@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.4
+// @version       0.0.5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
-// @downloadURL     https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
+// @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
 // @updateURL     https://github.com/jswale/KFE/raw/master/src/KMHC.meta.js
 // @grant         none
 // @copyright     2014+, Miltown
@@ -14,33 +14,66 @@
 var undefined = "undefined";
 var success = "success";
 
-var Module = function() {
+var Utils = function() {
+    CONF_KEY = "KMHC_";
+    
+    return {
+        getConf : function(key) {
+            return localStorage[CONF_KEY + key];
+        },
+        
+        setConf : function(key, value) {
+            localStorage[CONF_KEY + key] = value;
+        },
+        
+        getId : function(key) {
+            return CONF_KEY + key;
+        }
+    }
+}();
+
+var MH_Page = function() {
 		return {
 				load : function() {
 						console.log("Module initializing");
 						this.init();
 				},
+            
 				init : function() {
 						console.log("Not yet implemented");
 				},
+            
 				log : function() {
-						console.log(arguments);
+						console.log.apply(console, arguments);
 				},
+            
+				debug : function() {
+						console.debug.apply(console, arguments);
+				},
+            
+				warn : function() {
+						console.warn.apply(console, arguments);
+				},
+            
 				error : function() {
-						console.error(arguments);
+						console.error.apply(console, arguments);
 				},
+            
+
 				isInitialized : function() {
-						return  (typeof localStorage["KMHC_login"] != undefined)
-							&&  (typeof localStorage["KMHC_pswd"]  != undefined);
+						return  (typeof Utils.getConf("login") != undefined)
+							&&  (typeof Utils.getConf("pswd")  != undefined);
 				},
+            
 				callAPIConnected : function(conf) {
 						if(!this.isInitialized()) {
 								this.error("Authentification required");
 								return;
 						}
-						conf.data = $.extend(conf.data, {"login" : localStorage["KMHC_login"],"password" : localStorage["KMHC_pswd"]})
+						conf.data = $.extend(conf.data, {"login" : Utils.getConf("login"),"password" : Utils.getConf("pswd")})
 						this.callAPI(conf);
 				},
+            
 				callAPI : function(conf) {
 						this.log("Calling API", conf);
 						 $.ajax({
@@ -50,24 +83,317 @@ var Module = function() {
 						 }).done($.proxy(function(data, result, request){
 								 if(result == success) {
 										 if(typeof conf.callback == "undefined") {
-												 this.log("No callback found");
+												 this.warn("No callback found");
 										 } else {
 												conf.callback.apply(this, arguments);
 										 }
 								 } else {
-										 this.log("Error while executing the API call");
+										 this.error("Error while executing the API call");
 										 this.error(arguments);
 								 }
 						 }, conf.scope || this));
-				}
+				},
+            
+
+                addCssToLabel : function(o) {
+                    return o
+                    .css("float", "left")
+                    .css("font-weight", "bold")
+                    .css("padding", "5px")
+                    .css("text-align", "left")
+                    .css("width", "200px");
+                },
+        
+                addCssToInput : function(o) {
+                    return o
+                    .css("border", "1px solid #1E2A63")
+                    .css("font-size", "12px")
+                    .css("background-color", "#FFFFEE")
+                    .css("padding", "1px");
+                },            
+            
+            	addConfigPanel : function(items) {
+                    
+                    $("<div/>")
+                    	.attr("id", Utils.getId("page-options"))
+                        .addClass("mh_tdpage")
+                    	.css("position", "fixed")
+                    	.css("display", "none")
+                    	.css("right", "50px")
+                    	.css("top", "0px")
+                        .css("border", "1px solid black")
+                        .css("padding", "5px 10px")
+                        .css("width", "500px")
+                        .append(
+                                $("<fieldset/>")
+                                    .attr("id", "KMHC_form")
+                                    .append($("<legend/>").text("Page options"))
+                            		.append($.map(items, $.proxy(function(item){
+                                        var fieldValue = Utils.getConf(item.option) || undefined;
+                                        var field = $("<input/>")
+                                        	.attr("id", Utils.getId("page-options-"+item.option))
+                                        	.attr("type", item.type)
+                                        	.attr("name", item.option);
+                                        
+                                        if(item.type == "checkbox") {
+                                            field.prop("checked", fieldValue == "true");                                            
+                                        }
+                                        
+                                        return [
+                                            this.addCssToLabel($("<label/>").text(item.label)),
+                                            this.addCssToInput(field), 
+                                            $("<br/>").css("clear","left")
+                                        ];                    
+                                    },this)
+                                    ))
+                                    .append(
+                                        $("<input/>")
+                                            .addClass("mh_form_submit")
+                                        	.css("margin","auto 0px")
+                                            .attr("type","button")
+                                            .attr("value", "Enregistrer")
+                                        .click($.proxy(function(){
+                                            $.each(items, $.proxy(function(id, item){
+                                                var field = $("#" + Utils.getId("page-options-"+item.option));
+                                                var value = field.val();
+                                                if(item.type == "checkbox") {
+                                                    value = field.prop("checked");
+                                                }
+                                                Utils.setConf(item.option, value);
+                                            }, this));
+                                            $("#" + Utils.getId("page-options")).toggle();
+                                        },this))
+                                     )
+                                    .append($("<br/>").css("clear","left"))
+                            		.append($("<br/>"))
+                            		.append("<i>Les changements seront pris en compte au prochain affichage de cette page</i>")
+                        )
+                        .appendTo($("body"));
+                    
+                    $('<svg height="40" version="1.1" width="40" xmlns="http://www.w3.org/2000/svg">'+
+                      	'<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
+                      		'<linearGradient id="27190-_0050af-_002c62" x1="0" y1="1" x2="0" y2="0" gradientTransform="matrix(1,0,0,1,-4,-4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
+                      			'<stop offset="0%" stop-color="#D05900" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>'+
+                      			'<stop offset="100%" stop-color="#642A00" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>'+
+                      		'</linearGradient>'+
+                      	'</defs>'+
+                      	'<path fill="none" stroke="#ffffff" d="M31.229,17.736C31.293,17.165,31.333,16.588,31.333,16S31.293,14.834,31.229,14.263L26.852,12.706C26.634,11.99,26.348,11.305,26.001,10.655999999999999L27.994,6.463999999999999C27.269,5.5539999999999985,26.445,4.729999999999999,25.536,4.004999999999999L21.343000000000004,5.998999999999999C20.696000000000005,5.651999999999999,20.009000000000004,5.366999999999999,19.294000000000004,5.149999999999999L17.736000000000004,0.7719999999999985C17.165,0.708,16.588,0.667,16,0.667S14.834,0.7080000000000001,14.263,0.772L12.707,5.15C11.991000000000001,5.367,11.306000000000001,5.652,10.657,5.9990000000000006L6.464,4.005C5.554,4.73,4.73,5.554,4.005,6.464L5.999,10.656C5.651999999999999,11.304,5.367,11.99,5.1499999999999995,12.706L0.7719999999999994,14.263C0.708,14.834,0.667,15.412,0.667,16S0.7080000000000001,17.165,0.772,17.736L5.15,19.294C5.367,20.009,5.652,20.695,5.9990000000000006,21.343L4.005000000000001,25.536C4.73,26.445,5.554,27.269000000000002,6.464,27.994L10.656,26.001C11.304,26.348000000000003,11.99,26.634,12.706,26.852L14.263,31.229C14.834,31.293,15.411,31.333,16,31.333C16.588,31.333,17.165,31.293,17.736,31.229L19.294,26.852C20.009,26.634,20.693,26.348,21.343,26.001L25.536,27.994C26.445,27.269,27.269000000000002,26.445,27.994,25.536L26.001,21.343000000000004C26.348000000000003,20.696000000000005,26.634,20.009000000000004,26.852,19.294000000000004L31.229,17.736ZM16,20.871C13.31,20.871,11.128,18.689,11.128,15.999999999999998C11.128,13.309999999999999,13.31,11.127999999999998,16,11.127999999999998C18.689,11.127999999999998,20.871000000000002,13.309999999999999,20.871000000000002,15.999999999999998C20.871,18.689,18.689,20.871,16,20.871Z" stroke-width="3" stroke-linejoin="round" opacity="0" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: round; opacity: 0;"></path>'+
+                      	'<path fill="url(#27190-_0050af-_002c62)" stroke="none" d="M31.229,17.736C31.293,17.165,31.333,16.588,31.333,16S31.293,14.834,31.229,14.263L26.852,12.706C26.634,11.99,26.348,11.305,26.001,10.655999999999999L27.994,6.463999999999999C27.269,5.5539999999999985,26.445,4.729999999999999,25.536,4.004999999999999L21.343000000000004,5.998999999999999C20.696000000000005,5.651999999999999,20.009000000000004,5.366999999999999,19.294000000000004,5.149999999999999L17.736000000000004,0.7719999999999985C17.165,0.708,16.588,0.667,16,0.667S14.834,0.7080000000000001,14.263,0.772L12.707,5.15C11.991000000000001,5.367,11.306000000000001,5.652,10.657,5.9990000000000006L6.464,4.005C5.554,4.73,4.73,5.554,4.005,6.464L5.999,10.656C5.651999999999999,11.304,5.367,11.99,5.1499999999999995,12.706L0.7719999999999994,14.263C0.708,14.834,0.667,15.412,0.667,16S0.7080000000000001,17.165,0.772,17.736L5.15,19.294C5.367,20.009,5.652,20.695,5.9990000000000006,21.343L4.005000000000001,25.536C4.73,26.445,5.554,27.269000000000002,6.464,27.994L10.656,26.001C11.304,26.348000000000003,11.99,26.634,12.706,26.852L14.263,31.229C14.834,31.293,15.411,31.333,16,31.333C16.588,31.333,17.165,31.293,17.736,31.229L19.294,26.852C20.009,26.634,20.693,26.348,21.343,26.001L25.536,27.994C26.445,27.269,27.269000000000002,26.445,27.994,25.536L26.001,21.343000000000004C26.348000000000003,20.696000000000005,26.634,20.009000000000004,26.852,19.294000000000004L31.229,17.736ZM16,20.871C13.31,20.871,11.128,18.689,11.128,15.999999999999998C11.128,13.309999999999999,13.31,11.127999999999998,16,11.127999999999998C18.689,11.127999999999998,20.871000000000002,13.309999999999999,20.871000000000002,15.999999999999998C20.871,18.689,18.689,20.871,16,20.871Z" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1; fill-opacity: 1;" opacity="1" fill-opacity="1"></path>'+
+                      	'<rect x="0" y="0" width="32" height="32" r="0" rx="0" ry="0" fill="#000000" stroke="#000" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></rect>'+
+                      '</svg>')
+                    	.attr("alt", "Options d'affichage")
+                        .css("position", "fixed")
+                    	.css("top", "10px")
+                    	.css("right", "10px")
+                    	.click($.proxy(function(){
+                            $("#" + Utils.getId("page-options")).toggle();
+                        }, this))
+                    	.appendTo($("body"));
+            	}
 		}
 }();
 
-var MH_Play_Play_vue = $.extend({}, Module, {
+var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
+    init : function() {
+        this.addConfigPanel([
+                {
+                    label : "Envoi automatique des CdM",
+                    option : "sendCdm",
+                    type : "checkbox"
+                }
+            ]);        
+    }    
+});
+
+
+var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
+    init : function() {
+        if(Utils.getConf("sendCdm") == "true") {
+            var result = $("form[name='ActionForm']:first").text();
+            if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
+               // Appel de l'API
+               this.callAPIConnected({
+                   api : "cdm",
+                   data : {
+                    "cdm" : result
+                   }
+               });
+            }
+    	}
+    }    
+});
+
+var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, {
+    init : function() {
+        Utils.setConf("action", "Sort20");
+        this.addConfigPanel([
+                {
+                    label : "Envoi automatique des AA",
+                    option : "sendAA",
+                    type : "checkbox"
+                }
+            ]);        
+    }    
+});
+
+var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
+    init : function() {
+        if(Utils.getConf("action") == "Sort20" && Utils.getConf("sendAA") == "true") {
+            var result = $($("table")[2]).text();
+            if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
+               // Appel de l'API
+               this.callAPIConnected({
+                   api : "aa",
+                   data : {
+                    "aa" : result
+                   }
+               });
+            }
+    	}
+    }    
+}); 
+
+var MH_Play_Play_profil = $.extend({}, MH_Page, {
+    init : function() {
+        if(Utils.getConf("sendProfile") == "true") {
+            this.sendData();
+        }
+        
+        this.addConfigPanel([
+                {
+                    label : "Envoi automatique du profile",
+                    option : "sendProfile",
+                    type : "checkbox"
+                }
+            ]);        
+    },
+    
+    sendData : function() {
+        var result = $($("table")[1]).text();
+        result = result.replace(/<\/(TD|TH)[^>]*>/gi,"");
+        result = result.replace(/<\/(TABLE|TR)[^>]*>/gi,"\n");
+        result = result.replace(/<\/?[^>]+>/gi,"");
+        result = result.replace(/[\n\r\t]+/gi,"");
+        result = result.replace(/ +/gi," ");        
+        
+        var troll = result.match(/.*Identifiants[^\d]*(\d+)/)[1];
+        
+        this.log(result);
+        this.log(troll);
+        
+        // Appel de l'API
+        this.callAPIConnected({
+            api : "profile",
+            data : {
+                "profile" : result
+                //,"troll" : troll
+            }
+        });        
+    }
+}); 
+
+var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
+    init : function() {
+        this.analyseMessage();
+        this.addConfigPanel([
+                {
+                    label : "Envoi automatique des CdM",
+                    option : "sendCdm",
+                    type : "checkbox"
+                },
+            	{
+                    label : "Envoi automatique des AA",
+                    option : "sendAA",
+                    type : "checkbox"
+                }
+            ]);
+    },
+    
+    analyseMessage : function() {
+        var title = $.trim($("table:first tr:first td:first font:first").text());
+        var body = $.trim($("table:first tr:nth-child(5) td:first").text());        
+        
+        var api = null;
+        var data = {};
+        
+        if(Utils.getConf("sendCdm") == "true" && title.indexOf("Compétence : Connaissance des Monstres") > -1) {
+        	api = "cdm";
+            data = {
+                "cdm" : body
+            };
+        }
+        
+        if(Utils.getConf("sendAA") == "true" && title.indexOf("Sortilège : Analyse Anatomique") > -1) {
+        	api = "aa";
+            data = {
+                "aa" : body
+            };
+        }
+        
+        this.log(body);
+        
+        if(null == api) {
+            return;
+        }
+        
+        // Appel de l'API
+        this.callAPIConnected({
+            api : api,
+            data : data
+        });        
+     }
+});     
+
+
+var MH_Play_Play_vue = $.extend({}, MH_Page, {
 		init : function(){
+            if(Utils.getConf("monsterLevel") == "true") {
 				this.addMonsterLevel();
+            }
+            
+            if(Utils.getConf("invisible") == "true") {
 				this.addInvisibleTroll();
+            }
+            
+            if(Utils.getConf("sendView") == "true") {
+				this.sendView();
+            }
+            
+            this.addConfigPanel([
+                {
+                    label : "Afficher le niveau",
+                    option : "monsterLevel",
+                    type : "checkbox"
+                },
+                {
+                    label : "Afficher les invisibles",
+                    option : "invisible",
+                    type : "checkbox"
+                },
+                {
+                    label : "Envoi automatique de la vue",
+                    option : "sendView",
+                    type : "checkbox"
+                }                
+            ]);
 		},
+    
+        sendView : function() {
+            var result = $($("table")[1]).html();
+            result = result.replace(/<\/(TD|TH)[^>]*>/gi," ");
+            result = result.replace(/[\n\r\t]+/gi," ");
+            result = result.replace(/<\/(TABLE|TR|LI)[^>]*>/gi,"\r\n");
+            result = result.replace(/<\/?[^>]+>/gi,"");
+            result = result.replace(/ +/gi," ");                                            
+            
+            // Appel de l'API
+            this.callAPIConnected({
+                api : "view",
+                data : {
+                    "view" : result
+                }
+            });        
+        },
 
 		addMonsterLevel : function() {
 				var monsterNames = [];
@@ -139,7 +465,7 @@ var MH_Play_Play_vue = $.extend({}, Module, {
 		}
 });
 
-var MH_Play_PlayStart = $.extend({}, Module, {
+var MH_Play_PlayStart = $.extend({}, MH_Page, {
 
 		init : function(){
 			$("<div/>")
@@ -153,10 +479,10 @@ var MH_Play_PlayStart = $.extend({}, Module, {
 							.attr("id", "KMHC_form")
 							.append($("<legend/>").text("Karlaaki MH Connector"))
 							.append(this.addCssToLabel($("<label/>").text("Identifiant")))
-							.append(this.addCssToInput($("<input/>").attr("type", "text").attr("name", "login").attr("value", localStorage["KMHC_login"] || "")))
+							.append(this.addCssToInput($("<input/>").attr("type", "text").attr("name", "login").attr("value", Utils.getConf("login") || "")))
 							.append($("<br/>").css("clear","left"))
 							.append(this.addCssToLabel($("<label/>").text("Mot de passe")))
-							.append(this.addCssToInput($("<input/>").attr("type", "password").attr("name", "password").attr("value", localStorage["KMHC_pswd"] || "")))
+							.append(this.addCssToInput($("<input/>").attr("type", "password").attr("name", "password").attr("value", Utils.getConf("pswd") || "")))
 							.append($("<br/>").css("clear","left"))
 							.append(
 										$("<input/>")
@@ -169,23 +495,6 @@ var MH_Play_PlayStart = $.extend({}, Module, {
 							.append($("<span/>"))
 				)
 				.insertAfter($("#loginform"));
-		},
-
-		addCssToLabel : function(o) {
-				return o
-					.css("float", "left")
-						.css("font-weight", "bold")
-						.css("padding", "5px")
-						.css("text-align", "left")
-						.css("width", "200px");
-		},
-
-	addCssToInput : function(o) {
-				return o
-				.css("border", "1px solid #1E2A63")
-						.css("font-size", "12px")
-						.css("background-color", "#FFFFEE")
-						.css("padding", "1px");
 		},
 
 		showMsg : function(msg, color) {
@@ -216,23 +525,23 @@ var MH_Play_PlayStart = $.extend({}, Module, {
 	},
 
 		save : function(login, pswd) {
-				localStorage["KMHC_login"] = login;
-				localStorage["KMHC_pswd"] = pswd;
+				Utils.setConf("login", login);
+				Utils.setConf("pswd", pswd);
 				this.showMsg("Identifiants de connexion enregistrés", "#009900");
 		}
 
 });
 
 
-var Play_monstres = $.extend({}, Module, {
+var Play_monstres = $.extend({}, MH_Page, {
 		init : function(){
 				var title = $.trim($("table:first tr:first td:first font:first").text());
 				var body = $.trim($("table:first tr:nth-child(5) td:first").text());
-				console.log(title, body);
+				this.debug(title, body);
 		}
 });
 
-var MH_Play_TurnStart = $.extend({}, Module, {
+var MH_Play_TurnStart = $.extend({}, MH_Page, {
 		init : function(){
 			if(!this.isInitialized()) {
 						this.error("Authentification required");
@@ -259,13 +568,13 @@ var MH_Play_TurnStart = $.extend({}, Module, {
 								$("<input/>")
 								.attr("type","text")
 								.attr("name","login")
-								.attr("value",localStorage["KMHC_login"])
+								.attr("value",Utils.getConf("login"))
 						)
 						.append(
 								$("<input/>")
 								.attr("type","password")
 								.attr("name","password")
-								.attr("value",localStorage["KMHC_pswd"])
+								.attr("value",Utils.getConf("pswd"))
 						)
 						.submit()
 				;
@@ -273,10 +582,10 @@ var MH_Play_TurnStart = $.extend({}, Module, {
 });
 
 
-
 $(document).ready(function() {
 		var pathname = document.location.pathname;
-		var moduleName = pathname.replace(/\/mountyhall\/(.*)\/(.*).php$/, "$1_$2");
+		var moduleName = pathname.replace(/\/mountyhall\/(.*).php.*$/, "$1").replace(/\//g, "_");
+    	console.log("Loading module " + moduleName + " for URL " + pathname);
 		var module = eval(moduleName);
 		if(typeof module == "undefined") {
 				console.log("Unable to find the module " + moduleName + " for URL " + pathname);
