@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.5
+// @version       0.0.6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -24,6 +24,25 @@ var Utils = function() {
         
         setConf : function(key, value) {
             localStorage[CONF_KEY + key] = value;
+        },
+        
+        initConf : function(key, value) {
+            if(typeof this.getConf(key) == undefined) {
+                this.setConf(key, value);
+            }
+        },
+        
+        initConfig : function() {
+            this.initConf("sendCdm","true");
+            this.initConf("sendAA","true");
+            this.initConf("sendIdT","true");
+            this.initConf("sendProfile","true");
+            this.initConf("sendView","true");
+            this.initConf("monsterLevel","true");
+            this.initConf("invisible","true");
+            this.initConf("monsterCdmLink","true");
+            this.initConf("viewTrollInfos","true");
+            this.initConf("viewMonsterInfos","true");            
         },
         
         getId : function(key) {
@@ -64,7 +83,7 @@ var MH_Page = function() {
 						return  (typeof Utils.getConf("login") != undefined)
 							&&  (typeof Utils.getConf("pswd")  != undefined);
 				},
-            
+                        
 				callAPIConnected : function(conf) {
 						if(!this.isInitialized()) {
 								this.error("Authentification required");
@@ -73,13 +92,14 @@ var MH_Page = function() {
 						conf.data = $.extend(conf.data, {"login" : Utils.getConf("login"),"password" : Utils.getConf("pswd")})
 						this.callAPI(conf);
 				},
-            
+                          
 				callAPI : function(conf) {
 						this.log("Calling API", conf);
 						 $.ajax({
 								type: "POST",
 								url: "http://pharoz.net/MH/outil/api.php?rnd=" + new Date().getTime(),
-								 data : $.extend(conf.data, {"page" : conf.api, "popup" : 0})
+                             	//contentType: "application/x-www-form-urlencoded;charset=ISO-8859-15",
+                             	data : $.extend(conf.data, {"page" : conf.api, "popup" : 0, "encoding" : "UTF-8"})
 						 }).done($.proxy(function(data, result, request){
 								 if(result == success) {
 										 if(typeof conf.callback == "undefined") {
@@ -165,7 +185,6 @@ var MH_Page = function() {
                                         },this))
                                      )
                                     .append($("<br/>").css("clear","left"))
-                            		.append($("<br/>"))
                             		.append("<i>Les changements seront pris en compte au prochain affichage de cette page</i>")
                         )
                         .appendTo($("body"));
@@ -236,8 +255,22 @@ var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, {
     }    
 });
 
+var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
+    init : function() {
+        Utils.setConf("action", "Sort10");
+        this.addConfigPanel([
+                {
+                    label : "Envoi automatique les identifications",
+                    option : "sendIdT",
+                    type : "checkbox"
+                }
+            ]);        
+    }    
+});
+
 var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
     init : function() {
+        
         if(Utils.getConf("action") == "Sort20" && Utils.getConf("sendAA") == "true") {
             var result = $($("table")[2]).text();
             if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
@@ -246,6 +279,22 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                    api : "aa",
                    data : {
                     "aa" : result
+                   }
+               });
+            }
+    	}        
+        
+        if(Utils.getConf("action") == "Sort10" && Utils.getConf("sendIdT") == "true") {
+            var result = $($("table")[2]).text();
+            if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
+                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec($($("table")[2]).text());
+                
+               // Appel de l'API
+               this.callAPIConnected({
+                   api : "idt",
+                   data : {
+                    "id" : data[1],
+                    "name" : data[2]
                    }
                });
             }
@@ -276,10 +325,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         result = result.replace(/[\n\r\t]+/gi,"");
         result = result.replace(/ +/gi," ");        
         
-        var troll = result.match(/.*Identifiants[^\d]*(\d+)/)[1];
-        
-        this.log(result);
-        this.log(troll);
+        var troll = result.match(/.*Identifiants[^\d]*(\d+)/)[1];        
         
         // Appel de l'API
         this.callAPIConnected({
@@ -347,17 +393,30 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
 		init : function(){
+			if(Utils.getConf("sendView") == "true") {
+				this.sendView();
+            }            
+            
             if(Utils.getConf("monsterLevel") == "true") {
 				this.addMonsterLevel();
             }
             
             if(Utils.getConf("invisible") == "true") {
 				this.addInvisibleTroll();
+            }                        
+            
+            if(Utils.getConf("monsterCdmLink") == "true") {
+            	this.addMonsterCdmLink();
             }
             
-            if(Utils.getConf("sendView") == "true") {
-				this.sendView();
+            if(Utils.getConf("viewTrollInfos") == "true") {
+            	this.addTrollInfos();
             }
+
+            if(Utils.getConf("viewMonsterInfos") == "true") {
+            	this.addMonsterInfos();
+            }
+                        
             
             this.addConfigPanel([
                 {
@@ -371,21 +430,55 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     type : "checkbox"
                 },
                 {
+                    label : "Afficher les données des trolls",
+                    option : "viewTrollInfos",
+                    type : "checkbox"
+                },                
+                {
+                    label : "Afficher les données des monstres",
+                    option : "viewMonsterInfos",
+                    type : "checkbox"
+                },                
+                {
                     label : "Envoi automatique de la vue",
                     option : "sendView",
                     type : "checkbox"
+ 				},
+                {
+                    label : "Ajout du lien vers la CdM",
+                    option : "monsterCdmLink",
+                    type : "checkbox"                    
                 }                
             ]);
 		},
     
         sendView : function() {
-            var result = $($("table")[1]).html();
-            result = result.replace(/<\/(TD|TH)[^>]*>/gi," ");
-            result = result.replace(/[\n\r\t]+/gi," ");
-            result = result.replace(/<\/(TABLE|TR|LI)[^>]*>/gi,"\r\n");
-            result = result.replace(/<\/?[^>]+>/gi,"");
-            result = result.replace(/ +/gi," ");                                            
+            function extractData(id, title) {
+                 var data = [];
+                data.push("");
+                data.push(title);
+                data.push($("#" + id + " table:first tr.mh_tdtitre td").map(function(){
+                        return $(this).text();
+                    }).get().join("\t"));
+                data.push($("#" + id + " table:first tr.mh_tdpage").map(function(){
+                        return $(this).children("td").map(function(){
+                            return $(this).text();
+                        }).get().join("\t")
+                    }).get().join("\r\n"));
+                return data;
+            }
             
+            var result = [];
+            result.push($("form[name='LimitViewForm']").text());
+            result = result.concat(extractData("mh_vue_hidden_monstres", "MONSTRES ERRANTS"));
+            result = result.concat(extractData("mh_vue_hidden_trolls", "TROLLS"));
+            result = result.concat(extractData("mh_vue_hidden_tresors", "TRÉSORS"));
+            result = result.concat(extractData("mh_vue_hidden_champignons", "CHAMPIGNONS"));
+            result = result.concat(extractData("mh_vue_hidden_lieux", "LIEUX"));
+            result = result.concat(extractData("mh_vue_hidden_cadavres", "CÉNOTAPHES"));            
+            
+            result = result.join("\r\n");            
+                                   
             // Appel de l'API
             this.callAPIConnected({
                 api : "view",
@@ -394,8 +487,128 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 }
             });        
         },
+    
+        getColumnId : function(id, name) {
+            var i = null;
+            $("#" + id + " table:first tr.mh_tdtitre td").each(function(idx){
+                if($(this).text().indexOf(name) > -1) {
+                    i = idx+1;
+                }
+            });
+            return i;
+        },
+    
+    	addMonsterCdmLink : function() {
+            var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
+            var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");            
+         
+            // Extraction des données
+				$("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
+                    	var monsterName = $($(this).children("td:nth-child("+nomColId+")")).text();
+                    	var td = $($(this).children("td:nth-child("+refColId+")"));
+						var monsterId = td.text();                    
+                    	td	.empty()
+                        	.append(
+                            	$("<a/>")
+                                	.attr("href", "javascript:void(0)")
+                                	.attr("title", "Voir la CdM de " + monsterName + " [" + monsterId + "]")
+                            		.text(monsterId)
+                                .click(function(){
+  									window.open("http://pharoz.net/MH/outil/popup.php4?popupWidth=700&popupHeight=400&page=bestiary/detail2&fullName=" + monsterName + "&ref=" + monsterId, "karlaakiPopup", "width=700, height=400, resizable=yes,menubar=no,scrollbars=yes,status=no");
+                                })
+                        	);
+				});            
+    	},
+    
+    	addTrollInfos : function() {
+            var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
+            
+ 			var trollIds = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+                var id = $(this).text();
+                $(this).parent("tr").attr("data-troll-info", id);
+                return id;
+            }).get();            
+            
+            return;    
+            
+			// Appel de l'API
+            this.callAPIConnected({
+                api : "trollInfos",
+                data : {
+                    "i" : trollIds
+                },
+                callback : function(datas) {
+                    var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");    
+                    
+                    // bouchon
+                    var json = $.parseJSON(datas);
+                    $.each(json, function(i, data){
+                        this.injectHP($("[data-troll-info='" + data[0] + "'] td:nth-child("+nomColId+")"), "70", "XX", "YY");
+                    });
+                },
+                scope : this
+            });                        
+        },
+
+       	addMonsterInfos : function() {
+            var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");         
+            
+            var monsterIds = $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+                var id = $(this).text();
+                $(this).parent("tr").attr("data-monster-info", id);
+                return id;
+            }).get();            
+            
+            return;
+            
+            // Appel de l'API
+            this.callAPIConnected({
+                api : "monsterInfos",
+                data : {
+                    "i" : monsterIds
+                },
+                callback : function(datas) {
+                    var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");    
+                    
+                    // bouchon
+                    var json = $.parseJSON(datas);
+                    $.each(json, function(i, data){
+                        this.injectHP($("[data-monster-info='" + data[0] + "'] td:nth-child("+nomColId+")"), "70", "XX", "YY");
+                    });
+                },
+                scope : this
+            });            
+        },
+    
+        injectHP : function(parent, prct, pvMin, pvMax) {
+            parent.append(
+                $("<div/>")
+                    .css("float", "right")
+                    .css("margin", "2px 2px 2px 0px")
+                    .css("width", "100")
+                    .css("height", "14")
+                    .css("border", "1px solid black")
+                    .css("background-color", "#FFFFFF")
+                    .attr("title", pvMin + " / " + pvMax + " PV")
+                    .append(
+                        $("<div/>")
+                        .css("height", "100%")
+                        .css("width", prct + "%")
+                        .css("background-color", "#FF0000")
+                    )
+            );
+        },
 
 		addMonsterLevel : function() {
+             	var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
+            	var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
+            	var levelColId = this.getColumnId("mh_vue_hidden_monstres", "Niveau");
+            
+            	if(levelColId != null) {
+                    this.warn("Colonne niveau déjà présente");
+                    return;
+            	}
+            
 				var monsterNames = [];
 				var monsterIds = [];
 
@@ -404,15 +617,15 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
 				// Extraction des données
 				$("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
-						var monsterId = $(this).children("td:nth-child(2)").text();
+						var monsterId = $(this).children("td:nth-child("+refColId+")").text();
 						monsterIds.push(monsterId);
 
-						var monsterName = $($(this).children("td:nth-child(3)").children("a")[0]).text();
+						var monsterName = $($(this).children("td:nth-child("+nomColId+")")).text();
 						monsterNames.push(monsterName);
 
 						$(this).children('td:nth-child(2)').after(
 								$("<td/>")
-									.css("text-align", "center")
+									.css("text-align", "center")                            
 									.attr("id", "view-monster-id-" + monsterId)
 									.text("-")
 					 );
@@ -431,7 +644,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 								$.each(json, function(i, data){
 										$("#view-monster-id-" + data[0]).text(data[1]);
 								});
-			},
+						},
 						scope : this
 				});
 		},
@@ -532,15 +745,6 @@ var MH_Play_PlayStart = $.extend({}, MH_Page, {
 
 });
 
-
-var Play_monstres = $.extend({}, MH_Page, {
-		init : function(){
-				var title = $.trim($("table:first tr:first td:first font:first").text());
-				var body = $.trim($("table:first tr:nth-child(5) td:first").text());
-				this.debug(title, body);
-		}
-});
-
 var MH_Play_TurnStart = $.extend({}, MH_Page, {
 		init : function(){
 			if(!this.isInitialized()) {
@@ -583,11 +787,20 @@ var MH_Play_TurnStart = $.extend({}, MH_Page, {
 
 
 $(document).ready(function() {
+    	// Initialisation de la configuration
+    	Utils.initConfig();
+    	
+    	// Chargement du module spécifique
 		var pathname = document.location.pathname;
 		var moduleName = pathname.replace(/\/mountyhall\/(.*).php.*$/, "$1").replace(/\//g, "_");
     	console.log("Loading module " + moduleName + " for URL " + pathname);
-		var module = eval(moduleName);
-		if(typeof module == "undefined") {
+    
+    	var module;
+    	try {
+			module = eval(moduleName);
+    	} catch(e) {}
+    
+		if(typeof module == undefined) {
 				console.log("Unable to find the module " + moduleName + " for URL " + pathname);
 		} else {
 				module.load();
