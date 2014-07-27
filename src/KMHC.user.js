@@ -831,6 +831,18 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(
                             $("<div/>")
                             .css("float", "right")
+                            .css("margin", "2px 0px")
+                            .css("padding", "0px 2px")
+                            .css("height", "14")
+                            .css("border", "1px solid black")
+                            .css("background-color", "#000")
+                            .css("color", "#FFF")
+                            .css("font-size", "11px")
+                            .text(data.pvRange + " PV")
+                            .attr("title", "MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()))                        
+                            /*
+                            $("<div/>")
+                            .css("float", "right")
                             .css("margin", "2px 2px 2px 0px")
                             .css("width", "100")
                             .css("height", "14")
@@ -843,6 +855,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                                 .css("width", (100-data.bless) + "%")
                                 .css("background-color", "#FF0000")
                             )
+                            */
                         );                        
                     }, this));
                     
@@ -933,22 +946,22 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
         .css("left", "54px")
         .append(
             $("<a/>")
-            	.css("margin", "5px")
-            	.css("color", "#ffffcc")
-            	.attr("href", "http://pharoz.net/MH/outil/")
-            	.attr("target", "blank")
-            	.text("Outil")
+            .css("margin", "5px")
+            .css("color", "#ffffcc")
+            .attr("href", "http://pharoz.net/MH/outil/")
+            .attr("target", "blank")
+            .text("Outil")
         )
         .append("|")
-        	.css("color", "#ffffcc")
-        	.css("margin", "5px")
+        .css("color", "#ffffcc")
+        .css("margin", "5px")
         .append(
             $("<a/>")
-            	.css("margin", "5px")
-            	.css("color", "#ffffcc")
-            	.attr("href", "http://pharoz.net/MH/forum/")
-            	.attr("target", "blank")
-            	.text("Forum")
+            .css("margin", "5px")
+            .css("color", "#ffffcc")
+            .attr("href", "http://pharoz.net/MH/forum/")
+            .attr("target", "blank")
+            .text("Forum")
         ).
         appendTo($("body"))
     }        
