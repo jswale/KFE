@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.7
+// @version       0.0.8
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -47,12 +47,26 @@ var Utils = function() {
         
         getId : function(key) {
             return CONF_KEY + key;
-        }
+        },
+        
+        formatTime : function(time, showTime) {
+            var d = new Date(time*1000);
+            var year = d.getFullYear();
+            var month = d.getMonth() + 1;
+            var date = d.getDate();
+            var hour = d.getHours();
+            var min = d.getMinutes();
+            var sec = d.getSeconds();
+            return (date < 10 ? "0" : "") + date + "/" + (month < 10 ? "0" : "") + month + '/' + year + (showTime ? (' ' + (hour < 10 ? "0" : "") + hour + ':' + (min < 10 ? "0" : "") + min + ':' + (sec < 10 ? "0" : "") + sec) : '');
+        }        
     }
 }();
 
 var MH_Page = function() {
     return {
+        
+        utils : Utils,
+        
         load : function() {
             console.log("Module initializing");
             this.init();
@@ -376,8 +390,6 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
             };
         }
         
-        this.log(body);
-        
         if(null == api) {
             return;
         }
@@ -401,22 +413,11 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             this.addMonsterLevel();
         }
         
-        if(Utils.getConf("invisible") == "true") {
-            this.addInvisibleTroll();
-        }                        
-        
         if(Utils.getConf("monsterCdmLink") == "true") {
             this.addMonsterCdmLink();
         }
         
-        if(Utils.getConf("viewTrollInfos") == "true") {
-            this.addTrollInfos();
-        }
-        
-        if(Utils.getConf("viewMonsterInfos") == "true") {
-            this.addMonsterInfos();
-        }
-        
+        this.addInfos();
         
         this.addConfigPanel([
             {
@@ -520,84 +521,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         });            
     },
     
-    addTrollInfos : function() {
-        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
-        
-        var trollIds = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-            var id = $(this).text();
-            $(this).parent("tr").attr("data-troll-info", id);
-            return id;
-        }).get();            
-        
-        return;    
-        
-        // Appel de l'API
-        this.callAPIConnected({
-            api : "trollInfos",
-            data : {
-                "i" : trollIds
-            },
-            callback : function(datas) {
-                var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");    
-                
-                // bouchon
-                var json = $.parseJSON(datas);
-                $.each(json, function(i, data){
-                    this.injectHP($("[data-troll-info='" + data[0] + "'] td:nth-child("+nomColId+")"), "70", "XX", "YY");
-                });
-            },
-            scope : this
-        });                        
-    },
-    
-    addMonsterInfos : function() {
-        var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");         
-        
-        var monsterIds = $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-            var id = $(this).text();
-            $(this).parent("tr").attr("data-monster-info", id);
-            return id;
-        }).get();            
-        
-        return;
-        
-        // Appel de l'API
-        this.callAPIConnected({
-            api : "monsterInfos",
-            data : {
-                "i" : monsterIds
-            },
-            callback : function(datas) {
-                var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");    
-                
-                // bouchon
-                var json = $.parseJSON(datas);
-                $.each(json, function(i, data){
-                    this.injectHP($("[data-monster-info='" + data[0] + "'] td:nth-child("+nomColId+")"), "70", "XX", "YY");
-                });
-            },
-            scope : this
-        });            
-    },
-    
-    injectHP : function(parent, prct, pvMin, pvMax) {
-        parent.append(
-            $("<div/>")
-            .css("float", "right")
-            .css("margin", "2px 2px 2px 0px")
-            .css("width", "100")
-            .css("height", "14")
-            .css("border", "1px solid black")
-            .css("background-color", "#FFFFFF")
-            .attr("title", pvMin + " / " + pvMax + " PV")
-            .append(
-                $("<div/>")
-                .css("height", "100%")
-                .css("width", prct + "%")
-                .css("background-color", "#FF0000")
-            )
-        );
-    },
     
     addMonsterLevel : function() {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
@@ -647,9 +570,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             },
             scope : this
         });
-    },
+    },    
     
-    addInvisibleTroll : function() {
+    addInfos : function() {
         var txt = $("form[name='LimitViewForm']").text();
         
         var x = parseInt(txt.match(/.*X = (-?\d+)/)[1]);
@@ -657,53 +580,133 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var n = parseInt(txt.match(/.*N = (-?\d+)/)[1]);
         var r = txt.match(/L'affichage est limité à (\d+) cases horizontalement et (\d+) verticalement/);
         var rH = parseInt(r[1]);
-        var rV = parseInt(r[2]);
+        var rV = parseInt(r[2]);        
+        
+        var trollIds = [];
+        if(Utils.getConf("viewTrollInfos") == "true") {
+            var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
+            
+            trollIds = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+                var id = $(this).text();
+                $(this).parent("tr").attr("data-troll-info", id);
+                return id;
+            }).get();      
+        }
+        
+        var monsterIds = [];        
+        if(Utils.getConf("viewMonsterInfos") == "true") {
+            var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");         
+            
+            monsterIds = $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+                var id = $(this).text();
+                $(this).parent("tr").attr("data-monster-info", id);
+                return id;
+            }).get();     
+        }                     
         
         this.callAPIConnected({
-            api : "getInvi",
+            api : "viewInfo",
             data : {
                 "xMin" : x - rH,
                 "xMax" : x + rH,
                 "yMin" : y - rH,
                 "yMax" : y + rH,
                 "nMin" : n - rV,
-                "nMax" : n + rV
+                "nMax" : n + rV,
+                "m" : monsterIds,
+                "t" : trollIds
             },
             callback : function(datas) {
-                //datas = '[[77,19,-60,666,"Troll invisible","Camou",66,true,123,"Un deux trois"]]';
                 var json = $.parseJSON(datas);
-                     
-                $.each(json, function(i, data){
-                    var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
-                    $("<tr/>")
+                
+                if(Utils.getConf("invisible") == "true") {
+                    $.each(json.invis, function(i, data){
+                        var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
+                        $("<tr/>")
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(d))
                         .append($("<td/>").text(data[3]))
-                    	.append($("<td/>").append('<a href="javascript:EPV(' + data[3] + ')" class="mh_trolls_0">' + data[4] + '</a> [' +(data[7] ? "Camouflé" : "Invisible") + ']'))
+                        .append($("<td/>").append('<a href="javascript:EPV(' + data[3] + ')" class="mh_trolls_0">' + data[4] + '</a> [' +(data[7] ? "Camouflé" : "Invisible") + ']'))
                         .append($("<td/>").text(data[6]))
                         .append($("<td/>").text(data[5]))
-                    	.append($("<td/>").append(data[8] ? ('<a href="javascript:EAV(' + data[8] + ',750,550)" class="mh_links">' + data[9] + '</a>') : ''))
+                        .append($("<td/>").append(data[8] ? ('<a href="javascript:EAV(' + data[8] + ',750,550)" class="mh_links">' + data[9] + '</a>') : ''))
                         .append($("<td/>").text(data[0]).attr("align", "center"))
                         .append($("<td/>").text(data[1]).attr("align", "center"))
                         .append($("<td/>").text(data[2]).attr("align", "center"))
-                    	.insertAfter(
-							$("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
-                        		return $(this).text() == d;
-                    		})
-                    		.last()
-                    		.parent("tr")
+                        .insertAfter(
+                            $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
+                                return $(this).text() == d;
+                            })
+                            .last()
+                            .parent("tr")
                         )
-                    ;
-                });
-                //API
-                // X | Y | N | ID | name | race | level | Camouflé[T],Invisible[F] | team_id | team_name
-                
-                // IHM
-                // Dist.	Réf.	Nom	Niveau	Race	Guilde	X	Y	N
+                        ;
+                    });
+                    
+                    var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");    
+                    $.each(json.trolls, $.proxy(function(trollId, data){
+                        $("[data-troll-info='" + trollId + "'] td:nth-child("+nomColId+")")
+                        .append(
+                            $("<div/>")
+                            .css("float", "right")
+                            .css("margin", "2px 2px 2px 0px")
+                            .css("width", "100")
+                            .css("height", "14")
+                            .css("border", "1px solid black")
+                            .css("background-color", "#FFFFFF")
+                            .attr("title", data.pv + " / " + data.pvMax + " PV (MAJ: " + this.utils.formatTime(data.updateDate, false) + ")")
+                            .append(
+                                $("<div/>")
+                                .css("height", "100%")
+                                .css("width", Math.min(100, Math.round(data.pv/data.pvMax*100)) + "%")
+                                .css("background-color", "#FF0000")
+                            )
+                        )
+                        .append(
+                            $("<div/>")
+                            .css("float", "right")
+                            .css("margin", "2px 0px")
+                            .css("padding", "0px 2px")
+                            .css("height", "14")
+                            .css("border", "1px solid black")
+                            .css("background-color", "#000")
+                            .css("color", "#FFF")
+                            .css("font-size", "11px")
+                            .text(data.pa + " PA")
+                            .attr("title", "DLA " + this.utils.formatTime(data.dla, true))
+                        )
+                        ;                        
+                    }, this));
+                    
+                    var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");    
+                    $.each(json.monsters, $.proxy(function(monsterId, data){
+                        $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(
+                            $("<div/>")
+                            .css("float", "right")
+                            .css("margin", "2px 2px 2px 0px")
+                            .css("width", "100")
+                            .css("height", "14")
+                            .css("border", "1px solid black")
+                            .css("background-color", "#FFFFFF")
+                            .attr("title", data.pvRange + " PV (MAJ: " + this.utils.formatTime(data.cdmDate, false) + ")")
+                            .append(
+                                $("<div/>")
+                                .css("height", "100%")
+                                .css("width", data.bless + "%")
+                                .css("background-color", "#FF0000")
+                            )
+                        );                        
+                    }, this));
+                    
+                }               
             },
             scope : this
-        });
+        });        
     }
+    
+    
+    
+    
 });
 
 var MH_Play_PlayStart = $.extend({}, MH_Page, {
