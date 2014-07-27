@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.8
+// @version       0.0.9
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -322,6 +322,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             this.sendData();
         }
         
+        this.removeAdds();
+        
         this.addConfigPanel([
             {
                 label : "Envoi automatique du profile",
@@ -329,6 +331,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 type : "checkbox"
             }
         ]);        
+    },
+    
+    removeAdds : function () {
+        $("iframe").remove();
     },
     
     sendData : function() {
@@ -680,6 +686,17 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     
                     var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");    
                     $.each(json.monsters, $.proxy(function(monsterId, data){
+                        var pvs = data.pvRange.split("-");
+                        var pvMin = pvs[0];
+                        var pvMax = pvs[1];
+                        var pvActMin = pvMin;
+                        var pvActMax = pvMax;                        
+                        
+                        if(data.bless > 0) {
+                            pvActMin = Math.max(1, Math.round((100 - data.bless - 5) * pvMin / 100));
+                            pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
+                        }
+                        
                         $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(
                             $("<div/>")
                             .css("float", "right")
@@ -688,11 +705,11 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("height", "14")
                             .css("border", "1px solid black")
                             .css("background-color", "#FFFFFF")
-                            .attr("title", data.pvRange + " PV (MAJ: " + this.utils.formatTime(data.cdmDate, false) + ")")
+                            .attr("title", (data.bless > 0 ? ("Reste: " + pvActMin + "-" + pvActMax + " PV sur ") : "") + data.pvRange + " PV (MAJ: " + this.utils.formatTime(data.cdmDate, false) + ")")
                             .append(
                                 $("<div/>")
                                 .css("height", "100%")
-                                .css("width", data.bless + "%")
+                                .css("width", (100-data.bless) + "%")
                                 .css("background-color", "#FF0000")
                             )
                         );                        
