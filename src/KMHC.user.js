@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.9
+// @version       0.0.10
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -42,14 +42,15 @@ var Utils = function() {
             this.initConf("invisible","true");
             this.initConf("monsterCdmLink","true");
             this.initConf("viewTrollInfos","true");
-            this.initConf("viewMonsterInfos","true");            
+            this.initConf("viewMonsterInfos","true");         
+            this.initConf("manageTags","true");
         },
         
         getId : function(key) {
             return CONF_KEY + key;
         },
         
-        formatTime : function(time, showTime) {
+        formatTime : function(time) {
             var d = new Date(time*1000);
             var year = d.getFullYear();
             var month = d.getMonth() + 1;
@@ -57,8 +58,45 @@ var Utils = function() {
             var hour = d.getHours();
             var min = d.getMinutes();
             var sec = d.getSeconds();
-            return (date < 10 ? "0" : "") + date + "/" + (month < 10 ? "0" : "") + month + '/' + year + (showTime ? (' ' + (hour < 10 ? "0" : "") + hour + ':' + (min < 10 ? "0" : "") + min + ':' + (sec < 10 ? "0" : "") + sec) : '');
-        }        
+            return (date < 10 ? "0" : "") + date + "/" + (month < 10 ? "0" : "") + month + '/' + year + (' ' + (hour < 10 ? "0" : "") + hour + ':' + (min < 10 ? "0" : "") + min + ':' + (sec < 10 ? "0" : "") + sec);
+        },
+        
+        getDateDiff : function (date1, date2){
+            var diff = {}                           // Initialisation du retour
+            var tmp = date2 - date1;
+            
+            tmp = Math.floor(tmp/1000);             // Nombre de secondes entre les 2 dates
+            diff.sec = tmp % 60;                    // Extraction du nombre de secondes
+            
+            tmp = Math.floor((tmp-diff.sec)/60);    // Nombre de minutes (partie entière)
+            diff.min = tmp % 60;                    // Extraction du nombre de minutes
+            
+            tmp = Math.floor((tmp-diff.min)/60);    // Nombre d'heures (entières)
+            diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+            
+            tmp = Math.floor((tmp-diff.hour)/24);   // Nombre de jours restants
+            diff.day = tmp;
+            
+            if(diff.day > 5) {
+                return ">5j";
+            }
+            
+            return $.grep([diff.day > 0 ? diff.day +"j" : null, 
+                           diff.hour > 0 ? diff.hour +"h" : null, 
+                           diff.min > 0 ? diff.min +"m" : null, 
+                           diff.sec > 0 ? diff.sec +"s" : null], function(o){return o;}).join(" ");
+        },
+        
+        addGlobalStyle : function(css) {
+            var head, style;
+            head = document.getElementsByTagName('head')[0];
+            if (!head) { return; }
+            style = document.createElement('style');
+            style.type = 'text/css';
+            style.innerHTML = css;
+            head.appendChild(style);
+        }
+        
     }
 }();
 
@@ -415,6 +453,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             this.sendView();
         }            
         
+        if(Utils.getConf("manageTags") == "true") {        
+            this.addTagEdition();  
+        }
+        
         if(Utils.getConf("monsterLevel") == "true") {
             this.addMonsterLevel();
         }
@@ -423,7 +465,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             this.addMonsterCdmLink();
         }
         
-        this.addInfos();
+        this.addInfos();                     
         
         this.addConfigPanel([
             {
@@ -455,8 +497,70 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 label : "Ajout du lien vers la CdM",
                 option : "monsterCdmLink",
                 type : "checkbox"                    
-            }                
+                /*            },
+            {
+                label : "Activer les tags",
+                option : "manageTags",
+                type : "checkbox"                    
+*/                
+            }                            
         ]);
+    },
+    
+    addTagEdition : function() {
+        return;
+        Utils.addGlobalStyle('.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 13px; height: 13px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABdSURBVHjalNLdCgAQDIZh5JJ3F9s9T3Ygf/uMUpKn3pBVNb2GiNghIsq20RGazKz7OgR2WFDSyJkS3bxbEsx7gQNFwIKiYKAfYOh2rQgsyHsXF0WS5lnd/wVGE2AAupiLqNBm6B0AAAAASUVORK5CYII=); }');
+        Utils.addGlobalStyle('tr.mh_tdpage:hover .editable:after {display:inline-block; }');
+        
+        $.each(
+            [
+                ["mh_vue_hidden_monstres", "Réf.", "Nom", "M"], 
+                ["mh_vue_hidden_trolls", "Réf.", "Nom", "T"],
+                ["mh_vue_hidden_tresors", "Réf.", "Type", "O"],
+                ["mh_vue_hidden_lieux", "Réf.", "Nom", "L"]
+            ], $.proxy(function(i, data) {
+                var refColId = this.getColumnId(data[0], data[1]);            
+                var nomColId = this.getColumnId(data[0], data[2]);
+                $("#" + data[0] + " table:first tr.mh_tdpage").each($.proxy(function(iTr, tr){
+                    $(tr).children("td:nth-child("+nomColId+")")
+                    .append(
+                        $("<span/>")
+                        .addClass("editable")
+                        .attr("contenteditable", "true")
+                        .attr("data-tag-type", data[3])
+                        .attr("data-tag-id", $($(tr).children("td:nth-child("+refColId+")")).text())
+                        .text("")
+                        .keydown(function(){
+                            $(this).attr("data-tag-edited", "true");
+                        })
+                        .focusout($.proxy(function(event){
+                            var span = $(event.target);
+                            if(!span.attr("data-tag-edited")) {
+                                return;
+                            }                            
+                            
+                            var type = span.attr("data-tag-type");
+                            var ref = span.attr("data-tag-id");
+                            var tag = span.text();     
+                            
+                            console.log(this);
+                            
+                            this.callAPIConnected({
+                                api : "addTag",
+                                data : {
+                                    "type" : type,
+                                    "ref" : ref,
+                                    "tag" : tag,
+                                },
+                                callback : function() {
+                                    span.removeAttr("data-tag-edited");                                    
+                                },
+                                scope : this
+                            });     
+                        }, this))
+                    );
+                }, this));   
+            }, this));        
     },
     
     sendView : function() {
@@ -608,7 +712,30 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 $(this).parent("tr").attr("data-monster-info", id);
                 return id;
             }).get();     
-        }                     
+        }                 
+        
+        
+        var tresorIds = [];        
+        if(Utils.getConf("manageTags") == "true") {
+            var refColId = this.getColumnId("mh_vue_hidden_tresors", "Réf.");         
+            
+            tresorIds = $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+                var id = $(this).text();
+                $(this).parent("tr").attr("data-tresor-info", id);
+                return id;
+            }).get();     
+        }                 
+        
+        var lieuIds = [];
+        if(Utils.getConf("manageTags") == "true") {
+            var refColId = this.getColumnId("mh_vue_hidden_lieux", "Réf.");         
+            
+            lieuIds = $("#mh_vue_hidden_lieux table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+                var id = $(this).text();
+                $(this).parent("tr").attr("data-lieu-info", id);
+                return id;
+            }).get();     
+        }  
         
         this.callAPIConnected({
             api : "viewInfo",
@@ -619,8 +746,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "yMax" : y + rH,
                 "nMin" : n - rV,
                 "nMax" : n + rV,
-                "m" : monsterIds,
-                "t" : trollIds
+                "m" : monsterIds,                
+                "t" : trollIds,
+                "l" : lieuIds,
+                "o" : tresorIds
             },
             callback : function(datas) {
                 var json = $.parseJSON(datas);
@@ -651,6 +780,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     
                     var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");    
                     $.each(json.trolls, $.proxy(function(trollId, data){
+                        var pvMin = data.pv;
+                        var pvMax = Math.max(data.pv, data.pvMax);
                         $("[data-troll-info='" + trollId + "'] td:nth-child("+nomColId+")")
                         .append(
                             $("<div/>")
@@ -660,11 +791,11 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("height", "14")
                             .css("border", "1px solid black")
                             .css("background-color", "#FFFFFF")
-                            .attr("title", data.pv + " / " + data.pvMax + " PV (MAJ: " + this.utils.formatTime(data.updateDate, false) + ")")
+                            .attr("title", pvMin + " / " + pvMax + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.updateDate*1000), new Date()) + ")")
                             .append(
                                 $("<div/>")
                                 .css("height", "100%")
-                                .css("width", Math.min(100, Math.round(data.pv/data.pvMax*100)) + "%")
+                                .css("width", Math.min(100, Math.round(pvMin/pvMax*100)) + "%")
                                 .css("background-color", "#FF0000")
                             )
                         )
@@ -679,7 +810,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("color", "#FFF")
                             .css("font-size", "11px")
                             .text(data.pa + " PA")
-                            .attr("title", "DLA " + this.utils.formatTime(data.dla, true))
+                            .attr("title", "DLA " + this.utils.formatTime(data.dla))
                         )
                         ;                        
                     }, this));
@@ -688,9 +819,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     $.each(json.monsters, $.proxy(function(monsterId, data){
                         var pvs = data.pvRange.split("-");
                         var pvMin = pvs[0];
-                        var pvMax = pvs[1];
+                        var pvMax = Math.max(pvs[0],pvs[1]);
                         var pvActMin = pvMin;
-                        var pvActMax = pvMax;                        
+                        var pvActMax = Math.max(pvMin, pvMax);                        
                         
                         if(data.bless > 0) {
                             pvActMin = Math.max(1, Math.round((100 - data.bless - 5) * pvMin / 100));
@@ -705,7 +836,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("height", "14")
                             .css("border", "1px solid black")
                             .css("background-color", "#FFFFFF")
-                            .attr("title", (data.bless > 0 ? ("Reste: " + pvActMin + "-" + pvActMax + " PV sur ") : "") + data.pvRange + " PV (MAJ: " + this.utils.formatTime(data.cdmDate, false) + ")")
+                            .attr("title", (data.bless > 0 ? ("Reste: " + pvActMin + "-" + pvActMax + " PV sur ") : "") + data.pvRange + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")")
                             .append(
                                 $("<div/>")
                                 .css("height", "100%")
@@ -791,6 +922,36 @@ var MH_Play_PlayStart = $.extend({}, MH_Page, {
         this.showMsg("Identifiants de connexion enregistrés", "#009900");
     }
     
+});
+
+var MH_Play_Play_menu = $.extend({}, MH_Page, {
+    init : function(){
+        $("<div/>")
+        .css("margin", "0px auto")
+        .css("position", "absolute")
+        .css("top", "30px")
+        .css("left", "54px")
+        .append(
+            $("<a/>")
+            	.css("margin", "5px")
+            	.css("color", "#ffffcc")
+            	.attr("href", "http://pharoz.net/MH/outil/")
+            	.attr("target", "blank")
+            	.text("Outil")
+        )
+        .append("|")
+        	.css("color", "#ffffcc")
+        	.css("margin", "5px")
+        .append(
+            $("<a/>")
+            	.css("margin", "5px")
+            	.css("color", "#ffffcc")
+            	.attr("href", "http://pharoz.net/MH/forum/")
+            	.attr("target", "blank")
+            	.text("Forum")
+        ).
+        appendTo($("body"))
+    }        
 });
 
 var MH_Play_TurnStart = $.extend({}, MH_Page, {
