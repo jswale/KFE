@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.12
+// @version       0.0.13
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -424,10 +424,10 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                 
                 // Appel de l'API
                 this.callAPIConnected({
-                    api : "addTag",
+                    api : "tag",
                     data : {
                         "type" : 3,
-                        "ref" : data[1],
+                        "num" : data[1],
                         "tag" : data[2],
                     }
                 });                 
@@ -491,15 +491,18 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
                 label : "Envoi automatique des AA",
                 option : "sendAA",
                 type : "checkbox"
+            },
+            {
+                label : "Envoi automatique des IdT",
+                option : "sendIdT",
+                type : "checkbox"
             }
         ]);
     },
     
     analyseMessage : function() {
         var title = $.trim($("table:first tr:first td:first font:first").text());
-        var body = $.trim($("table:first tr:nth-child(5) td:first").html().replace(/<br>/g, "\r\n"));        
-        
-        this.log(body);
+        var body = $.trim($("table:first tr:nth-child(5) td:first").html().replace(/<br>/g, "\r\n")).replace(/<\/?[^>]+>/gi,"");                
         
         var api = null;
         var data = {};
@@ -517,6 +520,17 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
                 "aa" : body
             };
         }
+        
+        if(Utils.getConf("sendIdT") == "true" && title.indexOf("Sortilège : Identification des trésors") > -1) {
+            var tmp = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(body);
+            api = "tag";
+            data =  {
+                "type" : 3,
+                "num" : tmp[1],
+                "tag" : tmp[2],
+            };
+        }     
+        
         
         if(null == api) {
             return;
@@ -606,7 +620,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     event.preventDefault();
                     span.blur();
                 } else {
-                	span.attr("data-tag-edited", "true");
+                    span.attr("data-tag-edited", "true");
                 }
                 
             }, this))
