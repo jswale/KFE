@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.12
+// @version       0.0.11
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -599,33 +599,45 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             .attr("data-tag-type", type)
             .attr("data-tag-id", $(cell.children("td:nth-child("+refColId+")")).text())
             .text("")
-            .keydown(function(){
-                $(this).attr("data-tag-edited", "true");
-            })
-            .focusout($.proxy(function(event){
+            .keydown($.proxy(function(event) {
                 var span = $(event.target);
-                if(!span.attr("data-tag-edited")) {
-                    return;
-                }                            
+                if ( event.which == 13 ) {
+                    span.trigger( "focusout" );
+                    event.preventDefault();
+                    span.blur();
+                } else {
+                	span.attr("data-tag-edited", "true");
+                }
                 
-                var type = span.attr("data-tag-type");
-                var ref = span.attr("data-tag-id");
-                var tag = span.text();               
-                
-                this.callAPIConnected({
-                    api : "tag",
-                    data : {
-                        "type" : type,
-                        "num" : ref,
-                        "tag" : tag,
-                    },
-                    callback : function() {
-                        span.removeAttr("data-tag-edited");                                    
-                    },
-                    scope : this
-                });     
+            }, this))
+            .focusout($.proxy(function(event) {
+                var span = $(event.target);
+                this.sendTagEdition(span);
             }, this))
         );        
+    },
+    
+    sendTagEdition : function(span) {
+        if(!span.attr("data-tag-edited")) {
+            return;
+        }                            
+        
+        var type = span.attr("data-tag-type");
+        var ref = span.attr("data-tag-id");
+        var tag = span.text();               
+        
+        this.callAPIConnected({
+            api : "tag",
+            data : {
+                "type" : type,
+                "num" : ref,
+                "tag" : tag,
+            },
+            callback : function() {
+                span.removeAttr("data-tag-edited");                                    
+            },
+            scope : this
+        });             
     },
     
     addTagEdition : function() {
