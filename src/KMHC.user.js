@@ -807,6 +807,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var trollIds = [];
         if(Utils.getConf("viewTrollInfos") == "true") {
             var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
+            var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
+            
+            // Fix
+            $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
             
             trollIds = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
                 var id = $(this).text();
@@ -870,7 +874,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 var json = $.parseJSON(datas);
                 
                 if(Utils.getConf("invisible") == "true") {
-                    $.each(json.invis, function(i, data){
+                    $.each(json.invis, function(i, data){                        
                         var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
                         var tr = $("<tr/>")
                         .addClass("mh_tdpage")
