@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.13
+// @version       0.0.14
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -386,6 +386,43 @@ var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, {
             }
         ]);        
     }    
+});
+
+var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
+    suffix : '',
+    
+    init : function() {
+        var tresorIds = $("select option[value!='']").map(function(){
+            return $(this).prop("value");
+        }).get();     
+        
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "invi" : 0,
+                "o" : tresorIds
+            },
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                $.each(json.tags, $.proxy(function(key, data){
+                    var tmp = key.split(";");
+                    if(tmp[0] == "3") {
+                        var o = $("select option[value='" + tmp[1] + this.suffix + "']");
+                        o.text(o.text() + " - " + data);
+                    }
+                },this));                
+            }
+        });
+        
+    }    
+});
+
+
+var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
+});
+
+var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
+	suffix : '_TE'
 });
 
 var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
