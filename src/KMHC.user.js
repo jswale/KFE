@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.11
+// @version       0.0.12
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -157,6 +157,7 @@ var MH_Page = function() {
                     if(typeof conf.callback == "undefined") {
                         this.warn("No callback found");
                     } else {
+                        this.debug("Result", data);
                         conf.callback.apply(this, arguments);
                     }
                 } else {
@@ -173,7 +174,7 @@ var MH_Page = function() {
             .css("font-weight", "bold")
             .css("padding", "5px")
             .css("text-align", "left")
-            .css("width", "200px");
+            .css("width", "250px");
         },
         
         addCssToInput : function(o) {
@@ -209,6 +210,8 @@ var MH_Page = function() {
                     
                     if(item.type == "checkbox") {
                         field.prop("checked", fieldValue == "true");                                            
+                    } else {
+                        field.val(fieldValue);                                            
                     }
                     
                     return [
@@ -264,6 +267,79 @@ var MH_Page = function() {
     }
 }();
 
+var MH_Play_Play_option = $.extend({}, MH_Page, {
+    init : function() {
+        this.addConfigPanel([
+            {
+                label : "Identifiant",
+                option : "login",
+                type : "text"                    
+            },   
+            {
+                label : "Mot de passe",
+                option : "pswd",
+                type : "password"                    
+            },   
+            {
+                label : "Envoi automatique des CdM",
+                option : "sendCdm",
+                type : "checkbox"
+            },
+            {
+                label : "Envoi automatique des AA",
+                option : "sendAA",
+                type : "checkbox"
+            },
+            {
+                label : "Envoi automatique les identifications",
+                option : "sendIdT",
+                type : "checkbox"
+            },
+            {
+                label : "Envoi automatique du profile",
+                option : "sendProfile",
+                type : "checkbox"
+            },
+            {
+                label : "Afficher le niveau",
+                option : "monsterLevel",
+                type : "checkbox"
+            },
+            {
+                label : "Afficher les invisibles",
+                option : "invisible",
+                type : "checkbox"
+            },
+            {
+                label : "Afficher les données des trolls",
+                option : "viewTrollInfos",
+                type : "checkbox"
+            },                
+            {
+                label : "Afficher les données des monstres",
+                option : "viewMonsterInfos",
+                type : "checkbox"
+            },                
+            {
+                label : "Envoi automatique de la vue",
+                option : "sendView",
+                type : "checkbox"
+            },
+            {
+                label : "Ajout du lien vers la CdM",
+                option : "monsterCdmLink",
+                type : "checkbox"         
+            },
+            {
+                label : "Activer les tags",
+                option : "manageTags",
+                type : "checkbox"                    
+            }   
+        ]);        
+    }    
+});
+
+
 var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
     init : function() {
         this.addConfigPanel([
@@ -280,10 +356,15 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
 var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
     init : function() {
         if(Utils.getConf("sendCdm") == "true") {
-            var result = $("form[name='ActionForm']:first").text();
+            var result = $("form[name='ActionForm']:first").html();
+            result = result.replace(/<br\/?>/gi, "\r\n");
+            result = result.replace(/<\/p>/gi, "\r\n");
+            result = result.replace(/<tr[^>]*>/gi, "\r\n");
+            result = result.replace(/<\/?[^>]+>/gi,"");
+            
             if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
                 // Appel de l'API
-                this.callAPIConnected({
+                MH_Page.callAPIConnected({
                     api : "cdm",
                     data : {
                         "cdm" : result
@@ -343,12 +424,13 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                 
                 // Appel de l'API
                 this.callAPIConnected({
-                    api : "idt",
+                    api : "addTag",
                     data : {
-                        "id" : data[1],
-                        "name" : data[2]
+                        "type" : 3,
+                        "ref" : data[1],
+                        "tag" : data[2],
                     }
-                });
+                });                 
             }
         }
     }    
@@ -499,68 +581,70 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 label : "Ajout du lien vers la CdM",
                 option : "monsterCdmLink",
                 type : "checkbox"                    
-                /*            },
+            },
             {
                 label : "Activer les tags",
                 option : "manageTags",
-                type : "checkbox"                    
-*/                
+                type : "checkbox"                                    
             }                            
         ]);
     },
     
+    addTagEditionForCell : function(cell, refColId, nomColId, type) {
+        cell.children("td:nth-child("+nomColId+")")
+        .append(
+            $("<span/>")
+            .addClass("editable")            
+            .attr("contenteditable", "true")
+            .attr("data-tag-type", type)
+            .attr("data-tag-id", $(cell.children("td:nth-child("+refColId+")")).text())
+            .text("")
+            .keydown(function(){
+                $(this).attr("data-tag-edited", "true");
+            })
+            .focusout($.proxy(function(event){
+                var span = $(event.target);
+                if(!span.attr("data-tag-edited")) {
+                    return;
+                }                            
+                
+                var type = span.attr("data-tag-type");
+                var ref = span.attr("data-tag-id");
+                var tag = span.text();               
+                
+                this.callAPIConnected({
+                    api : "tag",
+                    data : {
+                        "type" : type,
+                        "num" : ref,
+                        "tag" : tag,
+                    },
+                    callback : function() {
+                        span.removeAttr("data-tag-edited");                                    
+                    },
+                    scope : this
+                });     
+            }, this))
+        );        
+    },
+    
     addTagEdition : function() {
-        return;
+        Utils.addGlobalStyle('.editable { margin-left: 10px; }');
         Utils.addGlobalStyle('.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 13px; height: 13px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABdSURBVHjalNLdCgAQDIZh5JJ3F9s9T3Ygf/uMUpKn3pBVNb2GiNghIsq20RGazKz7OgR2WFDSyJkS3bxbEsx7gQNFwIKiYKAfYOh2rQgsyHsXF0WS5lnd/wVGE2AAupiLqNBm6B0AAAAASUVORK5CYII=); }');
         Utils.addGlobalStyle('tr.mh_tdpage:hover .editable:after {display:inline-block; }');
         
         $.each(
             [
-                ["mh_vue_hidden_monstres", "Réf.", "Nom", "M"], 
-                ["mh_vue_hidden_trolls", "Réf.", "Nom", "T"],
-                ["mh_vue_hidden_tresors", "Réf.", "Type", "O"],
-                ["mh_vue_hidden_lieux", "Réf.", "Nom", "L"]
+                ["mh_vue_hidden_monstres", "Réf.", "Nom", 1], 
+                ["mh_vue_hidden_trolls", "Réf.", "Nom", 2],
+                ["mh_vue_hidden_tresors", "Réf.", "Type", 3],
+                //["mh_vue_hidden_champignons", "", "", 4],
+                ["mh_vue_hidden_lieux", "Réf.", "Nom", 5]
             ], $.proxy(function(i, data) {
                 var refColId = this.getColumnId(data[0], data[1]);            
                 var nomColId = this.getColumnId(data[0], data[2]);
                 $("#" + data[0] + " table:first tr.mh_tdpage").each($.proxy(function(iTr, tr){
-                    $(tr).children("td:nth-child("+nomColId+")")
-                    .append(
-                        $("<span/>")
-                        .addClass("editable")
-                        .attr("contenteditable", "true")
-                        .attr("data-tag-type", data[3])
-                        .attr("data-tag-id", $($(tr).children("td:nth-child("+refColId+")")).text())
-                        .text("")
-                        .keydown(function(){
-                            $(this).attr("data-tag-edited", "true");
-                        })
-                        .focusout($.proxy(function(event){
-                            var span = $(event.target);
-                            if(!span.attr("data-tag-edited")) {
-                                return;
-                            }                            
-                            
-                            var type = span.attr("data-tag-type");
-                            var ref = span.attr("data-tag-id");
-                            var tag = span.text();     
-                            
-                            console.log(this);
-                            
-                            this.callAPIConnected({
-                                api : "addTag",
-                                data : {
-                                    "type" : type,
-                                    "ref" : ref,
-                                    "tag" : tag,
-                                },
-                                callback : function() {
-                                    span.removeAttr("data-tag-edited");                                    
-                                },
-                                scope : this
-                            });     
-                        }, this))
-                    );
+                    this.addTagEditionForCell($(tr), refColId, nomColId, data[3]);
                 }, this));   
             }, this));        
     },
@@ -739,6 +823,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             }).get();     
         }  
         
+        var champigonIds = [];
+        
         this.callAPIConnected({
             api : "viewInfo",
             data : {
@@ -751,7 +837,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "m" : monsterIds,                
                 "t" : trollIds,
                 "l" : lieuIds,
-                "o" : tresorIds
+                "o" : tresorIds,
+                "c" : champigonIds
             },
             callback : function(datas) {
                 var json = $.parseJSON(datas);
@@ -759,7 +846,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 if(Utils.getConf("invisible") == "true") {
                     $.each(json.invis, function(i, data){
                         var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
-                        $("<tr/>")
+                        var tr = $("<tr/>")
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(d))
                         .append($("<td/>").text(data[3]))
@@ -776,92 +863,89 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             })
                             .last()
                             .parent("tr")
-                        )
-                        ;
-                    });
-                    
-                    var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");    
-                    $.each(json.trolls, $.proxy(function(trollId, data){
-                        var pvMin = data.pv;
-                        var pvMax = Math.max(data.pv, data.pvMax);
-                        $("[data-troll-info='" + trollId + "'] td:nth-child("+nomColId+")")
+                        );
+                        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");            
+                        var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
+                        this.addTagEditionForCell(tr, refColId, nomColId, 2);
+                    });       
+                }                    
+                
+                var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");    
+                $.each(json.trolls, $.proxy(function(trollId, data){
+                    var pvMin = data.pv;
+                    var pvMax = Math.max(data.pv, data.pvMax);
+                    $("[data-troll-info='" + trollId + "'] td:nth-child("+nomColId+")")
+                    .append(
+                        $("<div/>")
+                        .css("float", "right")
+                        .css("margin", "2px 2px 2px 0px")
+                        .css("width", "100")
+                        .css("height", "14")
+                        .css("border", "1px solid black")
+                        .css("background-color", "#FFFFFF")
+                        .attr("title", pvMin + " / " + pvMax + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.updateDate*1000), new Date()) + ")")
                         .append(
                             $("<div/>")
-                            .css("float", "right")
-                            .css("margin", "2px 2px 2px 0px")
-                            .css("width", "100")
-                            .css("height", "14")
-                            .css("border", "1px solid black")
-                            .css("background-color", "#FFFFFF")
-                            .attr("title", pvMin + " / " + pvMax + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.updateDate*1000), new Date()) + ")")
-                            .append(
-                                $("<div/>")
-                                .css("height", "100%")
-                                .css("width", Math.min(100, Math.round(pvMin/pvMax*100)) + "%")
-                                .css("background-color", "#FF0000")
-                            )
+                            .css("height", "100%")
+                            .css("width", Math.min(100, Math.round(pvMin/pvMax*100)) + "%")
+                            .css("background-color", "#FF0000")
                         )
+                    )
+                    .append(
+                        $("<div/>")
+                        .css("float", "right")
+                        .css("margin", "2px 0px")
+                        .css("padding", "0px 2px")
+                        .css("height", "14")
+                        .css("border", "1px solid black")
+                        .css("background-color", "#000")
+                        .css("color", "#FFF")
+                        .css("font-size", "11px")
+                        .text(data.pa + " PA")
+                        .attr("title", "DLA " + this.utils.formatTime(data.dla))
+                    )
+                    ;                        
+                }, this));
+                
+                var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");    
+                $.each(json.monsters, $.proxy(function(monsterId, data){
+                    var pvs = data.pvRange.split("-");
+                    var pvMin = pvs[0];
+                    var pvMax = Math.max(pvs[0],pvs[1]);
+                    var pvActMin = pvMin;
+                    var pvActMax = Math.max(pvMin, pvMax);                        
+                    
+                    if(data.bless > 0) {
+                        pvActMin = Math.max(1, Math.round((100 - data.bless - 5) * pvMin / 100));
+                        pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
+                    }
+                    
+                    $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(                                                   
+                        $("<div/>")
+                        .css("float", "right")
+                        .css("margin", "2px 2px 2px 0px")
+                        .css("width", "100")
+                        .css("height", "14")
+                        .css("border", "1px solid black")
+                        .css("background-color", "#FFFFFF")
+                        .attr("title", (data.bless > 0 ? ("Reste: " + pvActMin + "-" + pvActMax + " PV sur ") : "") + data.pvRange + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")")
                         .append(
                             $("<div/>")
-                            .css("float", "right")
-                            .css("margin", "2px 0px")
-                            .css("padding", "0px 2px")
-                            .css("height", "14")
-                            .css("border", "1px solid black")
-                            .css("background-color", "#000")
-                            .css("color", "#FFF")
-                            .css("font-size", "11px")
-                            .text(data.pa + " PA")
-                            .attr("title", "DLA " + this.utils.formatTime(data.dla))
+                            .css("height", "100%")
+                            .css("width", (100-data.bless) + "%")
+                            .css("background-color", "#FF0000")
                         )
-                        ;                        
-                    }, this));
-                    
-                    var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");    
-                    $.each(json.monsters, $.proxy(function(monsterId, data){
-                        var pvs = data.pvRange.split("-");
-                        var pvMin = pvs[0];
-                        var pvMax = Math.max(pvs[0],pvs[1]);
-                        var pvActMin = pvMin;
-                        var pvActMax = Math.max(pvMin, pvMax);                        
-                        
-                        if(data.bless > 0) {
-                            pvActMin = Math.max(1, Math.round((100 - data.bless - 5) * pvMin / 100));
-                            pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
-                        }
-                        
-                        $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(                            
-                            /*
-                            $("<div/>")
-                            .css("float", "right")
-                            .css("margin", "2px 0px")
-                            .css("padding", "0px 2px")
-                            .css("height", "14")
-                            .css("border", "1px solid black")
-                            .css("background-color", "#000")
-                            .css("color", "#FFF")
-                            .css("font-size", "11px")
-                            .text(data.pvRange + " PV")
-                            .attr("title", "MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()))                        
-                            */
-                            $("<div/>")
-                            .css("float", "right")
-                            .css("margin", "2px 2px 2px 0px")
-                            .css("width", "100")
-                            .css("height", "14")
-                            .css("border", "1px solid black")
-                            .css("background-color", "#FFFFFF")
-                            .attr("title", (data.bless > 0 ? ("Reste: " + pvActMin + "-" + pvActMax + " PV sur ") : "") + data.pvRange + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")")
-                            .append(
-                                $("<div/>")
-                                .css("height", "100%")
-                                .css("width", (100-data.bless) + "%")
-                                .css("background-color", "#FF0000")
-                            )
-                        );                        
-                    }, this));
-                    
-                }               
+                    );                        
+                }, this));                
+                
+                
+                if(Utils.getConf("manageTags") == "true") {                    
+                    $.each(json.tags, $.proxy(function(key, tag){
+                        key = key.split(";");
+                        $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']").text(tag);
+                    }, this));  
+                }
+                
             },
             scope : this
         });        
