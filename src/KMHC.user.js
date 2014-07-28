@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.10
+// @version       0.0.11
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -415,7 +415,9 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
     
     analyseMessage : function() {
         var title = $.trim($("table:first tr:first td:first font:first").text());
-        var body = $.trim($("table:first tr:nth-child(5) td:first").text());        
+        var body = $.trim($("table:first tr:nth-child(5) td:first").html().replace(/<br>/g, "\r\n"));        
+        
+        this.log(body);
         
         var api = null;
         var data = {};
@@ -828,7 +830,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
                         }
                         
-                        $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(
+                        $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(                            
+                            /*
                             $("<div/>")
                             .css("float", "right")
                             .css("margin", "2px 0px")
@@ -840,7 +843,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("font-size", "11px")
                             .text(data.pvRange + " PV")
                             .attr("title", "MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()))                        
-                            /*
+                            */
                             $("<div/>")
                             .css("float", "right")
                             .css("margin", "2px 2px 2px 0px")
@@ -855,7 +858,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                                 .css("width", (100-data.bless) + "%")
                                 .css("background-color", "#FF0000")
                             )
-                            */
                         );                        
                     }, this));
                     
