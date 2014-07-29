@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.16
+// @version       0.0.17
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -416,7 +416,7 @@ var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
                     var tmp = key.split(";");
                     if(tmp[0] == "3") {
                         var o = $("select option[value='" + tmp[1] + this.suffix + "']");
-                        o.text(o.text() + " - " + data);
+                        o.text(o.text() + " - " + data.tag);
                     }
                 },this));                
             }
