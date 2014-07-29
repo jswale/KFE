@@ -958,7 +958,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(0))
                         .append($("<td/>").text(trollId))
-                        .append($("<td/>").text('-'))
+                        .append($("<td/>").text('Mon troll'))
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
