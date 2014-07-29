@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.14
+// @version       0.0.15
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -11,13 +11,21 @@
 // @copyright     2014+, Miltown
 // ==/UserScript==
 
-var undefined = "undefined";
 var success = "success";
 
 var Utils = function() {
     CONF_KEY = "KMHC_";
     
     return {
+        
+        isUndefined : function(value) {
+            return typeof value === 'undefined';
+        },
+        
+        isDefined : function(value) {
+            return typeof value !== 'undefined';
+        },         
+        
         getConf : function(key) {
             return localStorage[CONF_KEY + key];
         },
@@ -27,7 +35,7 @@ var Utils = function() {
         },
         
         initConf : function(key, value) {
-            if(typeof this.getConf(key) == undefined) {
+            if(this.isUndefined(typeof this.getConf(key))) {
                 this.setConf(key, value);
             }
         },
@@ -132,8 +140,8 @@ var MH_Page = function() {
         
         
         isInitialized : function() {
-            return  (typeof Utils.getConf("login") != undefined)
-            &&  (typeof Utils.getConf("pswd")  != undefined);
+            return  (Utils.isDefined(typeof Utils.getConf("login")))
+            &&  (Utils.isDefined(typeof Utils.getConf("pswd")));
         },
         
         callAPIConnected : function(conf) {
@@ -154,7 +162,7 @@ var MH_Page = function() {
                 data : $.extend(conf.data, {"page" : conf.api, "popup" : 0, "encoding" : "UTF-8"})
             }).done($.proxy(function(data, result, request){
                 if(result == success) {
-                    if(typeof conf.callback == "undefined") {
+                    if(Utils.isUndefined(typeof conf.callback)) {
                         this.warn("No callback found");
                     } else {
                         this.debug("Result", data);
@@ -202,7 +210,7 @@ var MH_Page = function() {
                 .attr("id", "KMHC_form")
                 .append($("<legend/>").text("Page options"))
                 .append($.map(items, $.proxy(function(item){
-                    var fieldValue = Utils.getConf(item.option) || undefined;
+                    var fieldValue = Utils.getConf(item.option) || "undefined";
                     var field = $("<input/>")
                     .attr("id", Utils.getId("page-options-"+item.option))
                     .attr("type", item.type)
@@ -949,27 +957,57 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .css("width", "100")
                         .css("height", "14")
                         .css("border", "1px solid black")
-                        .css("background-color", "#FFFFFF")
-                        .attr("title", pvMin + " / " + pvMax + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.updateDate*1000), new Date()) + ")")
+                        .css("background-color", "#FFFFFF")                  
+                        .css("position", "relative")
+                        .attr("title", "MAJ: " + this.utils.getDateDiff(new Date(data.updateDate*1000), new Date()))
                         .append(
                             $("<div/>")
                             .css("height", "100%")
                             .css("width", Math.min(100, Math.round(pvMin/pvMax*100)) + "%")
                             .css("background-color", "#FF0000")
                         )
+						.append(
+                            $("<div/>")
+                            .css("height", "100%")
+                            .css("width", "100%")
+                            .css("color", "#000")
+	                        .css("font-size", "11px")
+                            .css("text-align", "center")
+                            .css("position", "absolute")
+                            .css("top", "0")
+                            .css("left", "0")
+                            .text(pvMin != pvMax ? (pvMin + " / " + pvMax) : '')                            
+                        )                        
                     )
                     .append(
                         $("<div/>")
                         .css("float", "right")
-                        .css("margin", "2px 0px")
-                        .css("padding", "0px 2px")
+                        .css("margin", "2px 0px")                        
+                        .css("width", "30")
                         .css("height", "14")
                         .css("border", "1px solid black")
-                        .css("background-color", "#000")
-                        .css("color", "#FFF")
-                        .css("font-size", "11px")
-                        .text(data.pa + " PA")
+                        .css("border-right", "0px")                        
+                        .css("background-color", "#FFF")                        
+                        .css("position", "relative")
                         .attr("title", "DLA " + this.utils.formatTime(data.dla))
+                        .append(
+                            $("<div/>")
+                            .css("height", "100%")
+                            .css("width", Math.round(data.pa/6*100) + "%")
+                            .css("background-color", "#000")
+                        )
+                        .append(
+                            $("<div/>")
+                            .css("height", "100%")
+                            .css("width", "100%")
+                            .css("color", "#999")
+	                        .css("font-size", "11px")
+                            .css("text-align", "center")
+                            .css("position", "absolute")
+                            .css("top", "0")
+                            .css("left", "0")
+    	                   	.text(data.pa + " PA")                            
+                        )
                     )
                     ;                        
                 }, this));
@@ -995,13 +1033,26 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .css("height", "14")
                         .css("border", "1px solid black")
                         .css("background-color", "#FFFFFF")
-                        .attr("title", (data.bless > 0 ? ("Reste: " + pvActMin + "-" + pvActMax + " PV sur ") : "") + data.pvRange + " PV (MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")")
+                        .css("position", "relative")
+                        .attr("title",  "MAX: " + data.pvRange + " Pv / MAJ: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()))
                         .append(
                             $("<div/>")
                             .css("height", "100%")
                             .css("width", (100-data.bless) + "%")
                             .css("background-color", "#FF0000")
                         )
+                        .append(
+                            $("<div/>")
+                            .css("height", "100%")
+                            .css("width", "100%")
+                            .css("color", "#000")
+	                        .css("font-size", "11px")
+                            .css("text-align", "center")
+                            .css("position", "absolute")
+                            .css("top", "0")
+                            .css("left", "0")
+                            .text((data.bless > 0 ? (pvActMin + "-" + pvActMax) : data.pvRange).replace(/\-/, " / "))                            
+                        )    
                     );                        
                 }, this));                
                 
@@ -1158,7 +1209,7 @@ $(document).ready(function() {
         module = eval(moduleName);
     } catch(e) {}
     
-    if(typeof module == undefined) {
+    if(Utils.isUndefined(typeof module)) {
         console.log("Unable to find the module " + moduleName + " for URL " + pathname);
     } else {
         module.load();
