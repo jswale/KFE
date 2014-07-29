@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.15
+// @version       0.0.16
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -66,7 +66,7 @@ var Utils = function() {
             var hour = d.getHours();
             var min = d.getMinutes();
             var sec = d.getSeconds();
-            return (date < 10 ? "0" : "") + date + "/" + (month < 10 ? "0" : "") + month + '/' + year + (' ' + (hour < 10 ? "0" : "") + hour + ':' + (min < 10 ? "0" : "") + min + ':' + (sec < 10 ? "0" : "") + sec);
+            return (date < 10 ? "0" : "") + date + "/" + (month < 10 ? "0" : "") + month + '/' + year + (' à ' + (hour < 10 ? "0" : "") + hour + ':' + (min < 10 ? "0" : "") + min + ':' + (sec < 10 ? "0" : "") + sec);
         },
         
         getDateDiff : function (date1, date2){
@@ -430,7 +430,7 @@ var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_Pi
 });
 
 var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
-	suffix : '_TE'
+    suffix : '_TE'
 });
 
 var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
@@ -863,6 +863,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 return id;
             }).get();      
         }
+        trollIds.push(Utils.getConf("login"));
         
         var monsterIds = [];        
         if(Utils.getConf("viewMonsterInfos") == "true") {
@@ -922,6 +923,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     $.each(json.invis, function(i, data){                        
                         var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
                         var tr = $("<tr/>")
+                        .attr("data-troll-info", data[3])
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(d))
                         .append($("<td/>").text(data[3]))
@@ -945,8 +947,30 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     });       
                 }                    
                 
-                var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");    
+                var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");  
+                var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");    
                 $.each(json.trolls, $.proxy(function(trollId, data){
+                    
+                    // Création de la ligne pour son troll
+                    if(trollId == Utils.getConf("login")) {
+                        var tr = $("<tr/>")
+                        .attr("data-troll-info", trollId)
+                        .addClass("mh_tdpage")
+                        .append($("<td/>").text(0))
+                        .append($("<td/>").text(trollId))
+                        .append($("<td/>").text('-'))
+                        .append($("<td/>").text('-'))
+                        .append($("<td/>").text('-'))
+                        .append($("<td/>").text('-'))
+                        .append($("<td/>").text(x).attr("align", "center"))
+                        .append($("<td/>").text(y).attr("align", "center"))
+                        .append($("<td/>").text(n).attr("align", "center"))
+                        .insertAfter(
+                            $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first")
+                        );   
+                        this.addTagEditionForCell(tr, refColId, nomColId, 2);
+                    }
+                    
                     var pvMin = data.pv;
                     var pvMax = Math.max(data.pv, data.pvMax);
                     $("[data-troll-info='" + trollId + "'] td:nth-child("+nomColId+")")
@@ -966,12 +990,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("width", Math.min(100, Math.round(pvMin/pvMax*100)) + "%")
                             .css("background-color", "#FF0000")
                         )
-						.append(
+                        .append(
                             $("<div/>")
                             .css("height", "100%")
                             .css("width", "100%")
                             .css("color", "#000")
-	                        .css("font-size", "11px")
+                            .css("font-size", "11px")
                             .css("text-align", "center")
                             .css("position", "absolute")
                             .css("top", "0")
@@ -1001,12 +1025,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("height", "100%")
                             .css("width", "100%")
                             .css("color", "#999")
-	                        .css("font-size", "11px")
+                            .css("font-size", "11px")
                             .css("text-align", "center")
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-    	                   	.text(data.pa + " PA")                            
+                            .text(data.pa + " PA")                            
                         )
                     )
                     ;                        
@@ -1046,7 +1070,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("height", "100%")
                             .css("width", "100%")
                             .css("color", "#000")
-	                        .css("font-size", "11px")
+                            .css("font-size", "11px")
                             .css("text-align", "center")
                             .css("position", "absolute")
                             .css("top", "0")
@@ -1060,7 +1084,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 if(Utils.getConf("manageTags") == "true") {                    
                     $.each(json.tags, $.proxy(function(key, tag){
                         key = key.split(";");
-                        $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']").text(tag);
+                        $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']")
+                        .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
+                        .text(tag.tag);
                     }, this));  
                 }
                 
