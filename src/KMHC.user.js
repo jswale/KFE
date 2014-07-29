@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.19
+// @version       0.0.20
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -488,7 +488,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.sendView();
         this.addTagEdition();  
         
-        if(Utils.getConf("mountyzilla") == "false") {
+        if(Utils.getConf("mountyzilla") != "true") {
             this.addMonsterLevel();
         }
         
