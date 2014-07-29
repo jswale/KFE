@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.17
+// @version       0.0.18
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -574,8 +574,17 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
                 "num" : tmp[1],
                 "tag" : tmp[2],
             };
-        }     
-        
+        }             
+
+        if(title.indexOf("Sortilège : Téléportation") > -1) {
+            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*(Il conduit en[^\.]*)/.exec(body);
+            api = "tag";
+            data =  {
+                "type" : 5,
+                "num" : tmp[1],
+                "tag" : tmp[2],
+            };
+        }             
         
         if(null == api) {
             return;
@@ -606,9 +615,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         
         if(Utils.getConf("monsterCdmLink") == "true") {
             this.addMonsterCdmLink();
-        }
+        }                
         
-        this.addInfos();                     
+        this.addInfos();      
+        
+        // Tune ihm
+        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");
         
         this.addConfigPanel([
             {
@@ -848,7 +860,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var r = txt.match(/L'affichage est limité à (\d+) cases horizontalement et (\d+) verticalement/);
         var rH = parseInt(r[1]);
         var rV = parseInt(r[2]);        
-        
+               
         var trollIds = [];
         if(Utils.getConf("viewTrollInfos") == "true") {
             var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
@@ -866,7 +878,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         trollIds.push(Utils.getConf("login"));
         
         var monsterIds = [];        
-        if(Utils.getConf("viewMonsterInfos") == "true") {
+		if(Utils.getConf("viewMonsterInfos") == "true") {
             var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");         
             
             monsterIds = $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
