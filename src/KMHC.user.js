@@ -1051,7 +1051,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text((data.bless > 0 ? (pvActMin + "-" + pvActMax) : data.pvRange).replace(/\-/, " / "))                            
+                            .text((data.bless > 0 ? (pvActMin + "-" + pvActMax) : data.pvRange))                            
                         )    
                     );                        
                 }, this));                
