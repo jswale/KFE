@@ -577,12 +577,12 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
         }             
 
         if(title.indexOf("Sortilège : Téléportation") > -1) {
-            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*(Il conduit en[^\.]*)/.exec(body);
+            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*(Il conduit en[^\.]*).\s*(Erreur de calcul[^\.]*)/.exec(body);
             api = "tag";
             data =  {
                 "type" : 5,
                 "num" : tmp[1],
-                "tag" : tmp[2],
+                "tag" : tmp[2] + ' (' + tmp[3] + ')',
             };
         }             
         
