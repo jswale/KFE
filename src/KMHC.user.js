@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.18
+// @version       0.0.19
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -41,17 +41,7 @@ var Utils = function() {
         },
         
         initConfig : function() {
-            this.initConf("sendCdm","true");
-            this.initConf("sendAA","true");
-            this.initConf("sendIdT","true");
-            this.initConf("sendProfile","true");
-            this.initConf("sendView","true");
-            this.initConf("monsterLevel","true");
-            this.initConf("invisible","true");
-            this.initConf("monsterCdmLink","true");
-            this.initConf("viewTrollInfos","true");
-            this.initConf("viewMonsterInfos","true");         
-            this.initConf("manageTags","true");
+            this.initConf("mountyzilla","false");
         },
         
         getId : function(key) {
@@ -289,96 +279,30 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
                 type : "password"                    
             },   
             {
-                label : "Envoi automatique des CdM",
-                option : "sendCdm",
+                label : "Mountyzilla activé",
+                option : "mountyzilla",
                 type : "checkbox"
-            },
-            {
-                label : "Envoi automatique des AA",
-                option : "sendAA",
-                type : "checkbox"
-            },
-            {
-                label : "Envoi automatique les identifications",
-                option : "sendIdT",
-                type : "checkbox"
-            },
-            {
-                label : "Envoi automatique du profile",
-                option : "sendProfile",
-                type : "checkbox"
-            },
-            {
-                label : "Afficher le niveau",
-                option : "monsterLevel",
-                type : "checkbox"
-            },
-            {
-                label : "Afficher les invisibles",
-                option : "invisible",
-                type : "checkbox"
-            },
-            {
-                label : "Afficher les données des trolls",
-                option : "viewTrollInfos",
-                type : "checkbox"
-            },                
-            {
-                label : "Afficher les données des monstres",
-                option : "viewMonsterInfos",
-                type : "checkbox"
-            },                
-            {
-                label : "Envoi automatique de la vue",
-                option : "sendView",
-                type : "checkbox"
-            },
-            {
-                label : "Ajout du lien vers la CdM",
-                option : "monsterCdmLink",
-                type : "checkbox"         
-            },
-            {
-                label : "Activer les tags",
-                option : "manageTags",
-                type : "checkbox"                    
             }   
         ]);        
     }    
 });
 
-
-var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
-    init : function() {
-        this.addConfigPanel([
-            {
-                label : "Envoi automatique des CdM",
-                option : "sendCdm",
-                type : "checkbox"
-            }
-        ]);        
-    }    
-});
-
-
 var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
     init : function() {
-        if(Utils.getConf("sendCdm") == "true") {
-            var result = $("form[name='ActionForm']:first").html();
-            result = result.replace(/<br\/?>/gi, "\r\n");
-            result = result.replace(/<\/p>/gi, "\r\n");
-            result = result.replace(/<tr[^>]*>/gi, "\r\n");
-            result = result.replace(/<\/?[^>]+>/gi,"");
-            
-            if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
-                // Appel de l'API
-                MH_Page.callAPIConnected({
-                    api : "cdm",
-                    data : {
-                        "cdm" : result
-                    }
-                });
-            }
+        var result = $("form[name='ActionForm']:first").html();
+        result = result.replace(/<br\/?>/gi, "\r\n");
+        result = result.replace(/<\/p>/gi, "\r\n");
+        result = result.replace(/<tr[^>]*>/gi, "\r\n");
+        result = result.replace(/<\/?[^>]+>/gi,"");
+        
+        if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
+            // Appel de l'API
+            MH_Page.callAPIConnected({
+                api : "cdm",
+                data : {
+                    "cdm" : result
+                }
+            });
         }
     }    
 });
@@ -386,13 +310,6 @@ var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
 var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, {
     init : function() {
         Utils.setConf("action", "Sort20");
-        this.addConfigPanel([
-            {
-                label : "Envoi automatique des AA",
-                option : "sendAA",
-                type : "checkbox"
-            }
-        ]);        
     }    
 });
 
@@ -436,20 +353,13 @@ var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_Pick
 var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
     init : function() {
         Utils.setConf("action", "Sort10");
-        this.addConfigPanel([
-            {
-                label : "Envoi automatique les identifications",
-                option : "sendIdT",
-                type : "checkbox"
-            }
-        ]);        
     }    
 });
 
 var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
     init : function() {
         
-        if(Utils.getConf("action") == "Sort20" && Utils.getConf("sendAA") == "true") {
+        if(Utils.getConf("action") == "Sort20") {
             var result = $($("table")[2]).text();
             if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
                 // Appel de l'API
@@ -462,7 +372,7 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
             }
         }        
         
-        if(Utils.getConf("action") == "Sort10" && Utils.getConf("sendIdT") == "true") {
+        if(Utils.getConf("action") == "Sort10") {
             var result = $($("table")[2]).text();
             if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
                 var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec($($("table")[2]).text());
@@ -478,28 +388,19 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                 });                 
             }
         }
+        
+        Utils.setConf("action", "");
     }    
 }); 
 
 var MH_Play_Play_profil = $.extend({}, MH_Page, {
     init : function() {
-        if(Utils.getConf("sendProfile") == "true") {
-            this.sendData();
-        }
-        
+        this.sendData();        
         this.removeAdds();
-        
-        this.addConfigPanel([
-            {
-                label : "Envoi automatique du profile",
-                option : "sendProfile",
-                type : "checkbox"
-            }
-        ]);        
     },
     
     removeAdds : function () {
-        $("iframe").remove();
+        $("iframe").parent("td").remove();
     },
     
     sendData : function() {
@@ -526,23 +427,6 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
     init : function() {
         this.analyseMessage();
-        this.addConfigPanel([
-            {
-                label : "Envoi automatique des CdM",
-                option : "sendCdm",
-                type : "checkbox"
-            },
-            {
-                label : "Envoi automatique des AA",
-                option : "sendAA",
-                type : "checkbox"
-            },
-            {
-                label : "Envoi automatique des IdT",
-                option : "sendIdT",
-                type : "checkbox"
-            }
-        ]);
     },
     
     analyseMessage : function() {
@@ -552,21 +436,21 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
         var api = null;
         var data = {};
         
-        if(Utils.getConf("sendCdm") == "true" && title.indexOf("Compétence : Connaissance des Monstres") > -1) {
+        if(title.indexOf("Compétence : Connaissance des Monstres") > -1) {
             api = "cdm";
             data = {
                 "cdm" : body
             };
         }
         
-        if(Utils.getConf("sendAA") == "true" && title.indexOf("Sortilège : Analyse Anatomique") > -1) {
+        if(title.indexOf("Sortilège : Analyse Anatomique") > -1) {
             api = "aa";
             data = {
                 "aa" : body
             };
         }
         
-        if(Utils.getConf("sendIdT") == "true" && title.indexOf("Sortilège : Identification des trésors") > -1) {
+        if(title.indexOf("Sortilège : Identification des trésors") > -1) {
             var tmp = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(body);
             api = "tag";
             data =  {
@@ -575,14 +459,14 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
                 "tag" : tmp[2],
             };
         }             
-
+        
         if(title.indexOf("Sortilège : Téléportation") > -1) {
-            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*(Il conduit en[^\.]*).\s*(Erreur de calcul[^\.]*)/.exec(body);
+            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*(Il conduit en[^\.]*)/.exec(body);
             api = "tag";
             data =  {
                 "type" : 5,
                 "num" : tmp[1],
-                "tag" : tmp[2] + ' (' + tmp[3] + ')',
+                "tag" : tmp[2],
             };
         }             
         
@@ -601,21 +485,14 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
-        if(Utils.getConf("sendView") == "true") {
-            this.sendView();
-        }            
+        this.sendView();
+        this.addTagEdition();  
         
-        if(Utils.getConf("manageTags") == "true") {        
-            this.addTagEdition();  
-        }
-        
-        if(Utils.getConf("monsterLevel") == "true") {
+        if(Utils.getConf("mountyzilla") == "false") {
             this.addMonsterLevel();
         }
         
-        if(Utils.getConf("monsterCdmLink") == "true") {
-            this.addMonsterCdmLink();
-        }                
+        this.addMonsterCdmLink();
         
         this.addInfos();      
         
@@ -624,39 +501,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         
         this.addConfigPanel([
             {
-                label : "Afficher le niveau",
-                option : "monsterLevel",
+                label : "Mountyzilla activé ?",
+                option : "mountyzilla",
                 type : "checkbox"
-            },
-            {
-                label : "Afficher les invisibles",
-                option : "invisible",
-                type : "checkbox"
-            },
-            {
-                label : "Afficher les données des trolls",
-                option : "viewTrollInfos",
-                type : "checkbox"
-            },                
-            {
-                label : "Afficher les données des monstres",
-                option : "viewMonsterInfos",
-                type : "checkbox"
-            },                
-            {
-                label : "Envoi automatique de la vue",
-                option : "sendView",
-                type : "checkbox"
-            },
-            {
-                label : "Ajout du lien vers la CdM",
-                option : "monsterCdmLink",
-                type : "checkbox"                    
-            },
-            {
-                label : "Activer les tags",
-                option : "manageTags",
-                type : "checkbox"                                    
             }                            
         ]);
     },
@@ -849,7 +696,55 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             },
             scope : this
         });
-    },    
+    },  
+    
+    getTrollIds : function() {
+        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
+        var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
+        
+        // Fix
+        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
+        
+        var    ids = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+            var id = $(this).text();
+            $(this).parent("tr").attr("data-troll-info", id);
+            return id;
+        }).get();      
+        ids.push(Utils.getConf("login"));
+        return ids;
+    },
+    
+    getMonsterIds : function() {
+        var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");         
+        
+        return $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+            var id = $(this).text();
+            $(this).parent("tr").attr("data-monster-info", id);
+            return id;
+        }).get();     
+        
+    },
+    
+    getTresorIds : function() {
+        var refColId = this.getColumnId("mh_vue_hidden_tresors", "Réf.");         
+        
+        return $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+            var id = $(this).text();
+            $(this).parent("tr").attr("data-tresor-info", id);
+            return id;
+        }).get();    
+    },
+    
+    getLieuIds : function() {
+        var refColId = this.getColumnId("mh_vue_hidden_lieux", "Réf.");         
+        
+        return $("#mh_vue_hidden_lieux table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+            var id = $(this).text();
+            $(this).parent("tr").attr("data-lieu-info", id);
+            return id;
+        }).get();     
+        
+    },
     
     addInfos : function() {
         var txt = $("form[name='LimitViewForm']").text();
@@ -860,58 +755,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var r = txt.match(/L'affichage est limité à (\d+) cases horizontalement et (\d+) verticalement/);
         var rH = parseInt(r[1]);
         var rV = parseInt(r[2]);        
-               
-        var trollIds = [];
-        if(Utils.getConf("viewTrollInfos") == "true") {
-            var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
-            var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
-            
-            // Fix
-            $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
-            
-            trollIds = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-                var id = $(this).text();
-                $(this).parent("tr").attr("data-troll-info", id);
-                return id;
-            }).get();      
-        }
-        trollIds.push(Utils.getConf("login"));
         
-        var monsterIds = [];        
-		if(Utils.getConf("viewMonsterInfos") == "true") {
-            var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");         
-            
-            monsterIds = $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-                var id = $(this).text();
-                $(this).parent("tr").attr("data-monster-info", id);
-                return id;
-            }).get();     
-        }                 
+        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
+        var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
         
-        
-        var tresorIds = [];        
-        if(Utils.getConf("manageTags") == "true") {
-            var refColId = this.getColumnId("mh_vue_hidden_tresors", "Réf.");         
-            
-            tresorIds = $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-                var id = $(this).text();
-                $(this).parent("tr").attr("data-tresor-info", id);
-                return id;
-            }).get();     
-        }                 
-        
-        var lieuIds = [];
-        if(Utils.getConf("manageTags") == "true") {
-            var refColId = this.getColumnId("mh_vue_hidden_lieux", "Réf.");         
-            
-            lieuIds = $("#mh_vue_hidden_lieux table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-                var id = $(this).text();
-                $(this).parent("tr").attr("data-lieu-info", id);
-                return id;
-            }).get();     
-        }  
-        
-        var champigonIds = [];
+        // Fix
+        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
         
         this.callAPIConnected({
             api : "viewInfo",
@@ -922,42 +771,40 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "yMax" : y + rH,
                 "nMin" : n - rV,
                 "nMax" : n + rV,
-                "m" : monsterIds,                
-                "t" : trollIds,
-                "l" : lieuIds,
-                "o" : tresorIds,
-                "c" : champigonIds
+                "m" : this.getMonsterIds(),                
+                "t" : this.getTrollIds(),
+                "o" : this.getTresorIds(),
+                "l" : this.getLieuIds(),
+                "c" : []
             },
             callback : function(datas) {
                 var json = $.parseJSON(datas);
                 
-                if(Utils.getConf("invisible") == "true") {
-                    $.each(json.invis, function(i, data){                        
-                        var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
-                        var tr = $("<tr/>")
-                        .attr("data-troll-info", data[3])
-                        .addClass("mh_tdpage")
-                        .append($("<td/>").text(d))
-                        .append($("<td/>").text(data[3]))
-                        .append($("<td/>").append('<a href="javascript:EPV(' + data[3] + ')" class="mh_trolls_0">' + data[4] + '</a> [' +(data[7] ? "Camouflé" : "Invisible") + ']'))
-                        .append($("<td/>").text(data[6]))
-                        .append($("<td/>").text(data[5]))
-                        .append($("<td/>").append(data[8] ? ('<a href="javascript:EAV(' + data[8] + ',750,550)" class="mh_links">' + data[9] + '</a>') : ''))
-                        .append($("<td/>").text(data[0]).attr("align", "center"))
-                        .append($("<td/>").text(data[1]).attr("align", "center"))
-                        .append($("<td/>").text(data[2]).attr("align", "center"))
-                        .insertAfter(
-                            $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
-                                return $(this).text() == d;
-                            })
-                            .last()
-                            .parent("tr")
-                        );
-                        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");            
-                        var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
-                        this.addTagEditionForCell(tr, refColId, nomColId, 2);
-                    });       
-                }                    
+                $.each(json.invis, function(i, data){                        
+                    var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
+                    var tr = $("<tr/>")
+                    .attr("data-troll-info", data[3])
+                    .addClass("mh_tdpage")
+                    .append($("<td/>").text(d))
+                    .append($("<td/>").text(data[3]))
+                    .append($("<td/>").append('<a href="javascript:EPV(' + data[3] + ')" class="mh_trolls_0">' + data[4] + '</a> [' +(data[7] ? "Camouflé" : "Invisible") + ']'))
+                    .append($("<td/>").text(data[6]))
+                    .append($("<td/>").text(data[5]))
+                    .append($("<td/>").append(data[8] ? ('<a href="javascript:EAV(' + data[8] + ',750,550)" class="mh_links">' + data[9] + '</a>') : ''))
+                    .append($("<td/>").text(data[0]).attr("align", "center"))
+                    .append($("<td/>").text(data[1]).attr("align", "center"))
+                    .append($("<td/>").text(data[2]).attr("align", "center"))
+                    .insertAfter(
+                        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
+                            return $(this).text() == d;
+                        })
+                        .last()
+                        .parent("tr")
+                    );
+                    var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");            
+                    var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
+                    this.addTagEditionForCell(tr, refColId, nomColId, 2);
+                });       
                 
                 var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");  
                 var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");    
@@ -1093,14 +940,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 }, this));                
                 
                 
-                if(Utils.getConf("manageTags") == "true") {                    
-                    $.each(json.tags, $.proxy(function(key, tag){
-                        key = key.split(";");
-                        $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']")
-                        .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
-                        .text(tag.tag);
-                    }, this));  
-                }
+                $.each(json.tags, $.proxy(function(key, tag){
+                    key = key.split(";");
+                    $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']")
+                    .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
+                    .text(tag.tag);
+                }, this));  
                 
             },
             scope : this
