@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.20
+// @version       0.0.21
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -183,7 +183,7 @@ var MH_Page = function() {
             .css("padding", "1px");
         },            
         
-        addConfigPanel : function(items) {
+        addConfigPanel : function(items, callback) {
             
             $("<div/>")
             .attr("id", Utils.getId("page-options"))
@@ -234,11 +234,18 @@ var MH_Page = function() {
                             }
                             Utils.setConf(item.option, value);
                         }, this));
-                        $("#" + Utils.getId("page-options")).toggle();
+                        if(typeof(callback) == "function") {
+                            callback.apply(this);
+                        } else {
+                            $("#" + Utils.getId("page-options")).toggle();
+                        }
+                        
                     },this))
                 )
                 .append($("<br/>").css("clear","left"))
                 .append("<i>Les changements seront pris en compte au prochain affichage de cette page</i>")
+            	.append($("<br/>"))
+            	.append($("<span/>"))
             )
             .appendTo($("body"));
             
@@ -269,11 +276,6 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
     init : function() {
         this.addConfigPanel([
             {
-                label : "Identifiant",
-                option : "login",
-                type : "text"                    
-            },   
-            {
                 label : "Mot de passe",
                 option : "pswd",
                 type : "password"                    
@@ -283,8 +285,31 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
                 option : "mountyzilla",
                 type : "checkbox"
             }   
-        ]);        
-    }    
+        ], this.checkConnect);        
+    },
+    
+    checkConnect : function() {
+        this.callAPI({
+            api : "isLog",
+            data : {
+                "login" : Utils.getConf("login"),
+                "password" : Utils.getConf("pswd")
+            },
+            callback : function(data) {
+                var msg = $("#KMHC_form span:first");
+                if(data.indexOf("Une erreur est survenue lors de votre identification, veuillez recommencer") > -1) {
+                    msg
+                    .css("color", "#990000")
+                    .text("Une erreur est survenue lors de votre identification, veuillez vérifier votre mot de passe.");
+                } else {
+                    msg
+                    .css("color", "#009900")
+                    .text("Identifiants de connexion validés");
+                }
+            },
+            scope : this
+        });
+    }        
 });
 
 var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
@@ -499,6 +524,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");
         
+        /*
         this.addConfigPanel([
             {
                 label : "Mountyzilla activé ?",
@@ -506,6 +532,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 type : "checkbox"
             }                            
         ]);
+        */
     },
     
     addTagEditionForCell : function(cell, refColId, nomColId, type) {
@@ -957,75 +984,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     
 });
 
-var MH_Play_PlayStart = $.extend({}, MH_Page, {
-    
-    init : function(){
-        $("<div/>")
-        .addClass("mh_tdpage")
-        .css("border", "1px solid black")
-        .css("margin", "10px auto")
-        .css("padding", "5px 10px 10px")
-        .css("width", "500px")
-        .append(
-            $("<fieldset/>")
-            .attr("id", "KMHC_form")
-            .append($("<legend/>").text("Karlaaki MH Connector"))
-            .append(this.addCssToLabel($("<label/>").text("Identifiant")))
-            .append(this.addCssToInput($("<input/>").attr("type", "text").attr("name", "login").attr("value", Utils.getConf("login") || "")))
-            .append($("<br/>").css("clear","left"))
-            .append(this.addCssToLabel($("<label/>").text("Mot de passe")))
-            .append(this.addCssToInput($("<input/>").attr("type", "password").attr("name", "password").attr("value", Utils.getConf("pswd") || "")))
-            .append($("<br/>").css("clear","left"))
-            .append(
-                $("<input/>")
-                .addClass("mh_form_submit")
-                .attr("type","button")
-                .attr("value", "Enregistrer")
-                .click($.proxy(this.checkConnect,this))
-            )
-            .append($("<br/>"))
-            .append($("<span/>"))
-        )
-        .insertAfter($("#loginform"));
-    },    
-    
-    showMsg : function(msg, color) {
-        $("#KMHC_form span:first")
-        .css("color", color)
-        .text(msg);
-    },
-    
-    checkConnect : function() {
-        var login = $("#KMHC_form input[name=login]:first").val();
-        var pswd  = $("#KMHC_form input[name=password]:first").val();
-        
-        this.callAPI({
-            api : "isLog",
-            data : {
-                "login" : login,
-                "password" : pswd
-            },
-            callback : function(data) {
-                if(data.indexOf("Une erreur est survenue lors de votre identification, veuillez recommencer") > -1) {
-                    this.showMsg("Une erreur est survenue lors de votre identification, veuillez recommencer", "#990000");
-                } else {
-                    this.save(login, pswd);
-                }
-            },
-            scope : this
-        });
-    },
-    
-    save : function(login, pswd) {
-        Utils.setConf("login", login);
-        Utils.setConf("pswd", pswd);
-        this.showMsg("Identifiants de connexion enregistrés", "#009900");
-    }
-    
-});
-
 var MH_Play_Play_menu = $.extend({}, MH_Page, {
     init : function(){
+        Utils.setConf("login", $("input[name='ai_IdPJ']").val());        
+        
         $("<div/>")
         .css("margin", "0px auto")
         .css("position", "absolute")
