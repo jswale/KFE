@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.21
+// @version       0.0.22
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -783,11 +783,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var rH = parseInt(r[1]);
         var rV = parseInt(r[2]);        
         
-        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
-        var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
-        
         // Fix
-        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
+        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");
         
         this.callAPIConnected({
             api : "viewInfo",
@@ -805,38 +802,35 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "c" : []
             },
             callback : function(datas) {
-                var json = $.parseJSON(datas);
+                var json = $.parseJSON(datas);                
                 
-                $.each(json.invis, function(i, data){                        
-                    var d = Math.max(Math.abs(data[0]-x), Math.abs(data[1]-y), Math.abs(data[2]-n));                   
+                $.each(json.invis, $.proxy(function(trollId, data){                        
+                    var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));                   
                     var tr = $("<tr/>")
-                    .attr("data-troll-info", data[3])
+                    .attr("data-troll-info", trollId)
                     .addClass("mh_tdpage")
                     .append($("<td/>").text(d))
-                    .append($("<td/>").text(data[3]))
-                    .append($("<td/>").append('<a href="javascript:EPV(' + data[3] + ')" class="mh_trolls_0">' + data[4] + '</a> [' +(data[7] ? "Camouflé" : "Invisible") + ']'))
-                    .append($("<td/>").text(data[6]))
-                    .append($("<td/>").text(data[5]))
-                    .append($("<td/>").append(data[8] ? ('<a href="javascript:EAV(' + data[8] + ',750,550)" class="mh_links">' + data[9] + '</a>') : ''))
-                    .append($("<td/>").text(data[0]).attr("align", "center"))
-                    .append($("<td/>").text(data[1]).attr("align", "center"))
-                    .append($("<td/>").text(data[2]).attr("align", "center"))
+                    .append($("<td/>").text(trollId))
+                    .append($("<td/>").append('<a href="javascript:EPV(' + trollId + ')" class="mh_trolls_0">' + data.name + '</a> [' + (data.camou ? "Camouflé" : "") + (data.invi ? "Invisible" : "") + ']'))
+                    .append($("<td/>").text(data.lvl))
+                    .append($("<td/>").text(data.race))
+                    .append($("<td/>").append(data.guildId ? ('<a href="javascript:EAV(' + data.guildId + ',750,550)" class="mh_links">' + data.guildName + '</a>') : ''))
+                    .append($("<td/>").text(data.x).attr("align", "center"))
+                    .append($("<td/>").text(data.y).attr("align", "center"))
+                    .append($("<td/>").text(data.n).attr("align", "center"))
                     .insertAfter(
                         $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
                             return $(this).text() == d;
                         })
                         .last()
                         .parent("tr")
-                    );
-                    var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");            
-                    var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
-                    this.addTagEditionForCell(tr, refColId, nomColId, 2);
-                });       
+                    )
+                    ;
+                    this.addTagEditionForCell(tr, this.getColumnId("mh_vue_hidden_trolls", "Réf."), this.getColumnId("mh_vue_hidden_trolls", "Nom"), 2);
+                }, this));                
                 
-                var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");  
-                var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");    
                 $.each(json.trolls, $.proxy(function(trollId, data){
-                    
+                                        
                     // Création de la ligne pour son troll
                     if(trollId == Utils.getConf("login")) {
                         var tr = $("<tr/>")
@@ -854,12 +848,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .insertAfter(
                             $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first")
                         );   
-                        this.addTagEditionForCell(tr, refColId, nomColId, 2);
+                        this.addTagEditionForCell(tr, this.getColumnId("mh_vue_hidden_trolls", "Réf."), this.getColumnId("mh_vue_hidden_trolls", "Nom"), 2);
                     }
-                    
+                                        
                     var pvMin = data.pv;
                     var pvMax = Math.max(data.pv, data.pvMax);
-                    $("[data-troll-info='" + trollId + "'] td:nth-child("+nomColId+")")
+                    $("[data-troll-info='" + trollId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")")
                     .append(
                         $("<div/>")
                         .css("float", "right")
@@ -922,7 +916,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     ;                        
                 }, this));
                 
-                var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");    
                 $.each(json.monsters, $.proxy(function(monsterId, data){
                     var pvs = data.pvRange.split("-");
                     var pvMin = pvs[0];
@@ -935,7 +928,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
                     }
                     
-                    $("[data-monster-info='" + monsterId + "'] td:nth-child("+nomColId+")").append(                                                   
+                    $("[data-monster-info='" + monsterId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_monstres", "Nom")+")").append(                                                   
                         $("<div/>")
                         .css("float", "right")
                         .css("margin", "2px 2px 2px 0px")
