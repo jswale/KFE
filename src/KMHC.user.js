@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.24
+// @version       0.0.25
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -106,35 +106,35 @@ var MH_Page = function() {
         load : function() {
             console.log("Module initializing");
             this.init();
+            console.log("Module initialized");
         },
         
         init : function() {
             console.log("Not yet implemented");
         },
-        
+
         log : function() {
-            console.log.apply(console, arguments);
+			console.log(arguments);
         },
         
         debug : function() {
-            console.debug.apply(console, arguments);
+            console.debug(arguments);
         },
         
         warn : function() {
-            console.warn.apply(console, arguments);
+            console.warn(arguments);
         },
         
         error : function() {
-            console.error.apply(console, arguments);
-        },
-        
+            console.error(arguments);
+        },        
         
         isInitialized : function() {
             return  (Utils.isDefined(typeof Utils.getConf("login")))
             &&  (Utils.isDefined(typeof Utils.getConf("pswd")));
         },
         
-        callAPIConnected : function(conf) {
+        callAPIConnected : function(conf) {						
             if(!this.isInitialized()) {
                 this.error("Authentification required");
                 return;
@@ -144,7 +144,7 @@ var MH_Page = function() {
         },
         
         callAPI : function(conf) {
-            this.log("Calling API", conf);
+            this.debug("Calling API", conf);
             $.ajax({
                 type: "POST",
                 url: "http://pharoz.net/MH/outil/api.php?rnd=" + new Date().getTime(),
@@ -673,7 +673,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         result = result.concat(extractData("mh_vue_hidden_lieux", "LIEUX"));
         result = result.concat(extractData("mh_vue_hidden_cadavres", "CÉNOTAPHES"));            
         
-        result = result.join("\r\n");            
+        result = result.join("\r\n");      
         
         // Appel de l'API
         this.callAPIConnected({
@@ -1089,7 +1089,7 @@ $(document).ready(function() {
     // Chargement du module spécifique
     var pathname = document.location.pathname;
     var moduleName = pathname.replace(/\/mountyhall\/(.*).php.*$/, "$1").replace(/\//g, "_");
-    console.log("Loading module " + moduleName + " for URL " + pathname);
+    console.log("Searching for module " + moduleName + " by URL " + pathname);
     
     var module;
     try {
