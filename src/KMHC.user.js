@@ -320,7 +320,7 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
     },
     
     tune : function() {
-        $("select option:contains('Gowap')").css("color", "#C0C0C0")
+        $("select option:contains('Gowap')").css("color", "#808080");
     },
     
     showInfo : function() {
