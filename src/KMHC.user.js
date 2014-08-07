@@ -1024,10 +1024,9 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
         Utils.setConf("login", $("input[name='ai_IdPJ']").val());        
         
         $("<div/>")
-        .css("margin", "0px auto")
         .css("position", "absolute")
-        .css("top", "30px")
-        .css("left", "54px")
+        .css("top", "35px")
+        .css("left", "35px")
         .append(
             $("<a/>")
             .css("margin", "5px")
@@ -1037,8 +1036,7 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             .text("Outil")
         )
         .append("|")
-        .css("color", "#ffffcc")
-        .css("margin", "5px")
+        	.css("color", "#ffffcc")
         .append(
             $("<a/>")
             .css("margin", "5px")
@@ -1046,8 +1044,17 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             .attr("href", "http://pharoz.net/MH/forum/")
             .attr("target", "blank")
             .text("Forum")
-        ).
-        appendTo($("body"))
+        )
+        .append("|")
+        	.css("color", "#ffffcc")
+        .append(
+            $("<a/>")
+            .css("margin", "5px")
+            .css("color", "#ffffcc")
+            .attr("href", "https://github.com/jswale/KFE/raw/master/src/KMHC.user.js")
+            .text("MAJ")
+        )
+        .appendTo($("body"))
     }        
 });
 
