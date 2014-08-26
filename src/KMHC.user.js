@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.25
+// @version       0.0.26
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -847,7 +847,22 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 var json = $.parseJSON(datas);                
                 
                 $.each(json.invis, $.proxy(function(trollId, data){                        
-                    var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));                   
+                    var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));           
+                    
+                    var previous = [];
+                    var pd = d;
+                    do {
+                    	previous = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
+                            return $(this).text() == pd;
+                        }).last().parent("tr");
+                        pd--;            
+                        
+                    } while(pd > 0 && previous.length == 0);
+                    
+                    if(previous.length == 0) {
+                        previous = $("#mh_vue_hidden_trolls table:nth-child(1) tr.mh_tdtitre").first();
+                    }
+                    
                     var tr = $("<tr/>")
                     .attr("data-troll-info", trollId)
                     .addClass("mh_tdpage")
@@ -860,14 +875,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .append($("<td/>").text(data.x).attr("align", "center"))
                     .append($("<td/>").text(data.y).attr("align", "center"))
                     .append($("<td/>").text(data.n).attr("align", "center"))
-                    .insertAfter(
-                        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
-                            return $(this).text() == d;
-                        })
-                        .last()
-                        .parent("tr")
-                    )
+                    .insertAfter(previous)
                     ;
+                    
                     this.addTagEditionForCell(tr, this.getColumnId("mh_vue_hidden_trolls", "Réf."), this.getColumnId("mh_vue_hidden_trolls", "Nom"), 2);
                 }, this));                
                 
