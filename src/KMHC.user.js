@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.26
+// @version       0.0.26-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1091,6 +1091,48 @@ var MH_Play_TurnStart = $.extend({}, MH_Page, {
     }
 });
 
+var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
+    init : function(){
+        if(document.location.search == "?cat=3") {
+            var ta = $("textarea[name='Message']");
+            $("input[name='bsSend']").parent()
+            .append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "Aperçu")
+                    .click($.proxy(function(){
+                    },this))
+            )
+            .append(" ").append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "Trõlldûctéûr")
+                    .click($.proxy(function(){
+                        ta.val(
+                            ta.val()
+                      			.replace(/°*y°*/g, '°y°')
+                      			.replace(/a/g, 'à')
+                      			.replace(/e/g, 'é')
+                      			.replace(/i/g, 'ï')
+                      			.replace(/o/g, 'õ')
+                      			.replace(/u/g, 'û')
+                      			.replace(/A/g, 'À')
+                      			.replace(/E/g, 'É')
+                      			.replace(/I/g, 'Ï')
+                      			.replace(/O/g, 'Õ')
+                      			.replace(/U/g, 'Û')
+                        );
+                    },this))
+            );
+            ta.on('keyup change', function(e){
+            });
+        }
+    }
+});
 
 $(document).ready(function() {
     // Initialisation de la configuration
