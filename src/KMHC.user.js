@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.26
+// @version       0.0.27-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1091,6 +1091,111 @@ var MH_Play_TurnStart = $.extend({}, MH_Page, {
     }
 });
 
+var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
+    init : function(){
+    }
+});
+
+var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
+    init : function(){
+        if(document.location.search == "?cat=3") {
+            var ta = $("textarea[name='Message']"),
+                bt = $("input[name='bsSend']"),
+                pr = (function(bt){
+                  bt.closest( "tr" )
+                  .after(
+                    $("<tr>")
+                      .addClass("mh_tdpage")
+                    .append(
+                      $("<td>")
+                        .attr("colspan", 4)
+                      .append(
+                        $("<div>")
+                          .attr("id", "preview")
+                      )
+                    )
+                  );
+                  return $('#preview');
+                })(bt),
+                render = function(from, to){
+                  to.html((function/*wordwrap*/(str, width, brk, cut){
+                    brk = brk || '\n';
+                    width = width || 75;
+                    cut = cut || false;
+                    if(!str)  return str;
+                    var regex = '.{0,' + width + '}(\\s|$)' + (cut ? '|.{' + width + '}|.+$' : '|\\S+?(\\s|$)');
+                    return str.match(RegExp(regex, 'g')).join(brk);
+                  })(from.val(), 75, '<br/>'));
+                },
+                enclose = function(ta, ts, te){
+                  var beg = ta[0].selectionStart,
+                      end = ta[0].selectionEnd,
+                      sel = ta.val().substring(beg, end) || "copier le texte ici";
+                  ta.val(ta.val().substring(0, beg) + ts + sel + te + ta.val().substring(end, ta.val().length));
+                  ta.trigger("change");
+                };
+            bt.parent()
+            .append(" - ")
+/*            .append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "Aperçu")
+                    .click($.proxy(function(){ render(ta, pr); },this))
+            ).append(" ") /**/
+            .append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "B")
+                    .click($.proxy(function(){ enclose(ta, "<b>", "</b>"); },this))
+            ).append(" ")
+            .append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "I")
+                    .click($.proxy(function(){ enclose(ta, "<i>", "</i>"); },this))
+            ).append(" ")
+            .append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "S")
+                    .click($.proxy(function(){ enclose(ta, "<u>", "</u>"); },this))
+            ).append(" ")
+            .append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "Quote")
+                    .click($.proxy(function(){ enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); },this))
+            ).append(" ")
+            .append(
+                $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin","auto 0px")
+                    .attr("type","button")
+                    .attr("value", "Trõlldûctéûr")
+                    .click($.proxy(function(){
+                        ta.val(
+                            ta.val()
+                      			.replace(/°*y°*/g, '°y°')
+                      			.replace(/a/g, 'à').replace(/e/g, 'é').replace(/i/g, 'ï').replace(/o/g, 'õ').replace(/u/g, 'û')
+                      			.replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
+                        );
+                        ta.trigger("change");
+                    },this))
+            ).append(" ");
+            ta.on('keyup change', function(e){ render($(this), pr); });
+        }
+    }
+});
 
 $(document).ready(function() {
     // Initialisation de la configuration
