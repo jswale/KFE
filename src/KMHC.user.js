@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.27-2
+// @version       0.0.27-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -15,39 +15,39 @@ var success = "success";
 
 var Utils = function() {
     CONF_KEY = "KMHC_";
-    
+
     return {
-        
+
         isUndefined : function(value) {
             return typeof value === 'undefined';
         },
-        
+
         isDefined : function(value) {
             return typeof value !== 'undefined';
-        },         
-        
+        },
+
         getConf : function(key) {
             return localStorage[CONF_KEY + key];
         },
-        
+
         setConf : function(key, value) {
             localStorage[CONF_KEY + key] = value;
         },
-        
+
         initConf : function(key, value) {
             if(this.isUndefined(typeof this.getConf(key))) {
                 this.setConf(key, value);
             }
         },
-        
+
         initConfig : function() {
             this.initConf("mountyzilla","false");
         },
-        
+
         getId : function(key) {
             return CONF_KEY + key;
         },
-        
+
         formatTime : function(time) {
             var d = new Date(time*1000);
             var year = d.getFullYear();
@@ -58,33 +58,33 @@ var Utils = function() {
             var sec = d.getSeconds();
             return (date < 10 ? "0" : "") + date + "/" + (month < 10 ? "0" : "") + month + '/' + year + (' à ' + (hour < 10 ? "0" : "") + hour + ':' + (min < 10 ? "0" : "") + min + ':' + (sec < 10 ? "0" : "") + sec);
         },
-        
+
         getDateDiff : function (date1, date2){
             var diff = {}                           // Initialisation du retour
             var tmp = date2 - date1;
-            
+
             tmp = Math.floor(tmp/1000);             // Nombre de secondes entre les 2 dates
             diff.sec = tmp % 60;                    // Extraction du nombre de secondes
-            
+
             tmp = Math.floor((tmp-diff.sec)/60);    // Nombre de minutes (partie entière)
             diff.min = tmp % 60;                    // Extraction du nombre de minutes
-            
+
             tmp = Math.floor((tmp-diff.min)/60);    // Nombre d'heures (entières)
             diff.hour = tmp % 24;                   // Extraction du nombre d'heures
-            
+
             tmp = Math.floor((tmp-diff.hour)/24);   // Nombre de jours restants
             diff.day = tmp;
-            
+
             if(diff.day > 5) {
                 return ">5j";
             }
-            
-            return $.grep([diff.day > 0 ? diff.day +"j" : null, 
-                           diff.hour > 0 ? diff.hour +"h" : null, 
-                           diff.min > 0 ? diff.min +"m" : null, 
+
+            return $.grep([diff.day > 0 ? diff.day +"j" : null,
+                           diff.hour > 0 ? diff.hour +"h" : null,
+                           diff.min > 0 ? diff.min +"m" : null,
                            diff.sec > 0 ? diff.sec +"s" : null], function(o){return o;}).join(" ");
         },
-        
+
         addGlobalStyle : function(css) {
             var head, style;
             head = document.getElementsByTagName('head')[0];
@@ -94,21 +94,21 @@ var Utils = function() {
             style.innerHTML = css;
             head.appendChild(style);
         }
-        
+
     }
 }();
 
 var MH_Page = function() {
     return {
-        
+
         utils : Utils,
-        
+
         load : function() {
             console.log("Module initializing");
             this.init();
             console.log("Module initialized");
         },
-        
+
         init : function() {
             console.log("Not yet implemented");
         },
@@ -116,25 +116,25 @@ var MH_Page = function() {
         log : function() {
 			console.log(arguments);
         },
-        
+
         debug : function() {
             console.debug(arguments);
         },
-        
+
         warn : function() {
             console.warn(arguments);
         },
-        
+
         error : function() {
             console.error(arguments);
-        },        
-        
+        },
+
         isInitialized : function() {
             return  (Utils.isDefined(typeof Utils.getConf("login")))
             &&  (Utils.isDefined(typeof Utils.getConf("pswd")));
         },
-        
-        callAPIConnected : function(conf) {						
+
+        callAPIConnected : function(conf) {
             if(!this.isInitialized()) {
                 this.error("Authentification required");
                 return;
@@ -142,7 +142,7 @@ var MH_Page = function() {
             conf.data = $.extend(conf.data, {"login" : Utils.getConf("login"),"password" : Utils.getConf("pswd")})
             this.callAPI(conf);
         },
-        
+
         callAPI : function(conf) {
             this.debug("Calling API", conf);
             $.ajax({
@@ -164,8 +164,16 @@ var MH_Page = function() {
                 }
             }, conf.scope || this));
         },
-        
-        
+
+        mhButton : function(label, callback) {
+            return $("<input/>")
+                    .addClass("mh_form_submit")
+                    .css("margin", "auto 0px")
+                    .attr("type", "button")
+                    .attr("value", label)
+                    .click($.proxy(callback, this));
+        },
+
         addCssToLabel : function(o) {
             return o
             .css("float", "left")
@@ -174,17 +182,17 @@ var MH_Page = function() {
             .css("text-align", "left")
             .css("width", "250px");
         },
-        
+
         addCssToInput : function(o) {
             return o
             .css("border", "1px solid #1E2A63")
             .css("font-size", "12px")
             .css("background-color", "#FFFFEE")
             .css("padding", "1px");
-        },            
-        
+        },
+
         addConfigPanel : function(items, callback) {
-            
+
             $("<div/>")
             .attr("id", Utils.getId("page-options"))
             .addClass("mh_tdpage")
@@ -205,27 +213,22 @@ var MH_Page = function() {
                     .attr("id", Utils.getId("page-options-"+item.option))
                     .attr("type", item.type)
                     .attr("name", item.option);
-                    
+
                     if(item.type == "checkbox") {
-                        field.prop("checked", fieldValue == "true");                                            
+                        field.prop("checked", fieldValue == "true");
                     } else {
-                        field.val(fieldValue);                                            
+                        field.val(fieldValue);
                     }
-                    
+
                     return [
                         this.addCssToLabel($("<label/>").text(item.label)),
-                        this.addCssToInput(field), 
+                        this.addCssToInput(field),
                         $("<br/>").css("clear","left")
-                    ];                    
+                    ];
                 },this)
                              ))
                 .append(
-                    $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin","auto 0px")
-                    .attr("type","button")
-                    .attr("value", "Enregistrer")
-                    .click($.proxy(function(){
+                    this.mhButton("Enregistrer", function(){
                         $.each(items, $.proxy(function(id, item){
                             var field = $("#" + Utils.getId("page-options-"+item.option));
                             var value = field.val();
@@ -239,8 +242,7 @@ var MH_Page = function() {
                         } else {
                             $("#" + Utils.getId("page-options")).toggle();
                         }
-                        
-                    },this))
+                      })
                 )
                 .append($("<br/>").css("clear","left"))
                 .append("<i>Les changements seront pris en compte au prochain affichage de cette page</i>")
@@ -248,7 +250,7 @@ var MH_Page = function() {
                 .append($("<span/>"))
             )
             .appendTo($("body"));
-            
+
             $('<svg height="40" version="1.1" width="40" xmlns="http://www.w3.org/2000/svg">'+
               '<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
               '<linearGradient id="27190-_0050af-_002c62" x1="0" y1="1" x2="0" y2="0" gradientTransform="matrix(1,0,0,1,-4,-4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
@@ -278,16 +280,16 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
             {
                 label : "Mot de passe",
                 option : "pswd",
-                type : "password"                    
-            },   
+                type : "password"
+            },
             {
                 label : "Mountyzilla activé",
                 option : "mountyzilla",
                 type : "checkbox"
-            }   
-        ], this.checkConnect);        
+            }
+        ], this.checkConnect);
     },
-    
+
     checkConnect : function() {
         this.callAPI({
             api : "isLog",
@@ -309,25 +311,25 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
             },
             scope : this
         });
-    }        
+    }
 });
 
 var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
-    
-    init : function() {      
+
+    init : function() {
         this.tune();
         this.showInfo();
     },
-    
+
     tune : function() {
         $("select option:contains('Gowap')").css("color", "#808080");
     },
-    
+
     showInfo : function() {
         var monsterIds = $("select option[value!='']").map(function(){
             return $(this).prop("value").match(/(\d+)/)[1];
-        }).get();     
-        
+        }).get();
+
         this.callAPIConnected({
             api : "viewInfo",
             data : {
@@ -342,12 +344,12 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
                         var o = $("select option[value='ME_" + tmp[1] + "']");
                         o.text(o.text() + " " + data.tag);
                     }
-                },this));                                
-                
+                },this));
+
                 $.each(json.monsters, $.proxy(function(key, data) {
                     var o = $("select option[value='ME_" + key + "']");
                     o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
-                },this));                
+                },this));
             }
         });
     }
@@ -361,7 +363,7 @@ var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
         result = result.replace(/<\/p>/gi, "\r\n");
         result = result.replace(/<tr[^>]*>/gi, "\r\n");
         result = result.replace(/<\/?[^>]+>/gi,"");
-        
+
         if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
             // Appel de l'API
             MH_Page.callAPIConnected({
@@ -371,23 +373,23 @@ var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
                 }
             });
         }
-    }    
+    }
 });
 
 var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, {
     init : function() {
         Utils.setConf("action", "Sort20");
-    }    
+    }
 });
 
 var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
     suffix : '',
-    
+
     init : function() {
         var tresorIds = $("select option[value!='']").map(function(){
             return $(this).prop("value");
-        }).get();     
-        
+        }).get();
+
         this.callAPIConnected({
             api : "viewInfo",
             data : {
@@ -402,11 +404,11 @@ var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
                         var o = $("select option[value='" + tmp[1] + this.suffix + "']");
                         o.text(o.text() + " - " + data.tag);
                     }
-                },this));                
+                },this));
             }
         });
-        
-    }    
+
+    }
 });
 
 
@@ -420,12 +422,12 @@ var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_Pick
 var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
     init : function() {
         Utils.setConf("action", "Sort10");
-    }    
+    }
 });
 
 var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
     init : function() {
-        
+
         if(Utils.getConf("action") == "Sort20") {
             var result = $($("table")[2]).text();
             if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
@@ -437,13 +439,13 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                     }
                 });
             }
-        }        
-        
+        }
+
         if(Utils.getConf("action") == "Sort10") {
             var result = $($("table")[2]).text();
             if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
                 var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec($($("table")[2]).text());
-                
+
                 // Appel de l'API
                 this.callAPIConnected({
                     api : "tag",
@@ -452,34 +454,34 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                         "num" : data[1],
                         "tag" : data[2],
                     }
-                });                 
+                });
             }
         }
-        
+
         Utils.setConf("action", "");
-    }    
-}); 
+    }
+});
 
 var MH_Play_Play_profil = $.extend({}, MH_Page, {
     init : function() {
-        this.sendData();        
+        this.sendData();
         this.removeAdds();
     },
-    
+
     removeAdds : function () {
         $("iframe").parent("td").remove();
     },
-    
+
     sendData : function() {
         var result = $($("table")[1]).text();
         result = result.replace(/<\/(TD|TH)[^>]*>/gi,"");
         result = result.replace(/<\/(TABLE|TR)[^>]*>/gi,"\n");
         result = result.replace(/<\/?[^>]+>/gi,"");
         result = result.replace(/[\n\r\t]+/gi,"");
-        result = result.replace(/ +/gi," ");        
-        
-        var troll = result.match(/.*Identifiants[^\d]*(\d+)/)[1];        
-        
+        result = result.replace(/ +/gi," ");
+
+        var troll = result.match(/.*Identifiants[^\d]*(\d+)/)[1];
+
         // Appel de l'API
         this.callAPIConnected({
             api : "profile",
@@ -487,36 +489,36 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 "profile" : result
                 //,"troll" : troll
             }
-        });        
+        });
     }
-}); 
+});
 
 var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
     init : function() {
         this.analyseMessage();
     },
-    
+
     analyseMessage : function() {
         var title = $.trim($("table:first tr:first td:first font:first").text());
-        var body = $.trim($("table:first tr:nth-child(5) td:first").html().replace(/<br>/g, "\r\n")).replace(/<\/?[^>]+>/gi,"");                
-        
+        var body = $.trim($("table:first tr:nth-child(5) td:first").html().replace(/<br>/g, "\r\n")).replace(/<\/?[^>]+>/gi,"");
+
         var api = null;
         var data = {};
-        
+
         if(title.indexOf("Compétence : Connaissance des Monstres") > -1) {
             api = "cdm";
             data = {
                 "cdm" : body
             };
         }
-        
+
         if(title.indexOf("Sortilège : Analyse Anatomique") > -1) {
             api = "aa";
             data = {
                 "aa" : body
             };
         }
-        
+
         if(title.indexOf("Sortilège : Identification des trésors") > -1) {
             var tmp = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(body);
             api = "tag";
@@ -525,8 +527,8 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
                 "num" : tmp[1],
                 "tag" : tmp[2],
             };
-        }             
-        
+        }
+
         if(title.indexOf("Sortilège : Téléportation") > -1) {
             var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*(Il conduit en[^\.]*)/.exec(body);
             api = "tag";
@@ -535,53 +537,53 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
                 "num" : tmp[1],
                 "tag" : tmp[2],
             };
-        }             
-        
+        }
+
         if(null == api) {
             return;
         }
-        
+
         // Appel de l'API
         this.callAPIConnected({
             api : api,
             data : data
-        });        
+        });
     }
-});     
+});
 
 
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
-        this.addTagEdition();  
-        
+        this.addTagEdition();
+
         if(Utils.getConf("mountyzilla") != "true") {
             this.addMonsterLevel();
         }
-        
+
         this.addMonsterCdmLink();
-        
-        this.addInfos();      
-        
+
+        this.addInfos();
+
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");
-        
+
         /*
         this.addConfigPanel([
             {
                 label : "Mountyzilla activé ?",
                 option : "mountyzilla",
                 type : "checkbox"
-            }                            
+            }
         ]);
         */
     },
-    
+
     addTagEditionForCell : function(cell, refColId, nomColId, type) {
         cell.children("td:nth-child("+nomColId+")")
         .append(
             $("<span/>")
-            .addClass("editable")            
+            .addClass("editable")
             .attr("contenteditable", "true")
             .attr("data-tag-type", type)
             .attr("data-tag-id", $(cell.children("td:nth-child("+refColId+")")).text())
@@ -595,24 +597,24 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 } else {
                     span.attr("data-tag-edited", "true");
                 }
-                
+
             }, this))
             .focusout($.proxy(function(event) {
                 var span = $(event.target);
                 this.sendTagEdition(span);
             }, this))
-        );        
+        );
     },
-    
+
     sendTagEdition : function(span) {
         if(!span.attr("data-tag-edited")) {
             return;
-        }                            
-        
+        }
+
         var type = span.attr("data-tag-type");
         var ref = span.attr("data-tag-id");
-        var tag = span.text();               
-        
+        var tag = span.text();
+
         this.callAPIConnected({
             api : "tag",
             data : {
@@ -621,33 +623,33 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "tag" : tag,
             },
             callback : function() {
-                span.removeAttr("data-tag-edited");                                    
+                span.removeAttr("data-tag-edited");
             },
             scope : this
-        });             
+        });
     },
-    
+
     addTagEdition : function() {
         Utils.addGlobalStyle('.editable { margin-left: 10px; }');
         Utils.addGlobalStyle('.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 13px; height: 13px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABdSURBVHjalNLdCgAQDIZh5JJ3F9s9T3Ygf/uMUpKn3pBVNb2GiNghIsq20RGazKz7OgR2WFDSyJkS3bxbEsx7gQNFwIKiYKAfYOh2rQgsyHsXF0WS5lnd/wVGE2AAupiLqNBm6B0AAAAASUVORK5CYII=); }');
         Utils.addGlobalStyle('tr.mh_tdpage:hover .editable:after {display:inline-block; }');
-        
+
         $.each(
             [
-                ["mh_vue_hidden_monstres", "Réf.", "Nom", 1], 
+                ["mh_vue_hidden_monstres", "Réf.", "Nom", 1],
                 ["mh_vue_hidden_trolls", "Réf.", "Nom", 2],
                 ["mh_vue_hidden_tresors", "Réf.", "Type", 3],
                 //["mh_vue_hidden_champignons", "", "", 4],
                 ["mh_vue_hidden_lieux", "Réf.", "Nom", 5]
             ], $.proxy(function(i, data) {
-                var refColId = this.getColumnId(data[0], data[1]);            
+                var refColId = this.getColumnId(data[0], data[1]);
                 var nomColId = this.getColumnId(data[0], data[2]);
                 $("#" + data[0] + " table:first tr.mh_tdpage").each($.proxy(function(iTr, tr){
                     this.addTagEditionForCell($(tr), refColId, nomColId, data[3]);
-                }, this));   
-            }, this));        
+                }, this));
+            }, this));
     },
-    
+
     sendView : function() {
         function extractData(id, title) {
             var data = [];
@@ -663,7 +665,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             }).get().join("\r\n"));
             return data;
         }
-        
+
         var result = [];
         result.push($("form[name='LimitViewForm']").text());
         result = result.concat(extractData("mh_vue_hidden_monstres", "MONSTRES ERRANTS"));
@@ -671,19 +673,19 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         result = result.concat(extractData("mh_vue_hidden_tresors", "TRÉSORS"));
         result = result.concat(extractData("mh_vue_hidden_champignons", "CHAMPIGNONS"));
         result = result.concat(extractData("mh_vue_hidden_lieux", "LIEUX"));
-        result = result.concat(extractData("mh_vue_hidden_cadavres", "CÉNOTAPHES"));            
-        
-        result = result.join("\r\n");      
-        
+        result = result.concat(extractData("mh_vue_hidden_cadavres", "CÉNOTAPHES"));
+
+        result = result.join("\r\n");
+
         // Appel de l'API
         this.callAPIConnected({
             api : "view",
             data : {
                 "view" : result
             }
-        });        
+        });
     },
-    
+
     getColumnId : function(id, name) {
         var i = null;
         $("#" + id + " table:first tr.mh_tdtitre td").each(function(idx){
@@ -693,16 +695,16 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         });
         return i;
     },
-    
+
     addMonsterCdmLink : function() {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
-        var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");            
-        
+        var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
+
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
             var monsterName = $($(this).children("td:nth-child("+nomColId+")")).text();
             var td = $($(this).children("td:nth-child("+refColId+")"));
-            var monsterId = td.text();                    
+            var monsterId = td.text();
             td	.empty()
             .append(
                 $("<a/>")
@@ -713,42 +715,42 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     window.open("http://pharoz.net/MH/outil/popup.php4?popupWidth=700&popupHeight=400&page=bestiary/detail2&fullName=" + monsterName + "&ref=" + monsterId, "karlaakiPopup", "width=700, height=400, resizable=yes,menubar=no,scrollbars=yes,status=no");
                 })
             );
-        });            
+        });
     },
-    
-    
+
+
     addMonsterLevel : function() {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
         var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
         var levelColId = this.getColumnId("mh_vue_hidden_monstres", "Niveau");
-        
+
         if(levelColId != null) {
             this.warn("Colonne niveau déjà présente");
             return;
         }
-        
+
         var monsterNames = [];
         var monsterIds = [];
-        
+
         // Ajout de a colonne titre
         $("#mh_vue_hidden_monstres table:first tr.mh_tdtitre:first td:nth-child(2)").after('<td width="50px"><b>Niveau</b></td>');
-        
+
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
             var monsterId = $(this).children("td:nth-child("+refColId+")").text();
             monsterIds.push(monsterId);
-            
+
             var monsterName = $($(this).children("td:nth-child("+nomColId+")")).text();
             monsterNames.push(monsterName);
-            
+
             $(this).children('td:nth-child(2)').after(
                 $("<td/>")
-                .css("text-align", "center")                            
+                .css("text-align", "center")
                 .attr("id", "view-monster-id-" + monsterId)
                 .text("-")
             );
         });
-        
+
         // Appel de l'API
         this.callAPIConnected({
             api : "monsterLvl",
@@ -765,69 +767,69 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             },
             scope : this
         });
-    },  
-    
+    },
+
     getTrollIds : function() {
         var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
         var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
-        
+
         // Fix
         $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
-        
+
         var    ids = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
             var id = $(this).text();
             $(this).parent("tr").attr("data-troll-info", id);
             return id;
-        }).get();      
+        }).get();
         ids.push(Utils.getConf("login"));
         return ids;
     },
-    
+
     getMonsterIds : function() {
-        var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");         
-        
+        var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
+
         return $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
             var id = $(this).text();
             $(this).parent("tr").attr("data-monster-info", id);
             return id;
-        }).get();     
-        
+        }).get();
+
     },
-    
+
     getTresorIds : function() {
-        var refColId = this.getColumnId("mh_vue_hidden_tresors", "Réf.");         
-        
+        var refColId = this.getColumnId("mh_vue_hidden_tresors", "Réf.");
+
         return $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
             var id = $(this).text();
             $(this).parent("tr").attr("data-tresor-info", id);
             return id;
-        }).get();    
+        }).get();
     },
-    
+
     getLieuIds : function() {
-        var refColId = this.getColumnId("mh_vue_hidden_lieux", "Réf.");         
-        
+        var refColId = this.getColumnId("mh_vue_hidden_lieux", "Réf.");
+
         return $("#mh_vue_hidden_lieux table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
             var id = $(this).text();
             $(this).parent("tr").attr("data-lieu-info", id);
             return id;
-        }).get();     
-        
+        }).get();
+
     },
-    
+
     addInfos : function() {
         var txt = $("form[name='LimitViewForm']").text();
-        
+
         var x = parseInt(txt.match(/.*X = (-?\d+)/)[1]);
         var y = parseInt(txt.match(/.*Y = (-?\d+)/)[1]);
         var n = parseInt(txt.match(/.*N = (-?\d+)/)[1]);
         var r = txt.match(/L'affichage est limité à (\d+) cases horizontalement et (\d+) verticalement/);
         var rH = parseInt(r[1]);
-        var rV = parseInt(r[2]);        
-        
+        var rV = parseInt(r[2]);
+
         // Fix
         $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");
-        
+
         this.callAPIConnected({
             api : "viewInfo",
             data : {
@@ -837,37 +839,37 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "yMax" : y + rH,
                 "nMin" : n - rV,
                 "nMax" : n + rV,
-                "m" : this.getMonsterIds(),                
+                "m" : this.getMonsterIds(),
                 "t" : this.getTrollIds(),
                 "o" : this.getTresorIds(),
                 "l" : this.getLieuIds(),
                 "c" : []
             },
             callback : function(datas) {
-                var json = $.parseJSON(datas);                
-                
+                var json = $.parseJSON(datas);
+
                 var isInvisible = false;
-                
-                $.each(json.invis, $.proxy(function(trollId, data){                        
+
+                $.each(json.invis, $.proxy(function(trollId, data){
                     if(trollId == Utils.getConf("login")) {
                         isInvisible = true;
                     }
-                    var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));           
-                    
+                    var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
+
                     var previous = [];
                     var pd = d;
                     do {
                     	previous = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
                             return $(this).text() == pd;
                         }).last().parent("tr");
-                        pd--;            
-                        
+                        pd--;
+
                     } while(pd > 0 && previous.length == 0);
-                    
+
                     if(previous.length == 0) {
                         previous = $("#mh_vue_hidden_trolls table:nth-child(1) tr.mh_tdtitre").first();
                     }
-                    
+
                     var tr = $("<tr/>")
                     .attr("data-troll-info", trollId)
                     .addClass("mh_tdpage")
@@ -882,12 +884,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .append($("<td/>").text(data.n).attr("align", "center"))
                     .insertAfter(previous)
                     ;
-                    
+
                     this.addTagEditionForCell(tr, this.getColumnId("mh_vue_hidden_trolls", "Réf."), this.getColumnId("mh_vue_hidden_trolls", "Nom"), 2);
-                }, this));                
-                
+                }, this));
+
                 $.each(json.trolls, $.proxy(function(trollId, data){
-                    
+
                     // Création de la ligne pour son troll
                     if(trollId == Utils.getConf("login") && !isInvisible) {
                         var tr = $("<tr/>")
@@ -904,10 +906,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .append($("<td/>").text(n).attr("align", "center"))
                         .insertAfter(
                             $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first")
-                        );   
+                        );
                         this.addTagEditionForCell(tr, this.getColumnId("mh_vue_hidden_trolls", "Réf."), this.getColumnId("mh_vue_hidden_trolls", "Nom"), 2);
                     }
-                    
+
                     var pvMin = data.pv;
                     var pvMax = Math.max(data.pv, data.pvMax);
                     $("[data-troll-info='" + trollId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")")
@@ -918,7 +920,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .css("width", "100")
                         .css("height", "14")
                         .css("border", "1px solid black")
-                        .css("background-color", "#FFFFFF")                  
+                        .css("background-color", "#FFFFFF")
                         .css("position", "relative")
                         .attr("title", "MAJ: " + this.utils.getDateDiff(new Date(data.updateDate*1000), new Date()))
                         .append(
@@ -937,18 +939,18 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text(pvMin != pvMax ? (pvMin + " / " + pvMax) : '')                            
-                        )                        
+                            .text(pvMin != pvMax ? (pvMin + " / " + pvMax) : '')
+                        )
                     )
                     .append(
                         $("<div/>")
                         .css("float", "right")
-                        .css("margin", "2px 0px")                        
+                        .css("margin", "2px 0px")
                         .css("width", "30")
                         .css("height", "14")
                         .css("border", "1px solid black")
-                        .css("border-right", "0px")                        
-                        .css("background-color", "#FFF")                        
+                        .css("border-right", "0px")
+                        .css("background-color", "#FFF")
                         .css("position", "relative")
                         .attr("title", "DLA " + this.utils.formatTime(data.dla))
                         .append(
@@ -967,25 +969,25 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text(data.pa + " PA")                            
+                            .text(data.pa + " PA")
                         )
                     )
-                    ;                        
+                    ;
                 }, this));
-                
+
                 $.each(json.monsters, $.proxy(function(monsterId, data){
                     var pvs = data.pvRange.split("-");
                     var pvMin = pvs[0];
                     var pvMax = Math.max(pvs[0],pvs[1]);
                     var pvActMin = pvMin;
-                    var pvActMax = Math.max(pvMin, pvMax);                        
-                    
+                    var pvActMax = Math.max(pvMin, pvMax);
+
                     if(data.bless > 0) {
                         pvActMin = Math.max(1, Math.round((100 - data.bless - 5) * pvMin / 100));
                         pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
                     }
-                    
-                    $("[data-monster-info='" + monsterId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_monstres", "Nom")+")").append(                                                   
+
+                    $("[data-monster-info='" + monsterId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_monstres", "Nom")+")").append(
                         $("<div/>")
                         .css("float", "right")
                         .css("margin", "2px 2px 2px 0px")
@@ -1011,33 +1013,33 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text((data.bless > 0 ? (pvActMin + "-" + pvActMax) : data.pvRange))                            
-                        )    
-                    );                        
-                }, this));                
-                
-                
+                            .text((data.bless > 0 ? (pvActMin + "-" + pvActMax) : data.pvRange))
+                        )
+                    );
+                }, this));
+
+
                 $.each(json.tags, $.proxy(function(key, tag){
                     key = key.split(";");
                     $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']")
                     .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
                     .text(tag.tag);
-                }, this));  
-                
+                }, this));
+
             },
             scope : this
-        });        
+        });
     }
-    
-    
-    
-    
+
+
+
+
 });
 
 var MH_Play_Play_menu = $.extend({}, MH_Page, {
     init : function(){
-        Utils.setConf("login", $("input[name='ai_IdPJ']").val());        
-        
+        Utils.setConf("login", $("input[name='ai_IdPJ']").val());
+
         $("<div/>")
         .css("position", "absolute")
         .css("top", "35px")
@@ -1070,7 +1072,7 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             .text("MAJ")
         )
         .appendTo($("body"))
-    }        
+    }
 });
 
 var MH_Play_TurnStart = $.extend({}, MH_Page, {
@@ -1080,8 +1082,8 @@ var MH_Play_TurnStart = $.extend({}, MH_Page, {
             return;
         }
         this.autoConnect();
-    },    
-    
+    },
+
     autoConnect : function() {
         $("body")
         .append(
@@ -1092,7 +1094,7 @@ var MH_Play_TurnStart = $.extend({}, MH_Page, {
             .on("load", function() {
                 $(this).remove();
             })
-        );      
+        );
     }
 });
 
@@ -1103,7 +1105,21 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
 
 var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
     init : function(){
-        if(document.location.search == "?cat=3") {
+        console.log("search: ", document.location.search);
+        if(document.location.search.match(/^\?cat=3/)) {
+            $("input[name=Titre]").val(function(i, v){
+              if(v){
+                var a1 = v.match(/(Re\s*:)/ig) || [],
+                    a2 = v.match(/Re\s*\(\d+\)\s*:/ig);
+                v = a2 ? (function() {
+                  var n = 0;
+                  a2 = a2.join().match(/\d+/g);
+                  for(var i = 0; i < a2.length; ++i) n += 1 * a2[i];
+                  return v.replace(/^Re(.*)\s*:\s*/i, "Re(" + (a1.length + n) + ") : "); })()
+                : v.replace(/^(Re\s*:\s*)*/i, "Re(" + a1.length + ") : ");
+              }
+              return v;
+            });
             var ta = $("textarea[name='Message']"),
                 bt = $("input[name='bsSend']"),
                 pr = (function(bt){
@@ -1139,83 +1155,48 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                   ta.val(ta.val().substring(0, beg) + ts + sel + te + ta.val().substring(end, ta.val().length));
                   ta.trigger("change");
                 };
-            bt.parent()
-            .append(" - ")
-/*            .append(
-                $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin","auto 0px")
-                    .attr("type","button")
-                    .attr("value", "Aperçu")
-                    .click($.proxy(function(){ render(ta, pr); },this))
-            ).append(" ") /**/
-            .append(
-                $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin","auto 0px")
-                    .attr("type","button")
-                    .attr("value", "B")
-                    .click($.proxy(function(){ enclose(ta, "<b>", "</b>"); },this))
-            ).append(" ")
-            .append(
-                $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin","auto 0px")
-                    .attr("type","button")
-                    .attr("value", "I")
-                    .click($.proxy(function(){ enclose(ta, "<i>", "</i>"); },this))
-            ).append(" ")
-            .append(
-                $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin","auto 0px")
-                    .attr("type","button")
-                    .attr("value", "S")
-                    .click($.proxy(function(){ enclose(ta, "<u>", "</u>"); },this))
-            ).append(" ")
-            .append(
-                $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin","auto 0px")
-                    .attr("type","button")
-                    .attr("value", "Quote")
-                    .click($.proxy(function(){ enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); },this))
-            ).append(" ")
-            .append(
-                $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin","auto 0px")
-                    .attr("type","button")
-                    .attr("value", "Trõlldûctéûr")
-                    .click($.proxy(function(){
-                        ta.val(
-                            ta.val()
-                      			.replace(/°*y°*/g, '°y°')
-                      			.replace(/a/g, 'à').replace(/e/g, 'é').replace(/i/g, 'ï').replace(/o/g, 'õ').replace(/u/g, 'û')
-                      			.replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
-                        );
-                        ta.trigger("change");
-                    },this))
-            ).append(" ");
+            bt.parent().append(" - ");
+            [["B",     function(){ enclose(ta, "<b>", "</b>"); }],
+             ["I",     function(){ enclose(ta, "<i>", "</i>"); }],
+             ["S",     function(){ enclose(ta, "<u>", "</u>"); }],
+             ["Quote", function(){ enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); }],
+             ["Trõlldûctéûr",
+                function(){
+                    ta.val(
+                        ta.val()
+                        .replace(/°*y°*/g, '°y°')
+                			  .replace(/a/g, 'à').replace(/e/g, 'é').replace(/i/g, 'ï').replace(/o/g, 'õ').replace(/u/g, 'û')
+                			  .replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
+                    );
+                    ta.trigger("change");
+                }]
+            ].forEach(function(e, i, a) { bt.parent().append(this.mhButton(e[0], e[1])).append(" "); }, this);
             ta.on('keyup change', function(e){ render($(this), pr); });
         }
     }
 });
 
+var Messagerie_ViewMessage = $.extend({}, MH_Page, {
+    init : function(){
+        console.log("search: ", document.location.search);
+    }
+});
+
+
 $(document).ready(function() {
     // Initialisation de la configuration
     Utils.initConfig();
-    
+
     // Chargement du module spécifique
     var pathname = document.location.pathname;
     var moduleName = pathname.replace(/\/mountyhall\/(.*).php.*$/, "$1").replace(/\//g, "_");
     console.log("Searching for module " + moduleName + " by URL " + pathname);
-    
+
     var module;
     try {
         module = eval(moduleName);
     } catch(e) {}
-    
+
     if(Utils.isUndefined(typeof module)) {
         console.log("Unable to find the module " + moduleName + " for URL " + pathname);
     } else {
