@@ -14,7 +14,8 @@
 var success = "success";
 
 var Utils = function() {
-    CONF_KEY = "KMHC_";
+    var CONF_KEY = "KMHC_",
+        VAL_KEY  = "KMHV_";
 
     return {
 
@@ -93,8 +94,20 @@ var Utils = function() {
             style.type = 'text/css';
             style.innerHTML = css;
             head.appendChild(style);
-        }
+        },
 
+        getValue : function(key) {
+            return localStorage[VAL_KEY + key];
+        },
+        setValue : function(key, value) {
+            localStorage[VAL_KEY + key] = value;
+        },
+        getSessionValue : function(key) {
+            return sessionStorage[VAL_KEY + key];
+        },
+        setSessionValue : function(key, value) {
+            sessionStorage[VAL_KEY + key] = value;
+        }
     }
 }();
 
@@ -1107,20 +1120,8 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
     init : function(){
         console.log("search: ", document.location.search);
         if(document.location.search.match(/^\?cat=3/)) {
-            $("input[name=Titre]").val(function(i, v){
-              if(v){
-                var a1 = v.match(/(Re\s*:)/ig) || [],
-                    a2 = v.match(/Re\s*\(\d+\)\s*:/ig);
-                v = a2 ? (function() {
-                  var n = 0;
-                  a2 = a2.join().match(/\d+/g);
-                  for(var i = 0; i < a2.length; ++i) n += 1 * a2[i];
-                  return v.replace(/^Re(.*)\s*:\s*/i, "Re(" + (a1.length + n) + ") : "); })()
-                : v.replace(/^(Re\s*:\s*)*/i, "Re(" + a1.length + ") : ");
-              }
-              return v;
-            });
-            var ta = $("textarea[name='Message']"),
+            var ti = $("input[name=Titre]"),
+                ta = $("textarea[name='Message']"),
                 bt = $("input[name='bsSend']"),
                 pr = (function(bt){
                   bt.closest( "tr" )
@@ -1155,12 +1156,22 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                   ta.val(ta.val().substring(0, beg) + ts + sel + te + ta.val().substring(end, ta.val().length));
                   ta.trigger("change");
                 };
-            bt.parent().append(" - ");
-            [["B",     function(){ enclose(ta, "<b>", "</b>"); }],
-             ["I",     function(){ enclose(ta, "<i>", "</i>"); }],
-             ["S",     function(){ enclose(ta, "<u>", "</u>"); }],
+            bt.parent().append("&nbsp;&nbsp;&nbsp;");
+            [["Citer",
+                function(){
+                    var reply = Utils.getValue('lastReply');
+                    if(reply) {
+                        reply = '> ' + reply.replace(/<br\/?>/gm, '\n> ');
+                        ta.val(reply);
+                    }
+                }],
+             ["Mémo.", function(){ Utils.setValue('savedMsg', ta.val()); Utils.setValue('savedTitle', ti.val()); }],
+             ["Rappel", function(){ ta.val(Utils.getValue('savedMsg')); ti.val(Utils.getValue('savedTitle')); }],
+             ["G", function(){ enclose(ta, "<b>", "</b>"); }],
+             ["I", function(){ enclose(ta, "<i>", "</i>"); }],
+             ["S", function(){ enclose(ta, "<u>", "</u>"); }],
              ["Quote", function(){ enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); }],
-             ["Trõlldûctéûr",
+             ["Trõlldûctéûr", 
                 function(){
                     ta.val(
                         ta.val()
@@ -1172,6 +1183,19 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                 }]
             ].forEach(function(e, i, a) { bt.parent().append(this.mhButton(e[0], e[1])).append(" "); }, this);
             ta.on('keyup change', function(e){ render($(this), pr); });
+            ti.val(function(i, v){
+              if(v){
+                var a1 = v.match(/(Re\s*:)/ig) || [],
+                    a2 = v.match(/Re\s*\(\d+\)\s*:/ig);
+                v = a2 ? (function() {
+                  var n = 0;
+                  a2 = a2.join().match(/\d+/g);
+                  for(var i = 0; i < a2.length; ++i) n += 1 * a2[i];
+                  return v.replace(/^Re(.*)\s*:\s*/i, "Re(" + (a1.length + n) + ") : "); })()
+                : v.replace(/^(Re\s*:\s*)*/i, "Re(" + a1.length + ") : ");
+              }
+              return v;
+            });
         }
     }
 });
@@ -1179,6 +1203,10 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
 var Messagerie_ViewMessage = $.extend({}, MH_Page, {
     init : function(){
         console.log("search: ", document.location.search);
+        $("input[name='bAnswer'],input[name='bAnswerToAll']").on('click', function(e){
+            var reply = $($(this).closest('tr').prev().children()[0]).html();
+            Utils.setValue('lastReply', reply);
+        });
     }
 });
 
