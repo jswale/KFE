@@ -350,6 +350,7 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
                 "m" : monsterIds
             },
             callback : function(datas) {
+                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
                 $.each(json.tags, $.proxy(function(key, data) {
                     var tmp = key.split(";");
@@ -410,6 +411,7 @@ var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
                 "o" : tresorIds
             },
             callback : function(datas) {
+                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
                 $.each(json.tags, $.proxy(function(key, data){
                     var tmp = key.split(";");
@@ -773,6 +775,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             },
             callback : function(datas) {
                 // bouchon
+                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
                 $.each(json, function(i, data){
                     $("#view-monster-id-" + data[0]).text(data[1]);
@@ -859,6 +862,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "c" : []
             },
             callback : function(datas) {
+                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
 
                 var isInvisible = false;
