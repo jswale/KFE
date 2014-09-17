@@ -1184,14 +1184,18 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
             ta.on('keyup change', function(e){ render($(this), pr); });
             ti.val(function(i, v){
               if(v){
-                var a1 = v.match(/(Re\s*:)/ig) || [],
-                    a2 = v.match(/Re\s*\(\d+\)\s*:/ig);
-                v = a2 ? (function() {
-                  var n = 0;
-                  a2 = a2.join().match(/\d+/g);
-                  for(var i = 0; i < a2.length; ++i) n += 1 * a2[i];
-                  return v.replace(/^Re(.*)\s*:\s*/i, "Re(" + (a1.length + n) + ") : "); })()
-                : v.replace(/^(Re\s*:\s*)*/i, "Re(" + a1.length + ") : ");
+                  var re1 = /Re\s*:\s*/ig,
+                      n = (v.match(re1) || []).length,
+                      re2 = /Re\s*\(\d+\)\s*:\s*/ig;
+                  n += (function(){
+                      var p = 0,
+                          a = (v.match(re2) || []).join().match(/\d+/g);
+                      for(var i = 0; i < a.length; ++i) p += 1 * a[i];
+                      return p; })();
+                  v = v.replace(re1, '').replace(re2, '').replace(/^\s+/g,'');
+                  var t = v.match(/^\[.*\]\s?/);
+                  v = ((n > 1) ? ("Re(" + n + ") : ") : "Re : ") + v;
+                  if(t) v = t + v.replace(t, '');
               }
               return v;
             });
