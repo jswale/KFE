@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.27-3
+// @version       0.0.28
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -127,7 +127,7 @@ var MH_Page = function() {
         },
 
         log : function() {
-			console.log(arguments);
+            console.log(arguments);
         },
 
         debug : function() {
@@ -1118,7 +1118,6 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
 
 var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
     init : function(){
-        console.log("search: ", document.location.search);
         if(document.location.search.match(/^\?cat=3/)) {
             var ti = $("input[name=Titre]"),
                 ta = $("textarea[name='Message']"),
@@ -1202,7 +1201,6 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
 
 var Messagerie_ViewMessage = $.extend({}, MH_Page, {
     init : function(){
-        console.log("search: ", document.location.search);
         $("input[name='bAnswer'],input[name='bAnswerToAll']").on('click', function(e){
             var reply = $($(this).closest('tr').prev().children()[0]).html();
             Utils.setValue('lastReply', reply);
@@ -1210,6 +1208,16 @@ var Messagerie_ViewMessage = $.extend({}, MH_Page, {
     }
 });
 
+var MH_Play_Play_action = $.extend({}, MH_Page, {
+    init : function(){
+        $('select').find('optgroup').each(function(){
+            if($(this).prop('label') == "** Actions Spéciales **") {
+              $(this).css("background-color", "#99CCFF");
+              $(this).parent().css("background-color", "#99CCFF");
+            }
+        });
+    }
+});
 
 $(document).ready(function() {
     // Initialisation de la configuration

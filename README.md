@@ -1,10 +1,14 @@
 KFE
 ===
 
-Karlaaki MH Connector
+The Karlaaki MH Connector
 
 
 Changelog :
+
+v 0.0.28
+- Ajout de la mise en surbrillance des actions spéciales
+
 v 0.0.27-3
 - Ajout de la Citation et de la mémorisation de message dans l'éditeur de message
 - Correction auto des Re: Re: Re:... dans les titres des messages
