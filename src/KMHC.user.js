@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.28
+// @version       0.0.28-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -350,7 +350,6 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
                 "m" : monsterIds
             },
             callback : function(datas) {
-                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
                 $.each(json.tags, $.proxy(function(key, data) {
                     var tmp = key.split(";");
@@ -411,7 +410,6 @@ var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
                 "o" : tresorIds
             },
             callback : function(datas) {
-                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
                 $.each(json.tags, $.proxy(function(key, data){
                     var tmp = key.split(";");
@@ -570,6 +568,7 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
+        this.renameGG();
         this.addTagEdition();
 
         if(Utils.getConf("mountyzilla") != "true") {
@@ -592,6 +591,13 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             }
         ]);
         */
+    },
+    
+    renameGG : function() {        
+        var refColId = this.getColumnId("mh_vue_hidden_tresors", "Type");
+        $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").each(function(){
+            $(this).text($(this).text().replace("Gigots de Gob'", "piécettes à Miltown"));
+        });
     },
 
     addTagEditionForCell : function(cell, refColId, nomColId, type) {
@@ -775,7 +781,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             },
             callback : function(datas) {
                 // bouchon
-                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
                 $.each(json, function(i, data){
                     $("#view-monster-id-" + data[0]).text(data[1]);
@@ -862,7 +867,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "c" : []
             },
             callback : function(datas) {
-                datas = datas.replace(/\\+/g, "\\\\+").replace(/\\-/g, "\\\\-");
                 var json = $.parseJSON(datas);
 
                 var isInvisible = false;
