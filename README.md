@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.28-1
+- Correction des json incorrects
+
 v 0.0.28
 - Ajout de la mise en surbrillance des actions spéciales
 - Prise en compte d'un tag [...] dans les titres des messages
