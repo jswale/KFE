@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.27-4
+// @version       0.0.28
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -127,7 +127,7 @@ var MH_Page = function() {
         },
 
         log : function() {
-			console.log(arguments);
+            console.log(arguments);
         },
 
         debug : function() {
@@ -1122,7 +1122,6 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
 
 var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
     init : function(){
-        console.log("search: ", document.location.search);
         if(document.location.search.match(/^\?cat=3/)) {
             var ti = $("input[name=Titre]"),
                 ta = $("textarea[name='Message']"),
@@ -1189,14 +1188,18 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
             ta.on('keyup change', function(e){ render($(this), pr); });
             ti.val(function(i, v){
               if(v){
-                var a1 = v.match(/(Re\s*:)/ig) || [],
-                    a2 = v.match(/Re\s*\(\d+\)\s*:/ig);
-                v = a2 ? (function() {
-                  var n = 0;
-                  a2 = a2.join().match(/\d+/g);
-                  for(var i = 0; i < a2.length; ++i) n += 1 * a2[i];
-                  return v.replace(/^Re(.*)\s*:\s*/i, "Re(" + (a1.length + n) + ") : "); })()
-                : v.replace(/^(Re\s*:\s*)*/i, "Re(" + a1.length + ") : ");
+                  var re1 = /Re\s*:\s*/ig,
+                      n = (v.match(re1) || []).length,
+                      re2 = /Re\s*\(\d+\)\s*:\s*/ig;
+                  n += (function(){
+                      var p = 0,
+                          a = (v.match(re2) || []).join().match(/\d+/g);
+                      for(var i = 0; i < a.length; ++i) p += 1 * a[i];
+                      return p; })();
+                  v = v.replace(re1, '').replace(re2, '').replace(/^\s+/g,'');
+                  var t = v.match(/^\[.*\]\s?/);
+                  v = ((n > 1) ? ("Re(" + n + ") : ") : "Re : ") + v;
+                  if(t) v = t + v.replace(t, '');
               }
               return v;
             });
@@ -1206,7 +1209,6 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
 
 var Messagerie_ViewMessage = $.extend({}, MH_Page, {
     init : function(){
-        console.log("search: ", document.location.search);
         $("input[name='bAnswer'],input[name='bAnswerToAll']").on('click', function(e){
             var reply = $($(this).closest('tr').prev().children()[0]).html();
             Utils.setValue('lastReply', reply);
@@ -1214,6 +1216,16 @@ var Messagerie_ViewMessage = $.extend({}, MH_Page, {
     }
 });
 
+var MH_Play_Play_action = $.extend({}, MH_Page, {
+    init : function(){
+        $('select').find('optgroup').each(function(){
+            if($(this).prop('label') == "** Actions Spéciales **") {
+              $(this).css("background-color", "#99CCFF");
+              $(this).parent().css("background-color", "#99CCFF");
+            }
+        });
+    }
+});
 
 $(document).ready(function() {
     // Initialisation de la configuration
