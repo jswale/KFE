@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.28-1
+// @version       0.0.28-2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -435,6 +435,31 @@ var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_Pick
 var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
     init : function() {
         Utils.setConf("action", "Sort10");
+        this.injectInfo();
+    },
+    
+    injectInfo : function() {
+         var tresorIds = $("select option[value!='']").map(function(){
+            return $(this).prop("value").substr(2);
+        }).get();
+
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "invi" : 0,
+                "o" : tresorIds
+            },
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                $.each(json.tags, $.proxy(function(key, data){
+                    var tmp = key.split(";");
+                    if(tmp[0] == "3") {
+                        var o = $("select option[value='2_" + tmp[1] + "']");
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                },this));
+            }
+        });
     }
 });
 
