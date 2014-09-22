@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.28-3
+- Ajout d'une flèche de selection dans la liste publique
+
 v 0.0.28-2
 - Mise à jour automatique de la page de profil à la connexion.
 - Ajout des tags des objets dans l'action d'identification des trésors
