@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.28-2
+// @version       0.0.28-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -184,7 +184,7 @@ var MH_Page = function() {
                     .css("margin", "auto 0px")
                     .attr("type", "button")
                     .attr("value", label)
-                    .click($.proxy(callback, this));
+                    .on('click', $.proxy(callback, this));
         },
 
         addCssToLabel : function(o) {
@@ -279,7 +279,7 @@ var MH_Page = function() {
             .css("position", "fixed")
             .css("top", "10px")
             .css("right", "10px")
-            .click($.proxy(function(){
+            .on('click', $.proxy(function(){
                 $("#" + Utils.getId("page-options")).toggle();
             }, this))
             .appendTo($("body"));
@@ -757,7 +757,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 .attr("href", "javascript:void(0)")
                 .attr("title", "Voir la CdM de " + monsterName + " [" + monsterId + "]")
                 .text(monsterId)
-                .click(function(){
+                .on('click', function(){
                     window.open("http://pharoz.net/MH/outil/popup.php4?popupWidth=700&popupHeight=400&page=bestiary/detail2&fullName=" + monsterName + "&ref=" + monsterId, "karlaakiPopup", "width=700, height=400, resizable=yes,menubar=no,scrollbars=yes,status=no");
                 })
             );
@@ -1253,6 +1253,18 @@ var MH_Play_Play_action = $.extend({}, MH_Page, {
               $(this).parent().css("background-color", "#99CCFF");
             }
         });
+    }
+});
+
+var MH_Play_Liste_Vente_ListeVente_view = $.extend({}, MH_Page, {
+    init : function(){
+        var img = $("<img src='/mountyhall/Images/fleche_bas.gif' alt='v'>")
+            .appendTo($("form[name='VenteForm'] table:first table:first td:first"))
+            .on('mouseover', function() { $(this).css("cursor", "pointer"); })
+            .on('click', function(){
+                var cbs = $(this).parents('tbody').find("input[type='checkbox']");
+                cbs.prop("checked", ! cbs.prop("checked"));
+            });
     }
 });
 
