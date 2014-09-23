@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.28-4
+- Colorisation de trésors au sol
+
 v 0.0.28-3
 - Ajout d'une flèche de selection dans la liste publique
 
