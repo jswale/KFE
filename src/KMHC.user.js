@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.28-3
+// @version       0.0.28-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -593,7 +593,7 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
-        this.renameGG();
+        this.highlightTreasures();
         this.addTagEdition();
 
         if(Utils.getConf("mountyzilla") != "true") {
@@ -617,11 +617,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         ]);
         */
     },
-    
-    renameGG : function() {        
+
+    highlightTreasures : function() {
         var refColId = this.getColumnId("mh_vue_hidden_tresors", "Type");
         $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").each(function(){
             $(this).text($(this).text().replace("Gigots de Gob'", "piécettes à Miltown"));
+            $(this).html($(this).text().replace(/(Parchemin|Carte|Spécial)/, "<b style='color:#800080'>$1</b>"));
         });
     },
 
