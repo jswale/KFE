@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.28-4
+// @version       0.0.29
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -11,13 +11,73 @@
 // @copyright     2014+, Miltown
 // ==/UserScript==
 
-var success = "success";
+/*
+ *
+ * jQuery Editables 1.0.1
+ * 
+ * Date: Aug 11 2012
+ * Source: www.tectual.com.au, www.arashkarimzadeh.com
+ * Author: Arash Karimzadeh (arash@tectual.com.au)
+ *
+ * Copyright (c) 2012 Tectual Pty. Ltd.
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ */
+(function($){
 
+$.fn.editables = function(options){
+
+  var opts = $.extend( {}, $.fn.editables.options, options );
+
+  if(!$.isArray(opts.freezeOn)) opts.freezeOn = [opts.freezeOn];
+  if(!$.isArray(opts.editOn)) opts.editOn = [opts.editOn];
+
+  $('[data-type=editable]', this).each(
+    function(){
+      var $this = $(this);
+      var fn = function(ev){
+        var t = $($this.data('for'));
+        if(opts.beforeFreeze.call(t, $this, ev)==false) return;
+        t.hide();
+        $this.show();
+        t.trigger('onFreeze');
+      };
+      var evs= {};
+      $.each( opts.freezeOn, function(){ evs[this] = fn; } );
+      $($this.data('for')).hide().bind('onFreeze', opts.onFreeze).bind(evs);
+
+      var fn = function(ev){
+        var t = $($this.data('for'));
+        if(opts.beforeEdit.call($this, t, ev)==false) return;
+        $this.hide();
+        t.show().focus();
+        $this.trigger('onEdit');
+      }
+      var evs = {};
+      $.each( opts.editOn, function(){ evs[this] = fn; } );
+      $this.bind('onEdit', opts.onEdit).bind(evs);
+    }
+  );
+  return this;
+}
+$.fn.editables.options = {
+  editOn: 'click',      /* Event, Array[Events]: All jquery events */
+  beforeEdit: $.noop,   /* Function: It is called before conversion, you can stop it by returning false */
+  onEdit: $.noop,       /* Function: This function bind to editable item as event */
+  freezeOn: 'blur',     /* Event, Array[Events]: All jquery events */
+  beforeFreeze: $.noop, /* Function: It is called before conversion, you can stop it by returning false */
+  onFreeze: $.noop      /* Function: This function bind to edit field as event */
+}
+
+})(jQuery);
+
+// Here we are...
 var Utils = function() {
     var CONF_KEY = "KMHC_",
         VAL_KEY  = "KMHV_";
 
     return {
+        success: "success",
 
         isUndefined : function(value) {
             return typeof value === 'undefined';
@@ -87,13 +147,10 @@ var Utils = function() {
         },
 
         addGlobalStyle : function(css) {
-            var head, style;
-            head = document.getElementsByTagName('head')[0];
-            if (!head) { return; }
-            style = document.createElement('style');
-            style.type = 'text/css';
-            style.innerHTML = css;
-            head.appendChild(style);
+            if($.isArray(css)) css = css.join('\n');
+
+            // cf. http://stackoverflow.com/a/2692861
+            $('head').append('<style type="text/css">\n' + css + '\n</style>');
         },
 
         getValue : function(key) {
@@ -164,7 +221,7 @@ var MH_Page = function() {
                 //contentType: "application/x-www-form-urlencoded;charset=ISO-8859-15",
                 data : $.extend(conf.data, {"page" : conf.api, "popup" : 0, "encoding" : "UTF-8"})
             }).done($.proxy(function(data, result, request){
-                if(result == success) {
+                if(result == Utils.success) {
                     if(Utils.isUndefined(typeof conf.callback)) {
                         this.warn("No callback found");
                     } else {
@@ -573,7 +630,7 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
             data =  {
                 "type" : 5,
                 "num" : tmp[1],
-                "tag" : tmp[2],
+                "tag" : '=> ' . tmp[2],
             };
         }
 
@@ -622,64 +679,36 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var refColId = this.getColumnId("mh_vue_hidden_tresors", "Type");
         $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").each(function(){
             $(this).text($(this).text().replace("Gigots de Gob'", "piécettes à Miltown"));
-            $(this).html($(this).text().replace(/(Parchemin|Carte|Spécial)/, "<b style='color:#800080'>$1</b>"));
+            $(this).html($(this).text().replace(/(Parchemin|Carte|Coquillage|Conteneur|Spécial)/, "<b style='color:#900090'>$1</b>"));
         });
     },
 
     addTagEditionForCell : function(cell, refColId, nomColId, type) {
-        cell.children("td:nth-child("+nomColId+")")
+        var ref = $(cell.children("td:nth-child(" + refColId + ")")).text();
+        cell.children("td:nth-child(" + nomColId + ")")
         .append(
             $("<span/>")
-            .addClass("editable")
-            .attr("contenteditable", "true")
-            .attr("data-tag-type", type)
-            .attr("data-tag-id", $(cell.children("td:nth-child("+refColId+")")).text())
-            .text("")
-            .keydown($.proxy(function(event) {
-                var span = $(event.target);
-                if ( event.which == 13 ) {
-                    span.trigger( "focusout" );
-                    event.preventDefault();
-                    span.blur();
-                } else {
-                    span.attr("data-tag-edited", "true");
-                }
-
-            }, this))
-            .focusout($.proxy(function(event) {
-                var span = $(event.target);
-                this.sendTagEdition(span);
-            }, this))
-        );
+            .append(
+                $("<label/>")
+                .addClass("editable")
+                .attr("data-type", "editable")
+                .attr("data-for", "#tag_" + ref)
+                .text(""))
+            .append(
+                $("<input/>")
+                .attr("id", "tag_" + ref)
+                .attr("data-tag-type", type)
+                .attr("data-tag-id", ref))
+        )
     },
 
-    sendTagEdition : function(span) {
-        if(!span.attr("data-tag-edited")) {
-            return;
-        }
-
-        var type = span.attr("data-tag-type");
-        var ref = span.attr("data-tag-id");
-        var tag = span.text();
-
-        this.callAPIConnected({
-            api : "tag",
-            data : {
-                "type" : type,
-                "num" : ref,
-                "tag" : tag,
-            },
-            callback : function() {
-                span.removeAttr("data-tag-edited");
-            },
-            scope : this
-        });
-    },
-
-    addTagEdition : function() {
-        Utils.addGlobalStyle('.editable { margin-left: 10px; }');
-        Utils.addGlobalStyle('.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 13px; height: 13px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABdSURBVHjalNLdCgAQDIZh5JJ3F9s9T3Ygf/uMUpKn3pBVNb2GiNghIsq20RGazKz7OgR2WFDSyJkS3bxbEsx7gQNFwIKiYKAfYOh2rQgsyHsXF0WS5lnd/wVGE2AAupiLqNBm6B0AAAAASUVORK5CYII=); }');
-        Utils.addGlobalStyle('tr.mh_tdpage:hover .editable:after {display:inline-block; }');
+    addTagEdition: function() {
+        Utils.addGlobalStyle([
+            '.editable { margin-left: 10px; }',
+            '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 13px; height: 13px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABdSURBVHjalNLdCgAQDIZh5JJ3F9s9T3Ygf/uMUpKn3pBVNb2GiNghIsq20RGazKz7OgR2WFDSyJkS3bxbEsx7gQNFwIKiYKAfYOh2rQgsyHsXF0WS5lnd/wVGE2AAupiLqNBm6B0AAAAASUVORK5CYII=); }',
+            'tr.mh_tdpage:hover .editable:after {display:inline-block; }',
+            '.editable + input { margin-left: 10px; font-family: monospace; border: none; display: none; }'
+        ]);
 
         $.each(
             [
@@ -691,10 +720,53 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             ], $.proxy(function(i, data) {
                 var refColId = this.getColumnId(data[0], data[1]);
                 var nomColId = this.getColumnId(data[0], data[2]);
-                $("#" + data[0] + " table:first tr.mh_tdpage").each($.proxy(function(iTr, tr){
+                $("#" + data[0] + " table:first tr.mh_tdpage").each($.proxy(function(iTr, tr) {
                     this.addTagEditionForCell($(tr), refColId, nomColId, data[3]);
                 }, this));
-            }, this));
+            }, this)
+        );
+    },
+
+    handleTagEdition: function() {
+        var self = this;
+        $('body').editables({
+            editOn: 'click',
+            freezeOn: ['blur', 'keyup'],
+            beforeEdit: function(field) {
+                field.data('undo', this.text());
+                field.val(this.text());
+                field.attr('size', field.val().length + 2);
+            },
+            beforeFreeze: function(display, ev) { 
+                display.text(this.val());
+                //console.log(ev);
+                if(ev.type == 'keyup') {
+                    if(ev.which == 13) return true;
+                    if(ev.which == 27) {
+                        display.text(this.data('undo'));
+                        this.val(this.data('undo'));
+                        return true;
+                    }
+                    this.attr('size', this.val().length + 2);
+                    return false;
+                }
+                return true;
+            },
+            onFreeze: function() {
+                if($(this).val() != $(this).data('undo')) {
+                    self.callAPIConnected({
+                        api : "tag",
+                        data : {
+                            "type" : $(this).attr("data-tag-type"),
+                            "num" : $(this).attr("data-tag-id"),
+                            "tag" : $(this).val()
+                        },
+                        callback : $.noop,
+                        scope : self
+                    });
+                }
+            }
+        });
     },
 
     sendView : function() {
@@ -1065,21 +1137,18 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     );
                 }, this));
 
-
+                // populate tags and start handling
                 $.each(json.tags, $.proxy(function(key, tag){
                     key = key.split(";");
-                    $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']")
+                    $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']").prev()
                     .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
                     .text(tag.tag);
                 }, this));
-
+                this.handleTagEdition();
             },
             scope : this
         });
     }
-
-
-
 
 });
 

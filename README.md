@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.29
+- Refonte du système d'affichage/édition in-situ des tags (support du copier-coller et de l'annulation)
+
 v 0.0.28-4
 - Colorisation de trésors au sol
 
