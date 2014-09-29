@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.29
+// @version       0.0.30
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
 // @updateURL     https://github.com/jswale/KFE/raw/master/src/KMHC.meta.js
 // @grant         GM_addStyle
-// @copyright     2014+, Miltown
+// @copyright     2014+, Miltown, Grul & disciple
 // ==/UserScript==
 
 /*
@@ -241,7 +241,7 @@ var MH_Page = function() {
                     .css("margin", "auto 0px")
                     .attr("type", "button")
                     .attr("value", label)
-                    .on('click', $.proxy(callback, this));
+                    .on('click', callback);
         },
 
         addCssToLabel : function(o) {
@@ -262,7 +262,7 @@ var MH_Page = function() {
         },
 
         addConfigPanel : function(items, callback) {
-
+            var self = this;
             $("<div/>")
             .attr("id", Utils.getId("page-options"))
             .addClass("mh_tdpage")
@@ -296,9 +296,10 @@ var MH_Page = function() {
                         $("<br/>").css("clear","left")
                     ];
                 },this)
-                             ))
+                ))
                 .append(
-                    this.mhButton("Enregistrer", function(){
+                    self.mhButton("Enregistrer", function(){
+                        $(this).val("Enregistré");
                         $.each(items, $.proxy(function(id, item){
                             var field = $("#" + Utils.getId("page-options-"+item.option));
                             var value = field.val();
@@ -655,6 +656,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
         if(Utils.getConf("mountyzilla") != "true") {
             this.addMonsterLevel();
+            this.addSharingUI();
         }
 
         this.addMonsterCdmLink();
@@ -677,9 +679,19 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
     highlightTreasures : function() {
         var refColId = this.getColumnId("mh_vue_hidden_tresors", "Type");
+
         $("#mh_vue_hidden_tresors table:first tr.mh_tdpage td:nth-child("+refColId+")").each(function(){
-            $(this).text($(this).text().replace("Gigots de Gob'", "piécettes à Miltown"));
-            $(this).html($(this).text().replace(/(Parchemin|Carte|Coquillage|Conteneur|Spécial)/, "<b style='color:#900090'>$1</b>"));
+            $(this).html((function(txt) {
+                $.each(
+                    [
+                        ["Gigots de Gob'", "<b style='color:#ff8000'>piécettes à Miltown</b>"],
+                        [/(Gigots de Gob)/, "<b style='color:#ff8000'>$1</b>"],
+                        [/(Carte|Coquillage|Conteneur|Minerai|Parchemin|Spécial)/, "<b style='color:#900090'>$1</b>"]
+                    ], function(i, r) {
+                        txt = txt.replace(r[0], r[1]);
+                    });
+                return txt;
+            })($(this).html()));
         });
     },
 
@@ -886,6 +898,87 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             },
             scope : this
         });
+    },
+
+    addSharingUI : function() {
+        var self = this,
+            shareCallback = function() {
+                var ids = [];
+                $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(3) input:checked").each(function() {
+                    ids.push($(this).val());
+                });
+                window.open(
+                    (
+                        $("#mh_vue_hidden_trolls table:first").parents("table").prev().find("#radioPX").is(':checked')
+                        ? "Actions/Play_a_DonPX.php?cat=8&dest="
+                        : "../Messagerie/MH_Messagerie.php?cat=3&dest="
+                    ) + ids.join(','),
+                    "Contenu"
+                );
+            },
+            selectCallback = function() {
+                var refColId = self.getColumnId("mh_vue_hidden_trolls", "Réf.");
+
+                $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first td:nth-child(2)").after($("<td/>"));
+                $("#mh_vue_hidden_trolls table:first tr.mh_tdpage").each(function() {
+                    var trollId = $(this).children("td:nth-child("+refColId+")").text();
+                    $(this).children('td:nth-child(2)').after(
+                        $("<td/>")
+                        .attr("width", 5)
+                        .append(
+                            $("<input/>")
+                            .attr("type", "checkbox")
+                            .val(trollId)
+                        )
+                    );
+                });
+
+                $(this)
+                .before(
+                    self.mhButton("Annuler", function() {
+                        $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first td:nth-child(3)").remove();
+                        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(3)").remove();
+
+                        $(this).siblings("span").remove();
+                        $(this).next()
+                        .off()
+                        .on('click', selectCallback);
+                        $(this).remove();
+                    })
+                )
+                .after(
+                    $("<span/>")
+                    .append(
+                        $("<label/>")
+                        .append(
+                            $("<input/>")
+                            .attr("type", "radio")
+                            .attr("name", "envoiPXMP")
+                            .attr("id", "radioPX")
+                        )
+                        .append(" des PX ")
+                    )
+                    .append(
+                        $("<label/>")
+                        .append(
+                            $("<input/>")
+                            .attr("type", "radio")
+                            .attr("name", "envoiPXMP")
+                            .attr("checked", "checked")
+                        )
+                        .append(" un MP")
+                    )
+                )
+                .off()
+                .on('click', shareCallback);
+            };
+        $("#mh_vue_hidden_trolls table:first").parents("table").prev().find("a[name=trolls]").parent()
+        .attr("width", 50)
+        .after(
+            $("<td/>")
+            .attr("align", "left")
+            .append(self.mhButton("Envoyer...", selectCallback))
+        );
     },
 
     getTrollIds : function() {
@@ -1220,12 +1313,12 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
 });
 
 var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
-    init : function(){
+    init : function() {
         if(document.location.search.match(/^\?cat=3/)) {
             var ti = $("input[name=Titre]"),
                 ta = $("textarea[name='Message']"),
                 bt = $("input[name='bsSend']"),
-                pr = (function(bt){
+                pr = (function(bt) {
                   bt.closest( "tr" )
                   .after(
                     $("<tr>")
@@ -1241,7 +1334,7 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                   );
                   return $('#preview');
                 })(bt),
-                render = function(from, to){
+                render = function(from, to) {
                   to.html((function/*wordwrap*/(str, width, brk, cut){
                     brk = brk || '\n';
                     width = width || 75;
@@ -1251,7 +1344,7 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                     return str.match(RegExp(regex, 'g')).join(brk);
                   })(from.val(), 75, '<br/>'));
                 },
-                enclose = function(ta, ts, te){
+                enclose = function(ta, ts, te) {
                   var beg = ta[0].selectionStart,
                       end = ta[0].selectionEnd,
                       sel = ta.val().substring(beg, end) || "copier le texte ici";
@@ -1259,22 +1352,23 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                   ta.trigger("change");
                 };
             bt.parent().append("&nbsp;&nbsp;&nbsp;");
-            [["Citer",
-                function(){
+            $.each([
+                ["Citer",
+                function() {
                     var reply = Utils.getValue('lastReply');
                     if(reply) {
                         reply = '> ' + reply.replace(/<br\/?>/gm, '\n> ');
                         ta.val(reply);
                     }
                 }],
-             ["Mémo.", function(){ Utils.setValue('savedMsg', ta.val()); Utils.setValue('savedTitle', ti.val()); }],
-             ["Rappel", function(){ ta.val(Utils.getValue('savedMsg')); ti.val(Utils.getValue('savedTitle')); }],
-             ["G", function(){ enclose(ta, "<b>", "</b>"); }],
-             ["I", function(){ enclose(ta, "<i>", "</i>"); }],
-             ["S", function(){ enclose(ta, "<u>", "</u>"); }],
-             ["Quote", function(){ enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); }],
-             ["Trõlldûctéûr", 
-                function(){
+                ["Mémo.", function() { Utils.setValue('savedMsg', ta.val()); Utils.setValue('savedTitle', ti.val()); }],
+                ["Rappel", function() { ta.val(Utils.getValue('savedMsg')); ti.val(Utils.getValue('savedTitle')); }],
+                ["G", function() { enclose(ta, "<b>", "</b>"); }],
+                ["I", function() { enclose(ta, "<i>", "</i>"); }],
+                ["S", function() { enclose(ta, "<u>", "</u>"); }],
+                ["Quote", function() { enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); }],
+                ["Trõlldûctéûr", 
+                function() {
                     ta.val(
                         ta.val()
                         .replace(/°*y°*/g, '°y°')
@@ -1282,15 +1376,16 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                 			  .replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
                     );
                     ta.trigger("change");
-                }]
-            ].forEach(function(e, i, a) { bt.parent().append(this.mhButton(e[0], e[1])).append(" "); }, this);
-            ta.on('keyup change', function(e){ render($(this), pr); });
-            ti.val(function(i, v){
+                }]], $.proxy(function(i, e) {
+                    bt.parent().append(this.mhButton(e[0], e[1])).append(" ");
+                }, this));
+            ta.on('keyup change', function(e) { render($(this), pr); });
+            ti.val(function(i, v) {
               if(v){
                   var re1 = /Re\s*:\s*/ig,
                       n = (v.match(re1) || []).length,
                       re2 = /Re\s*\(\d+\)\s*:\s*/ig;
-                  n += (function(){
+                  n += (function() {
                       var p = 0,
                           a = (v.match(re2) || []).join().match(/\d+/g);
                       for(var i = 0; i < a.length; ++i) p += 1 * a[i];
@@ -1307,8 +1402,8 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
 });
 
 var Messagerie_ViewMessage = $.extend({}, MH_Page, {
-    init : function(){
-        $("input[name='bAnswer'],input[name='bAnswerToAll']").on('click', function(e){
+    init : function() {
+        $("input[name='bAnswer'],input[name='bAnswerToAll']").on('click', function(e) {
             var reply = $($(this).closest('tr').prev().children()[0]).html();
             Utils.setValue('lastReply', reply);
         });
@@ -1316,7 +1411,7 @@ var Messagerie_ViewMessage = $.extend({}, MH_Page, {
 });
 
 var MH_Play_Play_action = $.extend({}, MH_Page, {
-    init : function(){
+    init : function() {
         $('select').find('optgroup').each(function(){
             if($(this).prop('label') == "** Actions Spéciales **") {
               $(this).css("background-color", "#99CCFF");
@@ -1327,11 +1422,11 @@ var MH_Play_Play_action = $.extend({}, MH_Page, {
 });
 
 var MH_Play_Liste_Vente_ListeVente_view = $.extend({}, MH_Page, {
-    init : function(){
+    init : function() {
         var img = $("<img src='/mountyhall/Images/fleche_bas.gif' alt='v'>")
             .appendTo($("form[name='VenteForm'] table:first table:first td:first"))
             .on('mouseover', function() { $(this).css("cursor", "pointer"); })
-            .on('click', function(){
+            .on('click', function() {
                 var cbs = $(this).parents('tbody').find("input[type='checkbox']");
                 cbs.prop("checked", ! cbs.prop("checked"));
             });
