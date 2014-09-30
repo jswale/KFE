@@ -6,6 +6,10 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.30
+- Ajout du partage depuis la vue
+- Correctifs cosmétiques divers
+
 v 0.0.29
 - Refonte du système d'affichage/édition in-situ des tags (support du copier-coller et de l'annulation)
 
