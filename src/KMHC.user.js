@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.30
+// @version       0.0.30-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -562,6 +562,149 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
     init : function() {
         this.sendData();
         this.removeAdds();
+        //this.analizeStats();
+    },
+    
+    analizeStats : function() {
+        var stats = {};
+        
+        var getText = function(id) {
+            return $("table.mh_tdborder:first tr:nth-child(" + id + "):first").text().replace(/[\n\r\t]+/gi,"").replace(/\s+/gi," ");
+        };
+               
+        // DLA
+        var text = getText(2);
+        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes. Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);
+        
+        stats.pa = tmp[2];
+        stats.dla = {
+            next :tmp[1],
+            duration : {
+                normal : {
+                    hour : tmp[3],
+                    min : tmp[4]
+                },
+                bonus : {
+                    hour : tmp[5],
+                    min : tmp[6]
+                },
+                injuries : {
+                    hour : tmp[7],
+                    min : tmp[8]
+                },
+                stuf : {
+                    hour : tmp[9],
+                    min : tmp[10]
+                },
+                total : {
+                    hour : tmp[11],
+                    min : tmp[12]
+                }
+            }
+        };
+        
+        // Vue
+        var text = getText(3);
+        var tmp = /Position X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+) Vue.......: (-?\d+) Cases ([+-]\d+)/.exec(text);
+        stats.position = {
+            x : tmp[1],
+            y : tmp[2],
+            n : tmp[3],
+        };
+        
+        stats.view = {
+            range : tmp[4],
+            bonus : tmp[5]
+        };              
+        
+        // XP
+        var text = getText(4);
+        var tmp = /Expérience Niveau........: (\d+) \((\d+) PI\) PX..............: (\d+) PX Personnels...... : (\d+) PI..............: (\d+) \(Table des Améliorations\) Karma.........: (.*) /.exec(text);
+        stats.xp = {
+            level : tmp[1],
+            PI : {
+                all : tmp[2],
+                current : tmp[5],
+            },
+            PX : {
+                public : tmp[3],
+                private : tmp[4]
+            }            
+        };
+        stats.karma = tmp[6];
+        
+        // HP
+        var text = getText(5);
+        var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+) \)/.exec(text);
+        stats.hp = {
+            current : tmp[1],
+            max : {
+                value : tmp[2],
+                bonus : tmp[3]
+            },
+            fatigue : {
+                display : tmp[4],
+                value : tmp[5]
+            }
+        };        
+ 
+        // Caracs
+        var text = getText(6);
+        var tmp = /Caractéristiques Régénération.....: (\d+) D3 ([+-]\d+) ([+-]\d+) Attaque............: (\d+) D6 ([+-]\d+) ([+-]\d+) Esquive.............: (\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts..............: (\d+) D3 ([+-]\d+) ([+-]\d+) Armure.............: (\d+) D3 ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :-Corpulence.....: (\d+)points- Agilité.............: (\d+)points/.exec(text);
+        stats.regen = {
+            des : tmp[1], 
+            stuff : tmp[2],
+            mouche : tmp[3]
+        };
+        stats.attaque = {
+            des : tmp[4], 
+            stuff : tmp[5],
+            mouche : tmp[6]
+        };
+        stats.esquive = {
+            des : tmp[7], 
+            stuff : tmp[8],
+            mouche : tmp[9]
+        };
+        stats.degat = {
+            des : tmp[10], 
+            stuff : tmp[11],
+            mouche : tmp[12]
+        };
+        stats.armure = {
+            des : tmp[13], 
+            stuff : tmp[14],
+            mouche : tmp[15]
+        };
+        stats.corpulence = tmp[16];
+        stats.agilite = tmp[17];
+        
+        // Combat
+        var text = getText(7);
+        var tmp = /Combat Pour ce tour : - Dés d'attaque en moins ................: (\d+) - Dés d'esquive en moins ................: (\d+) - Dés d'armure en moins .................: (\d+) Nombre d'Adversaires tués......: (\d+) Nombre de Décès...................: (\d+)/.exec(text);
+        stats.roundMalus = {
+            attaque : tmp[1],
+            esquive : tmp[2],
+            armure : tmp[3],
+        };
+        stats.kills = tmp[4];
+        stats.deaths = tmp[5];
+
+        // Magie
+        var text = getText(10);
+        var tmp = / Magie Résistance à la Magie...................: (\d+) points ([+-]\d+) Maîtrise de la Magie....................: (\d+) points ([+-]\d+) Bonus de Concentration : (\d+) %/.exec(text);
+        stats.magie = {
+            rm : {
+                value : tmp[1],
+                bonus : tmp[2]
+            },
+            mm : {
+                value : tmp[3],
+                bonus : tmp[4]
+            }
+        };
+        stats.concentration = tmp[5];
+        
     },
 
     removeAdds : function () {
