@@ -166,7 +166,7 @@ var Utils = function() {
             sessionStorage[VAL_KEY + key] = value;
         },
 
-        cleanup(str) {
+        cleanup : function(str) {
             return $.trim(str.replace(/<br\/?>/gi, "\r\n")
                              .replace(/<\/p>/gi, "\r\n")
                              .replace(/<tr[^>]*>/gi, "\r\n")
@@ -564,7 +564,6 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                 });
             }
         }
-
         Utils.setConf("action", "");
     }
 });
