@@ -164,6 +164,15 @@ var Utils = function() {
         },
         setSessionValue : function(key, value) {
             sessionStorage[VAL_KEY + key] = value;
+        },
+
+        cleanup(str) {
+            return $.trim(str.replace(/<br\/?>/gi, "\r\n")
+                             .replace(/<\/p>/gi, "\r\n")
+                             .replace(/<tr[^>]*>/gi, "\r\n")
+                             .replace(/<\/t[dh][^>]*>/gi," ")
+                             .replace(/<\/?[^>]+>/gi,"")
+                             .replace(/\s+/gi," "));
         }
     }
 }();
@@ -385,7 +394,7 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
     }
 });
 
-var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
+var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, { // CdM
 
     init : function() {
         this.tune();
@@ -427,14 +436,9 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
 });
 
 
-var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
+var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { // CdM
     init : function() {
-        var result = $("form[name='ActionForm']:first").html();
-        result = result.replace(/<br\/?>/gi, "\r\n");
-        result = result.replace(/<\/p>/gi, "\r\n");
-        result = result.replace(/<tr[^>]*>/gi, "\r\n");
-        result = result.replace(/<\/?[^>]+>/gi,"");
-
+        var result = Utils.cleanup($("form[name='ActionForm']:first").html());
         if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
             // Appel de l'API
             MH_Page.callAPIConnected({
@@ -447,7 +451,13 @@ var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
     }
 });
 
-var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, {
+var MH_Play_Actions_Sorts_Play_a_Sort13 = $.extend({}, MH_Page, { // TP
+    init : function() {
+        Utils.setConf("action", "Sort13");
+    }
+});
+
+var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, { // AA
     init : function() {
         Utils.setConf("action", "Sort20");
     }
@@ -483,14 +493,14 @@ var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
 });
 
 
-var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
+var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, { // TELEK
 });
 
 var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
     suffix : '_TE'
 });
 
-var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
+var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, { // IdT
     init : function() {
         Utils.setConf("action", "Sort10");
         this.injectInfo();
@@ -523,10 +533,10 @@ var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
 
 var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
     init : function() {
+        var result = $($("table")[2]).text();
+        if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
 
-        if(Utils.getConf("action") == "Sort20") {
-            var result = $($("table")[2]).text();
-            if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
+            if(Utils.getConf("action") == "Sort20") { // AA
                 // Appel de l'API
                 this.callAPIConnected({
                     api : "aa",
@@ -535,12 +545,13 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                     }
                 });
             }
-        }
 
-        if(Utils.getConf("action") == "Sort10") {
-            var result = $($("table")[2]).text();
-            if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
-                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec($($("table")[2]).text());
+            if(Utils.getConf("action") == "Sort13") { // TP
+                
+            }
+
+            if(Utils.getConf("action") == "Sort10") { // IdT
+                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(result);
 
                 // Appel de l'API
                 this.callAPIConnected({
