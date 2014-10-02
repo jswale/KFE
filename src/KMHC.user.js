@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.30-1
+// @version       0.0.30-2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -572,73 +572,155 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
     init : function() {
         this.sendData();
         this.removeAdds();
-        //this.analizeStats();
+        this.tuneIHM();
     },
     
-    analizeStats : function() {
+    convertDate : function(date) {
+        return new Date(date.replace(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)/, "$2/$1/$3 $4:$5:$6"));
+    },
+    
+    io2 : function(i) {
+        return (i < 10 ? "0" : "") + i;
+    },
+    
+    dateToString : function(d) {
+        return [this.io2(d.getDate()), this.io2(d.getMonth()+1), this.io2(d.getFullYear())].join('/')+' '+ [this.io2(d.getHours()), this.io2(d.getMinutes()), this.io2(d.getSeconds())].join(':');
+    },
+    
+    tuneIHM : function() {
+    	var stats = this.getStats();        
+        
+        var getContainer = function(id) {
+            return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
+        };
+        
+        // Echéance du Tour
+        {
+			var ctn = getContainer(2);        
+            var nextDla = this.convertDate(stats.dla.next);
+            nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
+            nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
+            console.log(nextDla);
+        	ctn.append($("<p/>").append($("<b/>").text("---> Prochaine DLA (estimée)............: " + this.dateToString(nextDla))));
+        }
+    
+        // Expérience
+        {
+			var ctn = getContainer(4);      
+            
+            var pi_nextLvl = stats.xp.level * (stats.xp.level + 3) * 5;
+			var px_ent = 2 * stats.xp.level;
+            var px = stats.xp.PX.public + stats.xp.PX.private;
+            if(stats.xp.level < 3) {
+                px_ent = Math.max(px_ent, Math.min(px, 5));
+            }
+			var nb_ent = Math.ceil((pi_nextLvl - stats.xp.PI.all) / px_ent);            
+            ctn.html(ctn.html().replace("PI)", 'PI | Niveau ' + (stats.xp.level + 1) + ' : ' + pi_nextLvl + ' PI => ' + nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '') + ")"));
+            
+            var trainingMsg;
+            if(px < px_ent) {
+				trainingMsg = 'Il vous manque ' + (px_ent - px) + ' PX pour vous entraîner.';
+            } else {		
+				trainingMsg = 'Entraînement possible. Il vous restera ' + (px - px_ent) + ' PX.';
+			}
+            ctn.html(ctn.html().replace(/(PI\.\.\.)/, "<i>" + trainingMsg + '</i><br/>$1'));            
+        }
+        
+        // Point de Vie
+        {
+            var ctn = getContainer(5);      
+            
+            var pvmax = stats.hp.max.value + stats.hp.max.bonus;
+            
+            ctn.find("table table tr td img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');            
+
+			// Différence PV p/r à équilibre de temps (propale R')
+            if(stats.hp.current > 0) {
+                var bmt = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;                
+                var pdm = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
+				var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);
+                var texte = false;
+                if(bmt + pdm >= 0) {
+					texte = 'Vous ne pouvez compenser aucune blessure actuellement.';
+                } else if(pvdispo > 0) {
+					texte = 'Vous pouvez encore perdre <b>'+Math.min(pvdispo,stats.hp.current) +' PV</b> sans malus de temps.';
+                } else if(pvdispo<0) {
+					texte = 'Il vous manque <b>'+(-pvdispo) +' PV</b> pour ne plus avoir de malus de temps.';
+                }
+                if(texte) {
+                    ctn.find("table:first td:nth-child(2)").append("<p><i>" + texte + "</i></p>");
+                }
+            }
+        }
+        
+//        console.log(ctn);
+        
+    },
+    
+    getStats : function() {
         var stats = {};
         
         var getText = function(id) {
             return $("table.mh_tdborder:first tr:nth-child(" + id + "):first").text().replace(/[\n\r\t]+/gi,"").replace(/\s+/gi," ");
         };
                
-        // DLA
-        var text = getText(2);
-        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes. Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);
-        
-        stats.pa = tmp[2];
+        // Echéance du Tour
+        var text = getText(2);        
+        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes. Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);        
+        stats.pa = parseInt(tmp[2]);
         stats.dla = {
             next :tmp[1],
             duration : {
                 normal : {
-                    hour : tmp[3],
-                    min : tmp[4]
+                    hour : parseInt(tmp[3]),
+                    min : parseInt(tmp[4])
                 },
                 bonus : {
-                    hour : tmp[5],
-                    min : tmp[6]
+                    hour : parseInt(tmp[5]),
+                    min : parseInt(tmp[6])
                 },
                 injuries : {
-                    hour : tmp[7],
-                    min : tmp[8]
+                    hour : parseInt(tmp[7]),
+                    min : parseInt(tmp[8])
                 },
                 stuf : {
-                    hour : tmp[9],
-                    min : tmp[10]
+                    hour : parseInt(tmp[9]),
+                    min : parseInt(tmp[10])
                 },
                 total : {
-                    hour : tmp[11],
-                    min : tmp[12]
+                    hour : parseInt(tmp[11]),
+                    min : parseInt(tmp[12])
                 }
             }
         };
         
         // Vue
         var text = getText(3);
-        var tmp = /Position X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+) Vue.......: (-?\d+) Cases ([+-]\d+)/.exec(text);
+        
+        var tmp = /Position X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue.......: (-?\d+) Cases ([+-]\d+)/.exec(text);
         stats.position = {
-            x : tmp[1],
-            y : tmp[2],
-            n : tmp[3],
+            x : parseInt(tmp[1]),
+            y : parseInt(tmp[2]),
+            n : parseInt(tmp[3]),
         };
         
         stats.view = {
-            range : tmp[4],
-            bonus : tmp[5]
+            range : parseInt(tmp[4]),
+            bonus : parseInt(tmp[5])
         };              
         
         // XP
         var text = getText(4);
         var tmp = /Expérience Niveau........: (\d+) \((\d+) PI\) PX..............: (\d+) PX Personnels...... : (\d+) PI..............: (\d+) \(Table des Améliorations\) Karma.........: (.*) /.exec(text);
         stats.xp = {
-            level : tmp[1],
+            level : parseInt(tmp[1]),
             PI : {
-                all : tmp[2],
-                current : tmp[5],
+                all : parseInt(tmp[2]),
+                current : parseInt(tmp[5])
             },
             PX : {
-                public : tmp[3],
-                private : tmp[4]
+                public : parseInt(tmp[3]),
+                private : parseInt(tmp[4])
             }            
         };
         stats.karma = tmp[6];
@@ -647,14 +729,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         var text = getText(5);
         var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+) \)/.exec(text);
         stats.hp = {
-            current : tmp[1],
+            current : parseInt(tmp[1]),
             max : {
-                value : tmp[2],
-                bonus : tmp[3]
+                value : parseInt(tmp[2]),
+                bonus : parseInt(tmp[3])
             },
             fatigue : {
                 display : tmp[4],
-                value : tmp[5]
+                value : parseInt(tmp[5])
             }
         };        
  
@@ -662,59 +744,60 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         var text = getText(6);
         var tmp = /Caractéristiques Régénération.....: (\d+) D3 ([+-]\d+) ([+-]\d+) Attaque............: (\d+) D6 ([+-]\d+) ([+-]\d+) Esquive.............: (\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts..............: (\d+) D3 ([+-]\d+) ([+-]\d+) Armure.............: (\d+) D3 ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :-Corpulence.....: (\d+)points- Agilité.............: (\d+)points/.exec(text);
         stats.regen = {
-            des : tmp[1], 
-            stuff : tmp[2],
-            mouche : tmp[3]
+            des : parseInt(tmp[1]), 
+            stuff : parseInt(tmp[2]),
+            mouche : parseInt(tmp[3])
         };
         stats.attaque = {
-            des : tmp[4], 
-            stuff : tmp[5],
-            mouche : tmp[6]
+            des : parseInt(tmp[4]), 
+            stuff : parseInt(tmp[5]),
+            mouche : parseInt(tmp[6])
         };
         stats.esquive = {
-            des : tmp[7], 
-            stuff : tmp[8],
-            mouche : tmp[9]
+            des : parseInt(tmp[7]), 
+            stuff : parseInt(tmp[8]),
+            mouche : parseInt(tmp[9])
         };
         stats.degat = {
-            des : tmp[10], 
-            stuff : tmp[11],
-            mouche : tmp[12]
+            des : parseInt(tmp[10]) ,
+            stuff : parseInt(tmp[11]),
+            mouche : parseInt(tmp[12])
         };
         stats.armure = {
-            des : tmp[13], 
-            stuff : tmp[14],
-            mouche : tmp[15]
+            des : parseInt(tmp[13]), 
+            stuff : parseInt(tmp[14]),
+            mouche : parseInt(tmp[15])
         };
-        stats.corpulence = tmp[16];
-        stats.agilite = tmp[17];
+        stats.corpulence = parseInt(tmp[16]);
+        stats.agilite = parseInt(tmp[17]);
         
         // Combat
         var text = getText(7);
         var tmp = /Combat Pour ce tour : - Dés d'attaque en moins ................: (\d+) - Dés d'esquive en moins ................: (\d+) - Dés d'armure en moins .................: (\d+) Nombre d'Adversaires tués......: (\d+) Nombre de Décès...................: (\d+)/.exec(text);
         stats.roundMalus = {
-            attaque : tmp[1],
-            esquive : tmp[2],
-            armure : tmp[3],
+            attaque : parseInt(tmp[1]),
+            esquive : parseInt(tmp[2]),
+            armure : parseInt(tmp[3]),
         };
-        stats.kills = tmp[4];
-        stats.deaths = tmp[5];
+        stats.kills = parseInt(tmp[4]);
+        stats.deaths = parseInt(tmp[5]);
 
         // Magie
         var text = getText(10);
         var tmp = / Magie Résistance à la Magie...................: (\d+) points ([+-]\d+) Maîtrise de la Magie....................: (\d+) points ([+-]\d+) Bonus de Concentration : (\d+) %/.exec(text);
         stats.magie = {
             rm : {
-                value : tmp[1],
-                bonus : tmp[2]
+                value : parseInt(tmp[1]),
+                bonus : parseInt(tmp[2])
             },
             mm : {
-                value : tmp[3],
-                bonus : tmp[4]
+                value : parseInt(tmp[3]),
+                bonus : parseInt(tmp[4])
             }
         };
-        stats.concentration = tmp[5];
+        stats.concentration = parseInt(tmp[5]);
         
+        return stats;        
     },
 
     removeAdds : function () {
