@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.30-3
+- Enrichissement des infos de profil
+
 v 0.0.30
 - Ajout du partage depuis la vue
 - Correctifs cosmétiques divers

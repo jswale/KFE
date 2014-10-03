@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.30-2
+// @version       0.0.30-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -14,7 +14,7 @@
 /*
  *
  * jQuery Editables 1.0.1
- * 
+ *
  * Date: Aug 11 2012
  * Source: www.tectual.com.au, www.arashkarimzadeh.com
  * Author: Arash Karimzadeh (arash@tectual.com.au)
@@ -164,6 +164,15 @@ var Utils = function() {
         },
         setSessionValue : function(key, value) {
             sessionStorage[VAL_KEY + key] = value;
+        },
+
+        cleanup : function(str) {
+            return $.trim(str.replace(/<br\/?>/gi, "\r\n")
+                             .replace(/<\/p>/gi, "\r\n")
+                             .replace(/<tr[^>]*>/gi, "\r\n")
+                             .replace(/<\/t[dh][^>]*>/gi," ")
+                             .replace(/<\/?[^>]+>/gi,"")
+                             .replace(/\s+/gi," "));
         }
     }
 }();
@@ -385,7 +394,7 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
     }
 });
 
-var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
+var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, { // CdM
 
     init : function() {
         this.tune();
@@ -427,14 +436,9 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, {
 });
 
 
-var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
+var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { // CdM
     init : function() {
-        var result = $("form[name='ActionForm']:first").html();
-        result = result.replace(/<br\/?>/gi, "\r\n");
-        result = result.replace(/<\/p>/gi, "\r\n");
-        result = result.replace(/<tr[^>]*>/gi, "\r\n");
-        result = result.replace(/<\/?[^>]+>/gi,"");
-
+        var result = Utils.cleanup($("form[name='ActionForm']:first").html());
         if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
             // Appel de l'API
             MH_Page.callAPIConnected({
@@ -447,7 +451,13 @@ var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, {
     }
 });
 
-var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, {
+var MH_Play_Actions_Sorts_Play_a_Sort13 = $.extend({}, MH_Page, { // TP
+    init : function() {
+        Utils.setConf("action", "Sort13");
+    }
+});
+
+var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, { // AA
     init : function() {
         Utils.setConf("action", "Sort20");
     }
@@ -483,19 +493,19 @@ var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
 });
 
 
-var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
+var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, { // TELEK
 });
 
 var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
     suffix : '_TE'
 });
 
-var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
+var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, { // IdT
     init : function() {
         Utils.setConf("action", "Sort10");
         this.injectInfo();
     },
-    
+
     injectInfo : function() {
          var tresorIds = $("select option[value!='']").map(function(){
             return $(this).prop("value").substr(2);
@@ -523,10 +533,10 @@ var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, {
 
 var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
     init : function() {
+        var result = $($("table")[2]).text();
+        if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
 
-        if(Utils.getConf("action") == "Sort20") {
-            var result = $($("table")[2]).text();
-            if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
+            if(Utils.getConf("action") == "Sort20") { // AA
                 // Appel de l'API
                 this.callAPIConnected({
                     api : "aa",
@@ -535,12 +545,13 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                     }
                 });
             }
-        }
 
-        if(Utils.getConf("action") == "Sort10") {
-            var result = $($("table")[2]).text();
-            if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
-                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec($($("table")[2]).text());
+            if(Utils.getConf("action") == "Sort13") { // TP
+
+            }
+
+            if(Utils.getConf("action") == "Sort10") { // IdT
+                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(result);
 
                 // Appel de l'API
                 this.callAPIConnected({
@@ -553,7 +564,6 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
                 });
             }
         }
-
         Utils.setConf("action", "");
     }
 });
@@ -561,102 +571,111 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
 var MH_Play_Play_profil = $.extend({}, MH_Page, {
     init : function() {
         this.sendData();
-        this.removeAdds();
+        this.removeAds();
         this.tuneIHM();
     },
-    
+
     convertDate : function(date) {
         return new Date(date.replace(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)/, "$2/$1/$3 $4:$5:$6"));
     },
-    
+
     io2 : function(i) {
         return (i < 10 ? "0" : "") + i;
     },
-    
+
     dateToString : function(d) {
         return [this.io2(d.getDate()), this.io2(d.getMonth()+1), this.io2(d.getFullYear())].join('/')+' '+ [this.io2(d.getHours()), this.io2(d.getMinutes()), this.io2(d.getSeconds())].join(':');
     },
-    
+
     tuneIHM : function() {
-    	var stats = this.getStats();        
-        
+        var stats = this.getStats();
+
         var getContainer = function(id) {
             return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
         };
-        
+
         // Echéance du Tour
         {
-			var ctn = getContainer(2);        
+            var ctn = getContainer(2);
             var nextDla = this.convertDate(stats.dla.next);
             nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
             nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
             console.log(nextDla);
-        	ctn.append($("<p/>").append($("<b/>").text("---> Prochaine DLA (estimée)............: " + this.dateToString(nextDla))));
+            ctn.append($("<p/>").append($("<b/>").text("---> Prochaine DLA (estimée)............: " + this.dateToString(nextDla))));
         }
-    
+
         // Expérience
         {
-			var ctn = getContainer(4);      
-            
+            var ctn = getContainer(4);
+
             var pi_nextLvl = stats.xp.level * (stats.xp.level + 3) * 5;
-			var px_ent = 2 * stats.xp.level;
+            var px_ent = 2 * stats.xp.level;
             var px = stats.xp.PX.public + stats.xp.PX.private;
             if(stats.xp.level < 3) {
                 px_ent = Math.max(px_ent, Math.min(px, 5));
             }
-			var nb_ent = Math.ceil((pi_nextLvl - stats.xp.PI.all) / px_ent);            
+            var nb_ent = Math.ceil((pi_nextLvl - stats.xp.PI.all) / px_ent);
             ctn.html(ctn.html().replace("PI)", 'PI | Niveau ' + (stats.xp.level + 1) + ' : ' + pi_nextLvl + ' PI => ' + nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '') + ")"));
-            
+
             var trainingMsg;
             if(px < px_ent) {
-				trainingMsg = 'Il vous manque ' + (px_ent - px) + ' PX pour vous entraîner.';
-            } else {		
-				trainingMsg = 'Entraînement possible. Il vous restera ' + (px - px_ent) + ' PX.';
-			}
-            ctn.html(ctn.html().replace(/(PI\.\.\.)/, "<i>" + trainingMsg + '</i><br/>$1'));            
+                trainingMsg = 'Il vous manque ' + (px_ent - px) + ' PX pour vous entraîner.';
+            } else {
+                trainingMsg = 'Entraînement possible. Il vous restera ' + (px - px_ent) + ' PX.';
+            }
+            ctn.html(ctn.html().replace(/(PI\.\.\.)/, "<i>" + trainingMsg + '</i><br/>$1'));
         }
-        
+
         // Point de Vie
         {
-            var ctn = getContainer(5);      
-            
-            var pvmax = stats.hp.max.value + stats.hp.max.bonus;
-            
-            ctn.find("table table tr td img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');            
+            var ctn = getContainer(5);
 
-			// Différence PV p/r à équilibre de temps (propale R')
+            var pvmax = stats.hp.max.value + stats.hp.max.bonus;
+
+            ctn.find("table table tr td img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');
+
+            // Différence PV p/r à équilibre de temps (propale R')
             if(stats.hp.current > 0) {
-                var bmt = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;                
+                var bmt = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
                 var pdm = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
-				var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);
+                var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);
                 var texte = false;
                 if(bmt + pdm >= 0) {
-					texte = 'Vous ne pouvez compenser aucune blessure actuellement.';
+                    texte = 'Vous ne pouvez compenser aucune blessure actuellement.';
                 } else if(pvdispo > 0) {
-					texte = 'Vous pouvez encore perdre <b>'+Math.min(pvdispo,stats.hp.current) +' PV</b> sans malus de temps.';
+                    texte = 'Vous pouvez encore perdre <b>'+Math.min(pvdispo,stats.hp.current) +' PV</b> sans malus de temps.';
                 } else if(pvdispo<0) {
-					texte = 'Il vous manque <b>'+(-pvdispo) +' PV</b> pour ne plus avoir de malus de temps.';
+                    texte = 'Il vous manque <b>'+(-pvdispo) +' PV</b> pour ne plus avoir de malus de temps.';
                 }
                 if(texte) {
                     ctn.find("table:first td:nth-child(2)").append("<p><i>" + texte + "</i></p>");
                 }
             }
         }
-        
+
+        // MM/RM
+        {
+            var ctn = getContainer(10);
+            var rmmax = stats.magie.rm.value + stats.magie.rm.bonus;
+            var mmmax = stats.magie.mm.value + stats.magie.mm.bonus;
+            ctn.html(ctn.html().replace(/(Résistance[^<]+)/, "$1 (" + rmmax + ")")
+                               .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
+        }
+
 //        console.log(ctn);
-        
+
     },
-    
+
     getStats : function() {
         var stats = {};
-        
+
         var getText = function(id) {
             return $("table.mh_tdborder:first tr:nth-child(" + id + "):first").text().replace(/[\n\r\t]+/gi,"").replace(/\s+/gi," ");
         };
-               
+
         // Echéance du Tour
-        var text = getText(2);        
-        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes. Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);        
+        var text = getText(2);
+        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes. Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);
         stats.pa = parseInt(tmp[2]);
         stats.dla = {
             next :tmp[1],
@@ -683,25 +702,25 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 }
             }
         };
-        
+
         // Vue
         var text = getText(3);
-        
+
         var tmp = /Position X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue.......: (-?\d+) Cases ([+-]\d+)/.exec(text);
         stats.position = {
             x : parseInt(tmp[1]),
             y : parseInt(tmp[2]),
             n : parseInt(tmp[3]),
         };
-        
+
         stats.view = {
             range : parseInt(tmp[4]),
             bonus : parseInt(tmp[5])
-        };              
-        
+        };
+
         // XP
         var text = getText(4);
-        var tmp = /Expérience Niveau........: (\d+) \((\d+) PI\) PX..............: (\d+) PX Personnels...... : (\d+) PI..............: (\d+) \(Table des Améliorations\) Karma.........: (.*) /.exec(text);
+        var tmp = /Expérience Niveau........: (\d+) \((\d+) PI\) PX..............: (\d+) PX Personnels...... : (\d+) PI..............: (\d+)/.exec(text);
         stats.xp = {
             level : parseInt(tmp[1]),
             PI : {
@@ -711,40 +730,45 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             PX : {
                 public : parseInt(tmp[3]),
                 private : parseInt(tmp[4])
-            }            
+            }
         };
-        stats.karma = tmp[6];
-        
+        tmp = /PM.............: (\d+) Niveau Calculé : (\d+)/.exec(text);
+        stats.xp.PM = tmp ? parseInt(tmp[1]) : stats.xp.PI.all;
+        stats.xp.vlevel = tmp ? parseInt(tmp[2]) : stats.xp.level;
+        tmp = /Karma.........: (.*) /.exec(text);
+        stats.karma = tmp[1];
+
         // HP
         var text = getText(5);
         var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+) \)/.exec(text);
+        console.log('"tmp"', tmp);
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
                 value : parseInt(tmp[2]),
-                bonus : parseInt(tmp[3])
+                bonus : parseInt(tmp[3] ? tmp[3] : 0)
             },
             fatigue : {
                 display : tmp[4],
                 value : parseInt(tmp[5])
             }
-        };        
- 
+        };
+
         // Caracs
         var text = getText(6);
         var tmp = /Caractéristiques Régénération.....: (\d+) D3 ([+-]\d+) ([+-]\d+) Attaque............: (\d+) D6 ([+-]\d+) ([+-]\d+) Esquive.............: (\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts..............: (\d+) D3 ([+-]\d+) ([+-]\d+) Armure.............: (\d+) D3 ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :-Corpulence.....: (\d+)points- Agilité.............: (\d+)points/.exec(text);
         stats.regen = {
-            des : parseInt(tmp[1]), 
+            des : parseInt(tmp[1]),
             stuff : parseInt(tmp[2]),
             mouche : parseInt(tmp[3])
         };
         stats.attaque = {
-            des : parseInt(tmp[4]), 
+            des : parseInt(tmp[4]),
             stuff : parseInt(tmp[5]),
             mouche : parseInt(tmp[6])
         };
         stats.esquive = {
-            des : parseInt(tmp[7]), 
+            des : parseInt(tmp[7]),
             stuff : parseInt(tmp[8]),
             mouche : parseInt(tmp[9])
         };
@@ -754,13 +778,13 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             mouche : parseInt(tmp[12])
         };
         stats.armure = {
-            des : parseInt(tmp[13]), 
+            des : parseInt(tmp[13]),
             stuff : parseInt(tmp[14]),
             mouche : parseInt(tmp[15])
         };
         stats.corpulence = parseInt(tmp[16]);
         stats.agilite = parseInt(tmp[17]);
-        
+
         // Combat
         var text = getText(7);
         var tmp = /Combat Pour ce tour : - Dés d'attaque en moins ................: (\d+) - Dés d'esquive en moins ................: (\d+) - Dés d'armure en moins .................: (\d+) Nombre d'Adversaires tués......: (\d+) Nombre de Décès...................: (\d+)/.exec(text);
@@ -786,11 +810,11 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             }
         };
         stats.concentration = parseInt(tmp[5]);
-        
-        return stats;        
+
+        return stats;
     },
 
-    removeAdds : function () {
+    removeAds : function () {
         $("iframe").parent("td").remove();
     },
 
@@ -975,7 +999,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 field.val(this.text());
                 field.attr('size', field.val().length + 2);
             },
-            beforeFreeze: function(display, ev) { 
+            beforeFreeze: function(display, ev) {
                 display.text(this.val());
                 //console.log(ev);
                 if(ev.type == 'keyup') {
@@ -1062,7 +1086,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             var monsterName = $($(this).children("td:nth-child("+nomColId+")")).text();
             var td = $($(this).children("td:nth-child("+refColId+")"));
             var monsterId = td.text();
-            td	.empty()
+            td  .empty()
             .append(
                 $("<a/>")
                 .attr("href", "javascript:void(0)")
@@ -1181,6 +1205,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             .attr("type", "radio")
                             .attr("name", "envoiPXMP")
                             .attr("id", "radioPX")
+                            .attr("checked", "checked")
                         )
                         .append(" des PX ")
                     )
@@ -1190,7 +1215,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                             $("<input/>")
                             .attr("type", "radio")
                             .attr("name", "envoiPXMP")
-                            .attr("checked", "checked")
                         )
                         .append(" un MP")
                     )
@@ -1297,7 +1321,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     var previous = [];
                     var pd = d;
                     do {
-                    	previous = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
+                        previous = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
                             return $(this).text() == pd;
                         }).last().parent("tr");
                         pd--;
@@ -1488,7 +1512,7 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             .text("Outil")
         )
         .append("|")
-        	.css("color", "#ffffcc")
+            .css("color", "#ffffcc")
         .append(
             $("<a/>")
             .css("margin", "5px")
@@ -1498,7 +1522,7 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             .text("Forum")
         )
         .append("|")
-        	.css("color", "#ffffcc")
+            .css("color", "#ffffcc")
         .append(
             $("<a/>")
             .css("margin", "5px")
@@ -1593,13 +1617,13 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                 ["I", function() { enclose(ta, "<i>", "</i>"); }],
                 ["S", function() { enclose(ta, "<u>", "</u>"); }],
                 ["Quote", function() { enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); }],
-                ["Trõlldûctéûr", 
+                ["Trõlldûctéûr",
                 function() {
                     ta.val(
                         ta.val()
                         .replace(/°*y°*/g, '°y°')
-                			  .replace(/a/g, 'à').replace(/e/g, 'é').replace(/i/g, 'ï').replace(/o/g, 'õ').replace(/u/g, 'û')
-                			  .replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
+                        .replace(/a/g, 'à').replace(/e/g, 'é').replace(/i/g, 'ï').replace(/o/g, 'õ').replace(/u/g, 'û')
+                        .replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
                     );
                     ta.trigger("change");
                 }]], $.proxy(function(i, e) {
