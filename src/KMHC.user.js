@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.30-4
+// @version       0.0.31
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -547,7 +547,16 @@ var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
             }
 
             if(Utils.getConf("action") == "Sort13") { // TP
-
+                var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(result);
+                // Appel de l'API
+                this.callAPIConnected({
+                    api : "tag",
+                    data : {
+                        "type" : 5,
+                        "num" : tmp[1],
+                        "tag" : tmp[2]
+                    }
+                });
             }
 
             if(Utils.getConf("action") == "Sort10") { // IdT
@@ -601,7 +610,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
             nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
             console.log(nextDla);
-            ctn.append($("<p/>").append($("<b/>").text("---> Prochaine DLA (estimée)............: " + this.dateToString(nextDla))));
+            ctn.find("p").last().append("<br/>")
+               .append($("<b/>").text("---> Prochaine DLA (estimée)..........: " + this.dateToString(nextDla)));
         }
 
         // Expérience
@@ -651,6 +661,71 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     ctn.find("table:first td:nth-child(2)").append("<p><i>" + texte + "</i></p>");
                 }
             }
+        }
+
+        // Caracs
+        {
+            var ctn = getContainer(6),
+                caracs = [
+                [
+                    stats.regen.des * 2   + stats.regen.stuff + stats.regen.mouche,
+                    stats.regen.des       + stats.regen.stuff + stats.regen.mouche,
+                    stats.regen.des * 3   + stats.regen.stuff + stats.regen.mouche
+                ],
+                [
+                    stats.attaque.des * 3.5 + stats.attaque.stuff + stats.attaque.mouche,
+                    stats.attaque.des       + stats.attaque.stuff + stats.attaque.mouche,
+                    stats.attaque.des * 6   + stats.attaque.stuff + stats.attaque.mouche
+                ],
+                [
+                    stats.esquive.des * 3.5 + stats.esquive.stuff + stats.esquive.mouche,
+                    stats.esquive.des       + stats.esquive.stuff + stats.esquive.mouche,
+                    stats.esquive.des * 6   + stats.esquive.stuff + stats.esquive.mouche
+                ],
+                [
+                    stats.degat.des * 2 + stats.degat.stuff + stats.degat.mouche,
+                    stats.degat.des     + stats.degat.stuff + stats.degat.mouche,
+                    stats.degat.des * 3 + stats.degat.stuff + stats.degat.mouche
+                ],
+                [
+                    stats.armure.des * 2 + stats.armure.stuff + stats.armure.mouche,
+                    stats.armure.des     + stats.armure.stuff + stats.armure.mouche,
+                    stats.armure.des * 3 + stats.armure.stuff + stats.armure.mouche
+                ]
+            ];
+            $.each(caracs, function(i, v) {
+                var row = ctn.find("table tr:nth-child(" + (i + 1) + ")");
+                if(i == 0) {
+                    row
+                    .append(
+                        $("<td/>")
+                        .attr("rowspan", caracs.length)
+                        .attr("width", "40")
+                        .attr("align", "center")
+                        .append("=&gt;"));
+                }
+                row
+                .append(
+                    $("<td/>")
+                    .attr("width", "40")
+                    .attr("align", "right")
+                    .append(v[0]))
+                .append(
+                    $("<td/>")
+                    .attr("width", "60")
+                    .attr("align", "right")
+                    .append("( " + v[1] + " - " + v[2] + " )")
+                );
+            });
+
+            var stabilite_des = Math.floor(2 * (stats.esquive.des + stats.regen.des) / 3),
+                stabilite_bonus = stats.esquive.stuff + stats.esquive.mouche;
+            ctn.find("p").last()
+            .append("<br/>")
+            .append("- Stabilité..........: " + stabilite_des + ' D6 ' + (function(v) { return (v >= 0 ? "+" : "-") + v; })(stabilite_bonus)
+                + " => " + (3.5 * stabilite_des + stabilite_bonus)
+                + " ( " + (stabilite_des + stabilite_bonus)
+                + " - " + (stabilite_des * 6 + stabilite_bonus) + " )");
         }
 
         // MM/RM
@@ -740,17 +815,16 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // HP
         var text = getText(5);
-        var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+) \)/.exec(text);
-        console.log('"tmp"', tmp);
+        var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+) ([+-]\d+)? \)/.exec(text);
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
                 value : parseInt(tmp[2]),
-                bonus : parseInt(tmp[3] ? tmp[3] : 0)
+                bonus : (tmp[3] ? parseInt(tmp[3]) : 0)
             },
             fatigue : {
                 display : tmp[4],
-                value : parseInt(tmp[5])
+                value : parseInt(tmp[5]) + (tmp[6] ? parseInt(tmp[6]) : 0)
             }
         };
 
@@ -876,12 +950,12 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
         }
 
         if(title.indexOf("Sortilège : Téléportation") > -1) {
-            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*(Il conduit en[^\.]*)/.exec(body);
+            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(body);
             api = "tag";
             data =  {
                 "type" : 5,
                 "num" : tmp[1],
-                "tag" : tmp[2],
+                "tag" : tmp[2]
             };
         }
 
@@ -915,16 +989,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");
-
-        /*
-        this.addConfigPanel([
-            {
-                label : "Mountyzilla activé ?",
-                option : "mountyzilla",
-                type : "checkbox"
-            }
-        ]);
-        */
     },
 
     highlightTreasures : function() {
@@ -1564,7 +1628,18 @@ var MH_Play_TurnStart = $.extend({}, MH_Page, {
 });
 
 var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
-    init : function(){
+    init : function() {
+        var tmp = /Portail de Téléportation\s+\(Lieu n° (\d+)\)/.exec($("div.titre2").text());
+        if(tmp) {
+            this.callAPIConnected({
+                api: "tag",
+                data: {
+                    "type" : 5,
+                    "num" : tmp[1],
+                    "tag" : /(mène en[^\.]*)/.exec($("#description").text())[1]
+                }
+            });
+        }
     }
 });
 
@@ -1701,7 +1776,7 @@ $(document).ready(function() {
     var module;
     try {
         module = eval(moduleName);
-    } catch(e) {}
+    } catch(e) { }
 
     if(Utils.isUndefined(typeof module)) {
         console.log("Unable to find the module " + moduleName + " for URL " + pathname);

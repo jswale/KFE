@@ -6,6 +6,10 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.31
+- Ajout des moyenne et min/max des caractéristiques
+- Marquage automatique des TP à partir du sortilège et des descriptions de lieux
+
 v 0.0.30-4
 - Correctifs messages de tp et collage de texte dans les tags
 
