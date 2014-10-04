@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.31
+// @version       0.0.31-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -815,7 +815,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // HP
         var text = getText(5);
-        var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+) ([+-]\d+)? \)/.exec(text);
+        var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+)\s?([+-]\d+)? \)/.exec(text);
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
