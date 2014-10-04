@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.30-4
+- Correctifs messages de tp et collage de texte dans les tags
+
 v 0.0.30-3
 - Enrichissement des infos de profil
 

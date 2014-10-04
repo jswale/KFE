@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.30-3
+// @version       0.0.30-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -881,7 +881,7 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
             data =  {
                 "type" : 5,
                 "num" : tmp[1],
-                "tag" : '=> ' . tmp[2],
+                "tag" : tmp[2],
             };
         }
 
@@ -961,6 +961,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 .attr("id", "tag_" + ref)
                 .attr("data-tag-type", type)
                 .attr("data-tag-id", ref))
+                .on("paste", function(){
+                    var input = this;
+                    setTimeout(function() {
+                        $(input).attr('size', $(input).val().length + 2);
+                    }, 10);
+                })
         )
     },
 
