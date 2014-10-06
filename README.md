@@ -6,6 +6,11 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.31-3
+- Prise en compte des attaque dans le calcul des caractéristiques
+- correction sur l'affichage des moyennes des caractéristiques
+- Affichage des liens vers les vues de l'outil
+
 v 0.0.31-2
 - Séparation physique/magiques des caractéristiques
 
