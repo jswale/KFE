@@ -1,7 +1,7 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.31-2
+// @version       0.0.31-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -665,41 +665,44 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Caracs
         {
+            var desAttaque = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
+            var desEsquive = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
+            var desArmure = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
             var ctn = getContainer(6),
                 caracs = [
                 [
-                    stats.regen.des * 2   + stats.regen.stuff + stats.regen.mouche,
-                    stats.regen.des       + stats.regen.stuff + stats.regen.mouche,
-                    stats.regen.des * 3   + stats.regen.stuff + stats.regen.mouche
+                    stats.regen.des * 2   + stats.regen.physique + stats.regen.magique,
+                    stats.regen.des       + stats.regen.physique + stats.regen.magique,
+                    stats.regen.des * 3   + stats.regen.physique + stats.regen.magique
                 ],
                 [
-                    stats.attaque.des * 3.5 + stats.attaque.physique,
-                    stats.attaque.des       + stats.attaque.physique,
-                    stats.attaque.des * 6   + stats.attaque.physique,
-                    stats.attaque.des * 3.5 + stats.attaque.magique,
-                    stats.attaque.des       + stats.attaque.magique,
-                    stats.attaque.des * 6   + stats.attaque.magique
+                    desAttaque * 3.5 + stats.attaque.physique,
+                    desAttaque       + stats.attaque.physique,
+                    desAttaque * 6   + stats.attaque.physique,
+                    desAttaque * 3.5 + stats.attaque.magique,
+                    desAttaque       + stats.attaque.magique,
+                    desAttaque * 6   + stats.attaque.magique
                 ],
                 [
-                    stats.esquive.des * 3.5 + stats.esquive.stuff + stats.esquive.mouche,
-                    stats.esquive.des       + stats.esquive.stuff + stats.esquive.mouche,
-                    stats.esquive.des * 6   + stats.esquive.stuff + stats.esquive.mouche
+                    desEsquive * 3.5 + stats.esquive.physique + stats.esquive.magique,
+                    desEsquive       + stats.esquive.physique + stats.esquive.magique,
+                    desEsquive * 6   + stats.esquive.physique + stats.esquive.magique
                 ],
                 [
-                    stats.degats.des * 2 + stats.degats.physique,
-                    stats.degats.des     + stats.degats.physique,
-                    stats.degats.des * 3 + stats.degats.physique,
-                    stats.degats.des * 2 + stats.degats.magique,
-                    stats.degats.des     + stats.degats.magique,
-                    stats.degats.des * 3 + stats.degats.magique
+                    stats.degat.des * 2 + stats.degat.physique,
+                    stats.degat.des     + stats.degat.physique,
+                    stats.degat.des * 3 + stats.degat.physique,
+                    stats.degat.des * 2 + stats.degat.magique,
+                    stats.degat.des     + stats.degat.magique,
+                    stats.degat.des * 3 + stats.degat.magique
                 ],
                 [
-                    stats.armure.des * 2 + stats.armure.physique,
-                    stats.armure.des     + stats.armure.physique,
-                    stats.armure.des * 3 + stats.armure.physique,
-                    stats.armure.des * 2 + stats.armure.magique,
-                    stats.armure.des     + stats.armure.magique,
-                    stats.armure.des * 3 + stats.armure.magique
+                    desArmure * 2 + stats.armure.physique,
+                    desArmure     + stats.armure.physique,
+                    desArmure * 3 + stats.armure.physique,
+                    desArmure * 2 + stats.armure.magique,
+                    desArmure     + stats.armure.magique,
+                    desArmure * 3 + stats.armure.magique
                 ]
             ];
             $.each(caracs, function(i, v) {
@@ -862,28 +865,28 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         var tmp = /Caractéristiques Régénération.....: (\d+) D3 ([+-]\d+) ([+-]\d+) Attaque............: (\d+) D6 ([+-]\d+) ([+-]\d+) Esquive.............: (\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts..............: (\d+) D3 ([+-]\d+) ([+-]\d+) Armure.............: (\d+) D3 ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :-Corpulence.....: (\d+)points- Agilité.............: (\d+)points/.exec(text);
         stats.regen = {
             des : parseInt(tmp[1]),
-            stuff : parseInt(tmp[2]),
-            mouche : parseInt(tmp[3])
+            physique : parseInt(tmp[2]),
+            magique : parseInt(tmp[3])
         };
         stats.attaque = {
             des : parseInt(tmp[4]),
-            stuff : parseInt(tmp[5]),
-            mouche : parseInt(tmp[6])
+            physique : parseInt(tmp[5]),
+            magique : parseInt(tmp[6])
         };
         stats.esquive = {
             des : parseInt(tmp[7]),
-            stuff : parseInt(tmp[8]),
-            mouche : parseInt(tmp[9])
+            physique : parseInt(tmp[8]),
+            magique : parseInt(tmp[9])
         };
         stats.degat = {
             des : parseInt(tmp[10]) ,
-            stuff : parseInt(tmp[11]),
-            mouche : parseInt(tmp[12])
+            physique : parseInt(tmp[11]),
+            magique : parseInt(tmp[12])
         };
         stats.armure = {
             des : parseInt(tmp[13]),
-            stuff : parseInt(tmp[14]),
-            mouche : parseInt(tmp[15])
+            physique : parseInt(tmp[14]),
+            magique : parseInt(tmp[15])
         };
         stats.corpulence = parseInt(tmp[16]);
         stats.agilite = parseInt(tmp[17]);
@@ -1004,6 +1007,10 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
+        
+        // Ajout des liens vers la vue de l'outil
+        $("<p><b>Vue dans l'outil</b> : <a href='http://pharoz.net/MH/outil/?page=viewGraph&viewType=1' target='_blank'>Vue 1</a> | <a href='http://pharoz.net/MH/outil/?page=viewGraph&viewType=2' target='_blank'>Vue 2</a></p>").insertAfter( "h2" );
+
         this.highlightTreasures();
         this.addTagEdition();
 
@@ -1013,7 +1020,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         }
 
         this.addMonsterCdmLink();
-
+        
         this.addInfos();
 
         // Tune ihm
