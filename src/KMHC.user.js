@@ -1,7 +1,7 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.31-1
+// @version       0.0.31-2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -673,9 +673,12 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     stats.regen.des * 3   + stats.regen.stuff + stats.regen.mouche
                 ],
                 [
-                    stats.attaque.des * 3.5 + stats.attaque.stuff + stats.attaque.mouche,
-                    stats.attaque.des       + stats.attaque.stuff + stats.attaque.mouche,
-                    stats.attaque.des * 6   + stats.attaque.stuff + stats.attaque.mouche
+                    stats.attaque.des * 3.5 + stats.attaque.physique,
+                    stats.attaque.des       + stats.attaque.physique,
+                    stats.attaque.des * 6   + stats.attaque.physique,
+                    stats.attaque.des * 3.5 + stats.attaque.magique,
+                    stats.attaque.des       + stats.attaque.magique,
+                    stats.attaque.des * 6   + stats.attaque.magique
                 ],
                 [
                     stats.esquive.des * 3.5 + stats.esquive.stuff + stats.esquive.mouche,
@@ -683,40 +686,66 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     stats.esquive.des * 6   + stats.esquive.stuff + stats.esquive.mouche
                 ],
                 [
-                    stats.degat.des * 2 + stats.degat.stuff + stats.degat.mouche,
-                    stats.degat.des     + stats.degat.stuff + stats.degat.mouche,
-                    stats.degat.des * 3 + stats.degat.stuff + stats.degat.mouche
+                    stats.degats.des * 2 + stats.degats.physique,
+                    stats.degats.des     + stats.degats.physique,
+                    stats.degats.des * 3 + stats.degats.physique,
+                    stats.degats.des * 2 + stats.degats.magique,
+                    stats.degats.des     + stats.degats.magique,
+                    stats.degats.des * 3 + stats.degats.magique
                 ],
                 [
-                    stats.armure.des * 2 + stats.armure.stuff + stats.armure.mouche,
-                    stats.armure.des     + stats.armure.stuff + stats.armure.mouche,
-                    stats.armure.des * 3 + stats.armure.stuff + stats.armure.mouche
+                    stats.armure.des * 2 + stats.armure.physique,
+                    stats.armure.des     + stats.armure.physique,
+                    stats.armure.des * 3 + stats.armure.physique,
+                    stats.armure.des * 2 + stats.armure.magique,
+                    stats.armure.des     + stats.armure.magique,
+                    stats.armure.des * 3 + stats.armure.magique
                 ]
             ];
             $.each(caracs, function(i, v) {
                 var row = ctn.find("table tr:nth-child(" + (i + 1) + ")");
                 if(i == 0) {
-                    row
-                    .append(
+                    row.append(
                         $("<td/>")
                         .attr("rowspan", caracs.length)
                         .attr("width", "40")
                         .attr("align", "center")
                         .append("=&gt;"));
                 }
-                row
-                .append(
+                row.append(
                     $("<td/>")
-                    .attr("width", "40")
+                    .attr("width", "30")
                     .attr("align", "right")
                     .append(v[0]))
                 .append(
                     $("<td/>")
-                    .attr("width", "60")
-                    .attr("align", "right")
-                    .append("( " + v[1] + " - " + v[2] + " )")
+                    .attr("align", "left")
+                    .append("&nbsp;[ " + v[1] + " - " + v[2] + " ]")
                 );
+                if(v.length > 3) {
+                    row.append(
+                        $("<td/>")
+                        .attr("width", "30")
+                        .attr("align", "right")
+                        .append(v[3]))
+                    .append(
+                        $("<td/>")
+                        .attr("align", "left")
+                        .append("&nbsp;[ " + v[4] + " - " + v[5] + " ]")
+                    );
+                } else {
+                    row.append("<td/>").append("<td/>");
+                }
             });
+            ctn.find("table tr:first").before($("<tr/>")
+                .append("<td/>").append("<td/>").append("<td/>").append("<td/>").append("<td/>")
+                .append($("<td/>").append("Physique")
+                                  .attr("colspan", 2)
+                                  .attr("align", "center"))
+                .append($("<td/>").append("Magique")
+                                  .attr("colspan", 2)
+                                  .attr("align", "center"))
+            );
 
             var stabilite_des = Math.floor(2 * (stats.esquive.des + stats.regen.des) / 3),
                 stabilite_bonus = stats.esquive.stuff + stats.esquive.mouche;
