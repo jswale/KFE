@@ -6,6 +6,10 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.31-4
+- Correction sur l'affichage des moyennes des caractéristiques physiques
+- Correctifs cosmétiques divers
+
 v 0.0.31-3
 - Prise en compte des attaque dans le calcul des caractéristiques
 - correction sur l'affichage des moyennes des caractéristiques

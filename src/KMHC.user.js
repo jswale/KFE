@@ -1,14 +1,15 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.31-3
+// @version       0.0.31-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
 // @updateURL     https://github.com/jswale/KFE/raw/master/src/KMHC.meta.js
-// @grant         GM_addStyle
+// @grant         none
 // @copyright     2014+, Miltown, Grul & disciple
+// @icon          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAAAUDBQwKBxQKBBwKEBkTBBwaJCQUBCQcCS4cBzASBDwWBDIeGCQGJDweLCwjETQkDjQqFDw0HDQqNDw2NEAeFEAlCkIsCkElF0EsFkwpEUwuHEQzFkw0ElwtH1w6BFQ1EVM8FVw5F14+GEEqLEwiNEE1J0wzLE88LFgsNFQzKV40Jl88KWw+HGQzN2E7N2w2NEQ+THA+QFRDIFZELFxCIFxKJFxNMl9VP2dEGmRLGXRLF2dEKWhMJ2ZENGdNOmJSLmxUK2xXP3RKLHdMP3BeKHdaL3pUInRfOnhVMWRaRGheSH9FR3dVQ3ZaQHReRnRmTHxhRn9pV39xZ4A8RIRMOIRXKYxWJIxfJ4xaPIBgKYFgNoNnNY9oMY1pPoRwNJBhNpFvPZxvPpxwMpx3P6RsOKRyPKR4O4RNSIxGVJBSRJZYT4NnRo9gRIRiVIxiXIRwR45wToRwVIR2WJBnTpxnRJR4QJx+RJJ4U5R+VJxwVpx9UIxqYIxyZI94YZJ+YJx+YpR+cKluSad6T6d+T6l+Qax6QLRuTLR+QLR6XKR4YKR+bJ+FObCEO52DXYyCZJCEbJyKfKOESqGNX6yFWK+MXbKER7GMSbyDRryNR7SFXLyLWbyTT7SUXbyaVKGDcayUYK6QbqSRda+YeLSaZLyWYbyZb7efd7ySfLqgZrymcMSRQcSRT8SXTcyXTMufU8maXMeVY9ShW9imX8agbcugYMyqbMSmfsimccqsf9ambNSrZdytZtSseNyybNyweOC3dey+f4yOnJSGiKyKhKyYiLSSlLCgiLSmjLylibSqlLasnryskLyyqLy2xMSihMWskc+0gceyl8i2mNS4k9S+mNy5ksi5psq+ptS8qNy+tOS+gOC+lNzClMzCrNTEp9TKrN/Eo9jFt9rMtuTEjOzDi/DLlPzKnPTVmuDLqO7NqOTOtuzSoePTuvDVsPvdtPzevPzisOTaw+zUwe/cwu3dzeTa1Pbjw/TmzPzmzvzuxPvr1Pzy2fz35/z+9AAAAEG26sQAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAAA7CAAAOwgEVKEqAAAAAGHRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4wLjOM5pdQAAAGpElEQVRIS3WVD1wT5xnHwdUVWjacW9XQ4Ay6mipqV4MYyRlgeJBVtGrrXBKoiXRxBWxo1WXEqRXoulbSDUkiGqZAhVlJAiFX/oSYuI6mTLryJzUytTQ5SE0woHAsSd9j7EISTJT9Pnef5O6e7+d9nz/v80TMzKcJ4vZ6/f8f0byA2+QBAJsMPIVrPgC4unFsEP0POgoCb+YEwHyAt6fO9hWGT0+jk48QwNUzD4D3J4lu251O5323wxN45xcY+jP2OIBbSBKjpvl8/Q3tLac1ZAkAHNwB/DEAR2lS7YEDfHaaBBbobwQIL/EzeYNXiz/qNHCPMivfTaGvjIshQXACz9DqIqJLhMxhba/IvEDsMAwAU66b74jY8fE02s6XxLxqmCI3mKe9k6OD7cPVXHqWi1gnDJhAMeeO5zZGXXca9H36yuqa+N9ViD4UVUjlytPbIFENRtiEAhiKtZftQKVv3Ws8myNuq79YKTpDid4k5qZx2XDq7z/q9cUsFEBd7Tnxe77LO26WSYUFJ0XaUvFRFpmzS1TfWl8i7euz+QIQCngGoGcXbn5Qmd4ugeITV1MvZm08mgtxahrqilrtw87BKZ9RuA806o+//3bq5peTf/LzPSTG0qjVUAJLUl0vhaX3xlB0NsJhgGtVDHUXPTryiU//9feXYkm7agqfYRZIeq3adgxDv/HbhAL48Zi64Za9UYvWrGEyIRhyOHjiHSdQYL73wG2Z8GcwFAA26pC9hU1axjiULhR1s3giWFtd5PgcM1swy1zhhgKmz+82yzctJtcWFTR0pwspDL09Ncssue29iWFB+1AAN7VpK7kbY6Ph9LdS02tEsUkNPTRR20AtioGHp+8hgHc9ly7kMVY9sWzFy5bS/SIJZ8ni2B9JHA6LryLmNAeAgRN1EmHiD3+wujY5Op7COipnc5PJ5LQTJhBqPwcAy8d3jTr51lXH+h4c/+lpYZ4MptRB2hK4ogEPO0UBALi67C1NVQJ+cycy3MC+XCfN48HiZO5eurTPn7CggoBpuFOlbGxENE2I/njMSs4+saQoOyq1Gkq73D7PCvjN1hG1SqVSNjUXM0kLnqSXCugwi0rKkm6BOdqw5uEHQJdV5wNapBsWREZGbuTw8pI4/ByYDlfwc5tNjwHeyW57CwF0Nq+JjFwYtZDGgOvTuI1yAb/k/JH89485QohZAPx70K5TqzsNGd9bsGjRCgqtIO6AXNGmVZz9Y/5vX3yzuAaftZ1VALDZr3Yavn1/2ZMMiJ7CyTpDl6k62trUZ0/lv5KRnlHY+7DR+oH+HvzuvfG/rSdlCtj7c3icPq5cqdFfrpadyj+YuPPF7X/qm8u2H3Blf2azntwaBwnKeILSbtbFitN/RZDLFysOH8zftfXgkcYRR7D8ZoEZ0Lth/dq1MYvS+GV5PGl3Lixmy5s6Pvm44kj+YeHWQuSWEwumzw98d/PCH06KukzUndvgJEkuFyqAfoMYblsr39jOpK4vREbGgCuQPj/g6f3HByezPzicben5cHMydSmZxeLpjE5n9ivPpzNfKOkYGQdfYziOE67PAtO2C8UU8tIV8UuSsk7Umfp3xybmZiLG+wOJr65//mcZMt3I2HQtaefuWsIRHzBt2XMoDuKWyWT8fSkUyqYzPe8sZaXIDO6eTH7hwe2vNiFGO/72U8uXr81GfQMFdJGfSYK1ROY0KqWy/LUt8TuOQfp1ZYZxS+6l+uJzJUqdcWScxsjPf2P5bgIAJg68hDncqfQVn1KtuVKembghtyRFph9zceq1JeebEN1Ve83KPNmpvUUOEOEZ7dX/KmHgLqJUNaqUGm0rckWw8hfbEnhKg9OTxZFfamrp0F2tZu2vUr7OHyJ88Ixixl8Lh+7riNNwRYm0tSLKqn3wFnY5MuL97y9JcJ5coZALeLz3zr5e4psuEa5Dfbc4wtfM9mvGlsYqRUcH0qQSHJCX6+xW9PpiMo2Tk1dWXi57793SL2eTHdHPWsfJTYQozALxJY1GTVxqZXl5y1V9EZVMToI4ZQo1olYotOZAbUTMuBrERQlLoqOfejqOUXyuqpHYgEDxyY3eAfQbq9V6x2y+fcfhwnxDLgAAAMa+6v4L81wZn7WOkcFicY5+dAfz4tM4Tnxye9xTYX1mNtNegIOucWOnRrY/Ey6oG5xwT019gdps6KjLHdYBCPlricjeP4fG7deuIdKGUa9vcExd//QLFO1/2FODCgJet8VC7Hhg0BM0mQDA65uCjygIENuasKFE2w08/h/NzPwPOHaIyvrbq40AAAAASUVORK5CYII=
 // ==/UserScript==
 
 /*
@@ -109,15 +110,21 @@ var Utils = function() {
             return CONF_KEY + key;
         },
 
+        convertDate : function(date) {
+            return new Date(date.replace(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)/, "$2/$1/$3 $4:$5:$6"));
+        },
+
+        io2 : function(i) {
+            return (i < 10 ? "0" : "") + i;
+        },
+
+        dateToString : function(d) {
+            return [ this.io2(d.getDate()), this.io2(d.getMonth() + 1), this.io2(d.getFullYear()) ].join('/') + ' '
+                + [ this.io2(d.getHours()), this.io2(d.getMinutes()), this.io2(d.getSeconds()) ].join(':');
+        },
+
         formatTime : function(time) {
-            var d = new Date(time*1000);
-            var year = d.getFullYear();
-            var month = d.getMonth() + 1;
-            var date = d.getDate();
-            var hour = d.getHours();
-            var min = d.getMinutes();
-            var sec = d.getSeconds();
-            return (date < 10 ? "0" : "") + date + "/" + (month < 10 ? "0" : "") + month + '/' + year + (' à ' + (hour < 10 ? "0" : "") + hour + ':' + (min < 10 ? "0" : "") + min + ':' + (sec < 10 ? "0" : "") + sec);
+            return this.dateToString(new Date(time * 1000));
         },
 
         getDateDiff : function (date1, date2){
@@ -584,195 +591,6 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         this.tuneIHM();
     },
 
-    convertDate : function(date) {
-        return new Date(date.replace(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+)/, "$2/$1/$3 $4:$5:$6"));
-    },
-
-    io2 : function(i) {
-        return (i < 10 ? "0" : "") + i;
-    },
-
-    dateToString : function(d) {
-        return [this.io2(d.getDate()), this.io2(d.getMonth()+1), this.io2(d.getFullYear())].join('/')+' '+ [this.io2(d.getHours()), this.io2(d.getMinutes()), this.io2(d.getSeconds())].join(':');
-    },
-
-    tuneIHM : function() {
-        var stats = this.getStats();
-
-        var getContainer = function(id) {
-            return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
-        };
-
-        // Echéance du Tour
-        {
-            var ctn = getContainer(2);
-            var nextDla = this.convertDate(stats.dla.next);
-            nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
-            nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
-            console.log(nextDla);
-            ctn.find("p").last().append("<br/>")
-               .append($("<b/>").text("---> Prochaine DLA (estimée)..........: " + this.dateToString(nextDla)));
-        }
-
-        // Expérience
-        {
-            var ctn = getContainer(4);
-
-            var pi_nextLvl = stats.xp.level * (stats.xp.level + 3) * 5;
-            var px_ent = 2 * stats.xp.level;
-            var px = stats.xp.PX.public + stats.xp.PX.private;
-            if(stats.xp.level < 3) {
-                px_ent = Math.max(px_ent, Math.min(px, 5));
-            }
-            var nb_ent = Math.ceil((pi_nextLvl - stats.xp.PI.all) / px_ent);
-            ctn.html(ctn.html().replace("PI)", 'PI | Niveau ' + (stats.xp.level + 1) + ' : ' + pi_nextLvl + ' PI => ' + nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '') + ")"));
-
-            var trainingMsg;
-            if(px < px_ent) {
-                trainingMsg = 'Il vous manque ' + (px_ent - px) + ' PX pour vous entraîner.';
-            } else {
-                trainingMsg = 'Entraînement possible. Il vous restera ' + (px - px_ent) + ' PX.';
-            }
-            ctn.html(ctn.html().replace(/(PI\.\.\.)/, "<i>" + trainingMsg + '</i><br/>$1'));
-        }
-
-        // Point de Vie
-        {
-            var ctn = getContainer(5);
-
-            var pvmax = stats.hp.max.value + stats.hp.max.bonus;
-
-            ctn.find("table table tr td img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');
-
-            // Différence PV p/r à équilibre de temps (propale R')
-            if(stats.hp.current > 0) {
-                var bmt = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
-                var pdm = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
-                var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);
-                var texte = false;
-                if(bmt + pdm >= 0) {
-                    texte = 'Vous ne pouvez compenser aucune blessure actuellement.';
-                } else if(pvdispo > 0) {
-                    texte = 'Vous pouvez encore perdre <b>'+Math.min(pvdispo,stats.hp.current) +' PV</b> sans malus de temps.';
-                } else if(pvdispo<0) {
-                    texte = 'Il vous manque <b>'+(-pvdispo) +' PV</b> pour ne plus avoir de malus de temps.';
-                }
-                if(texte) {
-                    ctn.find("table:first td:nth-child(2)").append("<p><i>" + texte + "</i></p>");
-                }
-            }
-        }
-
-        // Caracs
-        {
-            var desAttaque = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
-            var desEsquive = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
-            var desArmure = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
-            var ctn = getContainer(6),
-                caracs = [
-                [
-                    stats.regen.des * 2   + stats.regen.physique + stats.regen.magique,
-                    stats.regen.des       + stats.regen.physique + stats.regen.magique,
-                    stats.regen.des * 3   + stats.regen.physique + stats.regen.magique
-                ],
-                [
-                    desAttaque * 3.5 + stats.attaque.physique,
-                    desAttaque       + stats.attaque.physique,
-                    desAttaque * 6   + stats.attaque.physique,
-                    desAttaque * 3.5 + stats.attaque.magique,
-                    desAttaque       + stats.attaque.magique,
-                    desAttaque * 6   + stats.attaque.magique
-                ],
-                [
-                    desEsquive * 3.5 + stats.esquive.physique + stats.esquive.magique,
-                    desEsquive       + stats.esquive.physique + stats.esquive.magique,
-                    desEsquive * 6   + stats.esquive.physique + stats.esquive.magique
-                ],
-                [
-                    stats.degat.des * 2 + stats.degat.physique,
-                    stats.degat.des     + stats.degat.physique,
-                    stats.degat.des * 3 + stats.degat.physique,
-                    stats.degat.des * 2 + stats.degat.magique,
-                    stats.degat.des     + stats.degat.magique,
-                    stats.degat.des * 3 + stats.degat.magique
-                ],
-                [
-                    desArmure * 2 + stats.armure.physique,
-                    desArmure     + stats.armure.physique,
-                    desArmure * 3 + stats.armure.physique,
-                    desArmure * 2 + stats.armure.magique,
-                    desArmure     + stats.armure.magique,
-                    desArmure * 3 + stats.armure.magique
-                ]
-            ];
-            $.each(caracs, function(i, v) {
-                var row = ctn.find("table tr:nth-child(" + (i + 1) + ")");
-                if(i == 0) {
-                    row.append(
-                        $("<td/>")
-                        .attr("rowspan", caracs.length)
-                        .attr("width", "40")
-                        .attr("align", "center")
-                        .append("=&gt;"));
-                }
-                row.append(
-                    $("<td/>")
-                    .attr("width", "30")
-                    .attr("align", "right")
-                    .append(v[0]))
-                .append(
-                    $("<td/>")
-                    .attr("align", "left")
-                    .append("&nbsp;[ " + v[1] + " - " + v[2] + " ]")
-                );
-                if(v.length > 3) {
-                    row.append(
-                        $("<td/>")
-                        .attr("width", "30")
-                        .attr("align", "right")
-                        .append(v[3]))
-                    .append(
-                        $("<td/>")
-                        .attr("align", "left")
-                        .append("&nbsp;[ " + v[4] + " - " + v[5] + " ]")
-                    );
-                } else {
-                    row.append("<td/>").append("<td/>");
-                }
-            });
-            ctn.find("table tr:first").before($("<tr/>")
-                .append("<td/>").append("<td/>").append("<td/>").append("<td/>").append("<td/>")
-                .append($("<td/>").append("Physique")
-                                  .attr("colspan", 2)
-                                  .attr("align", "center"))
-                .append($("<td/>").append("Magique")
-                                  .attr("colspan", 2)
-                                  .attr("align", "center"))
-            );
-
-            var stabilite_des = Math.floor(2 * (stats.esquive.des + stats.regen.des) / 3),
-                stabilite_bonus = stats.esquive.stuff + stats.esquive.mouche;
-            ctn.find("p").last()
-            .append("<br/>")
-            .append("- Stabilité..........: " + stabilite_des + ' D6 ' + (function(v) { return (v >= 0 ? "+" : "-") + v; })(stabilite_bonus)
-                + " => " + (3.5 * stabilite_des + stabilite_bonus)
-                + " ( " + (stabilite_des + stabilite_bonus)
-                + " - " + (stabilite_des * 6 + stabilite_bonus) + " )");
-        }
-
-        // MM/RM
-        {
-            var ctn = getContainer(10);
-            var rmmax = stats.magie.rm.value + stats.magie.rm.bonus;
-            var mmmax = stats.magie.mm.value + stats.magie.mm.bonus;
-            ctn.html(ctn.html().replace(/(Résistance[^<]+)/, "$1 (" + rmmax + ")")
-                               .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
-        }
-
-//        console.log(ctn);
-
-    },
-
     getStats : function() {
         var stats = {};
 
@@ -920,6 +738,183 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         return stats;
     },
 
+    tuneIHM : function() {
+        var stats = this.getStats();
+
+        var getContainer = function(id) {
+            return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
+        };
+
+        // Echéance du Tour
+        {
+            var ctn = getContainer(2);
+            var nextDla = Utils.convertDate(stats.dla.next);
+            nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
+            nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
+            console.log(nextDla);
+            ctn.find("p").last().append("<br/>")
+               .append($("<b/>").text("---> Prochaine DLA (estimée)..........: " + Utils.dateToString(nextDla)));
+        }
+
+        // Expérience
+        {
+            var ctn = getContainer(4);
+
+            var pi_nextLvl = stats.xp.level * (stats.xp.level + 3) * 5;
+            var px_ent = 2 * stats.xp.level;
+            var px = stats.xp.PX.public + stats.xp.PX.private;
+            if(stats.xp.level < 3) {
+                px_ent = Math.max(px_ent, Math.min(px, 5));
+            }
+            var nb_ent = Math.ceil((pi_nextLvl - stats.xp.PI.all) / px_ent);
+            ctn.html(ctn.html().replace("PI)", 'PI | Niveau ' + (stats.xp.level + 1) + ' : ' + pi_nextLvl + ' PI => ' + nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '') + ")"));
+
+            var trainingMsg;
+            if(px < px_ent) {
+                trainingMsg = 'Il vous manque ' + (px_ent - px) + ' PX pour vous entraîner.';
+            } else {
+                trainingMsg = 'Entraînement possible. Il vous restera ' + (px - px_ent) + ' PX.';
+            }
+            ctn.html(ctn.html().replace(/(PI\.\.\.)/, "<i>" + trainingMsg + '</i><br/>$1'));
+        }
+
+        // Point de Vie
+        {
+            var ctn = getContainer(5);
+
+            var pvmax = stats.hp.max.value + stats.hp.max.bonus;
+
+            ctn.find("table table tr td img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');
+
+            // Différence PV p/r à équilibre de temps (propale R')
+            if(stats.hp.current > 0) {
+                var bmt = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
+                var pdm = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
+                var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);
+                var texte = false;
+                if(bmt + pdm >= 0) {
+                    texte = 'Vous ne pouvez compenser aucune blessure actuellement.';
+                } else if(pvdispo > 0) {
+                    texte = 'Vous pouvez encore perdre <b>'+Math.min(pvdispo,stats.hp.current) +' PV</b> sans malus de temps.';
+                } else if(pvdispo<0) {
+                    texte = 'Il vous manque <b>'+(-pvdispo) +' PV</b> pour ne plus avoir de malus de temps.';
+                }
+                if(texte) {
+                    ctn.find("table:first td:nth-child(2)").append("<p><i>" + texte + "</i></p>");
+                }
+            }
+        }
+
+        // Caracs
+        {
+            var desAttaque = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
+            var desEsquive = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
+            var desArmure = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
+            var ctn = getContainer(6),
+                caracs = [
+                [
+                    stats.regen.des * 2   + stats.regen.physique + stats.regen.magique,
+                    stats.regen.des       + stats.regen.physique + stats.regen.magique,
+                    stats.regen.des * 3   + stats.regen.physique + stats.regen.magique
+                ],
+                [
+                    desAttaque * 3.5 + stats.attaque.physique + stats.attaque.magique,
+                    desAttaque       + stats.attaque.physique + stats.attaque.magique,
+                    desAttaque * 6   + stats.attaque.physique + stats.attaque.magique,
+                    desAttaque * 3.5 + stats.attaque.magique,
+                    desAttaque       + stats.attaque.magique,
+                    desAttaque * 6   + stats.attaque.magique
+                ],
+                [
+                    desEsquive * 3.5 + stats.esquive.physique + stats.esquive.magique,
+                    desEsquive       + stats.esquive.physique + stats.esquive.magique,
+                    desEsquive * 6   + stats.esquive.physique + stats.esquive.magique
+                ],
+                [
+                    stats.degat.des * 2 + stats.degat.physique + stats.degat.magique,
+                    stats.degat.des     + stats.degat.physique + stats.degat.magique,
+                    stats.degat.des * 3 + stats.degat.physique + stats.degat.magique,
+                    stats.degat.des * 2 + stats.degat.magique,
+                    stats.degat.des     + stats.degat.magique,
+                    stats.degat.des * 3 + stats.degat.magique
+                ],
+                [
+                    desArmure * 2 + stats.armure.physique + stats.armure.magique,
+                    desArmure     + stats.armure.physique + stats.armure.magique,
+                    desArmure * 3 + stats.armure.physique + stats.armure.magique,
+                    desArmure * 2 + stats.armure.magique,
+                    desArmure     + stats.armure.magique,
+                    desArmure * 3 + stats.armure.magique
+                ]
+            ];
+            $.each(caracs, function(i, v) {
+                var row = ctn.find("table tr:nth-child(" + (i + 1) + ")");
+                if(i == 0) {
+                    row.append(
+                        $("<td/>")
+                        .attr("rowspan", caracs.length)
+                        .attr("width", "40")
+                        .attr("align", "center")
+                        .append("=&gt;"));
+                }
+                row.append(
+                    $("<td/>")
+                    .attr("width", "30")
+                    .attr("align", "right")
+                    .append(v[0]))
+                .append(
+                    $("<td/>")
+                    .attr("align", "left")
+                    .append("&nbsp;[ " + v[1] + " - " + v[2] + " ]")
+                );
+                if(v.length > 3) {
+                    row.append(
+                        $("<td/>")
+                        .attr("width", "30")
+                        .attr("align", "right")
+                        .append(v[3]))
+                    .append(
+                        $("<td/>")
+                        .attr("align", "left")
+                        .append("&nbsp;[ " + v[4] + " - " + v[5] + " ]")
+                    );
+                } else {
+                    row.append("<td/>").append("<td/>");
+                }
+            });
+            ctn.find("table tr:first").before($("<tr/>")
+                .append("<td/>").append("<td/>").append("<td/>").append("<td/>").append("<td/>")
+                .append($("<td/>").append("Physique")
+                                  .attr("colspan", 2)
+                                  .attr("align", "center"))
+                .append($("<td/>").append("Magique")
+                                  .attr("colspan", 2)
+                                  .attr("align", "center"))
+            );
+
+            var stabilite_des = Math.floor(2 * (stats.esquive.des + stats.regen.des) / 3),
+                stabilite_bonus = stats.esquive.physique + stats.esquive.magique;
+            ctn.find("p").last()
+            .append("<br/>")
+            .append("- Stabilité..........: " + stabilite_des + ' D6 ' + (function(v) { return (v >= 0 ? "+" : "-") + v; })(stabilite_bonus)
+                + " => " + (3.5 * stabilite_des + stabilite_bonus)
+                + " ( " + (stabilite_des + stabilite_bonus)
+                + " - " + (stabilite_des * 6 + stabilite_bonus) + " )");
+        }
+
+        // MM/RM
+        {
+            var ctn = getContainer(10);
+            var rmmax = stats.magie.rm.value + stats.magie.rm.bonus;
+            var mmmax = stats.magie.mm.value + stats.magie.mm.bonus;
+            ctn.html(ctn.html().replace(/(Résistance[^<]+)/, "$1 (" + rmmax + ")")
+                               .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
+        }
+
+//        console.log(ctn);
+
+    },
+
     removeAds : function () {
         $("iframe").parent("td").remove();
     },
@@ -1007,7 +1002,7 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
-        
+
         // Ajout des liens vers la vue de l'outil
         $("<p><b>Vue dans l'outil</b> : <a href='http://pharoz.net/MH/outil/?page=viewGraph&viewType=1' target='_blank'>Vue 1</a> | <a href='http://pharoz.net/MH/outil/?page=viewGraph&viewType=2' target='_blank'>Vue 2</a></p>").insertAfter( "h2" );
 
@@ -1020,7 +1015,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         }
 
         this.addMonsterCdmLink();
-        
+
         this.addInfos();
 
         // Tune ihm
@@ -1812,7 +1807,9 @@ $(document).ready(function() {
     var module;
     try {
         module = eval(moduleName);
-    } catch(e) { }
+    } catch(e) {
+//        console.log('catched!', e);
+    }
 
     if(Utils.isUndefined(typeof module)) {
         console.log("Unable to find the module " + moduleName + " for URL " + pathname);
