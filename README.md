@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.31-2
+- Séparation physique/magiques des caractéristiques
+
 v 0.0.31-1
 - Correctif de l'extraction des données liées à la fatigue
 
