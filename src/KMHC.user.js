@@ -1,7 +1,7 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.31-4
+// @version       0.0.31-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1181,23 +1181,33 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     addMonsterCdmLink : function() {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
         var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
+        
+        
 
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
-            var monsterName = $($(this).children("td:nth-child("+nomColId+")")).text();
-            var td = $($(this).children("td:nth-child("+refColId+")"));
-            var monsterId = td.text();
-            td  .empty()
+            var tdName = $($(this).children("td:nth-child("+nomColId+")"));
+            var monsterName = tdName.text();
+            
+            var tdRef = $($(this).children("td:nth-child("+refColId+")"));
+            var monsterId = tdRef.text();
+            tdRef.empty()
             .append(
                 $("<a/>")
+                .attr("href", "javascript:EMV(" + monsterId + ",750,550)")
+                .attr("title", "Voir les évenements de " + monsterName + " [" + monsterId + "]")
+                .text(monsterId)
+            );
+            
+            tdName.find("a")
                 .attr("href", "javascript:void(0)")
                 .attr("title", "Voir la CdM de " + monsterName + " [" + monsterId + "]")
-                .text(monsterId)
                 .on('click', function(){
                     window.open("http://pharoz.net/MH/outil/popup.php4?popupWidth=700&popupHeight=400&page=bestiary/detail2&fullName=" + monsterName + "&ref=" + monsterId, "karlaakiPopup", "width=700, height=400, resizable=yes,menubar=no,scrollbars=yes,status=no");
                 })
-            );
+           ;
         });
+                
     },
 
 
