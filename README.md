@@ -6,6 +6,10 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.32
+- Ajout des fiches de détail pour les compétences : Baroufle, Dressage, Botte Secrète, Charger, Connaissance des Monstres, Déplacement Eclair, Bidouille
+- Ajout des fiches de détail pour les sorts : Identification des trésors, Invisibilité, Lévitation
+
 v 0.0.31-4
 - Correction sur l'affichage des moyennes des caractéristiques physiques
 - Correctifs cosmétiques divers
