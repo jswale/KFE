@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.31-6
+// @version       0.0.32
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
 // @updateURL     https://github.com/jswale/KFE/raw/master/src/KMHC.meta.js
-// @grant         none
+// @grant         GM_addStyle
 // @copyright     2014+, Miltown, Grul & disciple
 // @icon          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAAAUDBQwKBxQKBBwKEBkTBBwaJCQUBCQcCS4cBzASBDwWBDIeGCQGJDweLCwjETQkDjQqFDw0HDQqNDw2NEAeFEAlCkIsCkElF0EsFkwpEUwuHEQzFkw0ElwtH1w6BFQ1EVM8FVw5F14+GEEqLEwiNEE1J0wzLE88LFgsNFQzKV40Jl88KWw+HGQzN2E7N2w2NEQ+THA+QFRDIFZELFxCIFxKJFxNMl9VP2dEGmRLGXRLF2dEKWhMJ2ZENGdNOmJSLmxUK2xXP3RKLHdMP3BeKHdaL3pUInRfOnhVMWRaRGheSH9FR3dVQ3ZaQHReRnRmTHxhRn9pV39xZ4A8RIRMOIRXKYxWJIxfJ4xaPIBgKYFgNoNnNY9oMY1pPoRwNJBhNpFvPZxvPpxwMpx3P6RsOKRyPKR4O4RNSIxGVJBSRJZYT4NnRo9gRIRiVIxiXIRwR45wToRwVIR2WJBnTpxnRJR4QJx+RJJ4U5R+VJxwVpx9UIxqYIxyZI94YZJ+YJx+YpR+cKluSad6T6d+T6l+Qax6QLRuTLR+QLR6XKR4YKR+bJ+FObCEO52DXYyCZJCEbJyKfKOESqGNX6yFWK+MXbKER7GMSbyDRryNR7SFXLyLWbyTT7SUXbyaVKGDcayUYK6QbqSRda+YeLSaZLyWYbyZb7efd7ySfLqgZrymcMSRQcSRT8SXTcyXTMufU8maXMeVY9ShW9imX8agbcugYMyqbMSmfsimccqsf9ambNSrZdytZtSseNyybNyweOC3dey+f4yOnJSGiKyKhKyYiLSSlLCgiLSmjLylibSqlLasnryskLyyqLy2xMSihMWskc+0gceyl8i2mNS4k9S+mNy5ksi5psq+ptS8qNy+tOS+gOC+lNzClMzCrNTEp9TKrN/Eo9jFt9rMtuTEjOzDi/DLlPzKnPTVmuDLqO7NqOTOtuzSoePTuvDVsPvdtPzevPzisOTaw+zUwe/cwu3dzeTa1Pbjw/TmzPzmzvzuxPvr1Pzy2fz35/z+9AAAAEG26sQAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAAA7CAAAOwgEVKEqAAAAAGHRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4wLjOM5pdQAAAGpElEQVRIS3WVD1wT5xnHwdUVWjacW9XQ4Ay6mipqV4MYyRlgeJBVtGrrXBKoiXRxBWxo1WXEqRXoulbSDUkiGqZAhVlJAiFX/oSYuI6mTLryJzUytTQ5SE0woHAsSd9j7EISTJT9Pnef5O6e7+d9nz/v80TMzKcJ4vZ6/f8f0byA2+QBAJsMPIVrPgC4unFsEP0POgoCb+YEwHyAt6fO9hWGT0+jk48QwNUzD4D3J4lu251O5323wxN45xcY+jP2OIBbSBKjpvl8/Q3tLac1ZAkAHNwB/DEAR2lS7YEDfHaaBBbobwQIL/EzeYNXiz/qNHCPMivfTaGvjIshQXACz9DqIqJLhMxhba/IvEDsMAwAU66b74jY8fE02s6XxLxqmCI3mKe9k6OD7cPVXHqWi1gnDJhAMeeO5zZGXXca9H36yuqa+N9ViD4UVUjlytPbIFENRtiEAhiKtZftQKVv3Ws8myNuq79YKTpDid4k5qZx2XDq7z/q9cUsFEBd7Tnxe77LO26WSYUFJ0XaUvFRFpmzS1TfWl8i7euz+QIQCngGoGcXbn5Qmd4ugeITV1MvZm08mgtxahrqilrtw87BKZ9RuA806o+//3bq5peTf/LzPSTG0qjVUAJLUl0vhaX3xlB0NsJhgGtVDHUXPTryiU//9feXYkm7agqfYRZIeq3adgxDv/HbhAL48Zi64Za9UYvWrGEyIRhyOHjiHSdQYL73wG2Z8GcwFAA26pC9hU1axjiULhR1s3giWFtd5PgcM1swy1zhhgKmz+82yzctJtcWFTR0pwspDL09Ncssue29iWFB+1AAN7VpK7kbY6Ph9LdS02tEsUkNPTRR20AtioGHp+8hgHc9ly7kMVY9sWzFy5bS/SIJZ8ni2B9JHA6LryLmNAeAgRN1EmHiD3+wujY5Op7COipnc5PJ5LQTJhBqPwcAy8d3jTr51lXH+h4c/+lpYZ4MptRB2hK4ogEPO0UBALi67C1NVQJ+cycy3MC+XCfN48HiZO5eurTPn7CggoBpuFOlbGxENE2I/njMSs4+saQoOyq1Gkq73D7PCvjN1hG1SqVSNjUXM0kLnqSXCugwi0rKkm6BOdqw5uEHQJdV5wNapBsWREZGbuTw8pI4/ByYDlfwc5tNjwHeyW57CwF0Nq+JjFwYtZDGgOvTuI1yAb/k/JH89485QohZAPx70K5TqzsNGd9bsGjRCgqtIO6AXNGmVZz9Y/5vX3yzuAaftZ1VALDZr3Yavn1/2ZMMiJ7CyTpDl6k62trUZ0/lv5KRnlHY+7DR+oH+HvzuvfG/rSdlCtj7c3icPq5cqdFfrpadyj+YuPPF7X/qm8u2H3Blf2azntwaBwnKeILSbtbFitN/RZDLFysOH8zftfXgkcYRR7D8ZoEZ0Lth/dq1MYvS+GV5PGl3Lixmy5s6Pvm44kj+YeHWQuSWEwumzw98d/PCH06KukzUndvgJEkuFyqAfoMYblsr39jOpK4vREbGgCuQPj/g6f3HByezPzicben5cHMydSmZxeLpjE5n9ivPpzNfKOkYGQdfYziOE67PAtO2C8UU8tIV8UuSsk7Umfp3xybmZiLG+wOJr65//mcZMt3I2HQtaefuWsIRHzBt2XMoDuKWyWT8fSkUyqYzPe8sZaXIDO6eTH7hwe2vNiFGO/72U8uXr81GfQMFdJGfSYK1ROY0KqWy/LUt8TuOQfp1ZYZxS+6l+uJzJUqdcWScxsjPf2P5bgIAJg68hDncqfQVn1KtuVKembghtyRFph9zceq1JeebEN1Ve83KPNmpvUUOEOEZ7dX/KmHgLqJUNaqUGm0rckWw8hfbEnhKg9OTxZFfamrp0F2tZu2vUr7OHyJ88Ixixl8Lh+7riNNwRYm0tSLKqn3wFnY5MuL97y9JcJ5coZALeLz3zr5e4psuEa5Dfbc4wtfM9mvGlsYqRUcH0qQSHJCX6+xW9PpiMo2Tk1dWXi57793SL2eTHdHPWsfJTYQozALxJY1GTVxqZXl5y1V9EZVMToI4ZQo1olYotOZAbUTMuBrERQlLoqOfejqOUXyuqpHYgEDxyY3eAfQbq9V6x2y+fcfhwnxDLgAAAMa+6v4L81wZn7WOkcFicY5+dAfz4tM4Tnxye9xTYX1mNtNegIOucWOnRrY/Ey6oG5xwT019gdps6KjLHdYBCPlricjeP4fG7deuIdKGUa9vcExd//QLFO1/2FODCgJet8VC7Hhg0BM0mQDA65uCjygIENuasKFE2w08/h/NzPwPOHaIyvrbq40AAAAASUVORK5CYII=
 // ==/UserScript==
@@ -116,6 +116,19 @@ var Utils = function() {
 
         io2 : function(i) {
             return (i < 10 ? "0" : "") + i;
+        },
+        
+        sign : function(i) {
+            return (i >=0 ? '+' : '') + i;
+        },
+        
+        getPortee : function(param) {
+			return Math.ceil( Math.sqrt( 2*param+10.75 )-3.5 );
+			// ça devrait être floor, +10.25, -2.5
+		},
+        
+        addS : function(i) {
+            return i>1 ? 's' : '';
         },
 
         dateToString : function(d) {
@@ -769,11 +782,11 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         {
             var ctn = getContainer(2);
             var nextDla = Utils.convertDate(stats.dla.next);
-            nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
-            nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
-            console.log(nextDla);
-            ctn.find("p").last().append("<br/>")
-               .append($("<b/>").text("---> Prochaine DLA (estimée)..........: " + Utils.dateToString(nextDla)));
+            for(i = 1 ; i < 3 ; i++) {
+            	nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
+            	nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);            	
+            	ctn.find("p").last().append("<br/>").append($("<b/>").text("---> Prochaine DLA " + i + " (estimée)..........: " + Utils.dateToString(nextDla)));
+            }
         }
 
         // Expérience
@@ -904,10 +917,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             });
             ctn.find("table tr:first").before($("<tr/>")
                 .append("<td/>").append("<td/>").append("<td/>").append("<td/>").append("<td/>")
-                .append($("<td/>").append("Physique")
+                .append($("<td/>").append("<b>Physique</b>")
                                   .attr("colspan", 2)
                                   .attr("align", "center"))
-                .append($("<td/>").append("Magique")
+                .append($("<td/>").append("<b>Magique</b>")
                                   .attr("colspan", 2)
                                   .attr("align", "center"))
             );
@@ -931,32 +944,201 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
         }
 
-        var compsDesc = {
-                'Baroufle' :
-                    "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !",
-                'Bidouille' :
-                    "Bidouiller un trésor permet de compléter le nom d'un objet de votre inventaire avec le texte de votre choix.",
-                'Camouflage' :
-                    function() {
-                        
-                    },
-                'Deplacement Eclair' :
-		            "Permet d'économiser <b>1</b> PA par rapport au déplacement classique",
-	            'Dressage' :
-		            "Le dressage permet d\'apprivoiser un gowap redevenu sauvage ou un gnu sauvage."
+        var database = {
+            "Comp" : {
+                999 : {
+                    name : "Baroufle",
+                    description : "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !"
+                },
+                999 : {
+                    name : "Dressage",
+                    description : "Le dressage permet d'apprivoiser un gowap redevenu sauvage ou un gnu sauvage."
+                },
+                1  : {
+                    name : "Botte Secrète",
+                    description : function(stats) {
+                        var att = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
+                        var attbm = stats.attaque.physique + stats.attaque.magique;
+                        var degbm = stats.degat.physique + stats.degat.magique;
+                        var ctn = $("<div/>");
+                        ctn.append("Attaque : <b>" + Math.floor(2*att/3) + "</b> D6 " + Utils.sign(Math.floor(attbm/2))	+ " => <b>" + Math.round(3.5*Math.floor(2*att/3)+Math.floor(attbm/2)) +"</b>");
+                        ctn.append("<br/>");
+                        ctn.append("Dégâts : <b>" + Math.floor(att/2) + "</b> D3 " + Utils.sign(Math.floor(degbm/2)) + " => <b>" + (2*Math.floor(att/2)+Math.floor(degbm/2)) + '/' + (2*Math.floor(1.5*Math.floor(att/2))+Math.floor(degbm/2))	+'</b>');
+                        return ctn;
+                    }
+                },
+                5  : {name : "Identification des Champignons"},
+                7  : {name : "Frénésie"},
+				8  : {name : "Coup de Butoir"},
+				14 : {
+                    name : "Charger",
+                    description : function(stats) {
+                        var pv = stats.hp.current;
+
+                        var ctn = $("<div/>");                        
+                        if(pv <=0 ) {
+                            ctn.append("Vous ne pouvez charger personne... Vous êtes mort !");
+                        } else {
+                            var reg = stats.regen.des;
+                            var fatigue = stats.hp.fatigue.value;
+                            var vuetotale = stats.view.range + stats.view.bonus;
+                            var portee = Math.min(Utils.getPortee(reg+Math.floor(pv/10))-Math.floor((fatigue)/5), vuetotale);
+                            
+                            if(portee < 1) {
+                            	ctn.append("Impossible de charger !");    
+                            } else {                            
+								var att = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);                            
+	                        	var attbm = stats.attaque.physique + stats.attaque.magique;
+                                var attmoy = 3.5 * att + attbm;
+                                var deg = stats.degat.des;
+    	                    	var degbm = stats.degat.physique + stats.degat.magique;
+                                var degmoy = 2 * deg + degbm;
+                                
+                                ctn.append('Attaque : <b>' + att + '</b> D6 ' + Utils.sign(attbm) + ' => <b>'+attmoy+'</b>');
+                                ctn.append("<br/>");
+                                ctn.append('Dégâts : <b>'+deg+'</b> D3 ' + Utils.sign(degbm) + ' => <b>' + degmoy + '/' + (degmoy+2*Math.floor(deg/2)) + '</b>');
+                                ctn.append("<br/>");
+                                ctn.append('Portée : <b>' + portee + '</b> case' + Utils.addS(portee));
+                            }
+                        }
+                        return ctn;                        
+                    }
+                },
+                16 : {
+                    name : "Connaissance des Monstres",
+                    description : function(stats) {
+                        var vuetotale = stats.view.range + stats.view.bonus;
+                        var viewH = vuetotale;
+                        var viewV = Math.ceil(vuetotale/2);
+	                    var ctn = $("<div/>");                        
+     	                ctn.append('Portée horizontale : <b>'+viewH+'</b> case' + Utils.addS(viewH));
+	                    ctn.append("<br/>");
+    	                ctn.append('Portée verticale : <b>'+viewV+'</b> case' + Utils.addS(viewV));
+                        return ctn;                        
+                    }
+                },
+                12 : {
+                    name : "Déplacement Eclair",
+                    description : "Permet d'économiser <b>1</b> PA par rapport au déplacement classique"
+                },
+                18 : {name : "Insultes"},
+                19 : {name : "Ecriture Magique"},
+                21 : {name : "Pistage"},
+                24 : {
+                    name : "Bidouille",
+                    description : "Bidouiller un trésor permet de compléter le nom d'un objet de votre inventaire avec le texte de votre choix."
+                },
+                41 : {name : "Golemologie"},
+                44 : {name : "Course"}
             },
-            sortsDesc = {
-                'Identification des tresors' :
-	                "Permet de connaitre les caractéristiques et effets précis d'un trésor.",
-                'Invisibilite' :
-	                "Un troll invisible est indétectable même quand on se trouve sur sa zone. Toute action physique ou sortilège d'attaque fait disparaître l'invisibilité.",
-                'Levitation' :
-	                "Prendre un peu de hauteur permet parfois d'éviter les ennuis. Comme les pièges ou les trous par exemple..."
-            };
-        $($("table.mh_tdborder:first").next().find("table.mh_tdpage")[0]).find("a")
-        .on("mouseover", function() {
-        })
-        .on("mouseout", function() {
+            "Sort" : {
+                2  : {name : "Hypnotisme"},
+                5  : {name : "Augmentation des Dégats"},
+                6  : {name : "Augmentation de l´Attaque"},
+                9  : {name : "Vision lointaine"},
+                10 : {
+                    name : "Identification des trésors",
+                    description : "Permet de connaitre les caractéristiques et effets précis d'un trésor."
+                },
+                13 : {name : "Téléportation"},
+                15 : {
+                    name : "Invisibilité",
+                    description : "Un troll invisible est indétectable même quand on se trouve sur sa zone. Toute action physique ou sortilège d'attaque fait disparaître l'invisibilité."
+                },
+                16 : {name : "Armure Ethérée"},
+                17 : {name : "Sacrifice"},
+                20 : {name : "Analyse Anatomique"},
+                21 : {name : "Projection"},
+                24 : {name : "Télékinésie"},
+                33 : {
+                    name : "Lévitation",
+                    description : "Prendre un peu de hauteur permet parfois d'éviter les ennuis. Comme les pièges ou les trous par exemple..."
+                }
+            }
+        };   
+        
+        $($("table.mh_tdborder:first").next().find("table.mh_tdpage")).find("a")
+        .hover(function() {
+            var link = $(this);
+            
+            var popupId = link.attr("data-popup");
+            if(Utils.isDefined(popupId)) {
+            	var popup = $('[action-popup-id="' + popupId + '"]');
+            	popup.toggle();
+                return;
+            }
+            
+            var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
+            var actionType = tmp[1];
+            var actionId = parseInt(tmp[2]);
+            var actionName = link.text().trim();
+            popupId = "info-" + actionType + "-" + actionId;
+            
+            link.attr("data-actionType", actionType);
+            link.attr("data-actionId", actionId);
+            link.attr("data-popup", popupId);
+            
+            var entry = database[actionType][actionId];
+            if(Utils.isUndefined(entry)) {
+                console.log("Entry not found for " + actionName + " [" + actionId + "] in category " + actionType);
+                return;
+            }
+            
+             // Description
+            var description = null;
+            if($.isFunction(entry.description)) {
+                description = entry.description(stats);
+            } else if(Utils.isDefined(entry.description)) {
+            	description = "<i>" + entry.description + "</i>";
+            }
+                
+            if(null == description) {
+            	return;
+            }
+            
+            var pos = link.position();    
+                       
+            var div = $("<div/>")
+            .attr("action-popup-id", popupId)
+        	.css("position", "absolute")
+        	.css("top", pos.top + 20 + "px")
+        	.css("left", (pos.left) + "px")
+            .css("border", "1px solid #CCC")
+            .css("background-color", "#FFF")
+            .css("width", "400px")
+            .css("border-radius", "5px");
+            
+            // Title
+            div.append(
+                $("<h2/>")
+                .css("background", "#333")
+                .css("border", "1px solid #111")
+                .css("padding", "5px 10px")
+                .css("font-size", "14px")
+                .css("color", "white")
+                .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
+                .css("letter-spacing", "0")
+                .css("border-radius", "5px 5px 0 0")
+                .css("font-weight", "normal")
+                .css("margin-bottom", "0px")
+                .css("margin-top", "0px")
+                .css("overflow", "hidden")
+                .text(entry.name)
+            );
+            
+            // content
+            div.append($("<div/>")
+			.css("padding", "10px")
+            .append(description));
+            
+            // Attach to DOM
+            div.appendTo($("body"));
+                
+        }, function() {
+            var link = $(this);
+            var popupId = link.attr("data-popup");
+            var popup = $('[action-popup-id="' + popupId + '"]');
+            popup.toggle();            
         });
 
 //        console.log(ctn);
