@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.31-5
+// @version       0.0.31-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -738,8 +738,28 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         return stats;
     },
 
+    getFeatures : function(i) {
+        var feats = {};
+
+        $($("table.mh_tdborder:first").next().find("table.mh_tdpage")[i]).find("tr").each(function() {
+            var feat = $($(this).children()[1]).text();
+                levels = {};
+                tmp = $($(this).children()[2]).text().replace(/[\n\s->niveau%\)]/g, "").split("(");
+            for(var j = 0; j < tmp.length; ++j) {
+                var f = (tmp[j]).split(":");
+                levels[f[0]] = f[1];
+            }
+            feats[feat] = levels;
+        });
+        return feats;
+    },
+
     tuneIHM : function() {
-        var stats = this.getStats();
+        var stats = this.getStats(),
+            comps = this.getFeatures(0),
+            sorts = this.getFeatures(1);
+
+        //console.log(["stats", stats, "comps", comps, "sorts", sorts]);
 
         var getContainer = function(id) {
             return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
@@ -911,9 +931,38 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
         }
 
+        var compsDesc = {
+                'Baroufle' :
+                    "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !",
+                'Bidouille' :
+                    "Bidouiller un trésor permet de compléter le nom d'un objet de votre inventaire avec le texte de votre choix.",
+                'Camouflage' :
+                    function() {
+                        
+                    },
+                'Deplacement Eclair' :
+		            "Permet d'économiser <b>1</b> PA par rapport au déplacement classique",
+	            'Dressage' :
+		            "Le dressage permet d\'apprivoiser un gowap redevenu sauvage ou un gnu sauvage."
+            },
+            sortsDesc = {
+                'Identification des tresors' :
+	                "Permet de connaitre les caractéristiques et effets précis d'un trésor.",
+                'Invisibilite' :
+	                "Un troll invisible est indétectable même quand on se trouve sur sa zone. Toute action physique ou sortilège d'attaque fait disparaître l'invisibilité.",
+                'Levitation' :
+	                "Prendre un peu de hauteur permet parfois d'éviter les ennuis. Comme les pièges ou les trous par exemple..."
+            };
+        $($("table.mh_tdborder:first").next().find("table.mh_tdpage")[0]).find("a")
+        .on("mouseover", function() {
+        })
+        .on("mouseout", function() {
+        });
+
 //        console.log(ctn);
 
     },
+
 
     removeAds : function () {
         $("iframe").parent("td").remove();
