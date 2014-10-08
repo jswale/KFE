@@ -945,6 +945,83 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             ctn.html(ctn.html().replace(/(Résistance[^<]+)/, "$1 (" + rmmax + ")")
                                .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
         }
+        
+/*
+Les Compétences :
+----------------
+3  Accélération du Métabolisme
+9  Attaque Précise
+6  Balayage®
+- 43 Baroufle
+- 24 Bidouille
+- 1 Botte Secrète®
+4 Camouflage®
+- 14 Charger
+- 16 Connaissance des Monstres
+15 Construire un Piège
+11 Contre-Attaquer
+- 8  Coup de Butoir
+- 44  Course
+- 12 Déplacement Eclair
+27 Dressage
+- 19 Ecriture Magique
+- 7  Frénésie
+41 Golemologie
+26 Grattage
+17 Hurlement Effrayant
+- 5  Identification des Champignons
+- 18 Insultes
+23 Lancer de Potions
+37 Marquage
+25 Mélange Magique
+29 Miner
+33 Nécromancie
+46 Painthure de Guerre
+10 Parer
+- 21 Pistage
+35 Planter un Champignon
+2  Régénération Accrue®
+40 Réparation
+38 Retraite
+42 RotoBaffe
+45 S'interposer
+28 Shamaner
+30 Tailler    
+
+
+Les Sortilèges :
+----------------
+- 20 Analyse Anatomique  
+- 16 Armure Ethérée  
+- 6  Augmentation de l´Attaque  
+7  Augmentation de l´Esquive  
+- 5  Augmentation des Dégats  
+27 Bulle Anti-Magie  
+29 Bulle Magique  
+8  Explosion  
+12 Faiblesse Passagère  
+19 Flash Aveuglant  
+18 Glue  
+28 Griffe du Sorcier  
+- 2  Hypnotisme
+- 10 Identification des trésors  
+- 15 Invisibilité  
+- 33 Lévitation
+34 Précision Magique  
+1  Projectile Magique
+- 21 Projection  
+35 Puissance Magique  
+4  Rafale Psychique
+- 17 Sacrifice  
+14 Siphon des âmes
+- 24 Télékinésie  
+- 13 Téléportation  
+3  Vampirisme  
+22 Vision Accrue
+- 9  Vision lointaine  
+23 Voir le Caché  
+11 Vue Troublée
+*/        
 
         var database = {
             "Comp" : {
