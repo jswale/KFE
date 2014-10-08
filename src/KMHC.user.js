@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-4
+// @version       0.0.32-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1737,8 +1737,35 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;                        
                     }                    
                 },
-                18 : {name : "Glue"},
-                19 : {name : "Flash Aveuglant"},
+                18 : {
+                    name : "Glue",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var viewH = (1+Math.floor(vuetotale/3));
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
+                        );
+                        return ctn;                        
+                    }                    
+                },
+                19 : {
+                    name : "Flash Aveuglant",
+                    description : function(stats) {
+                        var vue = stats.view.range;                        
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Vue, Attaque, Esquive :"))
+                            .append($("<td/>").html("<b>-" + (1+Math.floor(vue/5)) + "</b>"))
+                        );
+                        return ctn;                        
+                    }                    
+                },
                 20 : {
                     name : "Analyse Anatomique",
                     description : function(stats) {
@@ -1764,8 +1791,45 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     name : "Projection",
                     description : "Si le jet de résistance de la victime est raté:<br/>la victime est <b>déplacée</b> et perd <b>1D6</b> d'esquive<hr>Si le jet de résistance de la victime est réussi:<br/>la victime ne <b>bouge pas</b> mais perd <b>1D6</b> d'esquive."
                 },
-                22 : {name : "Vision Accrue"},
-                23 : {name : "Voir le Caché"},
+                22 : {
+                    name : "Vision Accrue",
+                    description : function(stats) {
+                        var vue = stats.view.range;
+                        
+                        var bonus = Math.floor(vue/2);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Bonus :"))
+                            .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b> case" + Utils.addS(bonus)))
+                        );
+                        return ctn;                        
+                    }           
+                },
+                23 : {
+                    name : "Voir le Caché",
+                    description : function(stats) {
+                        var vue = stats.view.range;
+                        var vuetotale = stats.view.total;
+                        
+                        var viewOnMe = Math.min(5,Utils.getPortee(vue));
+                        var viewAway = Utils.getPortee(vuetotale);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale (sur soi) :"))
+                            .append($("<td/>").html("<b>" + viewOnMe + "</b> case" + Utils.addS(viewOnMe)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale (a distance) :"))
+                            .append($("<td/>").html("<b>" + viewAway + "</b> case" + Utils.addS(viewAway)))
+                        );
+                        return ctn;                        
+                    }                    
+                },
                 24 : {
                     name : "Télékinésie",
                     description : function(stats) {
@@ -1792,7 +1856,30 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;                        
                     }
                 },
-				27 : {name : "Bulle Anti-Magie"},
+				27 : {
+                    name : "Bulle Anti-Magie",
+                    description : function(stats) {
+                        var rm = stats.magie.rm.value;
+                        var mm = stats.magie.mm.value;
+                        var rmbm = stats.magie.rm.bonus;
+                        var mmbm = stats.magie.mm.bonus;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("RM :"))
+                            .append($("<td/>").html("<b>" + rm + "</b>"))
+                            .append($("<td/>").html("(Total : <b>" + (2*rm+rmbm) + "</b>)"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("MM :"))
+                            .append($("<td/>").html("<b>" + mm + "</b>"))
+                            .append($("<td/>").html("(Total : <b>" + mmbm + "</b>)"))
+                        );
+                        return ctn;                        
+                    }             
+                },
                 28 : {name : "Griffe du Sorcier"},
                 33 : {
                     name : "Lévitation",
