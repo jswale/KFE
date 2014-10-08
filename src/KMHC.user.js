@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-3
+// @version       0.0.32-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -693,9 +693,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             },
             fatigue : {
                 display : tmp[4],
-                value : parseInt(tmp[5]) + (tmp[6] ? parseInt(tmp[6]) : 0)
+                value : parseInt(tmp[5]),
+                bm : (tmp[6] ? parseInt(tmp[6]) : 0)
             }
-        };
+        };        
 
         // Caracs
         var text = getText(6);
@@ -761,12 +762,15 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
         stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;        
         
+        stats.hp.fatigue.total = stats.hp.fatigue.value + stats.hp.fatigue.bm;
+        
         stats.view.total = stats.view.range + stats.view.bonus;
         
         stats.hp.max.total = stats.hp.max.value + stats.hp.max.bonus;
         
         stats.attaque.bm = stats.attaque.physique + stats.attaque.magique;
         stats.degat.bm   = stats.degat.physique + stats.degat.magique;
+        stats.esquive.bm = stats.esquive.physique + stats.esquive.magique;
         
         stats.attaque.desReel = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
         stats.esquive.desReel = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
@@ -948,7 +952,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             ctn.html(ctn.html().replace(/(Résistance[^<]+)/, "$1 (" + rmmax + ")")
                                .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
         }       
-
+        
         var database = {
             "Comp" : {
                 1  : {
@@ -977,8 +981,34 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-				2  : {name : "Régénération Accrue"},
-				3  : {name : "Accélération du Métabolisme"},
+				2  : {
+                    name : "Régénération Accrue",
+                    description : function(stats) {
+                        var pvmax = stats.hp.max.total;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Régénération :"))
+                            .append($("<td/>").html("<b>" + Math.floor(pvmax/15) + "</b> D3"))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + 2*Math.floor(pvmax/15) +"</b> PV"))
+                        );
+                        return ctn;
+                    }
+                },
+				3  : {
+                    name : "Accélération du Métabolisme",
+                    description : function(stats) {
+                        var fatig = stats.hp.fatigue.value;
+                        var fatigtotal = stats.hp.fatigue.total;
+                        var minParPV = fatigtotal > 4 ? Math.floor(120/( fatigtotal*(1+Math.floor(fatigtotal/10)) )) : 30;
+                        
+                        var ctn = $("<div/>");
+                        ctn.append("<b>1</b> PV = <b>" + minParPV + "</b> minute" + Utils.addS(minParPV));
+                        return ctn;
+                    }
+                },
                 4 : {
                     name : "Camouflage",
                     description : function(stats, levels) {
@@ -1134,15 +1164,76 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;                        
                     }
                 },
-				9  : {name : "Attaque Précise"},
+				9  : {
+                    name : "Attaque Précise",
+                    description : function(stats, levels) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                    	var attmoy = stats.attaque.moy;
+                    
+                    	var deg = stats.degat.desReel;
+                        var degbm = stats.degat.bm;
+                    	var degmoy = stats.degat.moy;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + Math.floor(att) + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(attbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + attmoy +"</b>"))
+                        );
+                        
+                        var pc, lastmax=0, espatt=0;
+						var notMaxedOut = false;
+                        var niveau = levels.length-1;
+                        for(var i= Math.min(niveau, 5) ; i>0 ; i--) {
+                            pc = levels[i] || 0;
+                            if(lastmax!=0 && pc<=lastmax) continue;                            
+                            
+                            var jetatt = Math.round(3.5*Math.min(Math.floor(1.5*att),att+3*i))+attbm;
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Attaque (niveau " + i + " : " + pc + "%) :"))
+                                .append($("<td/>").html("<b>" + Math.min(Math.floor(att*1.5),att+3*i) + "</b> D6"))
+                                .append($("<td/>").html(Utils.sign(attbm)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + jetatt +"</b>"))
+                            );
+                            if(i<=niveau) {
+								espatt += (pc-lastmax)*jetatt;
+								if(i<niveau) notMaxedOut = true;
+							}
+							lastmax = pc;
+                        }
+                        if(notMaxedOut) {
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Attaque moyenne (si réussite) :"))
+                                .append($("<td/>").attr("colspan", "4").html("<b>" +Math.floor(10*espatt/lastmax)/10 + "</b>"))
+                            );
+                        }
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + deg + "</b> D3"))
+                            .append($("<td/>").html(Utils.sign(degbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + degmoy + '/' + (degmoy+2*Math.floor(deg/2)) + "</b>"))
+                        );
+                        
+                        return ctn;                        
+                    }
+                },
                 10 : {
                     name : "Parer",
                     description : function(stats) {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
                         var esq = stats.esquive.desReel;
-                    var esqbm = stats.esquive.bm;
-                        
+                    	var esqbm = stats.esquive.bm;                        
+                                                
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1169,8 +1260,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
                         var deg = stats.degat.desReel;
-                    var degbm = stats.degat.bm;
-                    var degmoy = stats.degat.moy;
+                    	var degbm = stats.degat.bm;
+                    	var degmoy = stats.degat.moy;
                         
                         var ctn = $("<table/>");
                         ctn.append(
@@ -1200,18 +1291,16 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     name : "Charger",
                     description : function(stats) {
                         var pv = stats.hp.current;
-
-                        var ctn = $("<div/>");                        
                         if(pv <=0 ) {
-                            ctn.append("Vous ne pouvez charger personne... Vous êtes mort !");
+                            return $("<div/>").append("Vous ne pouvez charger personne... Vous êtes mort !");
                         } else {
                             var reg = stats.regen.des;
-                            var fatigue = stats.hp.fatigue.value;
+                            var fatigue = stats.hp.fatigue.total;
                             var vuetotale = stats.view.total;
                             var portee = Math.min(Utils.getPortee(reg+Math.floor(pv/10))-Math.floor((fatigue)/5), vuetotale);
                             
                             if(portee < 1) {
-                            	ctn.append("Impossible de charger !");    
+                            	return $("<div/>").append("Impossible de charger !");    
                             } else {                            
 		                        var att = stats.attaque.desReel;
         		                var attbm = stats.attaque.bm;
@@ -1220,14 +1309,33 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
     	                    	var degbm = stats.degat.bm;
                                 var degmoy = stats.degat.moy;
                                 
-                                ctn.append('Attaque : <b>' + att + '</b> D6 ' + Utils.sign(attbm) + ' => <b>'+attmoy+'</b>');
-                                ctn.append("<br/>");
-                                ctn.append('Dégâts : <b>'+deg+'</b> D3 ' + Utils.sign(degbm) + ' => <b>' + degmoy + '/' + (degmoy+2*Math.floor(deg/2)) + '</b>');
-                                ctn.append("<br/>");
-                                ctn.append('Portée : <b>' + portee + '</b> case' + Utils.addS(portee));
-                            }
-                        }
-                        return ctn;                        
+                                var ctn = $("<table/>");
+                                
+                                ctn.append(
+                                    $("<tr/>")
+                                    .append($("<th/>").html("Attaque :"))
+                                    .append($("<td/>").html("<b>" + att + "</b> D6"))
+                                    .append($("<td/>").html(Utils.sign(attbm)))
+                                    .append($("<td/>").html(" => "))
+                                    .append($("<td/>").html("<b>" + attmoy +"</b>"))
+                                );
+                                ctn.append(
+                                    $("<tr/>")
+                                    .append($("<th/>").html("Dégâts :"))
+                                    .append($("<td/>").html("<b>" + deg + "</b> D3"))
+                                    .append($("<td/>").html(Utils.sign(degbm)))
+                                    .append($("<td/>").html(" => "))
+                                    .append($("<td/>").html("<b>" + degmoy + "/" + (degmoy+2*Math.floor(deg/2)) +"</b>"))
+                                );     
+                                ctn.append(
+                                    $("<tr/>")
+                                    .append($("<th/>").html("Portée :"))
+                                    .append($("<td/>").attr("colspan", 4).html("<b>" + portee + "</b> case" + Utils.addS(portee)))
+                                );    
+                                
+                                return ctn;
+                            }               
+                        }                        
                     }
                 },
                 15 : {
@@ -1431,7 +1539,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var esq = stats.esquive.desReel;
                         var esqbm = stats.esquive.bm;
                         var deg = stats.degat.desReel;
-                    var degbm = stats.degat.bm;
+                   	 	var degbm = stats.degat.bm;
                         
                         var ctn = $("<table/>");
                         ctn.append(
@@ -1695,42 +1803,9 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             }
         };   
         
-        $($("table.mh_tdborder:first").next().find("table.mh_tdpage")).find("a")
-        .hover(function() {
-            var link = $(this);
-            
-            var popupId = link.attr("data-popup");
-            if(Utils.isDefined(popupId)) {
-            	var popup = $('[action-popup-id="' + popupId + '"]');
-            	popup.toggle();
-                return;
-            }
-            
-            var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
-            var actionType = tmp[1];
-            var actionId = parseInt(tmp[2]);
-            var actionName = link.text().trim();
-            popupId = "info-" + actionType + "-" + actionId;
-            
-            link.attr("data-actionType", actionType);
-            link.attr("data-actionId", actionId);
-            link.attr("data-popup", popupId);
-            
-            // Extract levels
-            var tmp = link.parents("tr:first").find("td:nth-child(3)").text().replace(/[\n\s->niveau%\)]/g, "").split("(");
-            var levels = [];
-            for(var j = 0; j < tmp.length; ++j) {
-                var f = (tmp[j]).split(":");
-                levels[f[0]] = f[1];
-            }
-            // ----------------
-            
-            var entry = database[actionType][actionId];
-            if(Utils.isUndefined(entry)) {
-                console.log("Entry not found for " + actionName + " [" + actionId + "] in category " + actionType);
-                return;
-            }
-            
+		$("<style type='text/css'> div.actionPopup th { text-align:right;} </style>").appendTo("head");        
+        
+        var showPopup = function(stats, entry, levels, actionName) {
              // Description
             var description = null;
             if($.isFunction(entry.description)) {
@@ -1742,15 +1817,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             if(null == description) {
             	return;
             }
-            
-            var pos = link.position();    
-                       
-            var div = $("<div/>")
-            .attr("action-popup-id", popupId)
-        	.css("position", "absolute")
-        	.css("top", "-1000px")
+                                   
+            var div = $("<div/>") 
+            .addClass("actionPopup")
             .css("max-width", "700px")
-            .css("left", (pos.left) + "px")
             .css("border", "1px solid #CCC")
             .css("background-color", "#FFF")
             .css("border-radius", "5px");
@@ -1778,10 +1848,66 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .append(description));
                         
             // Attach to DOM
-            div.appendTo($("body"));            
+            div.prependTo($("#footer2"));            
+                        
+            return div;
+        };
+        
+        if(false) {
+            $.each(["Comp", "Sort"], function(idx, actionType) {                
+                $.each(Object.keys(database[actionType]), function(idx, actionId) {
+                    var entry = database[actionType][actionId];
+                    var actionName = entry.name;
+                    var levels = [null, 90];
+                    var popup = showPopup(stats, entry, levels, actionName);
+                });
+                $("<div/>").append(actionType).prependTo($("#footer2"));
+            });                    
+        }
+        
+        $($("table.mh_tdborder:first").next().find("table.mh_tdpage")).find("a.AllLinks")
+        .hover(function() {            
+            var link = $(this);
+            var popupId = link.attr("data-popup");
+            if(Utils.isDefined(popupId)) {
+            	var popup = $('[action-popup-id="' + popupId + '"]');
+            	popup.toggle();                
+                return;
+            }
+                        
+            var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
+            var actionType = tmp[1];
+            var actionId = parseInt(tmp[2]);
+            var actionName = link.text().trim();
+            popupId = "info-" + actionType + "-" + actionId;                        
             
-            div.css("top", pos.top - div.height() + "px");            
-                
+            link.attr("data-actionType", actionType);
+            link.attr("data-actionId", actionId);
+            link.attr("data-popup", popupId);                       
+            
+            // Extract levels
+            var tmp = link.parents("tr:first").find("td:nth-child(3)").text().replace(/[\n\s->niveau%\)]/g, "").split("(");
+            var levels = [];
+            for(var j = 0; j < tmp.length; ++j) {
+                var f = (tmp[j]).split(":");
+                levels[f[0]] = f[1];
+            }
+            // ----------------
+            
+            var entry = database[actionType][actionId];
+            if(Utils.isUndefined(entry)) {
+                console.log("Entry not found for " + actionName + " [" + actionId + "] in category " + actionType);
+                return;
+            }            
+
+            var pos = link.position();    
+            
+            var popup = showPopup(stats, entry, levels, actionName);
+        	popup.css("position", "absolute")
+            popup.css("top", pos.top - popup.height() + "px");      
+            popup.css("left", (pos.left) + "px");
+            popup.attr("action-popup-id", popupId);            
+
         }, function() {
             var link = $(this);
             var popupId = link.attr("data-popup");
