@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-3
+// @version       0.0.32-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -126,6 +126,12 @@ var Utils = function() {
 			return Math.ceil( Math.sqrt( 2*param+10.75 )-3.5 );
 			// ça devrait être floor, +10.25, -2.5
 		},
+        
+        resiste : function(ddeg,bm) {
+            // version naive mais compréhensible ^^
+            if(!bm) return Math.floor(ddeg);
+            return Math.floor(ddeg)+Math.round(bm/2);
+        },
         
         addS : function(i) {
             return i>1 ? 's' : '';
@@ -941,84 +947,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             var mmmax = stats.magie.mm.value + stats.magie.mm.bonus;
             ctn.html(ctn.html().replace(/(Résistance[^<]+)/, "$1 (" + rmmax + ")")
                                .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
-        }
-        
-/*
-Les Compétences :
-----------------
-- 1 Botte Secrète®
-2  Régénération Accrue®
-3  Accélération du Métabolisme
-4 Camouflage®
-- 5  Identification des Champignons
-6  Balayage®
-- 7  Frénésie
-- 8  Coup de Butoir
-9  Attaque Précise
-10 Parer
-11 Contre-Attaquer
-- 12 Déplacement Eclair
-- 14 Charger
-15 Construire un Piège
-- 16 Connaissance des Monstres
-17 Hurlement Effrayant
-- 18 Insultes
-- 19 Ecriture Magique
-- 21 Pistage
-23 Lancer de Potions
-- 24 Bidouille
-25 Mélange Magique
-26 Grattage
-27 Dressage
-28 Shamaner
-29 Miner
-30 Tailler    
-33 Nécromancie
-35 Planter un Champignon
-37 Marquage
-38 Retraite
-40 Réparation
-41 Golemologie
-42 RotoBaffe
-- 43 Baroufle
-- 44  Course
-45 S'interposer
-46 Painthure de Guerre
-
-
-Les Sortilèges :
-----------------
-1  Projectile Magique
-- 2  Hypnotisme
-3  Vampirisme  
-4  Rafale Psychique
-- 5  Augmentation des Dégats  
-- 6  Augmentation de l´Attaque  
-7  Augmentation de l´Esquive  
-8  Explosion  
-- 9  Vision lointaine  
-- 10 Identification des trésors  
-11 Vue Troublée
-12 Faiblesse Passagère  
-- 13 Téléportation  
-14 Siphon des âmes
-- 15 Invisibilité  
-- 16 Armure Ethérée  
-- 17 Sacrifice  
-18 Glue  
-19 Flash Aveuglant  
-- 20 Analyse Anatomique  
-- 21 Projection  
-22 Vision Accrue
-23 Voir le Caché  
-- 24 Télékinésie  
-27 Bulle Anti-Magie  
-28 Griffe du Sorcier  
-29 Bulle Magique  
-- 33 Lévitation
-34 Précision Magique  
-35 Puissance Magique  
-*/        
+        }       
 
         var database = {
             "Comp" : {
@@ -1050,16 +979,32 @@ Les Sortilèges :
                 },
 				2  : {name : "Régénération Accrue"},
 				3  : {name : "Accélération du Métabolisme"},
-                4  : {
+                4 : {
                     name : "Camouflage",
                     description : function(stats, levels) {
-                        var camou = levels[levels.length - 1];
-                        var ctn = $("<div/>");
-                        ctn.append("Pour conserver son camouflage, il faut réussir un jet sous:<br/>"
-                            + "<i>Déplacement :</i> <b>" + Math.floor(0.75 * camou) + "%</b><br/>"
-                            + "<i>Attaque :</i> <b>perte automatique</b>.<br/>"
-                            + "<i>Projectile Magique :</i> <b>" + Math.floor(0.25 * camou) + "%</b>");
-                        return ctn;
+                        var camou = levels[1];
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<td/>").attr("colspan", 2).html("Pour conserver son camouflage, il faut réussir un jet sous :"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Déplacement :"))
+                            .append($("<td/>").html("<b>" + Math.floor(0.75*camou) + "%</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>perte automatique</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Projectile Magique :"))
+                            .append($("<td/>").html("<b>" + Math.floor(0.25*camou) + "%</b>"))
+                        );
+                        return ctn;	
                     }
                 },
                 5  : {
@@ -1083,7 +1028,28 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
-				6  : {name : "Augmentation de l´Attaque"},
+				6 : {
+                    name : "Balayage",
+                    description : function(stats) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<td/>").attr("colspan", 5).html("<u>Effet</u> : Met à terre l'adversaire"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Déstabilisation :"))
+                            .append($("<td/>").html("<b>" + att + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(attbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (Math.round(3.5*att)+attbm) +"</b>"))
+                        );
+                        return ctn;	
+                    }
+                },
                 7  : {
                     name : "Frénésie",
                     description : function(stats) {
@@ -1169,8 +1135,63 @@ Les Sortilèges :
                     }
                 },
 				9  : {name : "Attaque Précise"},
-                10 : {name : "Parer"},
-                11 : {name : "Contre-Attaquer"},
+                10 : {
+                    name : "Parer",
+                    description : function(stats) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                        var esq = stats.esquive.desReel;
+                    var esqbm = stats.esquive.bm;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Jet de parade :"))
+                            .append($("<td/>").html("<b>" + Math.floor(att/2) + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(Math.floor(attbm/2))))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (Math.round(3.5*Math.floor(att/2)+Math.floor(attbm/2))) +"</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Equivalent esquive :"))
+                            .append($("<td/>").html("<b>" + (Math.floor(att/2)+esq) + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(Math.floor(attbm/2)+esqbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (Math.round(3.5*(Math.floor(att/2)+esq)+Math.floor(attbm/2))+esqbm) +"</b>"))
+                        );
+                        return ctn;	
+                    }
+                },
+                11 : {
+                    name : "Contre-Attaquer",
+                    description : function(stats) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                        var deg = stats.degat.desReel;
+                    var degbm = stats.degat.bm;
+                    var degmoy = stats.degat.moy;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("'Attaque :"))
+                            .append($("<td/>").html("<b>" + Math.floor(att/2) + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(Math.floor(attbm/2))))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (Math.round(3.5*Math.floor(att/2)+Math.floor(attbm/2))) +"</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + deg + "</b> D3"))
+                            .append($("<td/>").html(Utils.sign(degbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + degmoy + "/" + (degmoy+2*Math.floor(deg/2)) +"</b>"))
+                        );
+                        return ctn;	
+                    }
+                },
                 12 : {
                     name : "Déplacement Eclair",
                     description : "Permet d'économiser <b>1</b> PA par rapport au déplacement classique"
@@ -1209,7 +1230,34 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
-                15 : {name : "Construire un Piège"},
+                15 : {
+                    name : "Construire un piège",
+                    description : function(stats, levels, actionName) {
+                        var vue = stats.view.range;
+                        var esq = stats.esquive.desReel;		
+                        
+                        if(actionName.indexOf('Glue') != -1) {
+                            return $("<div/>").append("Et si vous colliez vos adversaires au sol ?");
+                        }
+                        
+                        var ctn = $("<table/>");
+                        if(actionName.indexOf('Feu')!=-1) {
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<td/>").attr("colspan", 4).html("Et si on faisait péter quelque chose ?"))
+                            );
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Dégats du piège à feu :"))
+                                .append($("<td/>").html("<b>" + Math.floor((esq+vue)/2) + "</b> D3"))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + (2*Math.floor((esq+vue)/2)) + " (" + Utils.resiste((esq+vue)/2) + ")" +"</b>"))
+                            );
+                        }
+                        
+                        return ctn;                        
+                    }
+                },	
                 16 : {
                     name : "Connaissance des Monstres",
                     description : function(stats) {
@@ -1231,7 +1279,10 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
-                17 : {name : "Hurlement Effrayant"},
+                17 : {
+                    name : "Hurlement Effrayant",
+                    description : "Fait fuir un monstre si tout se passe bien.<br/>Lui donne de gros bonus sinon..."
+                },
                 18 : {
                     name : "Insultes",
                     description : function(stats) {
@@ -1272,26 +1323,90 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
-				23 : {name : "Lancer de Potions"},
+				23 : {
+                    name : "Lancer de potions",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var viewH = (2+Math.floor(vuetotale/5));
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
+                        );
+                        return ctn;                        
+                    }
+                },	
                 24 : {
                     name : "Bidouille",
                     description : "Bidouiller un trésor permet de compléter le nom d'un objet de votre inventaire avec le texte de votre choix."
                 },
-                25 : {name : "Mélange Magique"},
-                26 : {name : "Grattage"},
+                25 : {
+                    name : "Mélange Magique",
+                    description : "Cette Compétence permet de combiner deux Potions pour en réaliser une nouvelle dont l'effet est la somme des effets des potions initiales."
+                },
+                26 : {
+                    name : "Grattage",
+                    description : "Permet de confectionner un Parchemin Vierge à partir de composants et de Gigots de Gob"
+                },
                 27 : {
                     name : "Dressage",
                     description : "Le dressage permet d'apprivoiser un gowap redevenu sauvage ou un gnu sauvage."
                 },
-                28 : {name : "Shamaner"},
-                29 : {name : "Miner"},
-                30 : {name : "Tailler"},
-                33 : {name : "Nécromancie"},
-                35 : {name : "Planter un Champignon"},
-                37 : {name : "Marquage"},
-                38 : {name : "Retraite"},
-                40 : {name : "Réparation"},
-                41 : {name : "Golemologie"},
+                28 : {
+                    name : "Shamaner",
+                    description : "Permet de contrecarrer certains effets des pouvoirs spéciaux des monstres en utilisant des champignons (de 1 à 3)."
+                },
+                29 : {
+                    name : "Miner",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var viewH = 2 * vuetotale;
+                        var viewV = 2 * Math.ceil(vuetotale/2);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
+                        );
+                        return ctn;                        
+                    }
+                },
+                30 : {
+                    name : "Tailler",
+                    description : "Permet d'augmenter sensiblement la valeur marchande de certains minerais. Mais cette opération délicate n'est pas sans risques..."
+                },
+                33 : {
+                    name : "Nécromancie",
+                    description : "La Nécromancie permet à partir des composants d'un monstre de faire \"revivre\" ce monstre."
+                },
+                35 : {
+                    name : "Planter un Champignon",
+                    description : "Planter un Champignon est une compétence qui vous permet de créer des colonies d'une variété donnée de champignon à partir de quelques exemplaires préalablement enterrés."
+                },
+                37 : {
+                    name : "Marquage",
+                    description : "Marquage permet de rajouter un sobriquet à un monstre. Il faut bien choisir le nom à ajouter car celui-ci sera définitif. Il faut se trouver dans la même caverne que le monstre pour le marquer"
+                },
+                38 : {
+                    name : "Retraite",
+                    description : "Vous jugez la situation avec sagesse et estimez qu'il serait préférable de préparer un repli stratégique pour déconcerter l'ennemi et lui foutre une bonne branlée ... plus tard. MOUAHAHA ! Quelle intelligence démoniaque."
+                },
+                40 : {
+                    name : "Réparation",
+                    description : "Marre de ces arnaqueurs de forgerons ? Prenez quelques outils, et réparez vous-même votre matériel !"
+                },
+                41 : {
+                    name : "Golémologie",
+                    description : "Animez votre golem en assemblant divers matériaux autour d'un cerveau minéral."
+                },
                 42 : {name : "RotoBaffe"},
                 43 : {
                     name : "Baroufle",
@@ -1309,8 +1424,31 @@ Les Sortilèges :
                         return ctn;                        
                     }
 				},
-                45 : {name : "S'interposer"},
-                46 : {name : "Painthure de Guerre"}
+                45 : {
+                    name : "S'interposer",
+                    description : function(stats) {
+                        var reg = stats.regen.des;
+                        var esq = stats.esquive.desReel;
+                        var esqbm = stats.esquive.bm;
+                        var deg = stats.degat.desReel;
+                    var degbm = stats.degat.bm;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Jet de réflexe :"))
+                                .append($("<td/>").html("<b>" + Math.floor(2*(esq+reg)/3) + "</b> D6"))
+                                .append($("<td/>").html(Utils.sign(esqbm)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + (Math.round(3.5*Math.floor(2*(esq+reg)/3)+esqbm)) +"</b>"))
+                        );
+                        return ctn;	
+                    }
+                },
+                46 : {
+                    name : "Painthure de Guerre",
+                    description : "Grimez vos potrõlls et réveillez l'esprit guerrier qui sommeille en eux ! Un peu d\'encre, une Tête Réduite pour s'inspirer, et laissez parler votre créativité."
+                }
             },
             "Sort" : {
                 1 :  {name : "Projectile Magique"},
@@ -1596,7 +1734,7 @@ Les Sortilèges :
              // Description
             var description = null;
             if($.isFunction(entry.description)) {
-                description = entry.description(stats, levels);
+                description = entry.description(stats, levels, actionName);
             } else if(Utils.isDefined(entry.description)) {
             	description = $("<i>" + entry.description + "</i>");
             }
