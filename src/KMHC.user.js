@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-4
+// @version       0.0.32-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -992,17 +992,17 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Déplacement :"))
-                            .append($("<td/>").html("<b>" + Math.floor(0.75*camou) + "%</b>"))
+                            .append($("<td/>").html(Math.floor(0.75*camou) + "%"))
                         );
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Attaque :"))
-                            .append($("<td/>").html("<b>perte automatique</b>"))
+                            .append($("<td/>").html("perte automatique"))
                         );
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Projectile Magique :"))
-                            .append($("<td/>").html("<b>" + Math.floor(0.25*camou) + "%</b>"))
+                            .append($("<td/>").html(Math.floor(0.25*camou) + "%"))
                         );
                         return ctn;	
                     }
