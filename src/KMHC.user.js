@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32
+// @version       0.0.32-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -720,7 +720,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             magique : parseInt(tmp[15])
         };
         stats.corpulence = parseInt(tmp[16]);
-        stats.agilite = parseInt(tmp[17]);
+        stats.agilite = parseInt(tmp[17]);        
 
         // Combat
         var text = getText(7);
@@ -731,7 +731,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             armure : parseInt(tmp[3]),
         };
         stats.kills = parseInt(tmp[4]);
-        stats.deaths = parseInt(tmp[5]);
+        stats.deaths = parseInt(tmp[5]);        
 
         // Magie
         var text = getText(10);
@@ -747,6 +747,28 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             }
         };
         stats.concentration = parseInt(tmp[5]);
+        
+        // Computed
+        stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
+        stats.dla.duration.bonus.total = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
+        stats.dla.duration.injuries.total = stats.dla.duration.injuries.hour * 60 + stats.dla.duration.injuries.min;
+        stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
+        stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;        
+        
+        stats.view.total = stats.view.range + stats.view.bonus;
+        
+        stats.hp.max.total = stats.hp.max.value + stats.hp.max.bonus;
+        
+        stats.attaque.bm = stats.attaque.physique + stats.attaque.magique;
+        stats.degat.bm   = stats.degat.physique + stats.degat.magique;
+        
+        stats.attaque.desReel = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
+        stats.esquive.desReel = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
+        stats.armure.desReel = Math.max(stats.armure.des - stats.roundMalus.armure, 0);    
+        stats.degat.desReel = stats.degat.des;
+        
+		stats.attaque.moy = 3.5 * stats.attaque.desReel + stats.attaque.bm;
+        stats.degat.moy = 2 * stats.degat.desReel + stats.degat.bm;        
 
         return stats;
     },
@@ -815,14 +837,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         {
             var ctn = getContainer(5);
 
-            var pvmax = stats.hp.max.value + stats.hp.max.bonus;
+            var pvmax = stats.hp.max.total;
 
             ctn.find("table table tr td img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');
 
             // Différence PV p/r à équilibre de temps (propale R')
             if(stats.hp.current > 0) {
-                var bmt = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
-                var pdm = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
+                var bmt = stats.dla.duration.bonus.total;
+                var pdm = stats.dla.duration.stuf.total;
                 var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);
                 var texte = false;
                 if(bmt + pdm >= 0) {
@@ -840,9 +862,9 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Caracs
         {
-            var desAttaque = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
-            var desEsquive = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
-            var desArmure = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
+            var desAttaque = stats.attaque.desReel;
+            var desEsquive = stats.esquive.desReel;
+            var desArmure = stats.armure.desReel;
             var ctn = getContainer(6),
                 caracs = [
                 [
@@ -957,13 +979,26 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 1  : {
                     name : "Botte Secrète",
                     description : function(stats) {
-                        var att = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
-                        var attbm = stats.attaque.physique + stats.attaque.magique;
-                        var degbm = stats.degat.physique + stats.degat.magique;
-                        var ctn = $("<div/>");
-                        ctn.append("Attaque : <b>" + Math.floor(2*att/3) + "</b> D6 " + Utils.sign(Math.floor(attbm/2))	+ " => <b>" + Math.round(3.5*Math.floor(2*att/3)+Math.floor(attbm/2)) +"</b>");
-                        ctn.append("<br/>");
-                        ctn.append("Dégâts : <b>" + Math.floor(att/2) + "</b> D3 " + Utils.sign(Math.floor(degbm/2)) + " => <b>" + (2*Math.floor(att/2)+Math.floor(degbm/2)) + '/' + (2*Math.floor(1.5*Math.floor(att/2))+Math.floor(degbm/2))	+'</b>');
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                        var degbm = stats.degat.bm;
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + Math.floor(2*att/3) + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(Math.floor(attbm/2))))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + Math.round(3.5*Math.floor(2*att/3)+Math.floor(attbm/2)) +"</b>"))
+                        )
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + Math.floor(att/2) + "</b> D3"))
+                            .append($("<td/>").html(Utils.sign(Math.floor(degbm/2))))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (2*Math.floor(att/2)+Math.floor(degbm/2)) + '/' + (2*Math.floor(1.5*Math.floor(att/2))+Math.floor(degbm/2)) +"</b>"))
+                        )
                         return ctn;
                     }
                 },
@@ -981,18 +1016,18 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         } else {
                             var reg = stats.regen.des;
                             var fatigue = stats.hp.fatigue.value;
-                            var vuetotale = stats.view.range + stats.view.bonus;
+                            var vuetotale = stats.view.total;
                             var portee = Math.min(Utils.getPortee(reg+Math.floor(pv/10))-Math.floor((fatigue)/5), vuetotale);
                             
                             if(portee < 1) {
                             	ctn.append("Impossible de charger !");    
                             } else {                            
-								var att = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);                            
-	                        	var attbm = stats.attaque.physique + stats.attaque.magique;
-                                var attmoy = 3.5 * att + attbm;
+		                        var att = stats.attaque.desReel;
+        		                var attbm = stats.attaque.bm;
+                                var attmoy = stats.attaque.moy;
                                 var deg = stats.degat.des;
-    	                    	var degbm = stats.degat.physique + stats.degat.magique;
-                                var degmoy = 2 * deg + degbm;
+    	                    	var degbm = stats.degat.bm;
+                                var degmoy = stats.degat.moy;
                                 
                                 ctn.append('Attaque : <b>' + att + '</b> D6 ' + Utils.sign(attbm) + ' => <b>'+attmoy+'</b>');
                                 ctn.append("<br/>");
@@ -1007,7 +1042,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 16 : {
                     name : "Connaissance des Monstres",
                     description : function(stats) {
-                        var vuetotale = stats.view.range + stats.view.bonus;
+                        var vuetotale = stats.view.total;
                         var viewH = vuetotale;
                         var viewV = Math.ceil(vuetotale/2);
 	                    var ctn = $("<div/>");                        
