@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-1
+// @version       0.0.32-2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -773,28 +773,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         return stats;
     },
 
-    getFeatures : function(i) {
-        var feats = {};
-
-        $($("table.mh_tdborder:first").next().find("table.mh_tdpage")[i]).find("tr").each(function() {
-            var feat = $($(this).children()[1]).text();
-                levels = {};
-                tmp = $($(this).children()[2]).text().replace(/[\n\s->niveau%\)]/g, "").split("(");
-            for(var j = 0; j < tmp.length; ++j) {
-                var f = (tmp[j]).split(":");
-                levels[f[0]] = f[1];
-            }
-            feats[feat] = levels;
-        });
-        return feats;
-    },
-
     tuneIHM : function() {
-        var stats = this.getStats(),
-            comps = this.getFeatures(0),
-            sorts = this.getFeatures(1);
-
-        //console.log(["stats", stats, "comps", comps, "sorts", sorts]);
+        var stats = this.getStats();
 
         var getContainer = function(id) {
             return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
@@ -990,7 +970,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(Utils.sign(Math.floor(attbm/2))))
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + Math.round(3.5*Math.floor(2*att/3)+Math.floor(attbm/2)) +"</b>"))
-                        )
+                        );
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Dégâts :"))
@@ -998,13 +978,115 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(Utils.sign(Math.floor(degbm/2))))
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + (2*Math.floor(att/2)+Math.floor(degbm/2)) + '/' + (2*Math.floor(1.5*Math.floor(att/2))+Math.floor(degbm/2)) +"</b>"))
-                        )
+                        );
                         return ctn;
                     }
                 },
-                5  : {name : "Identification des Champignons"},
-                7  : {name : "Frénésie"},
-				8  : {name : "Coup de Butoir"},
+                5  : {
+                    name : "Identification des Champignons",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var viewH = Math.ceil(vuetotale/2);
+                        var viewV = Math.ceil(vuetotale/4);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> cases" + Utils.addS(viewH)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewV + "</b> cases" + Utils.addS(viewV)))
+                        );
+                        return ctn;                        
+                    }
+                },
+                7  : {
+                    name : "Frénésie",
+                    description : function(stats) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                    	var attmoy = stats.attaque.moy;
+                    
+                    	var deg = stats.degat.desReel;
+                        var degbm = stats.degat.bm;
+                    	var degmoy = stats.degat.moy;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + Math.floor(att) + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(attbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + attmoy +"</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + deg + "</b> D3"))
+                            .append($("<td/>").html(Utils.sign(degbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + degmoy + '/' + (degmoy+2*Math.floor(deg/2)) +"</b>"))
+                        );
+                        return ctn;                        
+                    }
+                },
+				8  : {
+                    name : "Coup de Butoir",
+                    description : function(stats, levels) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                    	var attmoy = stats.attaque.moy;
+                    
+                    	var deg = stats.degat.desReel;
+                        var degbm = stats.degat.bm;
+                    	var degmoy = stats.degat.moy;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + Math.floor(att) + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(attbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + attmoy +"</b>"))
+                        );
+                        
+                        var pc, lastmax=0, espdeg=0;
+						var notMaxedOut = false;
+                        var niveau = levels.length-1;
+                        for(var i= Math.min(niveau, 5) ; i>0 ; i--) {
+                            pc = levels[i] || 0;
+                            if(lastmax!=0 && pc<=lastmax) continue;                            
+                            
+                            var jetdeg = 2*Math.min(Math.floor(1.5*deg),deg+3*i)+degbm;
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Dégâts (niveau " + i + " : " + pc + "%) :"))
+                                .append($("<td/>").html("<b>" + Math.min(Math.floor(deg * 1.5),deg+3 * i) + "</b> D6"))
+                                .append($("<td/>").html(Utils.sign(degbm)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + jetdeg + '/' + (jetdeg+2*Math.floor(deg/2)) +"</b>"))
+                            );
+                            if(i<=niveau) {
+								espdeg += (pc-lastmax)*jetdeg;
+								if(i<niveau) notMaxedOut = true;
+							}
+							lastmax = pc;
+                        }
+                        if(notMaxedOut) {
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Dégâts moyens (si réussite) :"))
+                                .append($("<td/>").attr("colspan", "4").html("<b>" + Math.floor(10*espdeg/lastmax)/10 + '/' + (Math.floor(10*espdeg/lastmax)/10+2*Math.floor(deg/2)) + "</b>"))
+                            );
+                        }
+                        return ctn;                        
+                    }
+                },
 				14 : {
                     name : "Charger",
                     description : function(stats) {
@@ -1045,10 +1127,18 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var vuetotale = stats.view.total;
                         var viewH = vuetotale;
                         var viewV = Math.ceil(vuetotale/2);
-	                    var ctn = $("<div/>");                        
-     	                ctn.append('Portée horizontale : <b>'+viewH+'</b> case' + Utils.addS(viewH));
-	                    ctn.append("<br/>");
-    	                ctn.append('Portée verticale : <b>'+viewV+'</b> case' + Utils.addS(viewV));
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
+                        );
                         return ctn;                        
                     }
                 },
@@ -1056,35 +1146,283 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     name : "Déplacement Eclair",
                     description : "Permet d'économiser <b>1</b> PA par rapport au déplacement classique"
                 },
-                18 : {name : "Insultes"},
+                18 : {
+                    name : "Insultes",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var portee = Math.min(vuetotale,1);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + portee + "</b> case" + Utils.addS(portee)))
+                        );
+                        return ctn;                        
+                    }
+                },
                 19 : {name : "Ecriture Magique"},
-                21 : {name : "Pistage"},
+                21 : {
+                    name : "Pistage",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var viewH = 2 * vuetotale;
+                        var viewV = 2 * Math.ceil(vuetotale/2);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
+                        );
+                        return ctn;                        
+                    }
+                },
                 24 : {
                     name : "Bidouille",
                     description : "Bidouiller un trésor permet de compléter le nom d'un objet de votre inventaire avec le texte de votre choix."
                 },
                 41 : {name : "Golemologie"},
-                44 : {name : "Course"}
+                44 : {
+                    name : "Course",
+                    description : function(stats, levels) {
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Déplacement gratuit :"))
+                            .append($("<td/>").html("<b>" + Math.floor(levels[1]/2) + "%</b> de chance"))
+                        );
+                        return ctn;                        
+                    }
+                }
             },
             "Sort" : {
-                2  : {name : "Hypnotisme"},
-                5  : {name : "Augmentation des Dégats"},
-                6  : {name : "Augmentation de l´Attaque"},
-                9  : {name : "Vision lointaine"},
+                2  : {
+                    name : "Hypnotisme",
+                    description : function(stats) {
+                        var esq = stats.esquive.des;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Esquive (Full) :"))
+                            .append($("<td/>").html("<b>-"+Math.floor(1.5*esq)+"</b> Dés"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Esquive (Résistée) :"))
+                            .append($("<td/>").html("<b>-"+Math.floor(esq/3)+"</b> Dés"))
+                        );
+                        return ctn;                        
+                    }
+                },
+                5  : {
+                    name : "Augmentation des Dégats",
+                    description : function(stats) {
+                        var deg = stats.degat.des;
+                        var bonus = 1+Math.floor((deg-3)/2);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Bonus :"))
+                            .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
+                        );
+                        return ctn;                        
+                    }
+                },
+                6  : {
+                    name : "Augmentation de l´Attaque",
+                    description : function(stats) {
+                        var att = stats.attaque.des;
+                        var bonus = 1+Math.floor((att-3)/2);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Bonus :"))
+                            .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
+                        );
+                        return ctn;                        
+                    }
+                },
+                9  : {
+                    name : "Vision lointaine",
+                    description : "En ciblant une zone située n'importe où dans le Monde Souterrain, votre Trõll peut voir comme s'il s'y trouvait."
+
+                },
                 10 : {
                     name : "Identification des trésors",
                     description : "Permet de connaitre les caractéristiques et effets précis d'un trésor."
                 },
-                13 : {name : "Téléportation"},
+                13 : {
+                    name : "Téléportation",
+                    description : function(stats) {		
+                        var posX = stats.position.x;
+                        var posY = stats.position.y;
+                        var posN = stats.position.n;
+            			var mmTroll = stats.magie.mm.value + stats.magie.mm.bonus;
+                        var portee = Utils.getPortee(mmTroll/5);
+                        var vue = stats.view.total;
+						var pmh = (20+vue+portee);
+						var pmv = 3+Math.floor(portee/3);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + pmh + "</b> case" + Utils.addS(pmh)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + pmv + "</b> case" + Utils.addS(pmv)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("X compris entre :"))
+                            .append($("<td/>").html((posX-pmh) + ' et ' + (posX+pmh)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Y compris entre :"))
+                            .append($("<td/>").html((posY-pmh) + ' et ' + (posY+pmh)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("N compris entre :"))
+                            .append($("<td/>").html((posN-pmv) + ' et ' + Math.min(-1,posN+pmv)))
+                        );
+                        return ctn;                        
+                    }
+                },
                 15 : {
                     name : "Invisibilité",
                     description : "Un troll invisible est indétectable même quand on se trouve sur sa zone. Toute action physique ou sortilège d'attaque fait disparaître l'invisibilité."
                 },
-                16 : {name : "Armure Ethérée"},
-                17 : {name : "Sacrifice"},
-                20 : {name : "Analyse Anatomique"},
-                21 : {name : "Projection"},
-                24 : {name : "Télékinésie"},
+                16 : {
+                    name : "Armure Ethérée",
+                    description : function(stats) {
+                        var reg = stats.regen.des;
+                        var bonus = reg;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Bonus :"))
+                            .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
+                        );
+                        return ctn;                        
+                    }
+                },
+                17 : {
+                    name : "Sacrifice",
+                    description : function(stats) {
+                        var pv = stats.hp.current;
+                        var pvmax = stats.hp.max.total;
+                        if(pv <=0 ) {
+                            return $("<div/>").append("Vous ne pouvez soigner personne... Vous êtes mort !");
+                        }
+                        
+						var perteSacro = function (sac) {
+							return ' (-'+(sac+2*Math.floor(sac/5)+2)+' PV)';
+						}
+                        var vuetotale = stats.view.total;      
+                        
+                        var bmt = stats.dla.duration.bonus.total;
+                        var pdm = stats.dla.duration.stuf.total;
+                        var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);                        
+                        
+                        var sac = Math.floor((pv-1)/2);
+                        var sacOpti = Math.floor(pvdispo/1.4)-1;
+                    	var viewH = Math.min(1,vuetotale);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Soin maximal :"))
+                            .append($("<td/>").html("<b>" + sac + "</b> PV" + perteSacro(sac)))
+                        );
+                        if(sacOpti>0) {
+                    		ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Soin maximal sans malus de temps :"))
+                                .append($("<td/>").html("<b>" + sacOpti + "</b> PV" + perteSacro(sacOpti)))
+                            );
+                    	}
+                    	if(sacOpti>3) {
+                			sacOpti = 5*Math.floor((sacOpti+1)/5)-1;
+                            ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Soin optimal sans malus de temps :"))
+                            .append($("<td/>").html("<b>" + sacOpti + "</b> PV" + perteSacro(sacOpti)))
+                            );
+                        }
+                        
+                        return ctn;                        
+                    }                    
+                },
+                20 : {
+                    name : "Analyse Anatomique",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var viewH = Math.ceil(vuetotale/2);
+                        var viewV = Math.floor((vuetotale+1)/4);
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
+                        );
+                        return ctn;                        
+                    }
+                },
+                21 : {
+                    name : "Projection",
+                    description : "Si le jet de résistance de la victime est raté:<br/>la victime est <b>déplacée</b> et perd <b>1D6</b> d'esquive<hr>Si le jet de résistance de la victime est réussi:<br/>la victime ne <b>bouge pas</b> mais perd <b>1D6</b> d'esquive."
+                },
+                24 : {
+                    name : "Télékinésie",
+                    description : function(stats) {
+                        var vuetotale = stats.view.total;
+                        var vt = Math.floor(vuetotale/2)+2;
+                        
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + vt + "</b> case" + Utils.addS(vt)))
+                        );
+                        var strList = ['d\'une Plum\' ou Très Léger','Léger', 'Moyen','Lourd','Très Lourd ou d\'une Ton\''];
+                   		for(var i=0 ; i<strList.length ; i++) {
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("<i>Trésor " + strList[i] + "</i>:"))
+                                .append($("<td/>").html("<b>" + vt + "</b> case" + Utils.addS(vt)))
+                            );
+                            
+							vt = Math.max(0,vt-1);
+						}
+
+                        return ctn;                        
+                    }
+                },
                 33 : {
                     name : "Lévitation",
                     description : "Prendre un peu de hauteur permet parfois d'éviter les ennuis. Comme les pièges ou les trous par exemple..."
@@ -1113,6 +1451,16 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             link.attr("data-actionId", actionId);
             link.attr("data-popup", popupId);
             
+            // Extract levels
+            var tmp = link.parents("tr:first").find("td:nth-child(3)").text().replace(/[\n\s->niveau%\)]/g, "").split("(");
+            var levels = [];
+            for(var j = 0; j < tmp.length; ++j) {
+                var f = (tmp[j]).split(":");
+                levels[f[0]] = f[1];
+            }
+            // ----------------
+            
+            
             var entry = database[actionType][actionId];
             if(Utils.isUndefined(entry)) {
                 console.log("Entry not found for " + actionName + " [" + actionId + "] in category " + actionType);
@@ -1122,7 +1470,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
              // Description
             var description = null;
             if($.isFunction(entry.description)) {
-                description = entry.description(stats);
+                description = entry.description(stats, levels);
             } else if(Utils.isDefined(entry.description)) {
             	description = "<i>" + entry.description + "</i>";
             }
