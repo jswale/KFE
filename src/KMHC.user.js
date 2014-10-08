@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-2
+// @version       0.0.32-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1161,7 +1161,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;                        
                     }
                 },
-                19 : {name : "Ecriture Magique"},
+                19 : {
+                    name : "Ecriture Magique",
+                    description : "Réaliser la copie d'un sortilège après en avoir découvert la formule nécessite de réunir les composants de cette formule, d'obtenir un parchemin vierge sur lequel écrire, et de récupérer un champignon adéquat pour confectionner l'encre."
+                },
                 21 : {
                     name : "Pistage",
                     description : function(stats) {
@@ -1472,7 +1475,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             if($.isFunction(entry.description)) {
                 description = entry.description(stats, levels);
             } else if(Utils.isDefined(entry.description)) {
-            	description = "<i>" + entry.description + "</i>";
+            	description = $("<i>" + entry.description + "</i>");
             }
                 
             if(null == description) {
@@ -1484,38 +1487,39 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             var div = $("<div/>")
             .attr("action-popup-id", popupId)
         	.css("position", "absolute")
-        	.css("top", pos.top + 20 + "px")
-        	.css("left", (pos.left) + "px")
+        	.css("top", "-1000px")
+            .css("max-width", "700px")
+            .css("left", (pos.left) + "px")
             .css("border", "1px solid #CCC")
             .css("background-color", "#FFF")
-            .css("width", "400px")
             .css("border-radius", "5px");
             
             // Title
-            div.append(
-                $("<h2/>")
-                .css("background", "#333")
-                .css("border", "1px solid #111")
-                .css("padding", "5px 10px")
-                .css("font-size", "14px")
-                .css("color", "white")
-                .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
-                .css("letter-spacing", "0")
-                .css("border-radius", "5px 5px 0 0")
-                .css("font-weight", "normal")
-                .css("margin-bottom", "0px")
-                .css("margin-top", "0px")
-                .css("overflow", "hidden")
-                .text(entry.name)
-            );
+            var title = $("<h2/>")
+            .css("background", "#333")
+            .css("border", "1px solid #111")
+            .css("padding", "5px 10px")
+            .css("font-size", "14px")
+            .css("color", "white")
+            .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
+            .css("letter-spacing", "0")
+            .css("border-radius", "5px 5px 0 0")
+            .css("font-weight", "normal")
+            .css("margin-bottom", "0px")
+            .css("margin-top", "0px")
+            .css("overflow", "hidden")
+            .text(entry.name);
+            div.append(title);
             
             // content
             div.append($("<div/>")
 			.css("padding", "10px")
             .append(description));
-            
+                        
             // Attach to DOM
-            div.appendTo($("body"));
+            div.appendTo($("body"));            
+            
+            div.css("top", pos.top - div.height() + "px");            
                 
         }, function() {
             var link = $(this);
