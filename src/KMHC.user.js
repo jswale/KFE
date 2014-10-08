@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-5
+// @version       0.0.32-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1135,7 +1135,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var pc, lastmax=0, espdeg=0;
 						var notMaxedOut = false;
                         var niveau = levels.length-1;
-                        for(var i= Math.min(niveau, 5) ; i>0 ; i--) {
+                        for(var i= Math.min(niveau, 6) ; i>0 ; i--) {
                             pc = levels[i] || 0;
                             if(lastmax!=0 && pc<=lastmax) continue;                            
                             
