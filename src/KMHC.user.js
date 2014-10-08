@@ -842,9 +842,6 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Caracs
         {
-            var desAttaque = stats.attaque.desReel;
-            var desEsquive = stats.esquive.desReel;
-            var desArmure = stats.armure.desReel;
             var ctn = getContainer(6),
                 caracs = [
                 [
@@ -853,33 +850,33 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     stats.regen.des * 3   + stats.regen.physique + stats.regen.magique
                 ],
                 [
-                    desAttaque * 3.5 + stats.attaque.physique + stats.attaque.magique,
-                    desAttaque       + stats.attaque.physique + stats.attaque.magique,
-                    desAttaque * 6   + stats.attaque.physique + stats.attaque.magique,
-                    desAttaque * 3.5 + stats.attaque.magique,
-                    desAttaque       + stats.attaque.magique,
-                    desAttaque * 6   + stats.attaque.magique
+                    stats.attaque.moy,
+                    stats.attaque.desReel       + stats.attaque.bm,
+                    stats.attaque.desReel * 6   + stats.attaque.bm,
+                    stats.attaque.desReel * 3.5 + stats.attaque.magique,
+                    stats.attaque.desReel       + stats.attaque.magique,
+                    stats.attaque.desReel * 6   + stats.attaque.magique
                 ],
                 [
-                    desEsquive * 3.5 + stats.esquive.physique + stats.esquive.magique,
-                    desEsquive       + stats.esquive.physique + stats.esquive.magique,
-                    desEsquive * 6   + stats.esquive.physique + stats.esquive.magique
+                    stats.esquive.desReel * 3.5 + stats.esquive.physique + stats.esquive.magique,
+                    stats.esquive.desReel       + stats.esquive.physique + stats.esquive.magique,
+                    stats.esquive.desReel * 6   + stats.esquive.physique + stats.esquive.magique
                 ],
                 [
-                    stats.degat.des * 2 + stats.degat.physique + stats.degat.magique,
-                    stats.degat.des     + stats.degat.physique + stats.degat.magique,
-                    stats.degat.des * 3 + stats.degat.physique + stats.degat.magique,
+                    stats.degat.moy,
+                    stats.degat.des     + stats.degat.bm,
+                    stats.degat.des * 3 + stats.degat.bm,
                     stats.degat.des * 2 + stats.degat.magique,
                     stats.degat.des     + stats.degat.magique,
                     stats.degat.des * 3 + stats.degat.magique
                 ],
                 [
-                    desArmure * 2 + stats.armure.physique + stats.armure.magique,
-                    desArmure     + stats.armure.physique + stats.armure.magique,
-                    desArmure * 3 + stats.armure.physique + stats.armure.magique,
-                    desArmure * 2 + stats.armure.magique,
-                    desArmure     + stats.armure.magique,
-                    desArmure * 3 + stats.armure.magique
+                    stats.armure.desReel * 2 + stats.armure.physique + stats.armure.magique,
+                    stats.armure.desReel     + stats.armure.physique + stats.armure.magique,
+                    stats.armure.desReel * 3 + stats.armure.physique + stats.armure.magique,
+                    stats.armure.desReel * 2 + stats.armure.magique,
+                    stats.armure.desReel     + stats.armure.magique,
+                    stats.armure.desReel * 3 + stats.armure.magique
                 ]
             ];
             $.each(caracs, function(i, v) {
@@ -949,90 +946,82 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 /*
 Les Compétences :
 ----------------
-3  Accélération du Métabolisme
-9  Attaque Précise
-6  Balayage®
-- 43 Baroufle
-- 24 Bidouille
 - 1 Botte Secrète®
-4 Camouflage®
-- 14 Charger
-- 16 Connaissance des Monstres
-15 Construire un Piège
-11 Contre-Attaquer
-- 8  Coup de Butoir
-- 44  Course
-- 12 Déplacement Eclair
-27 Dressage
-- 19 Ecriture Magique
-- 7  Frénésie
-41 Golemologie
-26 Grattage
-17 Hurlement Effrayant
-- 5  Identification des Champignons
-- 18 Insultes
-23 Lancer de Potions
-37 Marquage
-25 Mélange Magique
-29 Miner
-33 Nécromancie
-46 Painthure de Guerre
-10 Parer
-- 21 Pistage
-35 Planter un Champignon
 2  Régénération Accrue®
-40 Réparation
-38 Retraite
-42 RotoBaffe
-45 S'interposer
+3  Accélération du Métabolisme
+4 Camouflage®
+- 5  Identification des Champignons
+6  Balayage®
+- 7  Frénésie
+- 8  Coup de Butoir
+9  Attaque Précise
+10 Parer
+11 Contre-Attaquer
+- 12 Déplacement Eclair
+- 14 Charger
+15 Construire un Piège
+- 16 Connaissance des Monstres
+17 Hurlement Effrayant
+- 18 Insultes
+- 19 Ecriture Magique
+- 21 Pistage
+23 Lancer de Potions
+- 24 Bidouille
+25 Mélange Magique
+26 Grattage
+27 Dressage
 28 Shamaner
+29 Miner
 30 Tailler    
+33 Nécromancie
+35 Planter un Champignon
+37 Marquage
+38 Retraite
+40 Réparation
+41 Golemologie
+42 RotoBaffe
+- 43 Baroufle
+- 44  Course
+45 S'interposer
+46 Painthure de Guerre
 
 
 Les Sortilèges :
 ----------------
-- 20 Analyse Anatomique  
-- 16 Armure Ethérée  
+1  Projectile Magique
+- 2  Hypnotisme
+3  Vampirisme  
+4  Rafale Psychique
+- 5  Augmentation des Dégats  
 - 6  Augmentation de l´Attaque  
 7  Augmentation de l´Esquive  
-- 5  Augmentation des Dégats  
-27 Bulle Anti-Magie  
-29 Bulle Magique  
 8  Explosion  
-12 Faiblesse Passagère  
-19 Flash Aveuglant  
-18 Glue  
-28 Griffe du Sorcier  
-- 2  Hypnotisme
+- 9  Vision lointaine  
 - 10 Identification des trésors  
+11 Vue Troublée
+12 Faiblesse Passagère  
+- 13 Téléportation  
+14 Siphon des âmes
 - 15 Invisibilité  
+- 16 Armure Ethérée  
+- 17 Sacrifice  
+18 Glue  
+19 Flash Aveuglant  
+- 20 Analyse Anatomique  
+- 21 Projection  
+22 Vision Accrue
+23 Voir le Caché  
+- 24 Télékinésie  
+27 Bulle Anti-Magie  
+28 Griffe du Sorcier  
+29 Bulle Magique  
 - 33 Lévitation
 34 Précision Magique  
-1  Projectile Magique
-- 21 Projection  
 35 Puissance Magique  
-4  Rafale Psychique
-- 17 Sacrifice  
-14 Siphon des âmes
-- 24 Télékinésie  
-- 13 Téléportation  
-3  Vampirisme  
-22 Vision Accrue
-- 9  Vision lointaine  
-23 Voir le Caché  
-11 Vue Troublée
 */        
 
         var database = {
             "Comp" : {
-                999 : {
-                    name : "Baroufle",
-                    description : "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !"
-                },
-                999 : {
-                    name : "Dressage",
-                    description : "Le dressage permet d'apprivoiser un gowap redevenu sauvage ou un gnu sauvage."
-                },
                 1  : {
                     name : "Botte Secrète",
                     description : function(stats) {
@@ -1059,12 +1048,26 @@ Les Sortilèges :
                         return ctn;
                     }
                 },
+				2  : {name : "Régénération Accrue"},
+				3  : {name : "Accélération du Métabolisme"},
+                4  : {
+                    name : "Camouflage",
+                    description : function(stats, levels) {
+                        var camou = levels[levels.length - 1];
+                        var ctn = $("<div/>");
+                        ctn.append("Pour conserver son camouflage, il faut réussir un jet sous:<br/>"
+                            + "<i>Déplacement :</i> <b>" + Math.floor(0.75 * camou) + "%</b><br/>"
+                            + "<i>Attaque :</i> <b>perte automatique</b>.<br/>"
+                            + "<i>Projectile Magique :</i> <b>" + Math.floor(0.25 * camou) + "%</b>");
+                        return ctn;
+                    }
+                },
                 5  : {
                     name : "Identification des Champignons",
                     description : function(stats) {
                         var vuetotale = stats.view.total;
-                        var viewH = Math.ceil(vuetotale/2);
-                        var viewV = Math.ceil(vuetotale/4);
+                        var viewH = Math.ceil(vuetotale / 2);
+                        var viewV = Math.ceil(vuetotale / 4);
                         
                         var ctn = $("<table/>");
                         ctn.append(
@@ -1080,6 +1083,7 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+				6  : {name : "Augmentation de l´Attaque"},
                 7  : {
                     name : "Frénésie",
                     description : function(stats) {
@@ -1164,6 +1168,13 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+				9  : {name : "Attaque Précise"},
+                10 : {name : "Parer"},
+                11 : {name : "Contre-Attaquer"},
+                12 : {
+                    name : "Déplacement Eclair",
+                    description : "Permet d'économiser <b>1</b> PA par rapport au déplacement classique"
+                },
 				14 : {
                     name : "Charger",
                     description : function(stats) {
@@ -1198,6 +1209,7 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+                15 : {name : "Construire un Piège"},
                 16 : {
                     name : "Connaissance des Monstres",
                     description : function(stats) {
@@ -1219,10 +1231,7 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
-                12 : {
-                    name : "Déplacement Eclair",
-                    description : "Permet d'économiser <b>1</b> PA par rapport au déplacement classique"
-                },
+                17 : {name : "Hurlement Effrayant"},
                 18 : {
                     name : "Insultes",
                     description : function(stats) {
@@ -1263,11 +1272,31 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+				23 : {name : "Lancer de Potions"},
                 24 : {
                     name : "Bidouille",
                     description : "Bidouiller un trésor permet de compléter le nom d'un objet de votre inventaire avec le texte de votre choix."
                 },
+                25 : {name : "Mélange Magique"},
+                26 : {name : "Grattage"},
+                27 : {
+                    name : "Dressage",
+                    description : "Le dressage permet d'apprivoiser un gowap redevenu sauvage ou un gnu sauvage."
+                },
+                28 : {name : "Shamaner"},
+                29 : {name : "Miner"},
+                30 : {name : "Tailler"},
+                33 : {name : "Nécromancie"},
+                35 : {name : "Planter un Champignon"},
+                37 : {name : "Marquage"},
+                38 : {name : "Retraite"},
+                40 : {name : "Réparation"},
                 41 : {name : "Golemologie"},
+                42 : {name : "RotoBaffe"},
+                43 : {
+                    name : "Baroufle",
+                    description : "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !"
+                },
                 44 : {
                     name : "Course",
                     description : function(stats, levels) {
@@ -1279,9 +1308,12 @@ Les Sortilèges :
                         );
                         return ctn;                        
                     }
-                }
+				},
+                45 : {name : "S'interposer"},
+                46 : {name : "Painthure de Guerre"}
             },
             "Sort" : {
+                1 :  {name : "Projectile Magique"},
                 2  : {
                     name : "Hypnotisme",
                     description : function(stats) {
@@ -1301,6 +1333,8 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+				3  : {name : "Vampirisme"},
+				4  : {name : "Rafale Psychique"},
                 5  : {
                     name : "Augmentation des Dégats",
                     description : function(stats) {
@@ -1331,6 +1365,8 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+				7  : {name : "Augmentation de l´Esquive"},
+				8  : {name : "Explosion"},
                 9  : {
                     name : "Vision lointaine",
                     description : "En ciblant une zone située n'importe où dans le Monde Souterrain, votre Trõll peut voir comme s'il s'y trouvait."
@@ -1340,6 +1376,8 @@ Les Sortilèges :
                     name : "Identification des trésors",
                     description : "Permet de connaitre les caractéristiques et effets précis d'un trésor."
                 },
+                11 : {name : "Vision Troublée"},
+				12 : {name : "Faiblesse Passagère"},
                 13 : {
                     name : "Téléportation",
                     description : function(stats) {		
@@ -1381,6 +1419,7 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+				14 : {name : "Siphon des âmes"},
                 15 : {
                     name : "Invisibilité",
                     description : "Un troll invisible est indétectable même quand on se trouve sur sa zone. Toute action physique ou sortilège d'attaque fait disparaître l'invisibilité."
@@ -1452,6 +1491,8 @@ Les Sortilèges :
                         return ctn;                        
                     }                    
                 },
+                18 : {name : "Glue"},
+                19 : {name : "Flash Aveuglant"},
                 20 : {
                     name : "Analyse Anatomique",
                     description : function(stats) {
@@ -1477,6 +1518,8 @@ Les Sortilèges :
                     name : "Projection",
                     description : "Si le jet de résistance de la victime est raté:<br/>la victime est <b>déplacée</b> et perd <b>1D6</b> d'esquive<hr>Si le jet de résistance de la victime est réussi:<br/>la victime ne <b>bouge pas</b> mais perd <b>1D6</b> d'esquive."
                 },
+                22 : {name : "Vision Accrue"},
+                23 : {name : "Voir le Caché"},
                 24 : {
                     name : "Télékinésie",
                     description : function(stats) {
@@ -1503,10 +1546,14 @@ Les Sortilèges :
                         return ctn;                        
                     }
                 },
+				27 : {name : "Bulle Anti-Magie"},
+                28 : {name : "Griffe du Sorcier"},
                 33 : {
                     name : "Lévitation",
                     description : "Prendre un peu de hauteur permet parfois d'éviter les ennuis. Comme les pièges ou les trous par exemple..."
-                }
+                },
+				34 : {name : "Précision Magique"},
+				35 : {name : "Puissance Magique"}
             }
         };   
         
@@ -1539,7 +1586,6 @@ Les Sortilèges :
                 levels[f[0]] = f[1];
             }
             // ----------------
-            
             
             var entry = database[actionType][actionId];
             if(Utils.isUndefined(entry)) {
