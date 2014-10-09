@@ -1,7 +1,7 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-7
+// @version       0.0.32-8
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1515,7 +1515,44 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     name : "Golémologie",
                     description : "Animez votre golem en assemblant divers matériaux autour d'un cerveau minéral."
                 },
-                42 : {name : "RotoBaffe"},
+                42 : {
+                    name : "RotoBaffe",
+                    description : function(stats, levels) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                        var deg = stats.degat.desReel;
+                        var degbm = stats.degat.bm;
+                        
+                        var niveau = levels.length;
+
+                        var ctn = $("<table/>");
+                        for(var i = 1; i < niveau + 1; i++) {                                                        
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("<u>Attaque n°" + i + " :</u>"))
+                            );
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Attaque :"))
+                                .append($("<td/>").html("<b>" + att + "</b> D6"))
+                                .append($("<td/>").html(Utils.sign(attbm)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + ((Math.round(3.5*att)+attbm)) +"</b>"))
+                            );
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Dégâts :"))
+                                .append($("<td/>").html("<b>" + deg + "</b> D6"))
+                                .append($("<td/>").html(Utils.sign(degbm)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + (2*deg+degbm) +"</b>"))
+                            );
+	               			att = Math.floor(0.75*att);
+							deg = Math.floor(0.75*deg);
+                        }
+                        return ctn;
+                    }
+                },
                 43 : {
                     name : "Baroufle",
                     description : "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !"
@@ -2088,6 +2125,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .css("border-radius", "5px");
 
             // Title
+            var level = levels.length;
             var title = $("<h2/>")
             .css("background", "#333")
             .css("border", "1px solid #111")
@@ -2101,7 +2139,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .css("margin-bottom", "0px")
             .css("margin-top", "0px")
             .css("overflow", "hidden")
-            .text(entry.name);
+            .text(entry.name + " [niv." + level + " : " + levels[level - 1] + "%]");
             div.append(title);
 
             // content
@@ -2115,12 +2153,12 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             return div;
         };
 
-        if(false) {
+        if(true) {
             $.each(["Comp", "Sort"], function(idx, actionType) {
                 $.each(Object.keys(database[actionType]), function(idx, actionId) {
                     var entry = database[actionType][actionId];
                     var actionName = entry.name;
-                    var levels = [null, 90];
+                    var levels = [null, 90,90];
                     var popup = showPopup(stats, entry, levels, actionName);
                 });
                 $("<div/>").append(actionType).prependTo($("#footer2"));
