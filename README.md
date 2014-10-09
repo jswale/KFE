@@ -3,8 +3,14 @@
 
 The Karlaaki MH Connector
 
+Manque les details pour les sorts :
+Vampirisme, Rafale Psychique, Siphon des âmes, Précision Magique, Puissance Magique
+
 
 Changelog :
+
+v 0.0.32-7
+- Ajout de la fiche de détail pour : RotoBaffe, Augmentation de l´Esquive
 
 v 0.0.32-7
 - Ajout des fiches de détail pour les compétences.
