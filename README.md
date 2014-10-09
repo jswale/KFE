@@ -4,10 +4,13 @@
 The Karlaaki MH Connector
 
 Manque les details pour les sorts :
-Vampirisme, Rafale Psychique, Siphon des âmes, Précision Magique, Puissance Magique
+Siphon des âmes, Précision Magique, Puissance Magique
 
 
 Changelog :
+
+v.0.0.32-12
+- Correction fiche de détail : Projectile Magique, Rafale Psychique, Vampirisme
 
 v.0.0.32-11
 - Ajout des jubilaires :)
