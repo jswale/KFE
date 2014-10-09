@@ -1,7 +1,7 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-8
+// @version       0.0.32-10
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -417,58 +417,6 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
             },
             scope : this
         });
-    }
-});
-
-var MH_Play_Play_news = $.extend({}, MH_Page, {
-
-    init : function() {
-        this.jubilaire();
-    },
-
-    jubilaire : function() {
-        $.get("http://mountyzilla.tilk.info/scripts/anniv.php",
-            function(data) {
-                var p = $($("p > a:contains('messagerie')")[0]).parent();
-                console.log("'p'", p);
-                p.before($("<table/>")
-                    .addClass("mh_tdborder")
-                    .attr("cellSpacing", 1)
-                    .attr("cellPadding", 1)
-                    .css({"maxWidth": "98%",
-                          "marginLeft": "auto",
-                          "marginRight": "auto"
-                        })
-                    .append($("<tr/>")
-                        .addClass("mh_tdtitre")
-                        .append($("<td/>")
-                            .append($("<span/>")
-                                .attr("title", "Envoyez leur un message ou un cadeau !")
-                                .text("Les Trõlls qui fêtent leur anniversaire aujourd'hui:")
-                            )
-                        )
-                    )
-                    .append($("<tr/>")
-                        .addClass("mh_tdpage")
-                        .append($("<td/>")
-                            .css("text-align", "center")
-                            .append($("<small/>")
-                                .html((function(list){
-                                    if(!list || list.length == 0) return "...";
-                                    var text = [],
-                                        trolls = list.split("\n");
-                                    $.each(trolls, function(i, t) {
-                                        var r = t.split(";");
-                                        if(r.length != 3 || r[2] === '0') return;
-                                        text.push("<a href='javascript:EPV(" + r[0] +")'>" + r[1] + "</a> (" + r[2] + " an" + Utils.addS(r[2]) + ")");
-                                    });
-                                    return text.join(", ");
-                                })(data))
-                            )
-                        )
-                    )
-                );
-            });
     }
 });
 
@@ -1186,7 +1134,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
                         var pc, lastmax=0, espdeg=0;
                         var notMaxedOut = false;
-                        var niveau = levels.length-1;
+                        var niveau = levels.length - 1;
                         for(var i= Math.min(niveau, 6) ; i>0 ; i--) {
                             pc = levels[i] || 0;
                             if(lastmax!=0 && pc<=lastmax) continue;
@@ -1239,7 +1187,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
                         var pc, lastmax=0, espatt=0;
                         var notMaxedOut = false;
-                        var niveau = levels.length-1;
+                        var niveau = levels.length - 1;
                         for(var i= Math.min(niveau, 5) ; i>0 ; i--) {
                             pc = levels[i] || 0;
                             if(lastmax!=0 && pc<=lastmax) continue;
@@ -1567,7 +1515,44 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     name : "Golémologie",
                     description : "Animez votre golem en assemblant divers matériaux autour d'un cerveau minéral."
                 },
-                42 : {name : "RotoBaffe"},
+                42 : {
+                    name : "RotoBaffe",
+                    description : function(stats, levels) {
+                        var att = stats.attaque.desReel;
+                        var attbm = stats.attaque.bm;
+                        var deg = stats.degat.desReel;
+                        var degbm = stats.degat.bm;
+                        
+                        var niveau = levels.length - 1;
+
+                        var ctn = $("<table/>");
+                        for(var i = 1; i < niveau + 1; i++) {                                                        
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("<u>Attaque n°" + i + " :</u>"))
+                            );
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Attaque :"))
+                                .append($("<td/>").html("<b>" + att + "</b> D6"))
+                                .append($("<td/>").html(Utils.sign(attbm)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + ((Math.round(3.5*att)+attbm)) +"</b>"))
+                            );
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Dégâts :"))
+                                .append($("<td/>").html("<b>" + deg + "</b> D6"))
+                                .append($("<td/>").html(Utils.sign(degbm)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + (2*deg+degbm) +"</b>"))
+                            );
+	               			att = Math.floor(0.75*att);
+							deg = Math.floor(0.75*deg);
+                        }
+                        return ctn;
+                    }
+                },
                 43 : {
                     name : "Baroufle",
                     description : "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !"
@@ -1665,7 +1650,48 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-                3  : {name : "Vampirisme"},
+                3  : {
+                    name : "Vampirisme",
+                    description : function(stats) {
+                        var deg = stats.degat.des;
+                        var attbmm = stats.attaque.magique;
+                        var degbmm = stats.degat.magique;
+
+   						var modA = 0;                        
+                        var modD = 0;  
+                        // TODO
+                        var pcA = false;
+                        var pcD = false;
+                        // ---
+                        
+                        if(pcA) {
+                            modA = parseInt(Math.floor(2*deg/3)*pcA/100);
+                        }
+                        if(pcD) {
+                        	modD = parseInt(deg*pcD/100);                        
+                        }
+                        
+                        var ctn = $("<table/>");                        
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + Math.floor(2*deg/3) + "</b> D6"))
+                            .append($("<td/>").html(pcA ? ("<i>" + Utils.sign(modA) + " D6</i>") : ""))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + Math.round(3.5*(Math.floor(2*deg/3)+modD)+attbmm)+ "</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + deg + "</b> D3"))
+                            .append($("<td/>").html(pcD ? ("<i>" + Utils.sign(modD) + " D3</i>") : ""))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" +(2*(deg+modD)+degbmm)+'/'+(2*(Math.floor(1.5*deg)+modD)+degbmm) +' ('+Utils.resiste(deg+modD,degbmm)+'/'+Utils.resiste(1.5*deg+modD,degbmm)+")</b>"))
+                        );
+                        
+                        return ctn;
+                    }
+                },
                 4  : {name : "Rafale Psychique"},
                 5  : {
                     name : "Augmentation des Dégats",
@@ -1697,7 +1723,21 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-                7  : {name : "Augmentation de l´Esquive"},
+                7  : {
+                    name : "Augmentation de l´Esquive",
+                    description : function(stats) {
+                        var esq = stats.esquive.des;
+                        var bonus = 1+Math.floor((esq-3)/2);
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Bonus :"))
+                            .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
+                        );
+                        return ctn;
+                    }
+                },
                 8  : {
                     name : "Explosion",
                     description : function(stats) {
@@ -2140,6 +2180,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .css("border-radius", "5px");
 
             // Title
+            var level = levels.length - 1;
             var title = $("<h2/>")
             .css("background", "#333")
             .css("border", "1px solid #111")
@@ -2153,7 +2194,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .css("margin-bottom", "0px")
             .css("margin-top", "0px")
             .css("overflow", "hidden")
-            .text(entry.name);
+            .text(entry.name + " [niv." + level + " : " + levels[level] + "%]");
             div.append(title);
 
             // content
@@ -2172,7 +2213,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 $.each(Object.keys(database[actionType]), function(idx, actionId) {
                     var entry = database[actionType][actionId];
                     var actionName = entry.name;
-                    var levels = [null, 90];
+                    var levels = [null, 90,90];
                     var popup = showPopup(stats, entry, levels, actionName);
                 });
                 $("<div/>").append(actionType).prependTo($("#footer2"));
