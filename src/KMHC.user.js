@@ -1682,7 +1682,21 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-                7  : {name : "Augmentation de l´Esquive"},
+                7  : {
+                    name : "Augmentation de l´Esquive",
+                    description : function(stats) {
+                        var esq = stats.esquive.des;
+                        var bonus = 1+Math.floor((esq-3)/2);
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Bonus :"))
+                            .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
+                        );
+                        return ctn;
+                    }
+                },
                 8  : {
                     name : "Explosion",
                     description : function(stats) {
@@ -2153,7 +2167,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             return div;
         };
 
-        if(true) {
+        if(false) {
             $.each(["Comp", "Sort"], function(idx, actionType) {
                 $.each(Object.keys(database[actionType]), function(idx, actionId) {
                     var entry = database[actionType][actionId];
