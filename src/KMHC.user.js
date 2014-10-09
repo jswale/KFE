@@ -1,7 +1,7 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-6
+// @version       0.0.32-7
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -117,22 +117,22 @@ var Utils = function() {
         io2 : function(i) {
             return (i < 10 ? "0" : "") + i;
         },
-        
+
         sign : function(i) {
             return (i >=0 ? '+' : '') + i;
         },
-        
+
         getPortee : function(param) {
-			return Math.ceil( Math.sqrt( 2*param+10.75 )-3.5 );
-			// ça devrait être floor, +10.25, -2.5
-		},
-        
+            return Math.ceil( Math.sqrt( 2*param+10.75 )-3.5 );
+            // ça devrait être floor, +10.25, -2.5
+        },
+
         resiste : function(ddeg,bm) {
             // version naive mais compréhensible ^^
             if(!bm) return Math.floor(ddeg);
             return Math.floor(ddeg)+Math.round(bm/2);
         },
-        
+
         addS : function(i) {
             return i>1 ? 's' : '';
         },
@@ -696,7 +696,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 value : parseInt(tmp[5]),
                 bm : (tmp[6] ? parseInt(tmp[6]) : 0)
             }
-        };        
+        };
 
         // Caracs
         var text = getText(6);
@@ -727,7 +727,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             magique : parseInt(tmp[15])
         };
         stats.corpulence = parseInt(tmp[16]);
-        stats.agilite = parseInt(tmp[17]);        
+        stats.agilite = parseInt(tmp[17]);
 
         // Combat
         var text = getText(7);
@@ -738,7 +738,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             armure : parseInt(tmp[3]),
         };
         stats.kills = parseInt(tmp[4]);
-        stats.deaths = parseInt(tmp[5]);        
+        stats.deaths = parseInt(tmp[5]);
 
         // Magie
         var text = getText(10);
@@ -754,31 +754,31 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             }
         };
         stats.concentration = parseInt(tmp[5]);
-        
+
         // Computed
         stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
         stats.dla.duration.bonus.total = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
         stats.dla.duration.injuries.total = stats.dla.duration.injuries.hour * 60 + stats.dla.duration.injuries.min;
         stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
-        stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;        
-        
+        stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;
+
         stats.hp.fatigue.total = stats.hp.fatigue.value + stats.hp.fatigue.bm;
-        
+
         stats.view.total = stats.view.range + stats.view.bonus;
-        
+
         stats.hp.max.total = stats.hp.max.value + stats.hp.max.bonus;
-        
+
         stats.attaque.bm = stats.attaque.physique + stats.attaque.magique;
         stats.degat.bm   = stats.degat.physique + stats.degat.magique;
         stats.esquive.bm = stats.esquive.physique + stats.esquive.magique;
-        
+
         stats.attaque.desReel = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
         stats.esquive.desReel = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
-        stats.armure.desReel = Math.max(stats.armure.des - stats.roundMalus.armure, 0);    
+        stats.armure.desReel = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
         stats.degat.desReel = stats.degat.des;
-        
-		stats.attaque.moy = 3.5 * stats.attaque.desReel + stats.attaque.bm;
-        stats.degat.moy = 2 * stats.degat.desReel + stats.degat.bm;        
+
+        stats.attaque.moy = 3.5 * stats.attaque.desReel + stats.attaque.bm;
+        stats.degat.moy = 2 * stats.degat.desReel + stats.degat.bm;
 
         return stats;
     },
@@ -795,9 +795,9 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             var ctn = getContainer(2);
             var nextDla = Utils.convertDate(stats.dla.next);
             for(i = 1 ; i < 3 ; i++) {
-            	nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
-            	nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);            	
-            	ctn.find("p").last().append("<br/>").append($("<b/>").text("---> Prochaine DLA " + i + " (estimée)..........: " + Utils.dateToString(nextDla)));
+                nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
+                nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
+                ctn.find("p").last().append("<br/>").append($("<b/>").text("---> Prochaine DLA " + i + " (estimée)..........: " + Utils.dateToString(nextDla)));
             }
         }
 
@@ -951,8 +951,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             var mmmax = stats.magie.mm.value + stats.magie.mm.bonus;
             ctn.html(ctn.html().replace(/(Résistance[^<]+)/, "$1 (" + rmmax + ")")
                                .replace(/(Maîtrise[^<]+)/, "$1 (" + mmmax + ")"));
-        }       
-        
+        }
+
         var database = {
             "Comp" : {
                 1  : {
@@ -981,11 +981,11 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-				2  : {
+                2  : {
                     name : "Régénération Accrue",
                     description : function(stats) {
                         var pvmax = stats.hp.max.total;
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -997,13 +997,13 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-				3  : {
+                3  : {
                     name : "Accélération du Métabolisme",
                     description : function(stats) {
                         var fatig = stats.hp.fatigue.value;
                         var fatigtotal = stats.hp.fatigue.total;
                         var minParPV = fatigtotal > 4 ? Math.floor(120/( fatigtotal*(1+Math.floor(fatigtotal/10)) )) : 30;
-                        
+
                         var ctn = $("<div/>");
                         ctn.append("<b>1</b> PV = <b>" + minParPV + "</b> minute" + Utils.addS(minParPV));
                         return ctn;
@@ -1013,7 +1013,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     name : "Camouflage",
                     description : function(stats, levels) {
                         var camou = levels[1];
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1034,7 +1034,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Projectile Magique :"))
                             .append($("<td/>").html(Math.floor(0.25*camou) + "%"))
                         );
-                        return ctn;	
+                        return ctn;
                     }
                 },
                 5  : {
@@ -1043,7 +1043,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var vuetotale = stats.view.total;
                         var viewH = Math.ceil(vuetotale / 2);
                         var viewV = Math.ceil(vuetotale / 4);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1055,15 +1055,15 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + viewV + "</b> cases" + Utils.addS(viewV)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
-				6 : {
+                6 : {
                     name : "Balayage",
                     description : function(stats) {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1077,7 +1077,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + (Math.round(3.5*att)+attbm) +"</b>"))
                         );
-                        return ctn;	
+                        return ctn;
                     }
                 },
                 7  : {
@@ -1085,12 +1085,12 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     description : function(stats) {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
-                    	var attmoy = stats.attaque.moy;
-                    
-                    	var deg = stats.degat.desReel;
+                        var attmoy = stats.attaque.moy;
+
+                        var deg = stats.degat.desReel;
                         var degbm = stats.degat.bm;
-                    	var degmoy = stats.degat.moy;
-                        
+                        var degmoy = stats.degat.moy;
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1108,20 +1108,20 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + degmoy + '/' + (degmoy+2*Math.floor(deg/2)) +"</b>"))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
-				8  : {
+                8  : {
                     name : "Coup de Butoir",
                     description : function(stats, levels) {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
-                    	var attmoy = stats.attaque.moy;
-                    
-                    	var deg = stats.degat.desReel;
+                        var attmoy = stats.attaque.moy;
+
+                        var deg = stats.degat.desReel;
                         var degbm = stats.degat.bm;
-                    	var degmoy = stats.degat.moy;
-                        
+                        var degmoy = stats.degat.moy;
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1131,14 +1131,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + attmoy +"</b>"))
                         );
-                        
+
                         var pc, lastmax=0, espdeg=0;
-						var notMaxedOut = false;
+                        var notMaxedOut = false;
                         var niveau = levels.length-1;
                         for(var i= Math.min(niveau, 6) ; i>0 ; i--) {
                             pc = levels[i] || 0;
-                            if(lastmax!=0 && pc<=lastmax) continue;                            
-                            
+                            if(lastmax!=0 && pc<=lastmax) continue;
+
                             var jetdeg = 2*Math.min(Math.floor(1.5*deg),deg+3*i)+degbm;
                             ctn.append(
                                 $("<tr/>")
@@ -1149,10 +1149,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                 .append($("<td/>").html("<b>" + jetdeg + '/' + (jetdeg+2*Math.floor(deg/2)) +"</b>"))
                             );
                             if(i<=niveau) {
-								espdeg += (pc-lastmax)*jetdeg;
-								if(i<niveau) notMaxedOut = true;
-							}
-							lastmax = pc;
+                                espdeg += (pc-lastmax)*jetdeg;
+                                if(i<niveau) notMaxedOut = true;
+                            }
+                            lastmax = pc;
                         }
                         if(notMaxedOut) {
                             ctn.append(
@@ -1161,20 +1161,20 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                 .append($("<td/>").attr("colspan", "4").html("<b>" + Math.floor(10*espdeg/lastmax)/10 + '/' + (Math.floor(10*espdeg/lastmax)/10+2*Math.floor(deg/2)) + "</b>"))
                             );
                         }
-                        return ctn;                        
+                        return ctn;
                     }
                 },
-				9  : {
+                9  : {
                     name : "Attaque Précise",
                     description : function(stats, levels) {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
-                    	var attmoy = stats.attaque.moy;
-                    
-                    	var deg = stats.degat.desReel;
+                        var attmoy = stats.attaque.moy;
+
+                        var deg = stats.degat.desReel;
                         var degbm = stats.degat.bm;
-                    	var degmoy = stats.degat.moy;
-                        
+                        var degmoy = stats.degat.moy;
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1184,14 +1184,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + attmoy +"</b>"))
                         );
-                        
+
                         var pc, lastmax=0, espatt=0;
-						var notMaxedOut = false;
+                        var notMaxedOut = false;
                         var niveau = levels.length-1;
                         for(var i= Math.min(niveau, 5) ; i>0 ; i--) {
                             pc = levels[i] || 0;
-                            if(lastmax!=0 && pc<=lastmax) continue;                            
-                            
+                            if(lastmax!=0 && pc<=lastmax) continue;
+
                             var jetatt = Math.round(3.5*Math.min(Math.floor(1.5*att),att+3*i))+attbm;
                             ctn.append(
                                 $("<tr/>")
@@ -1202,10 +1202,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                 .append($("<td/>").html("<b>" + jetatt +"</b>"))
                             );
                             if(i<=niveau) {
-								espatt += (pc-lastmax)*jetatt;
-								if(i<niveau) notMaxedOut = true;
-							}
-							lastmax = pc;
+                                espatt += (pc-lastmax)*jetatt;
+                                if(i<niveau) notMaxedOut = true;
+                            }
+                            lastmax = pc;
                         }
                         if(notMaxedOut) {
                             ctn.append(
@@ -1222,8 +1222,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + degmoy + '/' + (degmoy+2*Math.floor(deg/2)) + "</b>"))
                         );
-                        
-                        return ctn;                        
+
+                        return ctn;
                     }
                 },
                 10 : {
@@ -1232,8 +1232,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
                         var esq = stats.esquive.desReel;
-                    	var esqbm = stats.esquive.bm;                        
-                                                
+                        var esqbm = stats.esquive.bm;
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1251,7 +1251,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + (Math.round(3.5*(Math.floor(att/2)+esq)+Math.floor(attbm/2))+esqbm) +"</b>"))
                         );
-                        return ctn;	
+                        return ctn;
                     }
                 },
                 11 : {
@@ -1260,9 +1260,9 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var att = stats.attaque.desReel;
                         var attbm = stats.attaque.bm;
                         var deg = stats.degat.desReel;
-                    	var degbm = stats.degat.bm;
-                    	var degmoy = stats.degat.moy;
-                        
+                        var degbm = stats.degat.bm;
+                        var degmoy = stats.degat.moy;
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1280,14 +1280,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" + degmoy + "/" + (degmoy+2*Math.floor(deg/2)) +"</b>"))
                         );
-                        return ctn;	
+                        return ctn;
                     }
                 },
                 12 : {
                     name : "Déplacement Eclair",
                     description : "Permet d'économiser <b>1</b> PA par rapport au déplacement classique"
                 },
-				14 : {
+                14 : {
                     name : "Charger",
                     description : function(stats) {
                         var pv = stats.hp.current;
@@ -1298,19 +1298,19 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             var fatigue = stats.hp.fatigue.total;
                             var vuetotale = stats.view.total;
                             var portee = Math.min(Utils.getPortee(reg+Math.floor(pv/10))-Math.floor((fatigue)/5), vuetotale);
-                            
+
                             if(portee < 1) {
-                            	return $("<div/>").append("Impossible de charger !");    
-                            } else {                            
-		                        var att = stats.attaque.desReel;
-        		                var attbm = stats.attaque.bm;
+                                return $("<div/>").append("Impossible de charger !");
+                            } else {
+                                var att = stats.attaque.desReel;
+                                var attbm = stats.attaque.bm;
                                 var attmoy = stats.attaque.moy;
                                 var deg = stats.degat.des;
-    	                    	var degbm = stats.degat.bm;
+                                var degbm = stats.degat.bm;
                                 var degmoy = stats.degat.moy;
-                                
+
                                 var ctn = $("<table/>");
-                                
+
                                 ctn.append(
                                     $("<tr/>")
                                     .append($("<th/>").html("Attaque :"))
@@ -1326,28 +1326,28 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                     .append($("<td/>").html(Utils.sign(degbm)))
                                     .append($("<td/>").html(" => "))
                                     .append($("<td/>").html("<b>" + degmoy + "/" + (degmoy+2*Math.floor(deg/2)) +"</b>"))
-                                );     
+                                );
                                 ctn.append(
                                     $("<tr/>")
                                     .append($("<th/>").html("Portée :"))
                                     .append($("<td/>").attr("colspan", 4).html("<b>" + portee + "</b> case" + Utils.addS(portee)))
-                                );    
-                                
+                                );
+
                                 return ctn;
-                            }               
-                        }                        
+                            }
+                        }
                     }
                 },
                 15 : {
                     name : "Construire un piège",
                     description : function(stats, levels, actionName) {
                         var vue = stats.view.range;
-                        var esq = stats.esquive.desReel;		
-                        
+                        var esq = stats.esquive.desReel;
+
                         if(actionName.indexOf('Glue') != -1) {
                             return $("<div/>").append("Et si vous colliez vos adversaires au sol ?");
                         }
-                        
+
                         var ctn = $("<table/>");
                         if(actionName.indexOf('Feu')!=-1) {
                             ctn.append(
@@ -1362,17 +1362,17 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                 .append($("<td/>").html("<b>" + (2*Math.floor((esq+vue)/2)) + " (" + Utils.resiste((esq+vue)/2) + ")" +"</b>"))
                             );
                         }
-                        
-                        return ctn;                        
+
+                        return ctn;
                     }
-                },	
+                },
                 16 : {
                     name : "Connaissance des Monstres",
                     description : function(stats) {
                         var vuetotale = stats.view.total;
                         var viewH = vuetotale;
                         var viewV = Math.ceil(vuetotale/2);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1384,7 +1384,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
                 17 : {
@@ -1396,14 +1396,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     description : function(stats) {
                         var vuetotale = stats.view.total;
                         var portee = Math.min(vuetotale,1);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + portee + "</b> case" + Utils.addS(portee)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
                 19 : {
@@ -1416,7 +1416,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var vuetotale = stats.view.total;
                         var viewH = 2 * vuetotale;
                         var viewV = 2 * Math.ceil(vuetotale/2);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1428,24 +1428,24 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
-				23 : {
+                23 : {
                     name : "Lancer de potions",
                     description : function(stats) {
                         var vuetotale = stats.view.total;
                         var viewH = (2+Math.floor(vuetotale/5));
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
-                },	
+                },
                 24 : {
                     name : "Bidouille",
                     description : "Bidouiller un trésor permet de compléter le nom d'un objet de votre inventaire avec le texte de votre choix."
@@ -1472,7 +1472,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var vuetotale = stats.view.total;
                         var viewH = 2 * vuetotale;
                         var viewV = 2 * Math.ceil(vuetotale/2);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1484,7 +1484,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
                 30 : {
@@ -1529,9 +1529,9 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Déplacement gratuit :"))
                             .append($("<td/>").html("<b>" + Math.floor(levels[1]/2) + "%</b> de chance"))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
-				},
+                },
                 45 : {
                     name : "S'interposer",
                     description : function(stats) {
@@ -1539,8 +1539,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var esq = stats.esquive.desReel;
                         var esqbm = stats.esquive.bm;
                         var deg = stats.degat.desReel;
-                   	 	var degbm = stats.degat.bm;
-                        
+                        var degbm = stats.degat.bm;
+
                         var ctn = $("<table/>");
                         ctn.append(
                                 $("<tr/>")
@@ -1550,7 +1550,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                 .append($("<td/>").html(" => "))
                                 .append($("<td/>").html("<b>" + (Math.round(3.5*Math.floor(2*(esq+reg)/3)+esqbm)) +"</b>"))
                         );
-                        return ctn;	
+                        return ctn;
                     }
                 },
                 46 : {
@@ -1559,12 +1559,46 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 }
             },
             "Sort" : {
-                1 :  {name : "Projectile Magique"},
+                1 :  {
+                    name : "Projectile Magique",
+                    description : function(starts) {
+                        var vue = stats.view.range,
+                            vuetotale = stats.view.total,
+                            attbmm = stats.attaque.magique,
+                            degbmm = stats.degat.magique,
+                            portee = Utils.getPortee(vuetotale);
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>"+ vue + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(attbmm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").attr("colspan", "2").html("<b>" + (Math.round(3.5*(vue))+attbmm) + "</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>"+ Math.floor(vue/2)+ "</b> D3"))
+                            .append($("<td/>").html(Utils.sign(degbmm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (2*(Math.floor(vue/2))+degbmm) + "/" + (2*(Math.floor(1.5*Math.floor(vue/2)))+degbmm) + "</b>"))
+                            .append($("<td/>").html("(" + Utils.resiste(Math.floor(vue/2), degbmm) + "/" + Utils.resiste(1.5*Math.floor(vue/2), degbmm) + ")"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée :"))
+                            .append($("<td/>").attr("colspan", "5").html("<b>"+ portee + "</b> case" + Utils.addS(portee)))
+                        );
+                        return ctn;
+                    }
+                },
                 2  : {
                     name : "Hypnotisme",
                     description : function(stats) {
                         var esq = stats.esquive.des;
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1576,24 +1610,24 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Esquive (Résistée) :"))
                             .append($("<td/>").html("<b>-"+Math.floor(esq/3)+"</b> Dés"))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
-				3  : {name : "Vampirisme"},
-				4  : {name : "Rafale Psychique"},
+                3  : {name : "Vampirisme"},
+                4  : {name : "Rafale Psychique"},
                 5  : {
                     name : "Augmentation des Dégats",
                     description : function(stats) {
                         var deg = stats.degat.des;
                         var bonus = 1+Math.floor((deg-3)/2);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Bonus :"))
                             .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
                 6  : {
@@ -1601,41 +1635,109 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     description : function(stats) {
                         var att = stats.attaque.des;
                         var bonus = 1+Math.floor((att-3)/2);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Bonus :"))
                             .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
-				7  : {name : "Augmentation de l´Esquive"},
-				8  : {name : "Explosion"},
+                7  : {name : "Augmentation de l´Esquive"},
+                8  : {
+                    name : "Explosion",
+                    description : function(stats) {
+                        var deg = stats.degat.desReel,
+                            pvbase = stats.hp.max.value;
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + Math.floor( 1+(deg+Math.floor(pvbase/10))/2 ) + "</b> D3"))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + 2*Math.floor( 1+(deg+Math.floor(pvbase/10))/2 ) + "</b>"))
+                            .append($("<td/>").html("(" + Utils.resiste( 1+(deg+Math.floor(pvbase/10))/2 ) + ")"))
+                        );
+                        return ctn;
+                    }
+                },
                 9  : {
                     name : "Vision lointaine",
                     description : "En ciblant une zone située n'importe où dans le Monde Souterrain, votre Trõll peut voir comme s'il s'y trouvait."
-
                 },
                 10 : {
                     name : "Identification des trésors",
                     description : "Permet de connaitre les caractéristiques et effets précis d'un trésor."
                 },
-                11 : {name : "Vision Troublée"},
-				12 : {name : "Faiblesse Passagère"},
+                11 : {
+                    name : "Vision Troublée",
+                    description : function(stats) {
+                        var vue = stats.view.range,
+                            vuetotale = stats.view.total,
+                            ph = Math.min(1,vuetotale),
+                            v = Math.floor(vue/3);
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").html("<b>" + ph + "</b> case" + Utils.addS(ph)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Vue :"))
+                            .append($("<td/>").html("<b>-" + v + "</b> case" + Utils.addS(v)))
+                        );
+
+                        return ctn;
+                    }
+                },
+                12 : {
+                    name : "Faiblesse Passagère",
+                    description : function(stats) {
+                        var pv = stats.hp.current;
+                        if(pv <= 0) {
+                            return $("<div/>").append("Dans votre état, vous n'affaiblirez personne...");
+                        }
+                        var vuetotale = stats.view.total,
+                            deg = stats.degat.desReel,
+                            ph = Math.min(1,vuetotale);
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Portée horizontale :"))
+                            .append($("<td/>").attr("colspan", "2").html("<b>" + ph + "</b> case" + Utils.addS(ph)))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts physiques :"))
+                            .append($("<td/>").html("<b>-" + Math.ceil( (Math.floor(pv/10)+deg-5)/4 ) + "</b>"))
+                            .append($("<td/>").html("(-" + Math.ceil( (Math.floor(pv/10)+deg-5)/8 ) + ")"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts magiques :"))
+                            .append($("<td/>").html("<b>-" + Math.floor( (Math.floor(pv/10)+deg-4)/4 ) + "</b>"))
+                            .append($("<td/>").html("(-" + Math.floor( (Math.floor(pv/10)+deg-2)/8 ) + ")"))
+                        );
+                        return ctn;
+                    }
+                },
                 13 : {
                     name : "Téléportation",
-                    description : function(stats) {		
+                    description : function(stats) {
                         var posX = stats.position.x;
                         var posY = stats.position.y;
                         var posN = stats.position.n;
-            			var mmTroll = stats.magie.mm.value + stats.magie.mm.bonus;
+                        var mmTroll = stats.magie.mm.value + stats.magie.mm.bonus;
                         var portee = Utils.getPortee(mmTroll/5);
                         var vue = stats.view.total;
-						var pmh = (20+vue+portee);
-						var pmv = 3+Math.floor(portee/3);
-                        
+                        var pmh = (20+vue+portee);
+                        var pmv = 3+Math.floor(portee/3);
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1662,10 +1764,10 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("N compris entre :"))
                             .append($("<td/>").html((posN-pmv) + ' et ' + Math.min(-1,posN+pmv)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
-				14 : {name : "Siphon des âmes"},
+                14 : {name : "Siphon des âmes"},
                 15 : {
                     name : "Invisibilité",
                     description : "Un troll invisible est indétectable même quand on se trouve sur sa zone. Toute action physique ou sortilège d'attaque fait disparaître l'invisibilité."
@@ -1675,14 +1777,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     description : function(stats) {
                         var reg = stats.regen.des;
                         var bonus = reg;
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Bonus :"))
                             .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b>"))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
                 17 : {
@@ -1693,20 +1795,20 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         if(pv <=0 ) {
                             return $("<div/>").append("Vous ne pouvez soigner personne... Vous êtes mort !");
                         }
-                        
-						var perteSacro = function (sac) {
-							return ' (-'+(sac+2*Math.floor(sac/5)+2)+' PV)';
-						}
-                        var vuetotale = stats.view.total;      
-                        
+
+                        var perteSacro = function (sac) {
+                            return ' (-'+(sac+2*Math.floor(sac/5)+2)+' PV)';
+                        }
+                        var vuetotale = stats.view.total;
+
                         var bmt = stats.dla.duration.bonus.total;
                         var pdm = stats.dla.duration.stuf.total;
-                        var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);                        
-                        
+                        var pvdispo = stats.hp.current - pvmax - Math.ceil((bmt + pdm)*pvmax/250);
+
                         var sac = Math.floor((pv-1)/2);
                         var sacOpti = Math.floor(pvdispo/1.4)-1;
-                    	var viewH = Math.min(1,vuetotale);
-                        
+                        var viewH = Math.min(1,vuetotale);
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1719,52 +1821,52 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html("<b>" + sac + "</b> PV" + perteSacro(sac)))
                         );
                         if(sacOpti>0) {
-                    		ctn.append(
+                            ctn.append(
                                 $("<tr/>")
                                 .append($("<th/>").html("Soin maximal sans malus de temps :"))
                                 .append($("<td/>").html("<b>" + sacOpti + "</b> PV" + perteSacro(sacOpti)))
                             );
-                    	}
-                    	if(sacOpti>3) {
-                			sacOpti = 5*Math.floor((sacOpti+1)/5)-1;
+                        }
+                        if(sacOpti>3) {
+                            sacOpti = 5*Math.floor((sacOpti+1)/5)-1;
                             ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Soin optimal sans malus de temps :"))
                             .append($("<td/>").html("<b>" + sacOpti + "</b> PV" + perteSacro(sacOpti)))
                             );
                         }
-                        
-                        return ctn;                        
-                    }                    
+
+                        return ctn;
+                    }
                 },
                 18 : {
                     name : "Glue",
                     description : function(stats) {
                         var vuetotale = stats.view.total;
                         var viewH = (1+Math.floor(vuetotale/3));
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + viewH + "</b> case" + Utils.addS(viewH)))
                         );
-                        return ctn;                        
-                    }                    
+                        return ctn;
+                    }
                 },
                 19 : {
                     name : "Flash Aveuglant",
                     description : function(stats) {
-                        var vue = stats.view.range;                        
-                        
+                        var vue = stats.view.range;
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Vue, Attaque, Esquive :"))
                             .append($("<td/>").html("<b>-" + (1+Math.floor(vue/5)) + "</b>"))
                         );
-                        return ctn;                        
-                    }                    
+                        return ctn;
+                    }
                 },
                 20 : {
                     name : "Analyse Anatomique",
@@ -1772,7 +1874,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var vuetotale = stats.view.total;
                         var viewH = Math.ceil(vuetotale/2);
                         var viewV = Math.floor((vuetotale+1)/4);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1784,7 +1886,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Portée horizontale :"))
                             .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                         );
-                        return ctn;                        
+                        return ctn;
                     }
                 },
                 21 : {
@@ -1795,27 +1897,27 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     name : "Vision Accrue",
                     description : function(stats) {
                         var vue = stats.view.range;
-                        
+
                         var bonus = Math.floor(vue/2);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Bonus :"))
                             .append($("<td/>").html("<b>" + Utils.sign(bonus) + "</b> case" + Utils.addS(bonus)))
                         );
-                        return ctn;                        
-                    }           
+                        return ctn;
+                    }
                 },
                 23 : {
                     name : "Voir le Caché",
                     description : function(stats) {
                         var vue = stats.view.range;
                         var vuetotale = stats.view.total;
-                        
+
                         var viewOnMe = Math.min(5,Utils.getPortee(vue));
                         var viewAway = Utils.getPortee(vuetotale);
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1827,15 +1929,15 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<th/>").html("Portée horizontale (a distance) :"))
                             .append($("<td/>").html("<b>" + viewAway + "</b> case" + Utils.addS(viewAway)))
                         );
-                        return ctn;                        
-                    }                    
+                        return ctn;
+                    }
                 },
                 24 : {
                     name : "Télékinésie",
                     description : function(stats) {
                         var vuetotale = stats.view.total;
                         var vt = Math.floor(vuetotale/2)+2;
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1843,27 +1945,27 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html("<b>" + vt + "</b> case" + Utils.addS(vt)))
                         );
                         var strList = ['d\'une Plum\' ou Très Léger','Léger', 'Moyen','Lourd','Très Lourd ou d\'une Ton\''];
-                   		for(var i=0 ; i<strList.length ; i++) {
+                        for(var i=0 ; i<strList.length ; i++) {
                             ctn.append(
                                 $("<tr/>")
                                 .append($("<th/>").html("<i>Trésor " + strList[i] + "</i>:"))
                                 .append($("<td/>").html("<b>" + vt + "</b> case" + Utils.addS(vt)))
                             );
-                            
-							vt = Math.max(0,vt-1);
-						}
 
-                        return ctn;                        
+                            vt = Math.max(0,vt-1);
+                        }
+
+                        return ctn;
                     }
                 },
-				27 : {
+                27 : {
                     name : "Bulle Anti-Magie",
                     description : function(stats) {
                         var rm = stats.magie.rm.value;
                         var mm = stats.magie.mm.value;
                         var rmbm = stats.magie.rm.bonus;
                         var mmbm = stats.magie.mm.bonus;
-                        
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
@@ -1877,41 +1979,114 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html("<b>" + mm + "</b>"))
                             .append($("<td/>").html("(Total : <b>" + mmbm + "</b>)"))
                         );
-                        return ctn;                        
-                    }             
+                        return ctn;
+                    }
                 },
-                28 : {name : "Griffe du Sorcier"},
+                28 : {
+                    name : "Griffe du Sorcier",
+                    description : function(stats) {
+                        var att = stats.attaque.desReel,
+                            attbm = stats.attaque.bm,
+                            attmoy = stats.attaque.moy,
+                            deg = stats.degat.des,
+                            degbm = stats.degat.bm,
+                            pvbase = stats.hp.max.total,
+                            reg = stats.regen.des,
+                            vue = stats.view.total;
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + att + "</b> D6"))
+                            .append($("<td/>").html(Utils.sign(attbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").attr("colspan", "2").html("<b>" + attmoy +"</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + deg + "</b> D3"))
+                            .append($("<td/>").html(Utils.sign(degbm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (2*(Math.floor(deg/2))+degbm) + "/" + (2*(Math.floor(deg/2)+Math.floor(deg/4))+degbm) +"</b>"))
+                            .append($("<td/>").html("(" + Utils.resiste(Math.floor(deg/2),degbm) + "/" + Utils.resiste(Math.floor(deg/2)+Math.floor(deg/4),degbm) + ")"))
+                        );
+                        var addVenin = function(ctn, type, effet, duree) {
+                            var dred = Math.max(Math.floor(duree/2),1);
+                            ctn.append($("<tr/>").append($("<td/>").attr("colspan", "6").html("<hr/>")));
+                            ctn.append(
+                                $("<tr/>")
+                                .append($("<th/>").html("Venin " + type + " :"))
+                                .append($("<td/>").html("<b>" + effet + "</b> D3"))
+                                .append($("<td/>").html("pendant <b>" + duree + "</b> tour" + Utils.addS(duree)))
+                                .append($("<td/>").html(" => "))
+                                .append($("<td/>").html("<b>" + 2*effet + " x " + duree + " = " + 2*effet*duree + "</b>"))
+                                .append($("<td/>").html("(" + 2*effet + " x " + dred + " = " + 2*effet*dred + ")"))
+                            );
+                        };
+                        var effet = 1+Math.floor((Math.floor(pvbase/10)+reg)/3);
+                        addVenin(ctn, 'insidieux', effet, 2+Math.floor(vue/5));
+                        effet = Math.floor(1.5*effet);
+                        addVenin(ctn, 'virulent', effet, 1+Math.floor(vue/10));
+                        return ctn;
+                    }
+                },
+                29 : {
+                    name : "Bulle Magique",
+                    description : function(stats) {
+                        var rm = stats.magie.rm.value;
+                        var mm = stats.magie.mm.value;
+                        var rmbm = stats.magie.rm.bonus;
+                        var mmbm = stats.magie.mm.bonus;
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("RM :"))
+                            .append($("<td/>").html("<b>" + rm + "</b>"))
+                            .append($("<td/>").html("(Total : <b>" + rmbm + "</b>)"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("MM :"))
+                            .append($("<td/>").html("<b>" + mm + "</b>"))
+                            .append($("<td/>").html("(Total : <b>" + (2*mm+mmbm) + "</b>)"))
+                        );
+                        return ctn;
+                    }
+                },
                 33 : {
                     name : "Lévitation",
                     description : "Prendre un peu de hauteur permet parfois d'éviter les ennuis. Comme les pièges ou les trous par exemple..."
                 },
-				34 : {name : "Précision Magique"},
-				35 : {name : "Puissance Magique"}
+                34 : {name : "Précision Magique"},
+                35 : {name : "Puissance Magique"}
             }
-        };   
-        
-		$("<style type='text/css'> div.actionPopup th { text-align:right;} </style>").appendTo("head");        
-        
+        };
+
+        $("<style type='text/css'> div.actionPopup th { text-align:right;} </style>").appendTo("head");
+
         var showPopup = function(stats, entry, levels, actionName) {
              // Description
             var description = null;
             if($.isFunction(entry.description)) {
                 description = entry.description(stats, levels, actionName);
             } else if(Utils.isDefined(entry.description)) {
-            	description = $("<i>" + entry.description + "</i>");
+                description = $("<i>" + entry.description + "</i>");
             }
-                
+
             if(null == description) {
-            	return;
+                return;
             }
-                                   
-            var div = $("<div/>") 
+
+            var div = $("<div/>")
             .addClass("actionPopup")
             .css("max-width", "700px")
             .css("border", "1px solid #CCC")
             .css("background-color", "#FFF")
             .css("border-radius", "5px");
-            
+
             // Title
             var title = $("<h2/>")
             .css("background", "#333")
@@ -1928,20 +2103,20 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .css("overflow", "hidden")
             .text(entry.name);
             div.append(title);
-            
+
             // content
             div.append($("<div/>")
-			.css("padding", "10px")
+            .css("padding", "10px")
             .append(description));
-                        
+
             // Attach to DOM
-            div.prependTo($("#footer2"));            
-                        
+            div.prependTo($("#footer2"));
+
             return div;
         };
-        
+
         if(false) {
-            $.each(["Comp", "Sort"], function(idx, actionType) {                
+            $.each(["Comp", "Sort"], function(idx, actionType) {
                 $.each(Object.keys(database[actionType]), function(idx, actionId) {
                     var entry = database[actionType][actionId];
                     var actionName = entry.name;
@@ -1949,29 +2124,29 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     var popup = showPopup(stats, entry, levels, actionName);
                 });
                 $("<div/>").append(actionType).prependTo($("#footer2"));
-            });                    
+            });
         }
-        
+
         $($("table.mh_tdborder:first").next().find("table.mh_tdpage")).find("a.AllLinks")
-        .hover(function() {            
+        .hover(function() {
             var link = $(this);
             var popupId = link.attr("data-popup");
             if(Utils.isDefined(popupId)) {
-            	var popup = $('[action-popup-id="' + popupId + '"]');
-            	popup.toggle();                
+                var popup = $('[action-popup-id="' + popupId + '"]');
+                popup.toggle();
                 return;
             }
-                        
+
             var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
             var actionType = tmp[1];
             var actionId = parseInt(tmp[2]);
             var actionName = link.text().trim();
-            popupId = "info-" + actionType + "-" + actionId;                        
-            
+            popupId = "info-" + actionType + "-" + actionId;
+
             link.attr("data-actionType", actionType);
             link.attr("data-actionId", actionId);
-            link.attr("data-popup", popupId);                       
-            
+            link.attr("data-popup", popupId);
+
             // Extract levels
             var tmp = link.parents("tr:first").find("td:nth-child(3)").text().replace(/[\n\s->niveau%\)]/g, "").split("(");
             var levels = [];
@@ -1980,26 +2155,26 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 levels[f[0]] = f[1];
             }
             // ----------------
-            
+
             var entry = database[actionType][actionId];
             if(Utils.isUndefined(entry)) {
                 console.log("Entry not found for " + actionName + " [" + actionId + "] in category " + actionType);
                 return;
-            }            
+            }
 
-            var pos = link.position();    
-            
+            var pos = link.position();
+
             var popup = showPopup(stats, entry, levels, actionName);
-        	popup.css("position", "absolute")
-            popup.css("top", pos.top - popup.height() + "px");      
+            popup.css("position", "absolute")
+            popup.css("top", pos.top - popup.height() + "px");
             popup.css("left", (pos.left) + "px");
-            popup.attr("action-popup-id", popupId);            
+            popup.attr("action-popup-id", popupId);
 
         }, function() {
             var link = $(this);
             var popupId = link.attr("data-popup");
             var popup = $('[action-popup-id="' + popupId + '"]');
-            popup.toggle();            
+            popup.toggle();
         });
 
 //        console.log(ctn);
@@ -2273,14 +2448,14 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     addMonsterCdmLink : function() {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
         var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
-        
-        
+
+
 
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
             var tdName = $($(this).children("td:nth-child("+nomColId+")"));
             var monsterName = tdName.text();
-            
+
             var tdRef = $($(this).children("td:nth-child("+refColId+")"));
             var monsterId = tdRef.text();
             tdRef.empty()
@@ -2290,7 +2465,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 .attr("title", "Voir les évenements de " + monsterName + " [" + monsterId + "]")
                 .text(monsterId)
             );
-            
+
             tdName.find("a")
                 .attr("href", "javascript:void(0)")
                 .attr("title", "Voir la CdM de " + monsterName + " [" + monsterId + "]")
@@ -2299,7 +2474,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 })
            ;
         });
-                
+
     },
 
 
