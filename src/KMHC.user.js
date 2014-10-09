@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-7
+// @version       0.0.32-8
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -417,6 +417,58 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
             },
             scope : this
         });
+    }
+});
+
+var MH_Play_Play_news = $.extend({}, MH_Page, {
+
+    init : function() {
+        this.jubilaire();
+    },
+
+    jubilaire : function() {
+        $.get("http://mountyzilla.tilk.info/scripts/anniv.php",
+            function(data) {
+                var p = $($("p > a:contains('messagerie')")[0]).parent();
+                console.log("'p'", p);
+                p.before($("<table/>")
+                    .addClass("mh_tdborder")
+                    .attr("cellSpacing", 1)
+                    .attr("cellPadding", 1)
+                    .css({"maxWidth": "98%",
+                          "marginLeft": "auto",
+                          "marginRight": "auto"
+                        })
+                    .append($("<tr/>")
+                        .addClass("mh_tdtitre")
+                        .append($("<td/>")
+                            .append($("<span/>")
+                                .attr("title", "Envoyez leur un message ou un cadeau !")
+                                .text("Les Trõlls qui fêtent leur anniversaire aujourd'hui:")
+                            )
+                        )
+                    )
+                    .append($("<tr/>")
+                        .addClass("mh_tdpage")
+                        .append($("<td/>")
+                            .css("text-align", "center")
+                            .append($("<small/>")
+                                .html((function(list){
+                                    if(!list || list.length == 0) return "...";
+                                    var text = [],
+                                        trolls = list.split("\n");
+                                    $.each(trolls, function(i, t) {
+                                        var r = t.split(";");
+                                        if(r.length != 3 || r[2] === '0') return;
+                                        text.push("<a href='javascript:EPV(" + r[0] +")'>" + r[1] + "</a> (" + r[2] + " an" + Utils.addS(r[2]) + ")");
+                                    });
+                                    return text.join(", ");
+                                })(data))
+                            )
+                        )
+                    )
+                );
+            });
     }
 });
 

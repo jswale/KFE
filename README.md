@@ -6,6 +6,9 @@ The Karlaaki MH Connector
 
 Changelog :
 
+v 0.0.32-8
+- Ajout des jubilaires
+
 v 0.0.32-7
 - Ajout des fiches de détail pour les compétences.
   Manquantes : RotoBaffe
