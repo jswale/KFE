@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-9
+// @version       0.0.32-10
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1650,7 +1650,48 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-                3  : {name : "Vampirisme"},
+                3  : {
+                    name : "Vampirisme",
+                    description : function(stats) {
+                        var deg = stats.degat.des;
+                        var attbmm = stats.attaque.magique;
+                        var degbmm = stats.degat.magique;
+
+   						var modA = 0;                        
+                        var modD = 0;  
+                        // TODO
+                        var pcA = false;
+                        var pcD = false;
+                        // ---
+                        
+                        if(pcA) {
+                            modA = parseInt(Math.floor(2*deg/3)*pcA/100);
+                        }
+                        if(pcD) {
+                        	modD = parseInt(deg*pcD/100);                        
+                        }
+                        
+                        var ctn = $("<table/>");                        
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + Math.floor(2*deg/3) + "</b> D6"))
+                            .append($("<td/>").html(pcA ? ("<i>" + Utils.sign(modA) + " D6</i>") : ""))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + Math.round(3.5*(Math.floor(2*deg/3)+modD)+attbmm)+ "</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + deg + "</b> D3"))
+                            .append($("<td/>").html(pcD ? ("<i>" + Utils.sign(modD) + " D3</i>") : ""))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" +(2*(deg+modD)+degbmm)+'/'+(2*(Math.floor(1.5*deg)+modD)+degbmm) +' ('+Utils.resiste(deg+modD,degbmm)+'/'+Utils.resiste(1.5*deg+modD,degbmm)+")</b>"))
+                        );
+                        
+                        return ctn;
+                    }
+                },
                 4  : {name : "Rafale Psychique"},
                 5  : {
                     name : "Augmentation des Dégats",
