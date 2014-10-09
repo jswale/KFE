@@ -9,6 +9,9 @@ Vampirisme, Rafale Psychique, Siphon des âmes, Précision Magique, Puissance Ma
 
 Changelog :
 
+v.0.0.32-11
+- Ajout des jubilaires :)
+
 v 0.0.32-8
 - Ajout de la fiche de détail pour : RotoBaffe, Augmentation de l´Esquive
 
