@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-8
+// @version       0.0.32-9
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1134,7 +1134,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
                         var pc, lastmax=0, espdeg=0;
                         var notMaxedOut = false;
-                        var niveau = levels.length-1;
+                        var niveau = levels.length - 1;
                         for(var i= Math.min(niveau, 6) ; i>0 ; i--) {
                             pc = levels[i] || 0;
                             if(lastmax!=0 && pc<=lastmax) continue;
@@ -1187,7 +1187,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
                         var pc, lastmax=0, espatt=0;
                         var notMaxedOut = false;
-                        var niveau = levels.length-1;
+                        var niveau = levels.length - 1;
                         for(var i= Math.min(niveau, 5) ; i>0 ; i--) {
                             pc = levels[i] || 0;
                             if(lastmax!=0 && pc<=lastmax) continue;
@@ -1523,7 +1523,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var deg = stats.degat.desReel;
                         var degbm = stats.degat.bm;
                         
-                        var niveau = levels.length;
+                        var niveau = levels.length - 1;
 
                         var ctn = $("<table/>");
                         for(var i = 1; i < niveau + 1; i++) {                                                        
@@ -2139,7 +2139,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .css("border-radius", "5px");
 
             // Title
-            var level = levels.length;
+            var level = levels.length - 1;
             var title = $("<h2/>")
             .css("background", "#333")
             .css("border", "1px solid #111")
@@ -2153,7 +2153,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             .css("margin-bottom", "0px")
             .css("margin-top", "0px")
             .css("overflow", "hidden")
-            .text(entry.name + " [niv." + level + " : " + levels[level - 1] + "%]");
+            .text(entry.name + " [niv." + level + " : " + levels[level] + "%]");
             div.append(title);
 
             // content
