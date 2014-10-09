@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-11
+// @version       0.0.32-12
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -846,7 +846,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         {
             var ctn = getContainer(2);
             var nextDla = Utils.convertDate(stats.dla.next);
-            for(i = 1 ; i < 3 ; i++) {
+            for(var i = 1 ; i < 3 ; i++) {
                 nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
                 nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
                 ctn.find("p").last().append("<br/>").append($("<b/>").text("---> Prochaine DLA " + i + " (estimée)..........: " + Utils.dateToString(nextDla)));
@@ -1574,11 +1574,11 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var attbm = stats.attaque.bm;
                         var deg = stats.degat.desReel;
                         var degbm = stats.degat.bm;
-                        
+
                         var niveau = levels.length - 1;
 
                         var ctn = $("<table/>");
-                        for(var i = 1; i < niveau + 1; i++) {                                                        
+                        for(var i = 1; i < niveau + 1; i++) {
                             ctn.append(
                                 $("<tr/>")
                                 .append($("<th/>").html("<u>Attaque n°" + i + " :</u>"))
@@ -1599,8 +1599,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                                 .append($("<td/>").html(" => "))
                                 .append($("<td/>").html("<b>" + (2*deg+degbm) +"</b>"))
                             );
-	               			att = Math.floor(0.75*att);
-							deg = Math.floor(0.75*deg);
+                            att = Math.floor(0.75*att);
+                            deg = Math.floor(0.75*deg);
                         }
                         return ctn;
                     }
@@ -1657,28 +1657,44 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             degbmm = stats.degat.magique,
                             portee = Utils.getPortee(vuetotale);
 
+                        var modA = 0;
+                        var modD = 0;
+                        // TODO
+                        var pcA = false;
+                        var pcD = false;
+                        // ---
+
+                        if(pcA) {
+                            modD = parseInt(vue*pcA/100);
+                        }
+                        if(pcD) {
+                            modD = parseInt(Math.floor(vue/2)*pcD/100);
+                        }
+
                         var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Attaque :"))
                             .append($("<td/>").html("<b>"+ vue + "</b> D6"))
+                            .append($("<td/>").html(pcA ? ("<i>" + Utils.sign(modA) + " D6</i>") : ""))
                             .append($("<td/>").html(Utils.sign(attbmm)))
                             .append($("<td/>").html(" => "))
-                            .append($("<td/>").attr("colspan", "2").html("<b>" + (Math.round(3.5*(vue))+attbmm) + "</b>"))
+                            .append($("<td/>").attr("colspan", "2").html("<b>" + (Math.round(3.5*(vue+modD))+attbmm) + "</b>"))
                         );
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Dégâts :"))
-                            .append($("<td/>").html("<b>"+ Math.floor(vue/2)+ "</b> D3"))
+                            .append($("<td/>").html("<b>"+ Math.floor(vue/2) + "</b> D3"))
+                            .append($("<td/>").html(pcD ? ("<i>" + Utils.sign(modD) + " D3</i>") : ""))
                             .append($("<td/>").html(Utils.sign(degbmm)))
                             .append($("<td/>").html(" => "))
-                            .append($("<td/>").html("<b>" + (2*(Math.floor(vue/2))+degbmm) + "/" + (2*(Math.floor(1.5*Math.floor(vue/2)))+degbmm) + "</b>"))
-                            .append($("<td/>").html("(" + Utils.resiste(Math.floor(vue/2), degbmm) + "/" + Utils.resiste(1.5*Math.floor(vue/2), degbmm) + ")"))
+                            .append($("<td/>").html("<b>" + (2*(Math.floor(vue/2)+modD)+degbmm) + "/" + (2*(Math.floor(1.5*Math.floor(vue/2))+modD)+degbmm) + "</b>"))
+                            .append($("<td/>").html("(" + Utils.resiste(Math.floor(vue/2)+modD, degbmm) + "/" + Utils.resiste(1.5*Math.floor(vue/2)+modD, degbmm) + ")"))
                         );
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Portée :"))
-                            .append($("<td/>").attr("colspan", "5").html("<b>"+ portee + "</b> case" + Utils.addS(portee)))
+                            .append($("<td/>").attr("colspan", "6").html("<b>"+ portee + "</b> case" + Utils.addS(portee)))
                         );
                         return ctn;
                     }
@@ -1709,21 +1725,21 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         var attbmm = stats.attaque.magique;
                         var degbmm = stats.degat.magique;
 
-   						var modA = 0;                        
-                        var modD = 0;  
+                        var modA = 0;
+                        var modD = 0;
                         // TODO
                         var pcA = false;
                         var pcD = false;
                         // ---
-                        
+
                         if(pcA) {
                             modA = parseInt(Math.floor(2*deg/3)*pcA/100);
                         }
                         if(pcD) {
-                        	modD = parseInt(deg*pcD/100);                        
+                            modD = parseInt(deg*pcD/100);
                         }
-                        
-                        var ctn = $("<table/>");                        
+
+                        var ctn = $("<table/>");
                         ctn.append(
                             $("<tr/>")
                             .append($("<th/>").html("Attaque :"))
@@ -1740,7 +1756,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                             .append($("<td/>").html(" => "))
                             .append($("<td/>").html("<b>" +(2*(deg+modD)+degbmm)+'/'+(2*(Math.floor(1.5*deg)+modD)+degbmm) +' ('+Utils.resiste(deg+modD,degbmm)+'/'+Utils.resiste(1.5*deg+modD,degbmm)+")</b>"))
                         );
-                        
+
                         return ctn;
                     }
                 },
@@ -2070,7 +2086,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         );
                         ctn.append(
                             $("<tr/>")
-                            .append($("<th/>").html("Portée horizontale (a distance) :"))
+                            .append($("<th/>").html("Portée horizontale (à distance) :"))
                             .append($("<td/>").html("<b>" + viewAway + "</b> case" + Utils.addS(viewAway)))
                         );
                         return ctn;

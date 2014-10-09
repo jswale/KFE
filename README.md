@@ -9,6 +9,9 @@ Vampirisme, Rafale Psychique, Siphon des âmes, Précision Magique, Puissance Ma
 
 Changelog :
 
+v.0.0.32-12
+- Correction fiche de détail : Projectile Magique
+
 v.0.0.32-11
 - Ajout des jubilaires :)
 
