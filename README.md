@@ -1,4 +1,4 @@
-KFE
+﻿KFE
 ===
 
 The Karlaaki MH Connector
@@ -6,9 +6,11 @@ The Karlaaki MH Connector
 
 Changelog :
 
-v 0.0.32
-- Ajout des fiches de détail pour les compétences : Baroufle, Dressage, Botte Secrète, Charger, Connaissance des Monstres, Déplacement Eclair, Bidouille
-- Ajout des fiches de détail pour les sorts : Identification des trésors, Invisibilité, Lévitation
+v 0.0.32-7
+- Ajout des fiches de détail pour les compétences.
+  Manquantes : RotoBaffe
+- Ajout des fiches de détail pour les sorts.
+  Manquants : Vampirisme, Rafale Psychique, Augmentation de l´Esquive, Siphon des âmes, Précision Magique, Puissance Magique
 
 v 0.0.31-4
 - Correction sur l'affichage des moyennes des caractéristiques physiques
