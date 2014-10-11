@@ -9,6 +9,9 @@ Siphon des âmes, Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.0.32-13
+- Ajout compte à rebours de DLA
+
 v.0.0.32-12
 - Correction fiche de détail : Projectile Magique, Rafale Psychique, Vampirisme
 
