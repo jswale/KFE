@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-14
+// @version       0.0.32-15
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -417,6 +417,20 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
             },
             scope : this
         });
+    }
+});
+
+var MH_Play_PlayStart = $.extend({}, MH_Page, {
+    init : function() {
+        //$("#loginbutton").detach().insertAfter("#viewbutton");
+        $("#viewbutton")
+        .css("margin-right", "0.5em")
+        .css("color", "#AEFFAE")
+        .after(
+            $("#loginbutton")
+            .detach()
+            .css("color", "#FFB7B7")
+        );
     }
 });
 
@@ -3185,7 +3199,7 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
         var timer = setInterval(function() {
             var diff = Utils.getDateDiff(new Date(), dla);
             if(diff.length <= 0) {
-                diff = "<b style='color:#99FF64'>Vous pouvez réactiver!</b>";
+                diff = "<b style='color:#AEFFAE'>Vous pouvez réactiver!</b>";
                 clearInterval(timer);
             }
             cnt.html(diff);

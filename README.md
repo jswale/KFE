@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.0.32-15
+- Inversion des bouton de l'écran de démarrage
+
 v.0.0.32-14
 - Ajout de la fiche de détail pour : Siphon des âmes
 
