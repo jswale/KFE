@@ -4,10 +4,13 @@
 The Karlaaki MH Connector
 
 Manque les details pour les sorts :
-Siphon des âmes, Précision Magique, Puissance Magique
+Précision Magique, Puissance Magique
 
 
 Changelog :
+
+v.0.0.32-14
+- Ajout de la fiche de détail pour : Siphon des âmes
 
 v.0.0.32-13
 - Ajout compte à rebours de DLA

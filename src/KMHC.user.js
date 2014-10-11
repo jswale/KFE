@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-13
+// @version       0.0.32-14
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1959,7 +1959,58 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                         return ctn;
                     }
                 },
-                14 : {name : "Siphon des âmes"},
+                14 : {
+                    name : "Siphon des âmes",
+                    description : function(stats) {
+                        var att = stats.attaque.desReel,
+                            attbmm = stats.attaque.magique,
+                            degbmm = stats.degat.magique,
+                            reg = stats.regen.des;
+
+                        var modD = 0;
+                        // TODO
+                        var pcA = false;
+                        var pcD = false;
+                        // ---
+
+                        if(pcA) {
+                            modD = parseInt(att*pcA/100);
+                        }
+                        if(pcD) {
+                            modD = parseInt(reg*pcD/100);
+                        } else {
+                            modD = 0;
+                        }
+
+                        var ctn = $("<table/>");
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Attaque :"))
+                            .append($("<td/>").html("<b>" + att + "</b> D6"))
+                            .append($("<td/>").html(pcA ? ("<i>" + Utils.sign(modD) + " D6</i>") : ""))
+                            .append($("<td/>").html(Utils.sign(attbmm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").attr("colspan", "2").html("<b>" + Math.round(3.5*(att+modD)+attbmm) +"</b>"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Dégâts :"))
+                            .append($("<td/>").html("<b>" + reg + "</b> D3"))
+                            .append($("<td/>").html(pcD ? ("<i>" + Utils.sign(modD) + " D3</i>") : ""))
+                            .append($("<td/>").html(Utils.sign(degbmm)))
+                            .append($("<td/>").html(" => "))
+                            .append($("<td/>").html("<b>" + (2*(reg+modD)+degbmm) + "/" + (2*(Math.floor(1.5*reg)+modD)+degbmm) +"</b>"))
+                            .append($("<td/>").html("(" + Utils.resiste(reg+modD, degbmm) + "/" + Utils.resiste(1.5*reg+modD, degbmm) + ")"))
+                        );
+                        ctn.append(
+                            $("<tr/>")
+                            .append($("<th/>").html("Nécrose :"))
+                            .append($("<td/>").attr("colspan", "6").html("attaque magique <b>-" + reg + "</b>"))
+                        );
+
+                        return ctn;
+                    }
+                },
                 15 : {
                     name : "Invisibilité",
                     description : "Un troll invisible est indétectable même quand on se trouve sur sa zone. Toute action physique ou sortilège d'attaque fait disparaître l'invisibilité."
