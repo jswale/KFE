@@ -3131,9 +3131,6 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             cnt = $("<div/>").addClass("countdown");
         d.find("br").replaceWith(cnt);
 
-        dla = new Date();
-        dla.setSeconds(dla.getSeconds() + 15);
-
         var timer = setInterval(function() {
             var diff = Utils.getDateDiff(new Date(), dla);
             if(diff.length <= 0) {
