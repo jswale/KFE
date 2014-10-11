@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-12
+// @version       0.0.32-13
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -3085,7 +3085,11 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 var MH_Play_Play_menu = $.extend({}, MH_Page, {
     init : function(){
         Utils.setConf("login", $("input[name='ai_IdPJ']").val());
+        this.addMenu();
+        this.addTimer();
+    },
 
+    addMenu : function() {
         $("<div/>")
         .css("position", "absolute")
         .css("top", "35px")
@@ -3117,7 +3121,27 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             .attr("href", "https://github.com/jswale/KFE/raw/master/src/KMHC.user.js")
             .text("MAJ")
         )
-        .appendTo($("body"))
+        .appendTo($("body"));
+    },
+
+    addTimer : function() {
+        var d = $("div.infoMenu"),
+            tmp = /DLA:\s+([^<]+)</.exec(d.html()),
+            dla = Utils.convertDate(tmp[1]),
+            cnt = $("<div/>").addClass("countdown");
+        d.find("br").replaceWith(cnt);
+
+        dla = new Date();
+        dla.setSeconds(dla.getSeconds() + 15);
+
+        var timer = setInterval(function() {
+            var diff = Utils.getDateDiff(new Date(), dla);
+            if(diff.length <= 0) {
+                diff = "<b style='color:#99FF64'>Vous pouvez réactiver!</b>";
+                clearInterval(timer);
+            }
+            cnt.html(diff);
+        }, 1000);
     }
 });
 
