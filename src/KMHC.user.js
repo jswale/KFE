@@ -3199,7 +3199,7 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
         var timer = setInterval(function() {
             var diff = Utils.getDateDiff(new Date(), dla);
             if(diff.length <= 0) {
-                diff = "<b style='color:#AEFFAE'>Vous pouvez réactiver!</b>";
+                diff = "<a href='/mountyhall/MH_Play/Activate_DLA.php' target='_top' style='color:#AEFFAE'>Vous pouvez réactiver!</a>";
                 clearInterval(timer);
             }
             cnt.html(diff);
