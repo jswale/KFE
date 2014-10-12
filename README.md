@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.0.32-16
+- Réglages cosmétiques dans vue
+
 v.0.0.32-15
 - Inversion des bouton de l'écran de démarrage
 
