@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-15
+// @version       0.0.32-16
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -422,7 +422,6 @@ var MH_Play_Play_option = $.extend({}, MH_Page, {
 
 var MH_Play_PlayStart = $.extend({}, MH_Page, {
     init : function() {
-        //$("#loginbutton").detach().insertAfter("#viewbutton");
         $("#viewbutton")
         .css("margin-right", "0.5em")
         .css("color", "#AEFFAE")
@@ -444,7 +443,6 @@ var MH_Play_Play_news = $.extend({}, MH_Page, {
         $.get("http://mountyzilla.tilk.info/scripts/anniv.php",
             function(data) {
                 var p = $($("p > a:contains('messagerie')")[0]).parent();
-                console.log("'p'", p);
                 p.before($("<table/>")
                     .addClass("mh_tdborder")
                     .attr("cellSpacing", 1)
@@ -2609,9 +2607,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     addTagEdition: function() {
         Utils.addGlobalStyle([
             '.editable { margin-left: 10px; }',
-            '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 13px; height: 13px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABdSURBVHjalNLdCgAQDIZh5JJ3F9s9T3Ygf/uMUpKn3pBVNb2GiNghIsq20RGazKz7OgR2WFDSyJkS3bxbEsx7gQNFwIKiYKAfYOh2rQgsyHsXF0WS5lnd/wVGE2AAupiLqNBm6B0AAAAASUVORK5CYII=); }',
+            '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 12px; height: 12px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAFhJREFUKFOVjgEKgCAQBH1m/v8hG3N5cdWmuDCgMCM2SVN6PwR5/wiVIcYysiKk/I6mMuNc46WcG+fnl1YybMmwJcMtV5E5GezrfzJEYCIrAwuphFa8UDsBgSOr5cVAQ8gAAAAASUVORK5CYII=); }',
             'tr.mh_tdpage:hover .editable:after {display:inline-block; }',
-            '.editable + input { margin-left: 10px; font-family: monospace; border: none; display: none; }'
+            '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }'
         ]);
 
         $.each(
@@ -3030,7 +3028,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .append(
                         $("<div/>")
                         .css("float", "right")
-                        .css("margin", "2px 2px 2px 0px")
+                        .css("margin", "0 2px 0 0")
                         .css("width", "100")
                         .css("height", "14")
                         .css("border", "1px solid black")
@@ -3059,7 +3057,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .append(
                         $("<div/>")
                         .css("float", "right")
-                        .css("margin", "2px 0px")
+                        .css("margin", "0")
                         .css("width", "30")
                         .css("height", "14")
                         .css("border", "1px solid black")
@@ -3104,7 +3102,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     $("[data-monster-info='" + monsterId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_monstres", "Nom")+")").append(
                         $("<div/>")
                         .css("float", "right")
-                        .css("margin", "2px 2px 2px 0px")
+                        .css("margin", "0 1px 0 0")
                         .css("width", "100")
                         .css("height", "14")
                         .css("border", "1px solid black")
