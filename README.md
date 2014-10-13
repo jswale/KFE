@@ -9,6 +9,10 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.0.33
+- Ajustement de la hauteur dans le menu de gauche suite au compte à rebours de DLA
+- Ajout des vues de l'outil directement dans la page de vue MH
+
 v.0.0.32-16
 - Réglages cosmétiques dans vue
 
