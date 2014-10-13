@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-16
+// @version       0.0.32-17
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -3193,6 +3193,7 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             dla = Utils.convertDate(tmp[1]),
             cnt = $("<div/>").addClass("countdown");
         d.find("br").replaceWith(cnt);
+        d.css("top", "505px");
 
         var timer = setInterval(function() {
             var diff = Utils.getDateDiff(new Date(), dla);
