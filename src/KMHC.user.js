@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.33
+// @version       0.0.33-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -2581,21 +2581,21 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             $("<p>")
             .append("<b>Vue dans l'outil</b> : ")
             .append(
-                $("<a href='javascript:void(0)' target='_blank'>Vue 1</a>")
+                $("<a href='javascript:void(0)'>Vue 1</a>")
                 .click(function(){
                     fnShowKFEView(1);
                 })
             )
             .append(" | ")
             .append(
-                $("<a href='javascript:void(0)' target='_blank'>Vue 2</a>")
+                $("<a href='javascript:void(0)'>Vue 2</a>")
                 .click(function(){
                     fnShowKFEView(2);
                 })
             )
             .append(" | ")
             .append(
-                $("<a href='javascript:void(0)' target='_blank'>Vue MH</a>")
+                $("<a href='javascript:void(0)'>Vue MH</a>")
                 .click(function(){
                     $('[data-view="main"]').show();
                     $('[data-view="KFE"]').hide();
