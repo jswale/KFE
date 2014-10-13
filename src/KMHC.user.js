@@ -1,7 +1,7 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.32-17
+// @version       0.0.33
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -2543,8 +2543,68 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.sendView();
 
         // Ajout des liens vers la vue de l'outil
-        $("<p><b>Vue dans l'outil</b> : <a href='http://pharoz.net/MH/outil/?page=viewGraph&viewType=1' target='_blank'>Vue 1</a> | <a href='http://pharoz.net/MH/outil/?page=viewGraph&viewType=2' target='_blank'>Vue 2</a></p>").insertAfter( "h2" );
-
+        {
+        	var mainView = $("#mh_vue_hidden_tresors").parents("p:first");
+        	mainView.attr("data-view", "main");
+            
+            var altView = $("<iframe/>")
+            .css("display", "none")
+            .css("width", "98%")
+            .attr("data-view", "KFE")
+            .insertAfter(mainView);
+            
+            var fnShowKFEView = function(idView) {
+                var vue = parseInt($('input[name="ai_MaxVue"]').val());
+                var no = 0;
+                var i = 0;
+                while(i < vue) {  
+                  if(i <= 11) {
+                    no += 1;
+                  } else if(i <= 21) {
+                    no += 1/2;
+                  } else {
+                    no += 1/3;
+                  }
+                  i++;
+                }
+                
+                var h = (Math.ceil(no)*2+1) * 52 /* Ceils */ + 52 /* Margin */;
+                
+               	$('[data-view="main"]').hide();
+                $('[data-view="KFE"]')
+                .css("height", h + "px")
+                .attr("src", "http://pharoz.net/MH/outil/?page=viewGraph&viewType=" + idView + "&displayNow=true&noMenu=true")
+				.show()
+                ;
+            };
+                
+            $("<p>")
+            .append("<b>Vue dans l'outil</b> : ")
+            .append(
+                $("<a href='javascript:void(0)' target='_blank'>Vue 1</a>")
+                .click(function(){
+                    fnShowKFEView(1);
+                })
+            )
+            .append(" | ")
+            .append(
+                $("<a href='javascript:void(0)' target='_blank'>Vue 2</a>")
+                .click(function(){
+                    fnShowKFEView(2);
+                })
+            )
+            .append(" | ")
+            .append(
+                $("<a href='javascript:void(0)' target='_blank'>Vue MH</a>")
+                .click(function(){
+                    $('[data-view="main"]').show();
+                    $('[data-view="KFE"]').hide();
+                })
+            )
+            .insertAfter( "h2" );
+        }
+		// ------------------        
+        
         this.highlightTreasures();
         this.addTagEdition();
 
@@ -2559,6 +2619,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");
+        
     },
 
     highlightTreasures : function() {
@@ -3192,8 +3253,8 @@ var MH_Play_Play_menu = $.extend({}, MH_Page, {
             tmp = /DLA:\s+([^<]+)</.exec(d.html()),
             dla = Utils.convertDate(tmp[1]),
             cnt = $("<div/>").addClass("countdown");
-        d.find("br").replaceWith(cnt);
         d.css("top", "505px");
+        d.find("br").replaceWith(cnt);
 
         var timer = setInterval(function() {
             var diff = Utils.getDateDiff(new Date(), dla);
