@@ -1,5 +1,6 @@
 {
 	"Abishaii bleu" : {
+		"id" : "161",
 		"name" : "Abishaii bleu",
 		"familly" : "Démon",
 		"level" : "19",
@@ -24,6 +25,7 @@
 		"echant" : "279"
 	},
 	"Abishaii noir" : {
+		"id" : "94",
 		"name" : "Abishaii noir",
 		"familly" : "Démon",
 		"level" : "10",
@@ -48,6 +50,7 @@
 		"echant" : "50"
 	},
 	"Abishaii rouge" : {
+		"id" : "96",
 		"name" : "Abishaii rouge",
 		"familly" : "Démon",
 		"level" : "23",
@@ -72,6 +75,7 @@
 		"echant" : "193"
 	},
 	"Abishaii vert" : {
+		"id" : "95",
 		"name" : "Abishaii vert",
 		"familly" : "Démon",
 		"level" : "15",
@@ -96,6 +100,7 @@
 		"echant" : "98"
 	},
 	"Ame-en-peine" : {
+		"id" : "103",
 		"name" : "Ame-en-peine",
 		"familly" : "Mort-Vivant",
 		"level" : "8",
@@ -120,6 +125,7 @@
 		"echant" : "18"
 	},
 	"Amibe géante" : {
+		"id" : "18",
 		"name" : "Amibe géante",
 		"familly" : "Monstre",
 		"level" : "9",
@@ -144,6 +150,7 @@
 		"echant" : "34"
 	},
 	"Anaconda des Catacombes" : {
+		"id" : "45",
 		"name" : "Anaconda des Catacombes",
 		"familly" : "Monstre",
 		"level" : "8",
@@ -168,6 +175,7 @@
 		"echant" : "23"
 	},
 	"Ankheg" : {
+		"id" : "75",
 		"name" : "Ankheg",
 		"familly" : "Insecte",
 		"level" : "10",
@@ -192,6 +200,7 @@
 		"echant" : "27"
 	},
 	"Anoploure Purpurin" : {
+		"id" : "203",
 		"name" : "Anoploure Purpurin",
 		"familly" : "Insecte",
 		"level" : "36",
@@ -216,6 +225,7 @@
 		"echant" : "44"
 	},
 	"Aragnarok du Chaos" : {
+		"id" : "",
 		"name" : "Aragnarok du Chaos",
 		"familly" : "Insecte",
 		"level" : "?",
@@ -240,6 +250,7 @@
 		"echant" : "1"
 	},
 	"Araignée Géante" : {
+		"id" : "15",
 		"name" : "Araignée Géante",
 		"familly" : "Insecte",
 		"level" : "2",
@@ -264,6 +275,7 @@
 		"echant" : "22"
 	},
 	"Ashashin" : {
+		"id" : "221",
 		"name" : "Ashashin",
 		"familly" : "Humanoïde",
 		"level" : "35",
@@ -288,6 +300,7 @@
 		"echant" : "2"
 	},
 	"" : {
+		"id" : "",
 		"name" : "",
 		"familly" : "Insecte",
 		"level" : "0",
@@ -312,6 +325,7 @@
 		"echant" : "6"
 	},
 	"Banshee" : {
+		"id" : "104",
 		"name" : "Banshee",
 		"familly" : "Mort-Vivant",
 		"level" : "16",
@@ -336,6 +350,7 @@
 		"echant" : "73"
 	},
 	"Barghest" : {
+		"id" : "146",
 		"name" : "Barghest",
 		"familly" : "Démon",
 		"level" : "36",
@@ -360,6 +375,7 @@
 		"echant" : "81"
 	},
 	"Basilisk" : {
+		"id" : "76",
 		"name" : "Basilisk",
 		"familly" : "Monstre",
 		"level" : "11",
@@ -384,6 +400,7 @@
 		"echant" : "53"
 	},
 	"Behemoth" : {
+		"id" : "139",
 		"name" : "Behemoth",
 		"familly" : "Démon",
 		"level" : "34",
@@ -408,6 +425,7 @@
 		"echant" : "15"
 	},
 	"Béhir" : {
+		"id" : "77",
 		"name" : "Béhir",
 		"familly" : "Monstre",
 		"level" : "14",
@@ -432,6 +450,7 @@
 		"echant" : "62"
 	},
 	"Boggart" : {
+		"id" : "158",
 		"name" : "Boggart",
 		"familly" : "Humanoïde",
 		"level" : "3",
@@ -456,6 +475,7 @@
 		"echant" : "24"
 	},
 	"Bondin" : {
+		"id" : "164",
 		"name" : "Bondin",
 		"familly" : "Monstre",
 		"level" : "9",
@@ -480,6 +500,7 @@
 		"echant" : "42"
 	},
 	"Bouj'Dla" : {
+		"id" : "214",
 		"name" : "Bouj'Dla",
 		"familly" : "Monstre",
 		"level" : "19",
@@ -504,6 +525,7 @@
 		"echant" : "75"
 	},
 	"Bouj'Dla Placide" : {
+		"id" : "215",
 		"name" : "Bouj'Dla Placide",
 		"familly" : "Monstre",
 		"level" : "37",
@@ -528,6 +550,7 @@
 		"echant" : "91"
 	},
 	"Bulette" : {
+		"id" : "112",
 		"name" : "Bulette",
 		"familly" : "Monstre",
 		"level" : "19",
@@ -552,6 +575,7 @@
 		"echant" : "55"
 	},
 	"Caillouteux" : {
+		"id" : "40",
 		"name" : "Caillouteux",
 		"familly" : "Humanoïde",
 		"level" : "1",
@@ -576,6 +600,7 @@
 		"echant" : "14"
 	},
 	"Carnosaure" : {
+		"id" : "135",
 		"name" : "Carnosaure",
 		"familly" : "Monstre",
 		"level" : "25",
@@ -600,6 +625,7 @@
 		"echant" : "118"
 	},
 	"Champi-Glouton" : {
+		"id" : "118",
 		"name" : "Champi-Glouton",
 		"familly" : "Humanoïde",
 		"level" : "3",
@@ -624,6 +650,7 @@
 		"echant" : "11"
 	},
 	"Chauve-Souris Geante" : {
+		"id" : "137",
 		"name" : "Chauve-Souris Geante",
 		"familly" : "Animal",
 		"level" : "4",
@@ -648,6 +675,7 @@
 		"echant" : "23"
 	},
 	"Cheval à Dents de Sabre" : {
+		"id" : "207",
 		"name" : "Cheval à Dents de Sabre",
 		"familly" : "Animal",
 		"level" : "23",
@@ -672,6 +700,7 @@
 		"echant" : "149"
 	},
 	"Chevalier du Chaos" : {
+		"id" : "",
 		"name" : "Chevalier du Chaos",
 		"familly" : "Démon",
 		"level" : "20",
@@ -696,6 +725,7 @@
 		"echant" : "2"
 	},
 	"Chimere" : {
+		"id" : "80",
 		"name" : "Chimere",
 		"familly" : "Monstre",
 		"level" : "13",
@@ -720,6 +750,7 @@
 		"echant" : "48"
 	},
 	"Chonchon" : {
+		"id" : "192",
 		"name" : "Chonchon",
 		"familly" : "Monstre",
 		"level" : "24",
@@ -744,6 +775,7 @@
 		"echant" : "72"
 	},
 	"Coccicruelle" : {
+		"id" : "206",
 		"name" : "Coccicruelle",
 		"familly" : "Insecte",
 		"level" : "22",
@@ -768,6 +800,7 @@
 		"echant" : "91"
 	},
 	"Cockatrice" : {
+		"id" : "81",
 		"name" : "Cockatrice",
 		"familly" : "Monstre",
 		"level" : "5",
@@ -792,6 +825,7 @@
 		"echant" : "18"
 	},
 	"Crasc" : {
+		"id" : "189",
 		"name" : "Crasc",
 		"familly" : "Monstre",
 		"level" : "10",
@@ -816,6 +850,7 @@
 		"echant" : "39"
 	},
 	"Crasc Maexus" : {
+		"id" : "209",
 		"name" : "Crasc Maexus",
 		"familly" : "Monstre",
 		"level" : "25",
@@ -840,6 +875,7 @@
 		"echant" : "112"
 	},
 	"Crasc Medius" : {
+		"id" : "190",
 		"name" : "Crasc Medius",
 		"familly" : "Monstre",
 		"level" : "17",
@@ -864,6 +900,7 @@
 		"echant" : "101"
 	},
 	"Croquemitaine" : {
+		"id" : "42",
 		"name" : "Croquemitaine",
 		"familly" : "Mort-Vivant",
 		"level" : "6",
@@ -888,6 +925,7 @@
 		"echant" : "20"
 	},
 	"Cube Gelatineux" : {
+		"id" : "141",
 		"name" : "Cube Gelatineux",
 		"familly" : "Monstre",
 		"level" : "32",
@@ -912,6 +950,7 @@
 		"echant" : "23"
 	},
 	"Daemonite" : {
+		"id" : "225",
 		"name" : "Daemonite",
 		"familly" : "Démon",
 		"level" : "27",
@@ -936,6 +975,7 @@
 		"echant" : "10"
 	},
 	"Diablotin" : {
+		"id" : "",
 		"name" : "Diablotin",
 		"familly" : "Démon",
 		"level" : "5",
@@ -960,6 +1000,7 @@
 		"echant" : "56"
 	},
 	"Djinn" : {
+		"id" : "140",
 		"name" : "Djinn",
 		"familly" : "Monstre",
 		"level" : "29",
@@ -984,6 +1025,7 @@
 		"echant" : "74"
 	},
 	"Ectoplasme" : {
+		"id" : "167",
 		"name" : "Ectoplasme",
 		"familly" : "Mort-Vivant",
 		"level" : "18",
@@ -1008,6 +1050,7 @@
 		"echant" : "78"
 	},
 	"Effrit" : {
+		"id" : "142",
 		"name" : "Effrit",
 		"familly" : "Monstre",
 		"level" : "27",
@@ -1032,6 +1075,7 @@
 		"echant" : "95"
 	},
 	"Elémentaire d'Air" : {
+		"id" : "60",
 		"name" : "Elémentaire d'Air",
 		"familly" : "Démon",
 		"level" : "23",
@@ -1056,6 +1100,7 @@
 		"echant" : "164"
 	},
 	"Elémentaire de Feu" : {
+		"id" : "57",
 		"name" : "Elémentaire de Feu",
 		"familly" : "Démon",
 		"level" : "21",
@@ -1080,6 +1125,7 @@
 		"echant" : "124"
 	},
 	"Elémentaire de Terre" : {
+		"id" : "58",
 		"name" : "Elémentaire de Terre",
 		"familly" : "Démon",
 		"level" : "21",
@@ -1104,6 +1150,7 @@
 		"echant" : "124"
 	},
 	"Elémentaire d'Eau" : {
+		"id" : "59",
 		"name" : "Elémentaire d'Eau",
 		"familly" : "Démon",
 		"level" : "17",
@@ -1128,6 +1175,7 @@
 		"echant" : "101"
 	},
 	"Elémentaire du Chaos" : {
+		"id" : "134",
 		"name" : "Elémentaire du Chaos",
 		"familly" : "Démon",
 		"level" : "26",
@@ -1152,6 +1200,7 @@
 		"echant" : "138"
 	},
 	"Erinyes" : {
+		"id" : "82",
 		"name" : "Erinyes",
 		"familly" : "Démon",
 		"level" : "7",
@@ -1176,6 +1225,7 @@
 		"echant" : "85"
 	},
 	"Esprit-Follet" : {
+		"id" : "109",
 		"name" : "Esprit-Follet",
 		"familly" : "Monstre",
 		"level" : "16",
@@ -1200,6 +1250,7 @@
 		"echant" : "66"
 	},
 	"Essaim Sanguinaire" : {
+		"id" : "197",
 		"name" : "Essaim Sanguinaire",
 		"familly" : "Insecte",
 		"level" : "25",
@@ -1224,6 +1275,7 @@
 		"echant" : "22"
 	},
 	"Ettin" : {
+		"id" : "54",
 		"name" : "Ettin",
 		"familly" : "Humanoïde",
 		"level" : "8",
@@ -1248,6 +1300,7 @@
 		"echant" : "60"
 	},
 	"Fantôme" : {
+		"id" : "68",
 		"name" : "Fantôme",
 		"familly" : "Mort-Vivant",
 		"level" : "24",
@@ -1272,6 +1325,7 @@
 		"echant" : "95"
 	},
 	"Feu-Follet" : {
+		"id" : "70",
 		"name" : "Feu-Follet",
 		"familly" : "Monstre",
 		"level" : "20",
@@ -1296,6 +1350,7 @@
 		"echant" : "145"
 	},
 	"Flagelleur Mental" : {
+		"id" : "210",
 		"name" : "Flagelleur Mental",
 		"familly" : "Humanoïde",
 		"level" : "33",
@@ -1320,6 +1375,7 @@
 		"echant" : "45"
 	},
 	"Foudroyeur" : {
+		"id" : "199",
 		"name" : "Foudroyeur",
 		"familly" : "Insecte",
 		"level" : "38",
@@ -1344,6 +1400,7 @@
 		"echant" : "67"
 	},
 	"Fumeux" : {
+		"id" : "219",
 		"name" : "Fumeux",
 		"familly" : "Démon",
 		"level" : "22",
@@ -1368,6 +1425,7 @@
 		"echant" : "13"
 	},
 	"Fungus Geant" : {
+		"id" : "84",
 		"name" : "Fungus Geant",
 		"familly" : "Monstre",
 		"level" : "9",
@@ -1392,6 +1450,7 @@
 		"echant" : "21"
 	},
 	"Fungus Violet" : {
+		"id" : "113",
 		"name" : "Fungus Violet",
 		"familly" : "Monstre",
 		"level" : "4",
@@ -1416,6 +1475,7 @@
 		"echant" : "7"
 	},
 	"Furgolin" : {
+		"id" : "200",
 		"name" : "Furgolin",
 		"familly" : "Humanoïde",
 		"level" : "10",
@@ -1440,6 +1500,7 @@
 		"echant" : "29"
 	},
 	"Gargouille" : {
+		"id" : "85",
 		"name" : "Gargouille",
 		"familly" : "Monstre",
 		"level" : "3",
@@ -1464,6 +1525,7 @@
 		"echant" : "17"
 	},
 	"Géant de Pierre" : {
+		"id" : "61",
 		"name" : "Géant de Pierre",
 		"familly" : "Humanoïde",
 		"level" : "13",
@@ -1488,6 +1550,7 @@
 		"echant" : "60"
 	},
 	"Géant des Gouffres" : {
+		"id" : "114",
 		"name" : "Géant des Gouffres",
 		"familly" : "Humanoïde",
 		"level" : "22",
@@ -1512,6 +1575,7 @@
 		"echant" : "183"
 	},
 	"Geck'oo" : {
+		"id" : "230",
 		"name" : "Geck'oo",
 		"familly" : "Animal",
 		"level" : "15",
@@ -1536,6 +1600,7 @@
 		"echant" : "2"
 	},
 	"Geck'oo majestueux" : {
+		"id" : "",
 		"name" : "Geck'oo majestueux",
 		"familly" : "Animal",
 		"level" : "40",
@@ -1560,6 +1625,7 @@
 		"echant" : ""
 	},
 	"Glouton" : {
+		"id" : "191",
 		"name" : "Glouton",
 		"familly" : "Animal",
 		"level" : "20",
@@ -1584,6 +1650,7 @@
 		"echant" : "48"
 	},
 	"Gnoll" : {
+		"id" : "86",
 		"name" : "Gnoll",
 		"familly" : "Humanoïde",
 		"level" : "5",
@@ -1608,6 +1675,7 @@
 		"echant" : "17"
 	},
 	"Gnu Sauvage" : {
+		"id" : "138",
 		"name" : "Gnu Sauvage",
 		"familly" : "Animal",
 		"level" : "1",
@@ -1632,6 +1700,7 @@
 		"echant" : "17"
 	},
 	"Goblin" : {
+		"id" : "1",
 		"name" : "Goblin",
 		"familly" : "Humanoïde",
 		"level" : "4",
@@ -1656,6 +1725,7 @@
 		"echant" : "53"
 	},
 	"Goblours" : {
+		"id" : "79",
 		"name" : "Goblours",
 		"familly" : "Humanoïde",
 		"level" : "4",
@@ -1680,6 +1750,7 @@
 		"echant" : "15"
 	},
 	"Golem d'Argile" : {
+		"id" : "98",
 		"name" : "Golem d'Argile",
 		"familly" : "Humanoïde",
 		"level" : "15",
@@ -1704,6 +1775,7 @@
 		"echant" : "62"
 	},
 	"Golem de Chair" : {
+		"id" : "97",
 		"name" : "Golem de Chair",
 		"familly" : "Humanoïde",
 		"level" : "8",
@@ -1728,6 +1800,7 @@
 		"echant" : "38"
 	},
 	"Golem de Fer" : {
+		"id" : "100",
 		"name" : "Golem de Fer",
 		"familly" : "Humanoïde",
 		"level" : "31",
@@ -1752,6 +1825,7 @@
 		"echant" : "32"
 	},
 	"Golem de Pierre" : {
+		"id" : "99",
 		"name" : "Golem de Pierre",
 		"familly" : "Humanoïde",
 		"level" : "23",
@@ -1776,6 +1850,7 @@
 		"echant" : "108"
 	},
 	"Gorgone" : {
+		"id" : "111",
 		"name" : "Gorgone",
 		"familly" : "Monstre",
 		"level" : "11",
@@ -1800,6 +1875,7 @@
 		"echant" : "60"
 	},
 	"Goule" : {
+		"id" : "19",
 		"name" : "Goule",
 		"familly" : "Mort-Vivant",
 		"level" : "4",
@@ -1824,6 +1900,7 @@
 		"echant" : "22"
 	},
 	"Gremlins" : {
+		"id" : "101",
 		"name" : "Gremlins",
 		"familly" : "Humanoïde",
 		"level" : "3",
@@ -1848,6 +1925,7 @@
 		"echant" : "38"
 	},
 	"Gritche" : {
+		"id" : "169",
 		"name" : "Gritche",
 		"familly" : "Démon",
 		"level" : "39",
@@ -1872,6 +1950,7 @@
 		"echant" : "100"
 	},
 	"Grouilleux" : {
+		"id" : "106",
 		"name" : "Grouilleux",
 		"familly" : "Monstre",
 		"level" : "4",
@@ -1896,6 +1975,7 @@
 		"echant" : "16"
 	},
 	"Grylle" : {
+		"id" : "144",
 		"name" : "Grylle",
 		"familly" : "Monstre",
 		"level" : "31",
@@ -1920,6 +2000,7 @@
 		"echant" : "149"
 	},
 	"Harpie" : {
+		"id" : "14",
 		"name" : "Harpie",
 		"familly" : "Monstre",
 		"level" : "4",
@@ -1944,6 +2025,7 @@
 		"echant" : "24"
 	},
 	"Hellrot" : {
+		"id" : "165",
 		"name" : "Hellrot",
 		"familly" : "Démon",
 		"level" : "18",
@@ -1968,6 +2050,7 @@
 		"echant" : "88"
 	},
 	"Homme-Lezard" : {
+		"id" : "71",
 		"name" : "Homme-Lezard",
 		"familly" : "Humanoïde",
 		"level" : "4",
@@ -1992,6 +2075,7 @@
 		"echant" : "16"
 	},
 	"Hurleur" : {
+		"id" : "131",
 		"name" : "Hurleur",
 		"familly" : "Humanoïde",
 		"level" : "8",
@@ -2016,6 +2100,7 @@
 		"echant" : "41"
 	},
 	"Incube" : {
+		"id" : "198",
 		"name" : "Incube",
 		"familly" : "Démon",
 		"level" : "13",
@@ -2040,6 +2125,7 @@
 		"echant" : "47"
 	},
 	"Kobold" : {
+		"id" : "87",
 		"name" : "Kobold",
 		"familly" : "Humanoïde",
 		"level" : "2",
@@ -2064,6 +2150,7 @@
 		"echant" : "46"
 	},
 	"Lezard Geant" : {
+		"id" : "16",
 		"name" : "Lezard Geant",
 		"familly" : "Monstre",
 		"level" : "5",
@@ -2088,6 +2175,7 @@
 		"echant" : "26"
 	},
 	"Limace Geante" : {
+		"id" : "125",
 		"name" : "Limace Geante",
 		"familly" : "Insecte",
 		"level" : "10",
@@ -2112,6 +2200,7 @@
 		"echant" : "42"
 	},
 	"Loup-Garou" : {
+		"id" : "46",
 		"name" : "Loup-Garou",
 		"familly" : "Humanoïde",
 		"level" : "8",
@@ -2136,6 +2225,7 @@
 		"echant" : "36"
 	},
 	"Lutin" : {
+		"id" : "126",
 		"name" : "Lutin",
 		"familly" : "Humanoïde",
 		"level" : "2",
@@ -2160,6 +2250,7 @@
 		"echant" : "20"
 	},
 	"Mante Fulcreuse" : {
+		"id" : "173",
 		"name" : "Mante Fulcreuse",
 		"familly" : "Insecte",
 		"level" : "30",
@@ -2184,6 +2275,7 @@
 		"echant" : "129"
 	},
 	"Manticore" : {
+		"id" : "89",
 		"name" : "Manticore",
 		"familly" : "Monstre",
 		"level" : "9",
@@ -2208,6 +2300,7 @@
 		"echant" : "34"
 	},
 	"Marilith" : {
+		"id" : "120",
 		"name" : "Marilith",
 		"familly" : "Démon",
 		"level" : "33",
@@ -2232,6 +2325,7 @@
 		"echant" : "130"
 	},
 	"Méduse" : {
+		"id" : "88",
 		"name" : "Méduse",
 		"familly" : "Humanoïde",
 		"level" : "6",
@@ -2256,6 +2350,7 @@
 		"echant" : "21"
 	},
 	"Mégacephale" : {
+		"id" : "202",
 		"name" : "Mégacephale",
 		"familly" : "Humanoïde",
 		"level" : "38",
@@ -2280,6 +2375,7 @@
 		"echant" : "134"
 	},
 	"Mille-Pattes Geant" : {
+		"id" : "63",
 		"name" : "Mille-Pattes Geant",
 		"familly" : "Insecte",
 		"level" : "14",
@@ -2304,6 +2400,7 @@
 		"echant" : "47"
 	},
 	"Mimique" : {
+		"id" : "117",
 		"name" : "Mimique",
 		"familly" : "Monstre",
 		"level" : "6",
@@ -2328,6 +2425,7 @@
 		"echant" : "18"
 	},
 	"Minotaure" : {
+		"id" : "44",
 		"name" : "Minotaure",
 		"familly" : "Humanoïde",
 		"level" : "7",
@@ -2352,6 +2450,7 @@
 		"echant" : "29"
 	},
 	"Molosse Satanique" : {
+		"id" : "102",
 		"name" : "Molosse Satanique",
 		"familly" : "Démon",
 		"level" : "8",
@@ -2376,6 +2475,7 @@
 		"echant" : "44"
 	},
 	"Momie" : {
+		"id" : "2",
 		"name" : "Momie",
 		"familly" : "Mort-Vivant",
 		"level" : "4",
@@ -2400,6 +2500,7 @@
 		"echant" : "17"
 	},
 	"Monstre Rouilleur" : {
+		"id" : "105",
 		"name" : "Monstre Rouilleur",
 		"familly" : "Monstre",
 		"level" : "3",
@@ -2424,6 +2525,7 @@
 		"echant" : "18"
 	},
 	"Mouch'oo" : {
+		"id" : "193",
 		"name" : "Mouch'oo",
 		"familly" : "Monstre",
 		"level" : "14",
@@ -2448,6 +2550,7 @@
 		"echant" : "59"
 	},
 	"Mouch'oo Majestueux" : {
+		"id" : "194",
 		"name" : "Mouch'oo Majestueux",
 		"familly" : "Monstre",
 		"level" : "33",
@@ -2472,6 +2575,7 @@
 		"echant" : "62"
 	},
 	"Naga" : {
+		"id" : "64",
 		"name" : "Naga",
 		"familly" : "Monstre",
 		"level" : "10",
@@ -2496,6 +2600,7 @@
 		"echant" : "55"
 	},
 	"Necrochore" : {
+		"id" : "147",
 		"name" : "Necrochore",
 		"familly" : "Mort-Vivant",
 		"level" : "37",
@@ -2520,6 +2625,7 @@
 		"echant" : "144"
 	},
 	"Necromant" : {
+		"id" : "227",
 		"name" : "Necromant",
 		"familly" : "Mort-Vivant",
 		"level" : "39",
@@ -2544,6 +2650,7 @@
 		"echant" : "10"
 	},
 	"Necrophage" : {
+		"id" : "56",
 		"name" : "Necrophage",
 		"familly" : "Mort-Vivant",
 		"level" : "8",
@@ -2568,6 +2675,7 @@
 		"echant" : "31"
 	},
 	"Nuage d'Insectes" : {
+		"id" : "43",
 		"name" : "Nuage d'Insectes",
 		"familly" : "Insecte",
 		"level" : "7",
@@ -2592,6 +2700,7 @@
 		"echant" : "22"
 	},
 	"Nuee de Vermine" : {
+		"id" : "166",
 		"name" : "Nuee de Vermine",
 		"familly" : "Insecte",
 		"level" : "13",
@@ -2616,6 +2725,7 @@
 		"echant" : "31"
 	},
 	"Ogre" : {
+		"id" : "17",
 		"name" : "Ogre",
 		"familly" : "Humanoïde",
 		"level" : "7",
@@ -2640,6 +2750,7 @@
 		"echant" : "28"
 	},
 	"Ombre" : {
+		"id" : "128",
 		"name" : "Ombre",
 		"familly" : "Mort-Vivant",
 		"level" : "2",
@@ -2664,6 +2775,7 @@
 		"echant" : "19"
 	},
 	"Ombre de Roches" : {
+		"id" : "66",
 		"name" : "Ombre de Roches",
 		"familly" : "Monstre",
 		"level" : "13",
@@ -2688,6 +2800,7 @@
 		"echant" : "38"
 	},
 	"Orque" : {
+		"id" : "3",
 		"name" : "Orque",
 		"familly" : "Humanoïde",
 		"level" : "3",
@@ -2712,6 +2825,7 @@
 		"echant" : "13"
 	},
 	"Ours-Garou" : {
+		"id" : "67",
 		"name" : "Ours-Garou",
 		"familly" : "Humanoïde",
 		"level" : "18",
@@ -2736,6 +2850,7 @@
 		"echant" : "61"
 	},
 	"Palefroi Infernal" : {
+		"id" : "119",
 		"name" : "Palefroi Infernal",
 		"familly" : "Démon",
 		"level" : "29",
@@ -2760,6 +2875,7 @@
 		"echant" : "136"
 	},
 	"Plante Carnivore" : {
+		"id" : "8",
 		"name" : "Plante Carnivore",
 		"familly" : "Monstre",
 		"level" : "4",
@@ -2784,6 +2900,7 @@
 		"echant" : "16"
 	},
 	"Pseudo-dragon" : {
+		"id" : "",
 		"name" : "Pseudo-dragon",
 		"familly" : "Démon",
 		"level" : "5",
@@ -2808,6 +2925,7 @@
 		"echant" : "61"
 	},
 	"Raquettou" : {
+		"id" : "",
 		"name" : "Raquettou",
 		"familly" : "Humanoïde",
 		"level" : "?",
@@ -2832,6 +2950,7 @@
 		"echant" : ""
 	},
 	"Rat Geant" : {
+		"id" : "9",
 		"name" : "Rat Geant",
 		"familly" : "Animal",
 		"level" : "2",
@@ -2856,6 +2975,7 @@
 		"echant" : "58"
 	},
 	"Rat-Garou" : {
+		"id" : "115",
 		"name" : "Rat-Garou",
 		"familly" : "Humanoïde",
 		"level" : "3",
@@ -2880,6 +3000,7 @@
 		"echant" : "13"
 	},
 	"Rocketeux" : {
+		"id" : "41",
 		"name" : "Rocketeux",
 		"familly" : "Humanoïde",
 		"level" : "5",
@@ -2904,6 +3025,7 @@
 		"echant" : "25"
 	},
 	"Sagouin" : {
+		"id" : "130",
 		"name" : "Sagouin",
 		"familly" : "Animal",
 		"level" : "3",
@@ -2928,6 +3050,7 @@
 		"echant" : "23"
 	},
 	"Scarabee Geant" : {
+		"id" : "12",
 		"name" : "Scarabee Geant",
 		"familly" : "Insecte",
 		"level" : "4",
@@ -2952,6 +3075,7 @@
 		"echant" : "18"
 	},
 	"Scorpion Geant" : {
+		"id" : "62",
 		"name" : "Scorpion Geant",
 		"familly" : "Insecte",
 		"level" : "10",
@@ -2976,6 +3100,7 @@
 		"echant" : "23"
 	},
 	"Shai" : {
+		"id" : "48",
 		"name" : "Shai",
 		"familly" : "Démon",
 		"level" : "28",
@@ -3000,6 +3125,7 @@
 		"echant" : "125"
 	},
 	"Slaad" : {
+		"id" : "133",
 		"name" : "Slaad",
 		"familly" : "Monstre",
 		"level" : "5",
@@ -3024,6 +3150,7 @@
 		"echant" : "25"
 	},
 	"Sorcière" : {
+		"id" : "132",
 		"name" : "Sorcière",
 		"familly" : "Humanoïde",
 		"level" : "17",
@@ -3048,6 +3175,7 @@
 		"echant" : "98"
 	},
 	"Spectre" : {
+		"id" : "90",
 		"name" : "Spectre",
 		"familly" : "Mort-Vivant",
 		"level" : "14",
@@ -3072,6 +3200,7 @@
 		"echant" : "70"
 	},
 	"Sphinx" : {
+		"id" : "201",
 		"name" : "Sphinx",
 		"familly" : "Humanoïde",
 		"level" : "30",
@@ -3096,6 +3225,7 @@
 		"echant" : "92"
 	},
 	"Squelette" : {
+		"id" : "6",
 		"name" : "Squelette",
 		"familly" : "Mort-Vivant",
 		"level" : "1",
@@ -3120,6 +3250,7 @@
 		"echant" : "51"
 	},
 	"Strige" : {
+		"id" : "127",
 		"name" : "Strige",
 		"familly" : "Insecte",
 		"level" : "2",
@@ -3144,6 +3275,7 @@
 		"echant" : "53"
 	},
 	"Succube" : {
+		"id" : "10",
 		"name" : "Succube",
 		"familly" : "Démon",
 		"level" : "13",
@@ -3168,6 +3300,7 @@
 		"echant" : "53"
 	},
 	"Tertre Errant" : {
+		"id" : "129",
 		"name" : "Tertre Errant",
 		"familly" : "Monstre",
 		"level" : "20",
@@ -3192,6 +3325,7 @@
 		"echant" : "59"
 	},
 	"Thri-kreen" : {
+		"id" : "121",
 		"name" : "Thri-kreen",
 		"familly" : "Insecte",
 		"level" : "10",
@@ -3216,6 +3350,7 @@
 		"echant" : "30"
 	},
 	"Tigre-Garou" : {
+		"id" : "116",
 		"name" : "Tigre-Garou",
 		"familly" : "Humanoïde",
 		"level" : "12",
@@ -3240,6 +3375,7 @@
 		"echant" : "38"
 	},
 	"Titan" : {
+		"id" : "122",
 		"name" : "Titan",
 		"familly" : "Humanoïde",
 		"level" : "26",
@@ -3264,6 +3400,7 @@
 		"echant" : "117"
 	},
 	"Trancheur" : {
+		"id" : "168",
 		"name" : "Trancheur",
 		"familly" : "Monstre",
 		"level" : "35",
@@ -3288,6 +3425,7 @@
 		"echant" : "117"
 	},
 	"Tubercule Tueur" : {
+		"id" : "196",
 		"name" : "Tubercule Tueur",
 		"familly" : "Animal",
 		"level" : "14",
@@ -3312,6 +3450,7 @@
 		"echant" : "24"
 	},
 	"Tutoki" : {
+		"id" : "107",
 		"name" : "Tutoki",
 		"familly" : "Monstre",
 		"level" : "4",
@@ -3336,6 +3475,7 @@
 		"echant" : "16"
 	},
 	"Vampire" : {
+		"id" : "69",
 		"name" : "Vampire",
 		"familly" : "Mort-Vivant",
 		"level" : "29",
@@ -3360,6 +3500,7 @@
 		"echant" : "106"
 	},
 	"Ver Carnivore Geant" : {
+		"id" : "47",
 		"name" : "Ver Carnivore Geant",
 		"familly" : "Monstre",
 		"level" : "12",
@@ -3384,6 +3525,7 @@
 		"echant" : "60"
 	},
 	"Veskan du Chaos" : {
+		"id" : "",
 		"name" : "Veskan du Chaos",
 		"familly" : "Humanoïde",
 		"level" : "14",
@@ -3408,6 +3550,7 @@
 		"echant" : "3"
 	},
 	"Vouivre" : {
+		"id" : "145",
 		"name" : "Vouivre",
 		"familly" : "Monstre",
 		"level" : "33",
@@ -3432,6 +3575,7 @@
 		"echant" : "101"
 	},
 	"Worg" : {
+		"id" : "136",
 		"name" : "Worg",
 		"familly" : "Monstre",
 		"level" : "5",
@@ -3456,6 +3600,7 @@
 		"echant" : "28"
 	},
 	"Xorn" : {
+		"id" : "72",
 		"name" : "Xorn",
 		"familly" : "Démon",
 		"level" : "14",
@@ -3480,6 +3625,7 @@
 		"echant" : "31"
 	},
 	"Yéti" : {
+		"id" : "123",
 		"name" : "Yéti",
 		"familly" : "Humanoïde",
 		"level" : "8",
@@ -3504,6 +3650,7 @@
 		"echant" : "25"
 	},
 	"Yuan-ti" : {
+		"id" : "124",
 		"name" : "Yuan-ti",
 		"familly" : "Humanoïde",
 		"level" : "15",
@@ -3528,6 +3675,7 @@
 		"echant" : "69"
 	},
 	"Zombie" : {
+		"id" : "7",
 		"name" : "Zombie",
 		"familly" : "Mort-Vivant",
 		"level" : "2",
