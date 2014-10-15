@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.0.33-4
+- Ajout au survol (X,Y,N) d'un code couleurs des autres elements à ces coordonnées
+
 v.0.0.33-2
 - Ajout des accès rapide depuis la liste des missions
 
