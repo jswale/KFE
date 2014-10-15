@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.33-3
+// @version       0.0.33-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -2575,68 +2575,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
 
-        // Ajout des liens vers la vue de l'outil
-        {
-        	var mainView = $("#mh_vue_hidden_tresors").parents("p:first");
-        	mainView.attr("data-view", "main");
-            
-            var altView = $("<iframe/>")
-            .css("display", "none")
-            .css("width", "98%")
-            .attr("data-view", "KFE")
-            .insertAfter(mainView);
-            
-            var fnShowKFEView = function(idView) {
-                var vue = parseInt($('input[name="ai_MaxVue"]').val());
-                var no = 0;
-                var i = 0;
-                while(i < vue) {  
-                  if(i <= 11) {
-                    no += 1;
-                  } else if(i <= 21) {
-                    no += 1/2;
-                  } else {
-                    no += 1/3;
-                  }
-                  i++;
-                }
-                
-                var h = (Math.ceil(no)*2+1) * 52 /* Ceils */ + 52 /* Margin */;
-                
-               	$('[data-view="main"]').hide();
-                $('[data-view="KFE"]')
-                .css("height", h + "px")
-                .attr("src", "http://pharoz.net/MH/outil/?page=viewGraph&viewType=" + idView + "&displayNow=true&noMenu=true")
-				.show()
-                ;
-            };
-                
-            $("<p>")
-            .append("<b>Vue dans l'outil</b> : ")
-            .append(
-                $("<a href='javascript:void(0)'>Vue 1</a>")
-                .click(function(){
-                    fnShowKFEView(1);
-                })
-            )
-            .append(" | ")
-            .append(
-                $("<a href='javascript:void(0)'>Vue 2</a>")
-                .click(function(){
-                    fnShowKFEView(2);
-                })
-            )
-            .append(" | ")
-            .append(
-                $("<a href='javascript:void(0)'>Vue MH</a>")
-                .click(function(){
-                    $('[data-view="main"]').show();
-                    $('[data-view="KFE"]').hide();
-                })
-            )
-            .insertAfter( "h2" );
-        }
-		// ------------------        
+        this.addPharozViewLinks();
         
         this.highlightTreasures();
         this.addTagEdition();
@@ -2649,10 +2588,72 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.addMonsterCdmLink();
 
         this.addInfos();
+        
+        this.addSameXYN();
 
         // Tune ihm
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");
+        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");        
+    },
+    
+    addPharozViewLinks : function() {
+        var mainView = $("#mh_vue_hidden_tresors").parents("p:first");
+        mainView.attr("data-view", "main");
         
+        var altView = $("<iframe/>")
+        .css("display", "none")
+        .css("width", "98%")
+        .attr("data-view", "KFE")
+        .insertAfter(mainView);
+        
+        var fnShowKFEView = function(idView) {
+            var vue = parseInt($('input[name="ai_MaxVue"]').val());
+            var no = 0;
+            var i = 0;
+            while(i < vue) {  
+                if(i <= 11) {
+                    no += 1;
+                } else if(i <= 21) {
+                    no += 1/2;
+                } else {
+                    no += 1/3;
+                }
+                i++;
+            }
+            
+            var h = (Math.ceil(no)*2+1) * 52 /* Ceils */ + 52 /* Margin */;
+            
+            $('[data-view="main"]').hide();
+            $('[data-view="KFE"]')
+            .css("height", h + "px")
+            .attr("src", "http://pharoz.net/MH/outil/?page=viewGraph&viewType=" + idView + "&displayNow=true&noMenu=true")
+            .show()
+            ;
+        };
+        
+        $("<p>")
+        .append("<b>Vue dans l'outil</b> : ")
+        .append(
+            $("<a href='javascript:void(0)'>Vue 1</a>")
+            .click(function(){
+                fnShowKFEView(1);
+            })
+        )
+        .append(" | ")
+        .append(
+            $("<a href='javascript:void(0)'>Vue 2</a>")
+            .click(function(){
+                fnShowKFEView(2);
+            })
+        )
+        .append(" | ")
+        .append(
+            $("<a href='javascript:void(0)'>Vue MH</a>")
+            .click(function(){
+                $('[data-view="main"]').show();
+                $('[data-view="KFE"]').hide();
+            })
+        )
+        .insertAfter( "h2" );
     },
 
     highlightTreasures : function() {
@@ -2990,6 +2991,42 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         ids.push(Utils.getConf("login"));
         return ids;
     },
+    
+    addSameXYN : function() {        
+        $("<style type='text/css'> tr.xyn td { background-color:beige;} </style>").appendTo("head");
+        
+        $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_lieux", "mh_vue_hidden_tresors"], $.proxy(function(idx, tableId){
+            var xId = this.getColumnId(tableId, "X");
+            var yId = this.getColumnId(tableId, "Y");
+            var nId = this.getColumnId(tableId, "N");            
+    
+            $("#" + tableId + " table:first tr.mh_tdpage").each($.proxy(function(idx, tr){
+                var tr = $(tr);
+                var tdX = tr.find("td:nth-child("+xId+")");
+                var tdY = tr.find("td:nth-child("+yId+")");
+                var tdN = tr.find("td:nth-child("+nId+")");
+                tr.attr("data-xyn", tdX.text() + ";" + tdY.text() + ";" + tdN.text());
+                
+                $.each([tdX, tdY, tdN], $.proxy(function(idx, td) {                    
+                    this.addSameXYN_hoverTd($(td));
+                }, this));
+            }, this));        
+        }, this))        
+    },  
+    
+    addSameXYN_hoverTd : function(td) {
+        td.hover(
+            function(){
+                var tr = $(this).parent("tr");
+                $('tr[data-xyn="' + tr.attr("data-xyn") + '"]').addClass("xyn");
+            },
+            function(){
+                var tr = $(this).parent("tr");
+                $('tr[data-xyn="' + tr.attr("data-xyn") + '"]').removeClass("xyn");
+            }                    
+        );
+        return td;
+    },
 
     getMonsterIds : function() {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
@@ -3078,6 +3115,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
                     var tr = $("<tr/>")
                     .attr("data-troll-info", trollId)
+                    .attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
                     .addClass("mh_tdpage")
                     .append($("<td/>").text(d))
                     .append($("<td/>").text(trollId))
@@ -3085,9 +3123,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .append($("<td/>").text(data.lvl))
                     .append($("<td/>").text(data.race))
                     .append($("<td/>").append(data.guildId ? ('<a href="javascript:EAV(' + data.guildId + ',750,550)" class="mh_links">' + data.guildName + '</a>') : ''))
-                    .append($("<td/>").text(data.x).attr("align", "center"))
-                    .append($("<td/>").text(data.y).attr("align", "center"))
-                    .append($("<td/>").text(data.n).attr("align", "center"))
+                    .append(this.addSameXYN_hoverTd($("<td/>")).text(data.x).attr("align", "center"))
+                    .append(this.addSameXYN_hoverTd($("<td/>")).text(data.y).attr("align", "center"))
+                    .append(this.addSameXYN_hoverTd($("<td/>")).text(data.n).attr("align", "center"))
                     .insertAfter(previous)
                     ;
 
@@ -3100,6 +3138,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     if(trollId == Utils.getConf("login") && !isInvisible) {
                         var tr = $("<tr/>")
                         .attr("data-troll-info", trollId)
+                        .attr("data-xyn", x + ";" + y + ";" + n)
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(0))
                         .append($("<td/>").text(trollId))
@@ -3107,9 +3146,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
-                        .append($("<td/>").text(x).attr("align", "center"))
-                        .append($("<td/>").text(y).attr("align", "center"))
-                        .append($("<td/>").text(n).attr("align", "center"))
+                        .append(this.addSameXYN_hoverTd($("<td/>")).text(x).attr("align", "center"))
+                        .append(this.addSameXYN_hoverTd($("<td/>")).text(y).attr("align", "center"))
+                        .append(this.addSameXYN_hoverTd($("<td/>")).text(n).attr("align", "center"))
                         .insertAfter(
                             $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first")
                         );
