@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.33-2
+// @version       0.0.33-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -430,6 +430,39 @@ var MH_Play_PlayStart = $.extend({}, MH_Page, {
             .detach()
             .css("color", "#FFB7B7")
         );
+    }
+});
+
+
+var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
+    init : function() {
+        $("table:nth-child(3) div.mh_titre3").each(function(){
+            var me = $(this);
+            var tmp = /Mission \[(\d+)\]/.exec(me.text());
+            var idMission = tmp[1];
+            
+            $("<tr/>")
+            .addClass("mh_tdtitre")
+            .append(
+                $("<td/>")
+                .attr("align", "center")
+                .append(
+                    $("<b/>")
+                    .append('<a href="/mountyhall/MH_Missions/Mission_Description.php?ai_idMission=' + idMission + '">[Description]</a>')
+                    .append(' - ')
+                    .append('<a href="/mountyhall/MH_Missions/Mission_Equipe.php?ai_idMission=' + idMission + '">[L\'Equipe]</a>')
+                    .append(' - ')
+                    .append('<a href="/mountyhall/MH_Missions/Mission_Etape.php?ai_idMission=' + idMission + '">[Les Etapes]</a>')
+                    .append(' - ')
+                    .append('<a href="/mountyhall/MH_Missions/Mission_Recompense.php?ai_idMission=' + idMission + '">[Les Récompenses]</a>')
+                    .append(' - ')
+                    .append('<a href="/mountyhall/MH_Missions/Mission_Abandon.php?ai_idMission=' + idMission + '">[Abandonner]</a>')
+                    .append(' - ')
+                    .append('<a href="/mountyhall/MH_Missions/Mission_Aide.php?ai_idMission=' + idMission + '">[Aide]</a>')
+                )
+            )
+            .insertAfter(me.parents("tr:first"));
+        })
     }
 });
 
