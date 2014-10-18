@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.0.33-5
+// @version       0.0.33-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -2620,6 +2620,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         }
 
         this.addMonsterCdmLink();
+        this.addTrollEventLink();
 
         this.addInfos();
         
@@ -2850,8 +2851,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
         var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
 
-
-
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
             var tdName = $($(this).children("td:nth-child("+nomColId+")"));
@@ -2875,7 +2874,28 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 })
            ;
         });
+    },
+    
+    addTrollEventLink : function() {
+        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
+        var nomColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
 
+        // Extraction des données
+        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage").each(function(){
+            var tdName = $($(this).children("td:nth-child("+nomColId+")"));
+            var trollName = tdName.text();
+
+            var tdRef = $($(this).children("td:nth-child("+refColId+")"));
+            var trollId = tdRef.text();
+            tdRef.empty()
+            .append(
+                $("<a/>")
+                .attr("href", "javascript:Enter('/mountyhall/View/PJView_Events.php?ai_IDPJ=" + trollId + "', 750, 550)")
+                .attr("title", "Voir les évenements de " + trollName)
+                .attr("class", tdName.find("a").attr("class"))
+                .text(trollId)
+            );
+        });
     },
 
 
@@ -3010,22 +3030,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         );
     },
 
-    getTrollIds : function() {
-        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
-        var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
-
-        // Fix
-        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
-
-        var    ids = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-            var id = $(this).text();
-            $(this).parent("tr").attr("data-troll-info", id);
-            return id;
-        }).get();
-        ids.push(Utils.getConf("login"));
-        return ids;
-    },
-    
     addSameXYN : function() {        
         $("<style type='text/css'> tr.xyn td { background-color:beige;} </style>").appendTo("head");
         
@@ -3061,6 +3065,23 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         );
         return td;
     },
+    
+    getTrollIds : function() {
+        var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
+        var nameColId = this.getColumnId("mh_vue_hidden_trolls", "Nom");
+
+        // Fix
+        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
+
+        	var ids = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+            var id = $(this).text();
+            $(this).parent("tr").attr("data-troll-info", id);
+            return id;
+        }).get();
+        ids.push(Utils.getConf("login"));
+        return ids;
+    },
+    
 
     getMonsterIds : function() {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
@@ -3152,7 +3173,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
                     .addClass("mh_tdpage")
                     .append($("<td/>").text(d))
-                    .append($("<td/>").text(trollId))
+                    .append($("<td/>").append('<a href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);" class="mh_trolls_0">' + trollId + '</a>'))
                     .append($("<td/>").append('<a href="javascript:EPV(' + trollId + ')" class="mh_trolls_0">' + data.name + '</a> [' + (data.camou ? "Camouflé" : "") + (data.invi ? "Invisible" : "") + ']'))
                     .append($("<td/>").text(data.lvl))
                     .append($("<td/>").text(data.race))
@@ -3175,7 +3196,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .attr("data-xyn", x + ";" + y + ";" + n)
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(0))
-                        .append($("<td/>").text(trollId))
+	                    .append($("<td/>").append('<a href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);">' + trollId + '</a>'))
                         .append($("<td/>").text('Mon troll'))
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
