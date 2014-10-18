@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.1
+- Ajout des informations des monstres depuis la vue même sans CdM (base interne)
+
 v.0.0.33-6
 - Ajout du lien évenement du troll dans la vue
 
