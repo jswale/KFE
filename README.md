@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.0.33-6
+- Ajout du lien évenement du troll dans la vue
+
 v.0.0.33-5
 - Ajout des fiches de détail dans la page d'amélioration (depuis le profil)
 
