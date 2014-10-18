@@ -1,4 +1,4 @@
-var DB_monsterAge = {
+var DB_monsterAges = {
     "Bébé" : 0,
     "Initial" : 0,
     "Nouveau" : 0,
