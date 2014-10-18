@@ -1,5 +1,5 @@
  var DB_monstres = {
-     "Abishaii bleu": {
+     "Abishaii Bleu": {
          "id": 161,
          "name": "Abishaii bleu",
          "familly": "Démon",
@@ -24,7 +24,7 @@
          "dla": [4, 10],
          "echant": 279
      },
-     "Abishaii noir": {
+     "Abishaii Noir": {
          "id": 94,
          "name": "Abishaii noir",
          "familly": "Démon",
@@ -49,7 +49,7 @@
          "dla": [5, 11],
          "echant": 50
      },
-     "Abishaii rouge": {
+     "Abishaii Rouge": {
          "id": 96,
          "name": "Abishaii rouge",
          "familly": "Démon",
@@ -74,7 +74,7 @@
          "dla": [4, 10],
          "echant": 193
      },
-     "Abishaii vert": {
+     "Abishaii Vert": {
          "id": 95,
          "name": "Abishaii vert",
          "familly": "Démon",
