@@ -1,4 +1,4 @@
-var DB_monsterTemplates = {
+var DB_monsterTemplate = {
 	"Alchimiste" : {
 		"name" : "Alchimiste",
 		"spe" : "Ramasse des objets Utilise des potions",
@@ -15,18 +15,18 @@ var DB_monsterTemplates = {
 	"Alpha" : {
 		"name" : "Alpha",
 		"level" : 11,
-		"nbAtt" : "x2",
+		"nbAtt" : "*2",
 		"attDist" : true,
-		"hp" : "x3",
-		"att" : "x3",
-		"esq" : "x3",
-		"deg" : "x3",
-		"reg" : "x3",
-		"arm" : "x3",
-		"rm" : "x3",
-		"mm" : "x3",
+		"hp" : "*3",
+		"att" : "*3",
+		"esq" : "*3",
+		"deg" : "*3",
+		"reg" : "*3",
+		"arm" : "*3",
+		"rm" : "*3",
+		"mm" : "*3",
 		"vue" : "normal",
-		"power" : "x3",
+		"power" : "*3",
 		"spe" : "DLA plus Lente",
 		"familly" : "Insecte"
 	},
@@ -68,7 +68,7 @@ var DB_monsterTemplates = {
 	"Berserker" : {
 		"name" : "Berserker",
 		"level" : 3,
-		"nbAtt" : "x2",
+		"nbAtt" : "*2",
 		"attMag" : false,
 		"attDist" : false,
 		"vlc" : false,
@@ -196,7 +196,7 @@ var DB_monsterTemplates = {
 	"Enragé" : {
 		"name" : "Enragé",
 		"level" : 3,
-		"nbAtt" : "x2",
+		"nbAtt" : "*2",
 		"attDist" : false,
 		"vlc" : false,
 		"familly" : "Animal"
@@ -223,7 +223,7 @@ var DB_monsterTemplates = {
 	"Fanatique" : {
 		"name" : "Fanatique",
 		"level" : 2,
-		"nbAtt" : "x2",
+		"nbAtt" : "*2",
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "Ne fuit pas",
@@ -246,7 +246,7 @@ var DB_monsterTemplates = {
 	"Frénétique" : {
 		"name" : "Frénétique",
 		"level" : 3,
-		"nbAtt" : "x2",
+		"nbAtt" : "*2",
 		"attDist" : false,
 		"vlc" : false,
 		"familly" : "Monstre"
@@ -368,7 +368,7 @@ var DB_monsterTemplates = {
 	"Maitre" : {
 		"name" : "Maitre",
 		"level" : 8,
-		"nbAtt" : 1, //"+1 ou x2 ?",
+		"nbAtt" : 1, //"+1 ou *2 ?",
 		"attDist" : false,
 		"vlc" : true,
 		"familly" : "Mort-vivant"
@@ -481,7 +481,7 @@ var DB_monsterTemplates = {
 	"Reine" : {
 		"name" : "Reine",
 		"level" : 11,
-		"nbAtt" : 1, //"+1 ou x2 ?",
+		"nbAtt" : 1, //"+1 ou *2 ?",
 		"attDist" : true,
 		"vlc" : true,
 		"familly" : "Insecte"
