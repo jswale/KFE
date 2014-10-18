@@ -1,4 +1,4 @@
-var DB_monsterTemplate = {
+var DB_monsterTemplates = {
 	"Alchimiste" : {
 		"name" : "Alchimiste",
 		"spe" : "Ramasse des objets Utilise des potions",
