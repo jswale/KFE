@@ -1324,7 +1324,7 @@
          "dla": [7, 13],
          "echant": 95
      },
-     "Feu-Follet": {
+     "Feu Follet": {
          "id": 70,
          "name": "Feu-Follet",
          "familly": "Monstre",
