@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.1
+// @version       0.1.2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1474,6 +1474,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     
     addMonsterInfos : function() {
         var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
+        var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
         
         var fnExtract = function(monsterFullName) {
             var monster = null;
@@ -1544,12 +1545,20 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         };    
         
         Utils.addGlobalStyle([
-            ".monsterDbInfo { float:right; margin:0 1px 0 0; width:18px; height:18px; position:relative; background-image:url('data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAIAAADZrBkAAAAAAXNSR0IArs4c6QAAATlJREFUKM99kzGOhSAQhifGQk9gLOmMNdpaEC9AjNegNBYmHsIbEBNrb/GCFJ5BKy5gY8IWvuW9Bd2/gpn5GJhhQP+VlJIxhhACAABACDHGpJRWGJjVvu+UUngQpXTfdxsTQkRR5EabtAAQRZEQ4oMppeI4dpnP2b+K41gp9cbqunaZuq4NlqapZYd1XZ/e42a7tK6rP03TLYMxzrIMAJZlsVzTNEGSJJa16zqTp6oq90QXAcaY1vr1epk23t7F933/PE+zJ4SEYXgcx7Xdtu2WgbIs/ynGd9+MyrKEcRwta9u2TzW8NI4juD7DKKWeGgNa667rbrGiKIZhGIbBrfM7KM9zF7sUBIFx5XluTwDG+PI1TXNZ5nn+ZjDGN4Ojte77/umj9X1/P29GnHNCiOd5nucRQjjnbswPN/Jw4hvRoeUAAAAASUVORK5CYII='); }"
+            ".monsterDbInfo { float:right; margin:0 1px 0 4px; width:18px; height:18px; position:relative; background-image:url('data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6M0NBODFGRjJGMEFBMTFFMjg2MENENjNBQUEzNUQ5RkUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6M0NBODFGRjNGMEFBMTFFMjg2MENENjNBQUEzNUQ5RkUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozQ0E4MUZGMEYwQUExMUUyODYwQ0Q2M0FBQTM1RDlGRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozQ0E4MUZGMUYwQUExMUUyODYwQ0Q2M0FBQTM1RDlGRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pt14P18AAAHFSURBVHjajJSvb8JAFMcfHWKgEFgIDoGhGjEMlm6CpG4MXcH+AjKNYALND0eCGRiyYJhAgyLBNWAmICEIDIi97+W4XG5t4Js8jl57n3vve6+NkKFKpZLgoc7hcOSN2zOO/nA47JnrIgakykOLI6HPZ7NZEdvtltbrNZ1OJ5+n3xg4+wdiSJeHqg5IpVLkeR4lk0k1xxAaDAY0n89JwnoKJDPp6hAsbjQatNvtxEJkgjnXdcm2bWq327RYLPCozbClJT1pmTWXy2UxNptNAYEABQDXAEqJBCxpbMIEoSzsiFJMoSxkF4/HcZnnZIqWPJ1ABUH0eQmCXq2AIxba7/fCC+1hpUKhIGAoVSpjhWUznU5F+rVaTZ0aoPAOG+C+pnw0DARDsSMWITabDaXTabXJeDzWHz+EgrAzMoGxaMRYLCbMR+DakB+VbV80T8xxHNVDYaZr+oFHfX0GPqCboU6ncw8E6lmyxX2zpNFopBrxFoQZ/vXUXmAYSiqVSsJYw8wwLTne8ecBP6vV6jeXy31fLhf3fD4/TiYTOh6P90Dw0vpBn5GMfHeKNyCfHB8MOQR+jzQguv2Z40nvFZwOx9c1C11/AgwA8H/OrmGqC5MAAAAASUVORK5CYII='); }",
+            ".monsterDbInfoVlc { float:right; margin:0 1px 0 4px; width:18px; height:18px; position:relative; background-image:url('data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAApdJREFUeNqsVE9okmEYfz7/TEXMiRJBh2iXoEMUnQJBWIIHD4LXwYZ0GoRBUDIQZRdhjLoEC8NDePKmbnpK1gRBlhgZImriIRaY4tDQ5nT69jwv+qXOdeqFH++f53l+3/P+nuf9BMYY/I8hW3QYjUZv4vQQcWPO9B2RtdlsjfkYYTojJHiG06ZSqbyzvLwMCoVixvns7AxarRb0+/1PuH2LhO9FIxERIpHIm6OjI9Zut9lwOPwnms0mSyQSDGNeTeIl40xe6PX6p4eHh6DVakEqlXIkk0nxg7SenKMv32s0mucY+4Q7IKvq4OCAbW1t0R2Z2Wxmx8fHbH9/n+9NJhPHIpvL5WLhcPgzZSQbjUaPY7EYBAIBTux0OqFQKEAqlRIzmYx5287ODjgcjgeCIDySXVxc3CUHv9/P006n05DP56FUKnFn1ITPV9my2SxUq9UVykgpkXCpgDRaXV0VM8AriGuv1wvb29vinnx52QWBCOUzfYRaAGYISA6DwQCwDUSbx+MBt9stBhPIZzIoleF0L5FDKBSCXC53qVEpcwL50JDL5X87G5vrhBqNoFKp+KHVagWsDuzu7oqOa2trYDAYYGlpSTzrdrtwfn5ODfpTViwWP1BfkHBkIFGpqy0WC8dVg3xrtRpgc8Le3l5S4vP5asj4sVKpcG3IodPpQK/X4+QT0JfpjOwE0rJer8Pp6enrTCbzW4r6MFx8Q6cVNN5Wq9XiFSfCExHNpOW4SlAul6nswY2NjZd43hfGRhL9ejAY9KAOmzqdjj+V6apNP1oCXund+vo6kbQvvX4kvGa3228Zjcb7SHYPhZ35jaAEPxqNxhfs9q/xePwEY38t/I2MySg7Kg3VVjqnMbV5HzHAuNG04Y8AAwD1E7uGu52lyQAAAABJRU5ErkJggg=='); }",
+            ".monsterDbInfoAttDist { float:right; margin:0 1px 0 4px; width:18px; height:18px; position:relative; background-image:url('data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACNUlEQVR4nI2TPUwUQRTHf292j937Wu4DcjF4flwsTKjMVRix1sLO2KAlJhZWxk4SKjtiQUXsJMZgoYUmYExMJEZbbS00CCpGkDsuHMvd7T0LWFyPI8dLXjLzn3m/mfnPjKgqnVEuyvXlCiNBQD6f4kO7hbNeZ8SL82lpQycPFACo6oEspJgO22mHea+POVWl5DFWzHCvW40dAks5ubtW56JAX8xmJbJWYAwNAEupbgckPVdeAtamr5fDSRIezXPlxaavVwAG0/Kw0eSEQnMwzZtmgFupM6LgAkHN10sA2YTMbtT1BvBvR4AVNoxQqfo63s2KtCuvAMo5GY1ZVELdBihmZTIR43MmIY8dmx+lAotdDQWKeZ4OpOQRSnVtS2/vDxzPMHmmn6uqSsrhdTcjj5J2bZvhZX/3Sg20DttJGAVPplDirTaOKvF2m7jjsGoPeCxmXHmG0MwkeNsLZMFOrclwVPtV1Vt2zLCjEFelzwg7vUC2Yes/sLXbt1c3Ga3uvYe0KwvAg8Mg+aTMNAJORrWcy3sAYwmVck5G93TpBiiX5JrnyvMQYlv8dC2+CuiXdZ0Cdr9IPsF0Nsns2QLjqspQP/fD2xjKMJFyWAiz6DGxPxaZt/+yo+G5Mh+PsdRq4zQCjgEYg386y5OP33Wuq3edQikvdxSk3uRUqLkxvv2u6c3DvAMwncIfn/PRfjbOu16QA6BzRRkLApJRraUkekGg42grFS4Yg29BXQTfNvhBG+cooL/ZICEZznvBuAAAAABJRU5ErkJggg=='); }"
         ]);
+        
+        // Ajout de a colonne titre
+        $("#mh_vue_hidden_monstres table:first tr.mh_tdtitre:first td:nth-child("+nomColId+")").after('<td width="175px"><b>Infos</b></td>');
 
         // Extraction des données
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each($.proxy(function(idx, td){
-            var tdName = $($(td).children("td:nth-child("+nomColId+")"));
+        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each($.proxy(function(idx, tr){
+            
+            var monsterId = $(tr).children("td:nth-child("+refColId+")").text();
+            
+            var tdName = $($(tr).children("td:nth-child("+nomColId+")"));
             var tmp = tdName.find("a").text().match(/(.*)\s\[(.*)\]/);
             var monstreAge = tmp[2];
             var monsterFullName = tmp[1];
@@ -1557,41 +1566,48 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             var lvlModByAge = DB_monsterAges[monstreAge];
 			var extract = fnExtract(monsterFullName);
             var monster = extract.monster;
-            var monsterTemplate = extract.template;
-            
-            
-            if(!Utils.isUndefined(monster)) {       
-
-			     console.log(monsterFullName, "Niveau: " , parseInt(monster.level) , parseInt(lvlModByAge) , parseInt(monsterTemplate.level || 0)),
-                
-                  tdName.append(
-                        $("<div/>")
-                      	.addClass("monsterDbInfo")
-                      	.attr("title",  $.grep([
-                            fnShowCarac(monster, monsterTemplate, "familly", "Famille"),                            
-                          	//"Niveau: " + (parseInt(monster.level) + parseInt(lvlModByAge) + parseInt(monsterTemplate.level || 0)),
-                            fnShowCarac(monster, monsterTemplate, "power1", "Pouvoir"),
-                            fnShowCarac(monster, monsterTemplate, "power2", "Pouvoir"),
-                            (monsterTemplate.spe ? "Pouvoir spécial: " + monsterTemplate.spe : null),
-                            fnShowCarac(monster, monsterTemplate, "hp", "Point de vie", "PV"),
-                            fnShowCarac(monster, monsterTemplate, "regen", "Régénération", "D3"),
-                          	fnShowCarac(monster, monsterTemplate, "armPhy", "Armure Physique"),
-                            fnShowCarac(monster, monsterTemplate, "armMag", "Armure Magique"),
-                            fnShowCarac(monster, monsterTemplate, "attDist", "Attaque à distance"),
-                            fnShowCarac(monster, monsterTemplate, "attMag", "Attaque magique"),
-                          	fnShowCarac(monster, monsterTemplate, "noAtt", "Nb Attaque"),
-                            fnShowCarac(monster, monsterTemplate, "att", "Attaque", "D6"),
-                            fnShowCarac(monster, monsterTemplate, "esq", "Esquive", "D6"),
-                            fnShowCarac(monster, monsterTemplate, "deg", "Dégâts", "D3"),
-                            fnShowCarac(monster, monsterTemplate, "rm", "RM"),
-                            fnShowCarac(monster, monsterTemplate, "mm", "MM"),
-                            fnShowCarac(monster, monsterTemplate, "vue", "Vue"),
-                            fnShowCarac(monster, monsterTemplate, "vlc", "Voit le caché"),
-                            fnShowCarac(monster, monsterTemplate, "speed", "Vitesse de déplacement"),
-                            fnShowCarac(monster, monsterTemplate, "dla", "DLA", "heures"),
+            var monsterTemplate = extract.template;            
+           
+            var container = $("<td/>");
+            if(!Utils.isUndefined(monster)) {                
+                  container.append(
+                      $("<div/>")
+                      .addClass("monsterDbInfo")
+                      .attr("title",  $.grep([
+                          fnShowCarac(monster, monsterTemplate, "familly", "Famille"),                            
+                          //"Niveau: " + (parseInt(monster.level) + parseInt(lvlModByAge) + parseInt(monsterTemplate.level || 0)),
+                          fnShowCarac(monster, monsterTemplate, "power1", "Pouvoir"),
+                          fnShowCarac(monster, monsterTemplate, "power2", "Pouvoir"),
+                          (monsterTemplate.spe ? "Pouvoir spécial: " + monsterTemplate.spe : null),
+                          fnShowCarac(monster, monsterTemplate, "hp", "Point de vie", "PV"),
+                          fnShowCarac(monster, monsterTemplate, "regen", "Régénération", "D3"),
+                          fnShowCarac(monster, monsterTemplate, "armPhy", "Armure Physique"),
+                          fnShowCarac(monster, monsterTemplate, "armMag", "Armure Magique"),
+                          fnShowCarac(monster, monsterTemplate, "attDist", "Attaque à distance"),
+                          fnShowCarac(monster, monsterTemplate, "attMag", "Attaque magique"),
+                          fnShowCarac(monster, monsterTemplate, "noAtt", "Nb Attaque"),
+                          fnShowCarac(monster, monsterTemplate, "att", "Attaque", "D6"),
+                          fnShowCarac(monster, monsterTemplate, "esq", "Esquive", "D6"),
+                          fnShowCarac(monster, monsterTemplate, "deg", "Dégâts", "D3"),
+                          fnShowCarac(monster, monsterTemplate, "rm", "RM"),
+                          fnShowCarac(monster, monsterTemplate, "mm", "MM"),
+                          fnShowCarac(monster, monsterTemplate, "vue", "Vue"),
+                          fnShowCarac(monster, monsterTemplate, "vlc", "Voit le caché"),
+                          fnShowCarac(monster, monsterTemplate, "speed", "Vitesse de déplacement"),
+                          fnShowCarac(monster, monsterTemplate, "dla", "DLA", "heures"),
                       ], function(o){return o;}).join("\x0A"))
-                    );
+                );
+				if(monster.vlc || !!monsterTemplate.vlc) {
+                    container.append($("<div/>").addClass("monsterDbInfoVlc").attr("title", "Voit le caché"));
+				}
+				if(monster.attDist || !!monsterTemplate.attDist) {
+                    container.append($("<div/>").addClass("monsterDbInfoAttDist").attr("title", "Attaque à distance"));
+				}
             }
+                      
+                      
+                      
+           $(tr).children('td:nth-child(' + nomColId + ')').after(container);
             
         }, this));        
     },
@@ -2036,7 +2052,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
                     }
 
-                    $("[data-monster-info='" + monsterId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_monstres", "Nom")+")").append(
+                    $("[data-monster-info='" + monsterId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_monstres", "Infos")+")").append(
                         $("<div/>")
                         .css("float", "right")
                         .css("margin", "0 1px 0 0")
