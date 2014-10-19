@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.2
+- Ajout d'une image pour identifier les monstres voyant le caché et ceux attaquant à distance
+
 v.0.1.1
 - Ajout des informations des monstres depuis la vue même sans CdM (base interne)
 
