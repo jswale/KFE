@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.2-1
+- Correctif des données issues des templates de monstres
+
 v.0.1.2
 - Ajout d'une image pour identifier les monstres voyant le caché et ceux attaquant à distance
 
