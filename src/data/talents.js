@@ -643,7 +643,7 @@ var DB_talents = {
     "Sort" : {
         1 :  {
             name : "Projectile Magique",
-            description : function(starts) {
+            description : function(stats) {
                 var vue = stats.view.range,
                     vuetotale = stats.view.total,
                     attbmm = stats.attaque.magique,
