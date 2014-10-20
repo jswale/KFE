@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.2-6
+- Correction des âges en fonction des familles
+
 v.0.1.2-5
 - Amélioration de la gestion de l'âge sur les monstres
 
