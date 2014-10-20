@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.2-4
+- Gestion des alias des monstres pour les cas particuliers ayant le mot Géant(e) dans leur noms
+
 v.0.1.2-3
 - Ajout des monstres manquant et correction de niveau de monstres
 
