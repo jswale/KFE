@@ -224,33 +224,6 @@
          "dla": [9, 17],
          "echant": 44
      },
-		 /*
-     "Aragnarok du Chaos": {
-         "id": null,
-         "name": "Aragnarok du Chaos",
-         "familly": "Insecte",
-         "level": "?",
-         "noAtt": 1,
-         "attMag": null,
-         "attDist": false,
-         "speed": "Normale",
-         "vlc": true,
-         "power1": "Attaque paralysante - Auto",
-         "power2": null,
-         "hp": "70 ±",
-         "att": "15 ±",
-         "esq": "8 ±",
-         "degat": "12 ±",
-         "vue": "2 ±",
-         "regen": "2 ±",
-         "armPhy": "6 ±",
-         "armMag": null,
-         "mm": "1100 ±",
-         "rm": "1000 ±",
-         "dla": "9 ±",
-         "echant": 1
-     },
-		 */
      "Araignée Géante": {
          "id": 15,
          "name": "Araignée Géante",
@@ -329,7 +302,7 @@
      "Balrog": {
          "id": null,
          "name": "Balrog",
-         "familly": "?",
+         "familly": "Démon",
          "level": 50,
          "noAtt": null,
          "attMag": false,
@@ -350,7 +323,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Banshee": {
          "id": 104,
          "name": "Banshee",
@@ -479,7 +452,7 @@
      "Beholder": {
          "id": null,
          "name": "Beholder",
-         "familly": "?",
+         "familly": "Monstre",
          "level": 50,
          "noAtt": null,
          "attMag": false,
@@ -500,7 +473,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },				 
+     },        
      "Boggart": {
          "id": 158,
          "name": "Boggart",
@@ -654,7 +627,7 @@
      "Capitan": {
          "id": null,
          "name": "Capitan",
-         "familly": "?",
+         "familly": "Mort-Vivant",
          "level": 35,
          "noAtt": null,
          "attMag": false,
@@ -675,7 +648,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Carnosaure": {
          "id": 135,
          "name": "Carnosaure",
@@ -1079,7 +1052,7 @@
      "Dindon": {
          "id": null,
          "name": "Dindon",
-         "familly": "?",
+         "familly": "Animal",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -1100,7 +1073,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Djinn": {
          "id": 140,
          "name": "Djinn",
@@ -1304,7 +1277,7 @@
      "Elémentaire Magmatique": {
          "id": null,
          "name": "Elémentaire Magmatique",
-         "familly": "?",
+         "familly": "Démon",
          "level": 0,
          "noAtt": null,
          "attMag": false,
@@ -1325,7 +1298,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },				 
+     },        
      "Erinyes": {
          "id": 82,
          "name": "Erinyes",
@@ -1379,7 +1352,7 @@
      "Essaim Cratérien": {
          "id": null,
          "name": "Essaim Cratérien",
-         "familly": "?",
+         "familly": "Insecte",
          "level": 30,
          "noAtt": null,
          "attMag": false,
@@ -1400,7 +1373,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Essaim Sanguinaire": {
          "id": 197,
          "name": "Essaim Sanguinaire",
@@ -1454,7 +1427,7 @@
      "Familier": {
          "id": null,
          "name": "Familier",
-         "familly": "?",
+         "familly": "Monstre",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -1475,7 +1448,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },		 
+     },    
      "Fantôme": {
          "id": 68,
          "name": "Fantôme",
@@ -1754,7 +1727,7 @@
      "Géant des Tempêtes": {
          "id": null,
          "name": "Géant des Tempêtes",
-         "familly": "?",
+         "familly": "Humanoïde",
          "level": 18,
          "noAtt": null,
          "attMag": false,
@@ -1775,7 +1748,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Geck'oo": {
          "id": 230,
          "name": "Geck'oo",
@@ -1951,10 +1924,10 @@
          "dla": [6, 14],
          "echant": 53
      },
-		 "Gobelin Magique": {
+     "Gobelin Magique": {
          "id": null,
          "name": "Gobelin Magique",
-         "familly": "?",
+         "familly": "Humanoïde",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -1975,7 +1948,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },	
+     }, 
      "Goblours": {
          "id": 79,
          "name": "Goblours",
@@ -2054,7 +2027,7 @@
      "Golem de cuir": {
          "id": null,
          "name": "Golem de cuir",
-         "familly": "?",
+         "familly": "Humanoïde",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -2075,7 +2048,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Golem de Fer": {
          "id": 100,
          "name": "Golem de Fer",
@@ -2104,7 +2077,7 @@
      "Golem de métal": {
          "id": null,
          "name": "Golem de métal",
-         "familly": "?",
+         "familly": "Humanoïde",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -2125,11 +2098,11 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },				 
+     },        
      "Golem de mithril": {
          "id": null,
          "name": "Golem de mithril",
-         "familly": "?",
+         "familly": "Humanoïde",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -2150,11 +2123,11 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },				 
+     },        
      "Golem de papier": {
          "id": null,
          "name": "Golem de papier",
-         "familly": "?",
+         "familly": "Humanoïde",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -2175,7 +2148,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },				 
+     },        
      "Golem de Pierre": {
          "id": 99,
          "name": "Golem de Pierre",
@@ -2254,7 +2227,7 @@
      "Gowap Apprivoisé": {
          "id": null,
          "name": "Gowap Apprivoisé",
-         "familly": "?",
+         "familly": "Animal",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -2279,7 +2252,7 @@
      "Gowap Sauvage": {
          "id": null,
          "name": "Gowap Sauvage",
-         "familly": "?",
+         "familly": "Animal",
          "level": 1,
          "noAtt": null,
          "attMag": false,
@@ -2300,7 +2273,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },		 
+     },    
      "Gremlins": {
          "id": 101,
          "name": "Gremlins",
@@ -2504,7 +2477,7 @@
      "Hydre": {
          "id": null,
          "name": "Hydre",
-         "familly": "?",
+         "familly": "Monstre",
          "level": 50,
          "noAtt": null,
          "attMag": false,
@@ -2525,7 +2498,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Incube": {
          "id": 198,
          "name": "Incube",
@@ -2579,7 +2552,7 @@
      "Labeilleux": {
          "id": null,
          "name": "Labeilleux",
-         "familly": "?",
+         "familly": "Insecte",
          "level": 26,
          "noAtt": null,
          "attMag": false,
@@ -2600,7 +2573,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Lézard Géant": {
          "id": 16,
          "name": "Lézard Géant",
@@ -2629,7 +2602,7 @@
      "Liche": {
          "id": null,
          "name": "Liche",
-         "familly": "?",
+         "familly": "Mort-Vivant",
          "level": 50,
          "noAtt": null,
          "attMag": false,
@@ -2650,7 +2623,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Limace Géante": {
          "id": 125,
          "name": "Limace Géante",
@@ -3404,7 +3377,7 @@
      "Phoenix": {
          "id": null,
          "name": "Phoenix",
-         "familly": "?",
+         "familly": "Monstre",
          "level": 32,
          "noAtt": null,
          "attMag": false,
@@ -3425,7 +3398,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Plante Carnivore": {
          "id": 8,
          "name": "Plante Carnivore",
@@ -3679,7 +3652,7 @@
      "Sirène": {
          "id": null,
          "name": "Sirène",
-         "familly": "?",
+         "familly": "Humanoïde",
          "level": 8,
          "noAtt": null,
          "attMag": false,
@@ -3700,7 +3673,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },		 
+     },    
      "Slaad": {
          "id": 133,
          "name": "Slaad",
@@ -4053,8 +4026,8 @@
      },
      "T-Rex": {
          "id": null,
-         "name": "Sirène",
-         "familly": "?",
+         "name": "T-Rex",
+         "familly": "Monstre",
          "level": 16,
          "noAtt": null,
          "attMag": false,
@@ -4075,7 +4048,7 @@
          "rm": null,
          "dla": null,
          "echant": 0
-     },			 
+     },      
      "Vampire": {
          "id": 69,
          "name": "Vampire",
