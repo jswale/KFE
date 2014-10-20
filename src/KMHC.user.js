@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.2
+// @version       0.1.3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1492,42 +1492,43 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                           template = p.slice(0, i).join(" ");
                         } else {
                           template = p.slice(j, p.length).join(" ");
-                        }      
+                        }                        
                     }                    
                     j++;
                 } while(monster == null && j <= p.length);
                 i++;
             } while(monster == null && i < p.length);
-            
+
             return {
                 monster : monster,
-                template : template,
+                template : '' == template ? null : template,
             };
-            //console.log("Name: ", monsterFullName, "Age: ", monstreAge, "Template: ", monsterTemplate, "Monstre: ", monster);            
         };
         
-        var fnShowCarac = function(monster, template, key, name, suffix) {
+        var fnShowCarac = function(monster, template, key, name, suffix) {            
             var v = monster[key];
             if(Utils.isUndefined(v) || null == v) {
                 return null;
             }
             
-            var m = template[key];
-            if(!Utils.isUndefined(m)) {
-                if(m === true) {
-                    v = true;
-                } else if($.type( v ) === "number") {
-                    v = parseInt(v) + parseInt(m);
-                } else if($.isArray(v)) {
-                    if($.type( m ) === "string") {
-                        v[0] = eval((v[0] + m));
-                        v[1] = eval((v[1] + m));
-                    } else {
-                        v[0] = parseInt(v[0]) + parseInt(m);
-                        v[1] = parseInt(v[1]) + parseInt(m);
+            if(null != template) {                
+                var m = template[key];
+                if(!Utils.isUndefined(m)) {
+                    if(m === true) {
+                        v = true;
+                    } else if($.type( v ) === "number") {
+                        v = parseInt(v) + parseInt(m);
+                    } else if($.isArray(v)) {
+                        if($.type( m ) === "string") {
+                            v[0] = eval((v[0] + m));
+                            v[1] = eval((v[1] + m));
+                        } else {
+                            v[0] = parseInt(v[0]) + parseInt(m);
+                            v[1] = parseInt(v[1]) + parseInt(m);
+                        }
                     }
                 }
-                    }
+            }
             
             if($.isArray(v) && v[0] == v[1]) {
                 v = v[0];
@@ -1549,7 +1550,6 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             ".monsterDbInfoVlc { float:right; margin:0 1px 0 4px; width:18px; height:18px; position:relative; background-image:url('data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAApdJREFUeNqsVE9okmEYfz7/TEXMiRJBh2iXoEMUnQJBWIIHD4LXwYZ0GoRBUDIQZRdhjLoEC8NDePKmbnpK1gRBlhgZImriIRaY4tDQ5nT69jwv+qXOdeqFH++f53l+3/P+nuf9BMYY/I8hW3QYjUZv4vQQcWPO9B2RtdlsjfkYYTojJHiG06ZSqbyzvLwMCoVixvns7AxarRb0+/1PuH2LhO9FIxERIpHIm6OjI9Zut9lwOPwnms0mSyQSDGNeTeIl40xe6PX6p4eHh6DVakEqlXIkk0nxg7SenKMv32s0mucY+4Q7IKvq4OCAbW1t0R2Z2Wxmx8fHbH9/n+9NJhPHIpvL5WLhcPgzZSQbjUaPY7EYBAIBTux0OqFQKEAqlRIzmYx5287ODjgcjgeCIDySXVxc3CUHv9/P006n05DP56FUKnFn1ITPV9my2SxUq9UVykgpkXCpgDRaXV0VM8AriGuv1wvb29vinnx52QWBCOUzfYRaAGYISA6DwQCwDUSbx+MBt9stBhPIZzIoleF0L5FDKBSCXC53qVEpcwL50JDL5X87G5vrhBqNoFKp+KHVagWsDuzu7oqOa2trYDAYYGlpSTzrdrtwfn5ODfpTViwWP1BfkHBkIFGpqy0WC8dVg3xrtRpgc8Le3l5S4vP5asj4sVKpcG3IodPpQK/X4+QT0JfpjOwE0rJer8Pp6enrTCbzW4r6MFx8Q6cVNN5Wq9XiFSfCExHNpOW4SlAul6nswY2NjZd43hfGRhL9ejAY9KAOmzqdjj+V6apNP1oCXund+vo6kbQvvX4kvGa3228Zjcb7SHYPhZ35jaAEPxqNxhfs9q/xePwEY38t/I2MySg7Kg3VVjqnMbV5HzHAuNG04Y8AAwD1E7uGu52lyQAAAABJRU5ErkJggg=='); }",
             ".monsterDbInfoAttDist { float:right; margin:0 1px 0 4px; width:18px; height:18px; position:relative; background-image:url('data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACNUlEQVR4nI2TPUwUQRTHf292j937Wu4DcjF4flwsTKjMVRix1sLO2KAlJhZWxk4SKjtiQUXsJMZgoYUmYExMJEZbbS00CCpGkDsuHMvd7T0LWFyPI8dLXjLzn3m/mfnPjKgqnVEuyvXlCiNBQD6f4kO7hbNeZ8SL82lpQycPFACo6oEspJgO22mHea+POVWl5DFWzHCvW40dAks5ubtW56JAX8xmJbJWYAwNAEupbgckPVdeAtamr5fDSRIezXPlxaavVwAG0/Kw0eSEQnMwzZtmgFupM6LgAkHN10sA2YTMbtT1BvBvR4AVNoxQqfo63s2KtCuvAMo5GY1ZVELdBihmZTIR43MmIY8dmx+lAotdDQWKeZ4OpOQRSnVtS2/vDxzPMHmmn6uqSsrhdTcjj5J2bZvhZX/3Sg20DttJGAVPplDirTaOKvF2m7jjsGoPeCxmXHmG0MwkeNsLZMFOrclwVPtV1Vt2zLCjEFelzwg7vUC2Yes/sLXbt1c3Ga3uvYe0KwvAg8Mg+aTMNAJORrWcy3sAYwmVck5G93TpBiiX5JrnyvMQYlv8dC2+CuiXdZ0Cdr9IPsF0Nsns2QLjqspQP/fD2xjKMJFyWAiz6DGxPxaZt/+yo+G5Mh+PsdRq4zQCjgEYg386y5OP33Wuq3edQikvdxSk3uRUqLkxvv2u6c3DvAMwncIfn/PRfjbOu16QA6BzRRkLApJRraUkekGg42grFS4Yg29BXQTfNvhBG+cooL/ZICEZznvBuAAAAABJRU5ErkJggg=='); }"
         ]);
-        
         // Ajout de a colonne titre
         $("#mh_vue_hidden_monstres table:first tr.mh_tdtitre:first td:nth-child("+nomColId+")").after('<td width="175px"><b>Infos</b></td>');
 
@@ -1566,7 +1566,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             var lvlModByAge = DB_monsterAges[monstreAge];
 			var extract = fnExtract(monsterFullName);
             var monster = extract.monster;
-            var monsterTemplate = extract.template;            
+            var monsterTemplateName = extract.template;
+            var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
+            
+            //console.log("Name: ", monsterFullName, "Age: ", monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);                        
            
             var container = $("<td/>");
             if(!Utils.isUndefined(monster)) {                
@@ -1578,7 +1581,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                           //"Niveau: " + (parseInt(monster.level) + parseInt(lvlModByAge) + parseInt(monsterTemplate.level || 0)),
                           fnShowCarac(monster, monsterTemplate, "power1", "Pouvoir"),
                           fnShowCarac(monster, monsterTemplate, "power2", "Pouvoir"),
-                          (monsterTemplate.spe ? "Pouvoir spécial: " + monsterTemplate.spe : null),
+                          (monsterTemplate && monsterTemplate.spe ? "Pouvoir spécial: " + monsterTemplate.spe : null),
                           fnShowCarac(monster, monsterTemplate, "hp", "Point de vie", "PV"),
                           fnShowCarac(monster, monsterTemplate, "regen", "Régénération", "D3"),
                           fnShowCarac(monster, monsterTemplate, "armPhy", "Armure Physique"),
@@ -1597,14 +1600,13 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                           fnShowCarac(monster, monsterTemplate, "dla", "DLA", "heures"),
                       ], function(o){return o;}).join("\x0A"))
                 );
-				if(monster.vlc || !!monsterTemplate.vlc) {
+				if(monster.vlc || (monsterTemplate && !!monsterTemplate.vlc)) {
                     container.append($("<div/>").addClass("monsterDbInfoVlc").attr("title", "Voit le caché"));
 				}
-				if(monster.attDist || !!monsterTemplate.attDist) {
+				if(monster.attDist || (monsterTemplate && !!monsterTemplate.attDist)) {
                     container.append($("<div/>").addClass("monsterDbInfoAttDist").attr("title", "Attaque à distance"));
 				}
-            }
-                      
+            }                     
                       
                       
            $(tr).children('td:nth-child(' + nomColId + ')').after(container);
