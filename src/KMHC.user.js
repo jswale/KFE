@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.2-5
+// @version       0.1.2-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2014-10-18_23-00
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-20_10-58
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-20_12-02
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-20_13-01
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-20_13-01
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-20_10-03
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-20_11-43
 // @require		  https://github.com/jswale/KFE/raw/master/src/addon/editables.js
@@ -1578,17 +1578,19 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             var tmp = tdName.find("a").text().match(/(.*)\s\[(.*)\]/);
             var monstreAgeName = tmp[2];
             var monsterFullName = tmp[1];
-            var monstreAge = DB_monsterAges[monstreAgeName];
             
 			var extract = fnExtract(monsterFullName);
             var monster = extract.monster;
-            var monsterTemplateName = extract.template;
-            var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
-            
-            console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);                        
            
             var container = $("<td/>");
-            if(!Utils.isUndefined(monster)) {                
+            if(!Utils.isUndefined(monster)) {
+                
+                  var monstreAge = DB_monsterAges[monster.familly][monstreAgeName];
+	              var monsterTemplateName = extract.template;
+    	       	  var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
+            
+        		  //console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
+                
                   container.append(
                       $("<div/>")
                       .addClass("monsterDbInfo")
