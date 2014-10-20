@@ -1606,7 +1606,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     fnShowCarac(monster, monsterTemplate, monstreAge, "level", "Niveau"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "power1", "Pouvoir"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "power2", "Pouvoir"),
-                    (monsterTemplate && monsterTemplate.spe ? "Pouvoir spécial: " + monsterTemplate.spe : null),
+                    (monsterTemplate && monsterTemplate.spe ? ["Pouvoir spécial: " , monsterTemplate.spe] : null),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "hp", "Point de vie", "PV"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "regen", "Régénération", "D3"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "armPhy", "Armure Physique"),
