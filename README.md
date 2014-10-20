@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.2-2
+- Feminisation des templates des monstres
+
 v.0.1.2-1
 - Correctif des données issues des templates de monstres
 
