@@ -8,7 +8,7 @@
          "attDist": false,
          "speed": "Rapide",
          "vlc": true,
-         "power1": "Venin - Toucher",
+         "power1": "Venin - Affecte : PV | Durée 2 tour(s) (Au toucher)",
          "power2": "Mort : Duplication (2)",
          "hp": [127, 149],
          "att": 9,
