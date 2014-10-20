@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.2-4
+// @version       0.1.2-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2014-10-18_23-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-20_10-58
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-18_23-27
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-20_12-02
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-20_10-03
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-20_11-43
 // @require		  https://github.com/jswale/KFE/raw/master/src/addon/editables.js
@@ -1511,28 +1511,38 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             };
         };
         
-        var fnShowCarac = function(monster, template, key, name, suffix) {            
+        var fnShowCarac = function(monster, template, age, key, name, suffix) {            
             var v = monster[key];
             if(Utils.isUndefined(v) || null == v) {
                 return null;
             }
             
+            var fnMerge = function(v, m) {
+                if(m === true) {
+                    v = true;
+                } else if($.type( v ) === "number") {
+                    v = parseInt(v) + parseInt(m);
+                } else if($.isArray(v)) {
+                    if($.type( m ) === "string") {
+                        v[0] = eval((v[0] + m));
+                        v[1] = eval((v[1] + m));
+                    } else {
+                        v[0] = parseInt(v[0]) + parseInt(m);
+                        v[1] = parseInt(v[1]) + parseInt(m);
+                    }
+                }
+                return v;
+            };
+            
+			var a = age[key];
+            if(!Utils.isUndefined(a)) {
+                v = fnMerge(v, a);
+            }
+            
             if(null != template) {                
                 var m = template[key];
                 if(!Utils.isUndefined(m)) {
-                    if(m === true) {
-                        v = true;
-                    } else if($.type( v ) === "number") {
-                        v = parseInt(v) + parseInt(m);
-                    } else if($.isArray(v)) {
-                        if($.type( m ) === "string") {
-                            v[0] = eval((v[0] + m));
-                            v[1] = eval((v[1] + m));
-                        } else {
-                            v[0] = parseInt(v[0]) + parseInt(m);
-                            v[1] = parseInt(v[1]) + parseInt(m);
-                        }
-                    }
+                    v = fnMerge(v, m);
                 }
             }
             
@@ -1566,16 +1576,16 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             
             var tdName = $($(tr).children("td:nth-child("+nomColId+")"));
             var tmp = tdName.find("a").text().match(/(.*)\s\[(.*)\]/);
-            var monstreAge = tmp[2];
+            var monstreAgeName = tmp[2];
             var monsterFullName = tmp[1];
+            var monstreAge = DB_monsterAges[monstreAgeName];
             
-            var lvlModByAge = DB_monsterAges[monstreAge];
 			var extract = fnExtract(monsterFullName);
             var monster = extract.monster;
             var monsterTemplateName = extract.template;
             var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
             
-            //console.log("Name: ", monsterFullName, "Age: ", monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);                        
+            console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);                        
            
             var container = $("<td/>");
             if(!Utils.isUndefined(monster)) {                
@@ -1583,27 +1593,27 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                       $("<div/>")
                       .addClass("monsterDbInfo")
                       .attr("title",  $.grep([
-                          fnShowCarac(monster, monsterTemplate, "familly", "Famille"),                            
-                          //"Niveau: " + (parseInt(monster.level) + parseInt(lvlModByAge) + parseInt(monsterTemplate.level || 0)),
-                          fnShowCarac(monster, monsterTemplate, "power1", "Pouvoir"),
-                          fnShowCarac(monster, monsterTemplate, "power2", "Pouvoir"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "familly", "Famille"),                            
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "level", "Niveau"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "power1", "Pouvoir"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "power2", "Pouvoir"),
                           (monsterTemplate && monsterTemplate.spe ? "Pouvoir spécial: " + monsterTemplate.spe : null),
-                          fnShowCarac(monster, monsterTemplate, "hp", "Point de vie", "PV"),
-                          fnShowCarac(monster, monsterTemplate, "regen", "Régénération", "D3"),
-                          fnShowCarac(monster, monsterTemplate, "armPhy", "Armure Physique"),
-                          fnShowCarac(monster, monsterTemplate, "armMag", "Armure Magique"),
-                          fnShowCarac(monster, monsterTemplate, "attDist", "Attaque à distance"),
-                          fnShowCarac(monster, monsterTemplate, "attMag", "Attaque magique"),
-                          fnShowCarac(monster, monsterTemplate, "noAtt", "Nb Attaque"),
-                          fnShowCarac(monster, monsterTemplate, "att", "Attaque", "D6"),
-                          fnShowCarac(monster, monsterTemplate, "esq", "Esquive", "D6"),
-                          fnShowCarac(monster, monsterTemplate, "deg", "Dégâts", "D3"),
-                          fnShowCarac(monster, monsterTemplate, "rm", "RM"),
-                          fnShowCarac(monster, monsterTemplate, "mm", "MM"),
-                          fnShowCarac(monster, monsterTemplate, "vue", "Vue"),
-                          fnShowCarac(monster, monsterTemplate, "vlc", "Voit le caché"),
-                          fnShowCarac(monster, monsterTemplate, "speed", "Vitesse de déplacement"),
-                          fnShowCarac(monster, monsterTemplate, "dla", "DLA", "heures"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "hp", "Point de vie", "PV"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "regen", "Régénération", "D3"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "armPhy", "Armure Physique"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "armMag", "Armure Magique"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "attDist", "Attaque à distance"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "attMag", "Attaque magique"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "noAtt", "Nb Attaque"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "att", "Attaque", "D6"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "esq", "Esquive", "D6"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "deg", "Dégâts", "D3"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "rm", "RM"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "mm", "MM"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "vue", "Vue"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "vlc", "Voit le caché"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "speed", "Vitesse de déplacement"),
+                          fnShowCarac(monster, monsterTemplate, monstreAge, "dla", "DLA", "heures"),
                       ], function(o){return o;}).join("\x0A"))
                 );
 				if(monster.vlc || (monsterTemplate && !!monsterTemplate.vlc)) {
@@ -1969,7 +1979,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .attr("data-xyn", x + ";" + y + ";" + n)
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(0))
-	                    .append($("<td/>").append('<a href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);">' + trollId + '</a>'))
+	                    .append($("<td/>").append('<a class="mh_trolls_1" href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);">' + trollId + '</a>'))
                         .append($("<td/>").text('Mon troll'))
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
