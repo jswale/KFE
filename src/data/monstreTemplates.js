@@ -1,8 +1,13 @@
 var DB_monsterTemplate = {
-	"Alchimiste" : {
-		"name" : "Alchimiste",
-		"spe" : "Ramasse des objets Utilise des potions",
-		"familly" : "Humanoïde"
+	"Ancien" : {
+		"name" : "Ancien",
+		"level" : 3,
+		"familly" : "Mort-vivant"
+	},
+	"Ancienne" : {
+		"name" : "Ancienne",
+		"level" : 3,
+		"familly" : "Mort-vivant"
 	},
 	"Agressif" : {
 		"name" : "Agressif",
@@ -10,6 +15,19 @@ var DB_monsterTemplate = {
 		"attMag" : false,
 		"attDist" : false,
 		"vlc" : false,
+		"familly" : "Humanoïde"
+	},
+	"Agressive" : {
+		"name" : "Agressive",
+		"level" : 1,
+		"attMag" : false,
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Humanoïde"
+	},
+	"Alchimiste" : {
+		"name" : "Alchimiste",
+		"spe" : "Ramasse des objets Utilise des potions",
 		"familly" : "Humanoïde"
 	},
 	"Alpha" : {
@@ -30,9 +48,9 @@ var DB_monsterTemplate = {
 		"spe" : "DLA plus Lente",
 		"familly" : "Insecte"
 	},
-	"Archaique" : {
-		"name" : "Archaique",
-		"level" : -1,
+	"Archaïque" : {
+		"name" : "Archaïque",
+		"level" : 0,
 		"attMag" : false,
 		"attDist" : false,
 		"vlc" : false,
@@ -46,10 +64,20 @@ var DB_monsterTemplate = {
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "Soin des monstres",
-		"familly" : "Demon"
+		"familly" : "Démon"
 	},
 	"Attentionné" : {
 		"name" : "Attentionné",
+		"level" : 2,
+		"nbAtt" : 1,
+		"attMag" : false,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Soin des monstres",
+		"familly" : "Animal"
+	},
+	"Attentionnée" : {
+		"name" : "Attentionnée",
 		"level" : 2,
 		"nbAtt" : 1,
 		"attMag" : false,
@@ -67,22 +95,20 @@ var DB_monsterTemplate = {
 	},
 	"Berserker" : {
 		"name" : "Berserker",
-		"level" : 3,
+		"level" : 2,
 		"nbAtt" : "*2",
 		"attMag" : false,
 		"attDist" : false,
 		"vlc" : false,
 		"familly" : "Humanoïde"
 	},
-	"Champion" : {
-		"name" : "Champion",
-		"level" : 4,
+	"Berserkere" : {
+		"name" : "Berserkere",
+		"level" : 2,
+		"nbAtt" : "*2",
+		"attMag" : false,
 		"attDist" : false,
 		"vlc" : false,
-		"esq" : 2,
-		"deg" : 2,
-		"reg" : 1,
-		"arm" : 2,
 		"familly" : "Humanoïde"
 	},
 	"Cogneur" : {
@@ -94,8 +120,50 @@ var DB_monsterTemplate = {
 		"spe" : "Amnesie",
 		"familly" : "Tous"
 	},
+	"Cogneuse" : {
+		"name" : "Cogneuse",
+		"level" : 2,
+		"attMag" : "Jamais",
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Amnesie",
+		"familly" : "Tous"
+	},
+	"Champion" : {
+		"name" : "Champion",
+		"level" : 3,
+		"attDist" : false,
+		"vlc" : false,
+		"esq" : 2,
+		"deg" : 2,
+		"reg" : 1,
+		"arm" : 2,
+		"familly" : "Humanoïde"
+	},
+	"Championne" : {
+		"name" : "Championne",
+		"level" : 3,
+		"attDist" : false,
+		"vlc" : false,
+		"esq" : 2,
+		"deg" : 2,
+		"reg" : 1,
+		"arm" : 2,
+		"familly" : "Humanoïde"
+	},
 	"Colossal" : {
 		"name" : "Colossal",
+		"level" : 7,
+		"attDist" : false,
+		"vlc" : false,
+		"esq" : 2,
+		"deg" : 2,
+		"reg" : 1,
+		"arm" : 2,
+		"familly" : "Monstre"
+	},
+	"Colossalle" : {
+		"name" : "Colossalle",
 		"level" : 7,
 		"attDist" : false,
 		"vlc" : false,
@@ -130,13 +198,33 @@ var DB_monsterTemplate = {
 		"vue" : -1,
 		"familly" : "Tous"
 	},
+	"Corrompue" : {
+		"name" : "Corrompue",
+		"level" : 1,
+		"attMag" : false,
+		"attDist" : false,
+		"vlc" : false,
+		"att" : -2,
+		"esq" : -2,
+		"deg" : 1,
+		"vue" : -1,
+		"familly" : "Tous"
+	},
 	"Cracheur" : {
 		"name" : "Cracheur",
 		"level" : 2,
 		"attDist" : true,
 		"vlc" : false,
 		"spe" : "Attaque à distance",
-		"familly" : "Monstre"
+		"familly" : ["Monstre", "Démon"]
+	},
+	"Cracheuse" : {
+		"name" : "Cracheuse",
+		"level" : 2,
+		"attDist" : true,
+		"vlc" : false,
+		"spe" : "Attaque à distance",
+		"familly" : ["Monstre", "Démon"]
 	},
 	"de Premier Cercle" : {
 		"name" : "de Premier Cercle",
@@ -187,7 +275,13 @@ var DB_monsterTemplate = {
 	},
 	"Effrayé" : {
 		"name" : "Effrayé",
-		"level" : -1,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Fuyard",
+		"familly" : "Humanoïde"
+	},
+	"Effrayée" : {
+		"name" : "Effrayée",
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "Fuyard",
@@ -195,6 +289,14 @@ var DB_monsterTemplate = {
 	},
 	"Enragé" : {
 		"name" : "Enragé",
+		"level" : 3,
+		"nbAtt" : "*2",
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Animal"
+	},
+	"Enragée" : {
+		"name" : "Enragée",
 		"level" : 3,
 		"nbAtt" : "*2",
 		"attDist" : false,
@@ -218,7 +320,16 @@ var DB_monsterTemplate = {
 		"attDist" : true,
 		"vlc" : false,
 		"spe" : "Camouflage",
-		"familly" : "Demon"
+		"familly" : "Démon"
+	},
+	"Ethérée" : {
+		"name" : "Ethérée",
+		"level" : 3,
+		"attMag" : true,
+		"attDist" : true,
+		"vlc" : false,
+		"spe" : "Camouflage",
+		"familly" : "Démon"
 	},
 	"Fanatique" : {
 		"name" : "Fanatique",
@@ -236,8 +347,22 @@ var DB_monsterTemplate = {
 		"vlc" : false,
 		"familly" : "Humanoïde"
 	},
+	"Folle" : {
+		"name" : "Folle",
+		"level" : 1,
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Humanoïde"
+	},
 	"Fouisseur" : {
 		"name" : "Fouisseur",
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "enfouit les trésors",
+		"familly" : "Animal, Insecte, Monstre"
+	},
+	"Fouisseuse" : {
+		"name" : "Fouisseuse",
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "enfouit les trésors",
@@ -261,8 +386,26 @@ var DB_monsterTemplate = {
 		"esq" : 2,
 		"familly" : "Humanoïde"
 	},
+	"Frondeuse" : {
+		"name" : "Frondeuse",
+		"level" : 2,
+		"attDist" : true,
+		"vlc" : false,
+		"hp" : -40,
+		"att" : 2,
+		"esq" : 2,
+		"familly" : "Humanoïde"
+	},
 	"Fustigateur" : {
 		"name" : "Fustigateur",
+		"level" : 2,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Flagellation mentale",
+		"familly" : "Monstre"
+	},
+	"Fustigatrice" : {
+		"name" : "Fustigatrice",
 		"level" : 2,
 		"attDist" : false,
 		"vlc" : false,
@@ -275,25 +418,24 @@ var DB_monsterTemplate = {
 		"attDist" : false,
 		"familly" : "Tous"
 	},
-	"Gargantuesque" : {
-		"name" : "Gargantuesque",
-		"level" : 3,
+	"Gardienne" : {
+		"name" : "Gardienne",
+		"level" : 20,
 		"attDist" : false,
+		"familly" : "Tous"
+	},
+	"Grand Frondeur" : {
+		"name" : "Grand Frondeur",
+		"level" : 4,
+		"attDist" : true,
 		"vlc" : false,
 		"esq" : -40,
 		"deg" : 2,
 		"reg" : 2,
-		"familly" : "Monstre"
+		"familly" : "Humanoïde"
 	},
-	"Gigantesque" : {
-		"name" : "Gigantesque",
-		"level" : 1,
-		"attDist" : true,
-		"vlc" : false,
-		"familly" : "Animal, Insecte, Monstre"
-	},
-	"Grand Frondeur" : {
-		"name" : "Grand Frondeur",
+	"Grande Frondeuse" : {
+		"name" : "Grande Frondeuse",
 		"level" : 4,
 		"attDist" : true,
 		"vlc" : false,
@@ -309,6 +451,23 @@ var DB_monsterTemplate = {
 		"vlc" : false,
 		"familly" : "Tous"
 	},
+	"Grosse" : {
+		"name" : "Grosse",
+		"attMag" : false,
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Tous"
+	},
+	"Gargantuesque" : {
+		"name" : "Gargantuesque",
+		"level" : 3,
+		"attDist" : false,
+		"vlc" : false,
+		"esq" : -40,
+		"deg" : 2,
+		"reg" : 2,
+		"familly" : "Monstre"
+	},
 	"Guérisseur" : {
 		"name" : "Guérisseur",
 		"level" : 2,
@@ -317,7 +476,17 @@ var DB_monsterTemplate = {
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "Soin des monstres",
-		"familly" : "Humanoide"
+		"familly" : "Humanoïde"
+	},
+	"Guérisseuse" : {
+		"name" : "Guérisseuse",
+		"level" : 2,
+		"nbAtt" : -1,
+		"attMag" : false,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Soin des monstres",
+		"familly" : "Humanoïde"
 	},
 	"Guerrier" : {
 		"name" : "Guerrier",
@@ -326,9 +495,23 @@ var DB_monsterTemplate = {
 		"vlc" : false,
 		"familly" : "Humanoïde"
 	},
+	"Guerrière" : {
+		"name" : "Guerrière",
+		"level" : 1,
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Humanoïde"
+	},
+	"Gigantesque" : {
+		"name" : "Gigantesque",
+		"level" : 1,
+		"attDist" : true,
+		"vlc" : false,
+		"familly" : "Animal, Insecte, Monstre"
+	},	
 	"Héros" : {
 		"name" : "Héros",
-		"level" : 5,
+		"level" : 4,
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "DLA plus courte",
@@ -336,6 +519,7 @@ var DB_monsterTemplate = {
 	},
 	"Homochrome" : {
 		"name" : "Homochrome",
+		"level" : 3,
 		"attMag" : false,
 		"attDist" : true,
 		"vlc" : false,
@@ -344,6 +528,7 @@ var DB_monsterTemplate = {
 	},
 	"Homomorphe" : {
 		"name" : "Homomorphe",
+		"level" : 2,
 		"attDist" : true,
 		"vlc" : false,
 		"spe" : "Camouflage",
@@ -358,23 +543,32 @@ var DB_monsterTemplate = {
 	},
 	"Invocateur" : {
 		"name" : "Invocateur",
-		"level" : 3,
+		"level" : 5,
 		"attMag" : true,
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "Appel sous certaines conditions",
-		"familly" : "Demon"
+		"familly" : "Démon"
 	},
-	"Maitre" : {
-		"name" : "Maitre",
-		"level" : 8,
-		"nbAtt" : 1, //"+1 ou *2 ?",
+	"Invocatrice" : {
+		"name" : "Invocatrice",
+		"level" : 5,
+		"attMag" : true,
 		"attDist" : false,
-		"vlc" : true,
-		"familly" : "Mort-vivant"
+		"vlc" : false,
+		"spe" : "Appel sous certaines conditions",
+		"familly" : "Démon"
 	},
 	"Lobotomisateur" : {
 		"name" : "Lobotomisateur",
+		"level" : 2,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Flagellation mentale mais uniquement sur compétence",
+		"familly" : "Insecte"
+	},
+	"Lobotomisatrice" : {
+		"name" : "Lobotomisatrice",
 		"level" : 2,
 		"attDist" : false,
 		"vlc" : false,
@@ -390,6 +584,22 @@ var DB_monsterTemplate = {
 		"spe" : "Maladie + Perte de Pouvoir",
 		"familly" : "Tous"
 	},
+	"Maître" : {
+		"name" : "Maître",
+		"level" : 8,
+		"nbAtt" : 1, //"+1 ou *2 ?",
+		"attDist" : false,
+		"vlc" : true,
+		"familly" : "Mort-vivant"
+	},
+	"Maîtresse" : {
+		"name" : "Maîtresse",
+		"level" : 8,
+		"nbAtt" : 1, //"+1 ou *2 ?",
+		"attDist" : false,
+		"vlc" : true,
+		"familly" : "Mort-vivant"
+	},
 	"Médicastre" : {
 		"name" : "Médicastre",
 		"level" : 2,
@@ -398,14 +608,6 @@ var DB_monsterTemplate = {
 		"attDist" : false,
 		"vlc" : false,
 		"spe" : "Soin des monstres",
-		"familly" : "Mort-vivant"
-	},
-	"Mentat" : {
-		"name" : "Mentat",
-		"level" : 2,
-		"attMag" : true,
-		"attDist" : true,
-		"vlc" : false,
 		"familly" : "Mort-vivant"
 	},
 	"Morticole" : {
@@ -425,8 +627,33 @@ var DB_monsterTemplate = {
 		"vlc" : false,
 		"familly" : "Humanoïde"
 	},
+	"Mutante" : {
+		"name" : "Mutante",
+		"level" : 2,
+		"attMag" : true,
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Humanoïde"
+	},
+	"Mentat" : {
+		"name" : "Mentat",
+		"level" : 2,
+		"attMag" : true,
+		"attDist" : true,
+		"vlc" : false,
+		"familly" : "Mort-vivant"
+	},
 	"Nécromant" : {
 		"name" : "Nécromant",
+		"level" : 5,
+		"attMag" : true,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Appel",
+		"familly" : "Mort-vivant"
+	},
+	"Nécromante" : {
+		"name" : "Nécromante",
 		"level" : 5,
 		"attMag" : true,
 		"attDist" : false,
@@ -440,8 +667,21 @@ var DB_monsterTemplate = {
 		"vlc" : false,
 		"familly" : "Insecte"
 	},
+	"Ouvrière" : {
+		"name" : "Ouvrière",
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Insecte"
+	},
 	"Paysan" : {
 		"name" : "Paysan",
+		"level" : -1,
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Humanoïde"
+	},
+	"Paysanne" : {
+		"name" : "Paysanne",
 		"level" : -1,
 		"attDist" : false,
 		"vlc" : false,
@@ -454,15 +694,39 @@ var DB_monsterTemplate = {
 		"vlc" : false,
 		"familly" : "Tous"
 	},
-	"Planque" : {
-		"name" : "Planque",
+	"Petite" : {
+		"name" : "Petite",
+		"level" : -1,
+		"attDist" : false,
+		"vlc" : false,
+		"familly" : "Tous"
+	},
+	"Planqué" : {
+		"name" : "Planqué",
+		"level" : 1,
 		"attDist" : true,
 		"vlc" : false,
 		"spe" : "Camouflage",
-		"familly" : "Humanoide"
+		"familly" : "Humanoïde"
+	},
+	"Planquée" : {
+		"name" : "Planquée",
+		"level" : 1,
+		"attDist" : true,
+		"vlc" : false,
+		"spe" : "Camouflage",
+		"familly" : "Humanoïde"
 	},
 	"Prince" : {
 		"name" : "Prince",
+		"level" : 8,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "DLA très courte",
+		"familly" : "Démon"
+	},
+	"Princesse" : {
+		"name" : "Princesse",
 		"level" : 8,
 		"attDist" : false,
 		"vlc" : false,
@@ -486,8 +750,27 @@ var DB_monsterTemplate = {
 		"vlc" : true,
 		"familly" : "Insecte"
 	},
+	"Récent" : {
+		"name" : "Récent",
+		"level" : -1,
+		"familly" : "Mort-Vivant"
+	},
+	"Récente" : {
+		"name" : "Récente",
+		"level" : -1,
+		"familly" : "Mort-Vivant"
+	},
 	"Ronfleur" : {
 		"name" : "Ronfleur",
+		"level" : 2,
+		"attMag" : false,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Ronflage",
+		"familly" : "Tous"
+	},
+	"Ronfleuse" : {
+		"name" : "Ronfleuse",
 		"level" : 2,
 		"attMag" : false,
 		"attDist" : false,
@@ -505,6 +788,7 @@ var DB_monsterTemplate = {
 	},
 	"Shaman" : {
 		"name" : "Shaman",
+		"level" : 1,
 		"attMag" : true,
 		"attDist" : true,
 		"vlc" : false,
@@ -513,13 +797,22 @@ var DB_monsterTemplate = {
 	},
 	"Soldat" : {
 		"name" : "Soldat",
-		"level" : 3,
+		"level" : 2,
 		"attDist" : false,
 		"vlc" : false,
 		"familly" : "Insecte"
 	},
 	"Sorcier" : {
 		"name" : "Sorcier",
+		"level" : 2,
+		"attDist" : true,
+		"vlc" : true,
+		"spe" : "si pas de pouvoir, donne un pouvoir parmi bénédiction",
+		"familly" : "Humanoïde"
+	},
+	"Sorcière" : {
+		"name" : "Sorcière",
+		"level" : 2,
 		"attDist" : true,
 		"vlc" : true,
 		"spe" : "si pas de pouvoir, donne un pouvoir parmi bénédiction",
@@ -527,6 +820,15 @@ var DB_monsterTemplate = {
 	},
 	"Spectral" : {
 		"name" : "Spectral",
+		"level" : 3,
+		"attDist" : true,
+		"vlc" : false,
+		"spe" : "Camouflage",
+		"familly" : "Mort-vivant"
+	},
+	"Spectrale" : {
+		"name" : "Spectrale",
+		"level" : 3,
 		"attDist" : true,
 		"vlc" : false,
 		"spe" : "Camouflage",
@@ -540,6 +842,14 @@ var DB_monsterTemplate = {
 		"spe" : "Strident / auto",
 		"familly" : "Insecte"
 	},
+	"Stridente" : {
+		"name" : "Stridente",
+		"level" : 3,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Strident / auto",
+		"familly" : "Insecte"
+	},
 	"Traqueur" : {
 		"name" : "Traqueur",
 		"level" : 1,
@@ -547,8 +857,23 @@ var DB_monsterTemplate = {
 		"vlc" : true,
 		"familly" : "Monstre"
 	},
+	"Traqueuse" : {
+		"name" : "Traqueuse",
+		"level" : 1,
+		"attDist" : false,
+		"vlc" : true,
+		"familly" : "Monstre"
+	},
 	"Voleur" : {
 		"name" : "Voleur",
+		"level" : 2,
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "vol d'objet",
+		"familly" : "Humanoïde"
+	},
+	"Voleuse" : {
+		"name" : "Voleuse",
 		"level" : 2,
 		"attDist" : false,
 		"vlc" : false,
