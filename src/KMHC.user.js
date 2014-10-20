@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.2-3
+// @version       0.1.2-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -9,6 +9,7 @@
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-20_10-58
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-18_23-27
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-20_10-03
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-20_11-43
 // @require		  https://github.com/jswale/KFE/raw/master/src/addon/editables.js
 // @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
 // @updateURL     https://github.com/jswale/KFE/raw/master/src/KMHC.meta.js
@@ -1479,6 +1480,11 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var fnExtract = function(monsterFullName) {
             var monster = null;
             var template = null;
+            
+            var alias = DB_monstreAlias[monsterFullName];
+            if(!Utils.isUndefined(alias)) {
+                monsterFullName = alias;
+            }
             
             var p = monsterFullName.split(" ");
             var i = 0, j;
