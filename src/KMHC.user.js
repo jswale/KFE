@@ -1650,6 +1650,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             			ctn.attr("data-monster-info-popup", monsterId);                    
 
                         var pos = ctn.position();
+                    	var offset = ctn.offset();
                     	
                         var popup = $("<div/>")
                         .css("max-width", "700px")
@@ -1695,8 +1696,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     
                         popup.css("position", "absolute");
                         popup.css("z-index", "100");
-                        popup.css("top", (pos.top - popup.height() + 16) + "px");
-                        popup.css("left", (pos.left - popup.width()) + "px");
+                        popup.css("top", (offset.top - popup.height() + 16) + "px");
+                        popup.css("left", ( offset.left - popup.width()) + "px");
                         
                     
                     }, this), function(event){
