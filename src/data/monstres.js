@@ -1,4 +1,4 @@
- var DB_monstres =  {
+ var DB_monstres =   {
      "Abishaii Bleu": {
          "name": "Abishaii bleu",
          "familly": "Démon",
@@ -20,7 +20,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Abishaii Noir": {
          "name": "Abishaii noir",
@@ -43,7 +47,11 @@
          "armMag": null,
          "mm": 300,
          "rm": 1200,
-         "dla": 7
+         "dla": 7,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Abishaii Rouge": {
          "name": "Abishaii rouge",
@@ -66,7 +74,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Abishaii Vert": {
          "name": "Abishaii vert",
@@ -89,7 +101,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ame-en-peine": {
          "name": "Ame-en-peine",
@@ -112,7 +128,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Amibe Géante": {
          "name": "Amibe géante",
@@ -135,7 +155,11 @@
          "armMag": null,
          "mm": [300, 300],
          "rm": [500, 500],
-         "dla": [9, 15]
+         "dla": [9, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Anaconda des Catacombes": {
          "name": "Anaconda des Catacombes",
@@ -158,7 +182,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ankheg": {
          "name": "Ankheg",
@@ -181,7 +209,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Anoploure Purpurin": {
          "name": "Anoploure Purpurin",
@@ -204,7 +236,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Araignée Géante": {
          "name": "Araignée Géante",
@@ -227,7 +263,11 @@
          "armMag": null,
          "mm": null,
          "rm": "100 ±",
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ashashin": {
          "name": "Ashashin",
@@ -250,7 +290,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Pititabeille": {
          "name": "Pititabeille",
@@ -273,7 +317,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Balrog": {
          "name": "Balrog",
@@ -296,7 +344,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Banshee": {
          "name": "Banshee",
@@ -319,7 +371,11 @@
          "armMag": null,
          "mm": 600,
          "rm": 300,
-         "dla": 10
+         "dla": 10,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Barghest": {
          "name": "Barghest",
@@ -342,7 +398,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Basilisk": {
          "name": "Basilisk",
@@ -365,7 +425,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Behemoth": {
          "name": "Behemoth",
@@ -388,7 +452,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Behir": {
          "name": "Behir",
@@ -411,7 +479,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Beholder": {
          "name": "Beholder",
@@ -434,7 +506,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Boggart": {
          "name": "Boggart",
@@ -457,7 +533,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Bondin": {
          "name": "Bondin",
@@ -480,7 +560,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Bouj'Dla": {
          "name": "Bouj'Dla",
@@ -503,7 +587,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Bouj'Dla Placide": {
          "name": "Bouj'Dla Placide",
@@ -526,7 +614,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Bulette": {
          "name": "Bulette",
@@ -549,7 +641,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Caillouteux": {
          "name": "Caillouteux",
@@ -572,7 +668,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Capitan": {
          "name": "Capitan",
@@ -595,7 +695,11 @@
          "armMag": null,
          "mm": [1678, 1922],
          "rm": [1580, 2170],
-         "dla": [8, 10]
+         "dla": [8, 10],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Carnosaure": {
          "name": "Carnosaure",
@@ -618,7 +722,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Champi-Glouton": {
          "name": "Champi-Glouton",
@@ -641,7 +749,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Chauve-Souris Géante": {
          "name": "Chauve-Souris Géante",
@@ -664,7 +776,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [100, 100],
-         "dla": [8, 14]
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Cheval à Dents de Sabre": {
          "name": "Cheval à Dents de Sabre",
@@ -687,7 +803,11 @@
          "armMag": null,
          "mm": [1200, 1200],
          "rm": [1700, 1700],
-         "dla": [6, 12]
+         "dla": [6, 12],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Chevalier du Chaos": {
          "name": "Chevalier du Chaos",
@@ -710,7 +830,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Chimère": {
          "name": "Chimere",
@@ -733,7 +857,11 @@
          "armMag": null,
          "mm": [500, 500],
          "rm": [200, 200],
-         "dla": [13, 17]
+         "dla": [13, 17],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Chonchon": {
          "name": "Chonchon",
@@ -756,7 +884,11 @@
          "armMag": null,
          "mm": [2437, 2763],
          "rm": [2173, 2827],
-         "dla": 8
+         "dla": 8,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Coccicruelle": {
          "name": "Coccicruelle",
@@ -779,7 +911,11 @@
          "armMag": null,
          "mm": 1200,
          "rm": 400,
-         "dla": 9
+         "dla": 9,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Cockatrice": {
          "name": "Cockatrice",
@@ -802,7 +938,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Crasc": {
          "name": "Crasc",
@@ -825,7 +965,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Crasc Maexus": {
          "name": "Crasc Maexus",
@@ -848,7 +992,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Crasc Médius": {
          "name": "Crasc Médius",
@@ -871,7 +1019,11 @@
          "armMag": null,
          "mm": [0, 0],
          "rm": [1000, 1000],
-         "dla": [7, 13]
+         "dla": [7, 13],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Croquemitaine": {
          "name": "Croquemitaine",
@@ -882,19 +1034,23 @@
          "attDist": false,
          "speed": "Normale",
          "vlc": false,
-         "power1": "Attaque aveuglante - Toucher",
+         "powerRange": "Au toucher",
+         "power1": "Attaque Aveuglante - Affecte : Vue | Durée 2 tour(s)",
          "power2": null,
-         "hp": null,
-         "att": null,
-         "esq": null,
-         "degat": null,
-         "vue": null,
-         "regen": null,
-         "armPhy": null,
-         "armMag": null,
-         "mm": null,
-         "rm": null,
-         "dla": null
+         "hp": [70, 90],
+         "att": [0, 3],
+         "esq": [6, 8],
+         "degat": [0, 3],
+         "vue": [0, 4],
+         "regen": [0, 3],
+         "armPhy": [0, 3],
+         "armMag": [0, 3],
+         "mm": [400, 600],
+         "rm": [100, 300],
+         "dla": [11, 13],
+         "dlaUse": "Début",
+         "coldBlod": "Faible",
+         "thief": null
      },
      "Cube Gélatineux": {
          "name": "Cube Gélatineux",
@@ -917,7 +1073,11 @@
          "armMag": null,
          "mm": [800, 800],
          "rm": [100, 100],
-         "dla": [14, 22]
+         "dla": [14, 22],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Daemonite": {
          "name": "Daemonite",
@@ -940,7 +1100,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Diablotin": {
          "name": "Diablotin",
@@ -963,7 +1127,11 @@
          "armMag": null,
          "mm": 800,
          "rm": 500,
-         "dla": 14
+         "dla": 14,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Dindon": {
          "name": "Dindon",
@@ -986,7 +1154,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Djinn": {
          "name": "Djinn",
@@ -1009,7 +1181,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ectoplasme": {
          "name": "Ectoplasme",
@@ -1032,7 +1208,11 @@
          "armMag": null,
          "mm": 2850,
          "rm": 1400,
-         "dla": 10
+         "dla": 10,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Effrit": {
          "name": "Effrit",
@@ -1055,7 +1235,11 @@
          "armMag": null,
          "mm": [4408, 4658],
          "rm": [56, 104],
-         "dla": [7, 9]
+         "dla": [7, 9],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Elémentaire d'Air": {
          "name": "Elémentaire d'Air",
@@ -1078,7 +1262,11 @@
          "armMag": null,
          "mm": [2200, 2200],
          "rm": [800, 800],
-         "dla": [7, 13]
+         "dla": [7, 13],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Elémentaire de Feu": {
          "name": "Elémentaire de Feu",
@@ -1101,7 +1289,11 @@
          "armMag": null,
          "mm": [1300, 1300],
          "rm": [700, 700],
-         "dla": [8, 14]
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Elémentaire de Terre": {
          "name": "Elémentaire de Terre",
@@ -1124,7 +1316,11 @@
          "armMag": null,
          "mm": [2200, 2200],
          "rm": [800, 800],
-         "dla": [9, 15]
+         "dla": [9, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Elémentaire d'Eau": {
          "name": "Elémentaire d'Eau",
@@ -1147,7 +1343,11 @@
          "armMag": null,
          "mm": [1200, 1200],
          "rm": [700, 700],
-         "dla": [8, 14]
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Elémentaire du Chaos": {
          "name": "Elémentaire du Chaos",
@@ -1170,7 +1370,11 @@
          "armMag": null,
          "mm": [0, 0],
          "rm": [800, 800],
-         "dla": [8, 16]
+         "dla": [8, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Elémentaire Magmatique": {
          "name": "Elémentaire Magmatique",
@@ -1193,7 +1397,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Erinyes": {
          "name": "Erinyes",
@@ -1216,7 +1424,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Esprit-Follet": {
          "name": "Esprit-Follet",
@@ -1239,7 +1451,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Essaim Cratérien": {
          "name": "Essaim Cratérien",
@@ -1262,7 +1478,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Essaim Sanguinaire": {
          "name": "Essaim Sanguinaire",
@@ -1285,7 +1505,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ettin": {
          "name": "Ettin",
@@ -1308,7 +1532,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Familier": {
          "name": "Familier",
@@ -1331,7 +1559,11 @@
          "armMag": null,
          "mm": 50,
          "rm": 2300,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Fantôme": {
          "name": "Fantôme",
@@ -1354,7 +1586,11 @@
          "armMag": null,
          "mm": [1500, 1500],
          "rm": [1000, 1000],
-         "dla": [7, 13]
+         "dla": [7, 13],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Feu Follet": {
          "name": "Feu-Follet",
@@ -1377,7 +1613,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Flagelleur Mental": {
          "name": "Flagelleur Mental",
@@ -1400,7 +1640,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Foudroyeur": {
          "name": "Foudroyeur",
@@ -1423,7 +1667,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Fumeux": {
          "name": "Fumeux",
@@ -1446,7 +1694,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Fungus Géant": {
          "name": "Fungus Géant",
@@ -1469,7 +1721,11 @@
          "armMag": null,
          "mm": [500, 500],
          "rm": [500, 500],
-         "dla": [11, 17]
+         "dla": [11, 17],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Fungus Violet": {
          "name": "Fungus Violet",
@@ -1492,7 +1748,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Furgolin": {
          "name": "Furgolin",
@@ -1515,7 +1775,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gargouille": {
          "name": "Gargouille",
@@ -1538,7 +1802,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Géant de Pierre": {
          "name": "Géant de Pierre",
@@ -1561,7 +1829,11 @@
          "armMag": null,
          "mm": [600, 600],
          "rm": [300, 300],
-         "dla": [10, 16]
+         "dla": [10, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Géant des Gouffres": {
          "name": "Géant des Gouffres",
@@ -1584,7 +1856,11 @@
          "armMag": null,
          "mm": [2000, 2000],
          "rm": [500, 500],
-         "dla": [9, 15]
+         "dla": [9, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Géant des Tempêtes": {
          "name": "Géant des Tempêtes",
@@ -1607,7 +1883,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Geck'oo": {
          "name": "Geck'oo",
@@ -1630,7 +1910,11 @@
          "armMag": null,
          "mm": "100 ±",
          "rm": [1000, 1000],
-         "dla": [7, 13]
+         "dla": [7, 13],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Geck'oo majestueux": {
          "name": "Geck'oo majestueux",
@@ -1653,7 +1937,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Glouton": {
          "name": "Glouton",
@@ -1676,7 +1964,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [400, 400],
-         "dla": [8, 16]
+         "dla": [8, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gnoll": {
          "name": "Gnoll",
@@ -1699,7 +1991,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gnu Domestique": {
          "name": "Gnu Domestique",
@@ -1722,7 +2018,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gnu Sauvage": {
          "name": "Gnu Sauvage",
@@ -1745,7 +2045,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Goblin": {
          "name": "Goblin",
@@ -1768,7 +2072,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gobelin Magique": {
          "name": "Gobelin Magique",
@@ -1791,7 +2099,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Goblours": {
          "name": "Goblours",
@@ -1814,7 +2126,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem d'Argile": {
          "name": "Golem d'Argile",
@@ -1837,7 +2153,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem de Chair": {
          "name": "Golem de Chair",
@@ -1860,7 +2180,11 @@
          "armMag": null,
          "mm": 100,
          "rm": 2000,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem de cuir": {
          "name": "Golem de cuir",
@@ -1883,7 +2207,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem de Fer": {
          "name": "Golem de Fer",
@@ -1906,7 +2234,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem de métal": {
          "name": "Golem de métal",
@@ -1929,7 +2261,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem de mithril": {
          "name": "Golem de mithril",
@@ -1952,7 +2288,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem de papier": {
          "name": "Golem de papier",
@@ -1975,7 +2315,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Golem de Pierre": {
          "name": "Golem de Pierre",
@@ -1998,7 +2342,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gorgone": {
          "name": "Gorgone",
@@ -2021,7 +2369,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Goule": {
          "name": "Goule",
@@ -2044,7 +2396,11 @@
          "armMag": null,
          "mm": 300,
          "rm": 200,
-         "dla": 12
+         "dla": 12,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gowap Apprivoisé": {
          "name": "Gowap Apprivoisé",
@@ -2067,7 +2423,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gowap Sauvage": {
          "name": "Gowap Sauvage",
@@ -2090,7 +2450,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gremlins": {
          "name": "Gremlins",
@@ -2113,7 +2477,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Gritche": {
          "name": "Gritche",
@@ -2136,7 +2504,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Grouilleux": {
          "name": "Grouilleux",
@@ -2159,7 +2531,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Grylle": {
          "name": "Grylle",
@@ -2182,7 +2558,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Harpie": {
          "name": "Harpie",
@@ -2205,7 +2585,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Hellrot": {
          "name": "Hellrot",
@@ -2228,7 +2612,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Homme-Lezard": {
          "name": "Homme-Lezard",
@@ -2251,7 +2639,11 @@
          "armMag": null,
          "mm": [300, 300],
          "rm": [200, 200],
-         "dla": [10, 16]
+         "dla": [10, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Hurleur": {
          "name": "Hurleur",
@@ -2274,7 +2666,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Hydre": {
          "name": "Hydre",
@@ -2297,7 +2693,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Incube": {
          "name": "Incube",
@@ -2320,7 +2720,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Kobold": {
          "name": "Kobold",
@@ -2343,7 +2747,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Labeilleux": {
          "name": "Labeilleux",
@@ -2366,7 +2774,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Lézard Géant": {
          "name": "Lézard Géant",
@@ -2389,7 +2801,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [100, 100],
-         "dla": [7, 17]
+         "dla": [7, 17],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Liche": {
          "name": "Liche",
@@ -2412,7 +2828,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Limace Géante": {
          "name": "Limace Géante",
@@ -2435,7 +2855,11 @@
          "armMag": null,
          "mm": [200, 200],
          "rm": [100, 100],
-         "dla": [7, 15]
+         "dla": [7, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Loup-Garou": {
          "name": "Loup-Garou",
@@ -2458,7 +2882,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Lutin": {
          "name": "Lutin",
@@ -2481,7 +2909,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mante Fulcreuse": {
          "name": "Mante Fulcreuse",
@@ -2504,7 +2936,11 @@
          "armMag": null,
          "mm": [2900, 3250],
          "rm": [1400, 1750],
-         "dla": [10, 12]
+         "dla": [10, 12],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Manticore": {
          "name": "Manticore",
@@ -2527,7 +2963,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Marilith": {
          "name": "Marilith",
@@ -2550,7 +2990,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Méduse": {
          "name": "Méduse",
@@ -2573,7 +3017,11 @@
          "armMag": null,
          "mm": [400, 400],
          "rm": [200, 200],
-         "dla": [8, 14]
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mégacéphale": {
          "name": "Mégacéphale",
@@ -2596,7 +3044,11 @@
          "armMag": null,
          "mm": [3000, 3000],
          "rm": [1000, 1000],
-         "dla": [7, 13]
+         "dla": [7, 13],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mille-Pattes Géant": {
          "name": "Mille-Pattes Géant",
@@ -2619,7 +3071,11 @@
          "armMag": null,
          "mm": [400, 400],
          "rm": [200, 200],
-         "dla": [8, 14]
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mimique": {
          "name": "Mimique",
@@ -2642,7 +3098,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Minotaure": {
          "name": "Minotaure",
@@ -2665,7 +3125,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Molosse Satanique": {
          "name": "Molosse Satanique",
@@ -2688,7 +3152,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Momie": {
          "name": "Momie",
@@ -2711,7 +3179,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Monstre Rouilleur": {
          "name": "Monstre Rouilleur",
@@ -2734,7 +3206,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mouch'oo Sauvage": {
          "name": "Mouch'oo Sauvage",
@@ -2757,7 +3233,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mouch'oo Majestueux Sauvage": {
          "name": "Mouch'oo Majestueux Sauvage",
@@ -2780,7 +3260,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mouch'oo Domestique": {
          "name": "Mouch'oo Domestique",
@@ -2803,7 +3287,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [1000, 1000],
-         "dla": [8, 16]
+         "dla": [8, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Mouch'oo Domestique Sauvage": {
          "name": "Mouch'oo Domestique Sauvage",
@@ -2826,7 +3314,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [1000, 1000],
-         "dla": [8, 16]
+         "dla": [8, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Naga": {
          "name": "Naga",
@@ -2849,7 +3341,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Nécrochore": {
          "name": "Nécrochore",
@@ -2872,7 +3368,11 @@
          "armMag": null,
          "mm": ">>4800",
          "rm": ">>4800",
-         "dla": [11, 17]
+         "dla": [11, 17],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Nécromant": {
          "name": "Nécromant",
@@ -2895,7 +3395,11 @@
          "armMag": null,
          "mm": [4700, 4700],
          "rm": [3100, 3100],
-         "dla": [8, 14]
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Nécrophage": {
          "name": "Nécrophage",
@@ -2918,7 +3422,11 @@
          "armMag": null,
          "mm": [300, 300],
          "rm": [200, 200],
-         "dla": [7, 15]
+         "dla": [7, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Nuage d'Insectes": {
          "name": "Nuage d'Insectes",
@@ -2941,7 +3449,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Nuée de Vermine": {
          "name": "Nuée de Vermine",
@@ -2964,7 +3476,11 @@
          "armMag": null,
          "mm": [400, 400],
          "rm": [300, 300],
-         "dla": [8, 16]
+         "dla": [8, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ogre": {
          "name": "Ogre",
@@ -2987,7 +3503,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ombre": {
          "name": "Ombre",
@@ -3010,7 +3530,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ombre de Roches": {
          "name": "Ombre de Roches",
@@ -3033,7 +3557,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Orque": {
          "name": "Orque",
@@ -3056,7 +3584,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ours-Garou": {
          "name": "Ours-Garou",
@@ -3079,7 +3611,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Palefroi Infernal": {
          "name": "Palefroi Infernal",
@@ -3102,7 +3638,11 @@
          "armMag": null,
          "mm": 3500,
          "rm": 1500,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Phoenix": {
          "name": "Phoenix",
@@ -3125,7 +3665,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Plante Carnivore": {
          "name": "Plante Carnivore",
@@ -3148,7 +3692,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Pseudo-Dragon": {
          "name": "Pseudo-Dragon",
@@ -3171,7 +3719,11 @@
          "armMag": null,
          "mm": 800,
          "rm": 100,
-         "dla": 10
+         "dla": 10,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Raquettou": {
          "name": "Raquettou",
@@ -3194,7 +3746,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Rat Géant": {
          "name": "Rat Géant",
@@ -3217,7 +3773,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [100, 100],
-         "dla": [9, 15]
+         "dla": [9, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Rat-Garou": {
          "name": "Rat-Garou",
@@ -3240,7 +3800,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Rocketeux": {
          "name": "Rocketeux",
@@ -3263,7 +3827,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Sagouin": {
          "name": "Sagouin",
@@ -3286,7 +3854,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [200, 200],
-         "dla": [9, 15]
+         "dla": [9, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Scarabée Géant": {
          "name": "Scarabée Géant",
@@ -3309,7 +3881,11 @@
          "armMag": null,
          "mm": [200, 200],
          "rm": "100 ±",
-         "dla": [10, 16]
+         "dla": [10, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Scorpion Géant": {
          "name": "Scorpion Géant",
@@ -3332,7 +3908,11 @@
          "armMag": null,
          "mm": [200, 200],
          "rm": [100, 100],
-         "dla": [10, 16]
+         "dla": [10, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Shai": {
          "name": "Shai",
@@ -3355,7 +3935,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Sirène": {
          "name": "Sirène",
@@ -3378,7 +3962,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Slaad": {
          "name": "Slaad",
@@ -3401,7 +3989,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Sorcière": {
          "name": "Sorcière",
@@ -3424,7 +4016,11 @@
          "armMag": null,
          "mm": [1300, 1300],
          "rm": [800, 800],
-         "dla": [8, 14]
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Spectre": {
          "name": "Spectre",
@@ -3447,7 +4043,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Sphinx": {
          "name": "Sphinx",
@@ -3470,7 +4070,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Squelette": {
          "name": "Squelette",
@@ -3493,7 +4097,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Strige": {
          "name": "Strige",
@@ -3516,7 +4124,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Succube": {
          "name": "Succube",
@@ -3539,7 +4151,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Tertre Errant": {
          "name": "Tertre Errant",
@@ -3552,17 +4168,21 @@
          "vlc": true,
          "power1": "Spores - Affecte : Dégâts | Régénération | Vue | Durée 2 tour(s)",
          "power2": null,
-         "hp": [170,190],
-         "att": [14,16],
-         "esq": [10,12],
-         "degat": [10,12],
-         "vue": [2,4],
-         "regen": '>4>',
-         "armPhy": [20,22],
+         "hp": [170, 190],
+         "att": [14, 16],
+         "esq": [10, 12],
+         "degat": [10, 12],
+         "vue": [2, 4],
+         "regen": ">4>",
+         "armPhy": [20, 22],
          "armMag": null,
-         "mm": [2400,2600],
-         "rm": [600,800],
-         "dla": [14,16]
+         "mm": [2400, 2600],
+         "rm": [600, 800],
+         "dla": [14, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Thri-kreen": {
          "name": "Thri-kreen",
@@ -3585,7 +4205,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Tigre-Garou": {
          "name": "Tigre-Garou",
@@ -3608,7 +4232,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Titan": {
          "name": "Titan",
@@ -3631,7 +4259,11 @@
          "armMag": null,
          "mm": 50,
          "rm": 2800,
-         "dla": 13
+         "dla": 13,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Trancheur": {
          "name": "Trancheur",
@@ -3654,7 +4286,11 @@
          "armMag": null,
          "mm": 700,
          "rm": 3850,
-         "dla": 8
+         "dla": 8,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Tubercule Tueur": {
          "name": "Tubercule Tueur",
@@ -3677,7 +4313,11 @@
          "armMag": null,
          "mm": [300, 300],
          "rm": [600, 600],
-         "dla": [7, 15]
+         "dla": [7, 15],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Tutoki": {
          "name": "Tutoki",
@@ -3700,7 +4340,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "T-Rex": {
          "name": "T-Rex",
@@ -3723,7 +4367,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Vampire": {
          "name": "Vampire",
@@ -3746,7 +4394,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Ver Carnivore Géant": {
          "name": "Ver Carnivore Géant",
@@ -3769,7 +4421,11 @@
          "armMag": null,
          "mm": [700, 700],
          "rm": [300, 300],
-         "dla": [8, 16]
+         "dla": [8, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Veskan du Chaos": {
          "name": "Veskan du Chaos",
@@ -3792,7 +4448,11 @@
          "armMag": null,
          "mm": [800, 800],
          "rm": [600, 600],
-         "dla": [7, 11]
+         "dla": [7, 11],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Vouivre": {
          "name": "Vouivre",
@@ -3815,7 +4475,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Worg": {
          "name": "Worg",
@@ -3838,7 +4502,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Xorn": {
          "name": "Xorn",
@@ -3861,7 +4529,11 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Yéti": {
          "name": "Yéti",
@@ -3884,7 +4556,11 @@
          "armMag": null,
          "mm": [100, 100],
          "rm": [200, 200],
-         "dla": [8, 16]
+         "dla": [8, 16],
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Yuan-ti": {
          "name": "Yuan-ti",
@@ -3907,7 +4583,11 @@
          "armMag": null,
          "mm": 800,
          "rm": 500,
-         "dla": 13
+         "dla": 13,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      },
      "Zombie": {
          "name": "Zombie",
@@ -3930,6 +4610,10 @@
          "armMag": null,
          "mm": null,
          "rm": null,
-         "dla": null
+         "dla": null,
+         "dlaUse": null,
+         "coldBlod": null,
+         "thief": null,
+         "powerRange": null
      }
  };
