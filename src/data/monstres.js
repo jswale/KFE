@@ -23,7 +23,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Abishaii Noir": {
@@ -50,7 +50,7 @@
          "dla": 7,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Abishaii Rouge": {
@@ -62,23 +62,23 @@
          "attDist": false,
          "speed": "Rapide",
          "vlc": true,
-         "power1": "Venin - Toucher",
-         "power2": "Lévitation",
-         "hp": null,
-         "att": null,
-         "esq": null,
-         "degat": null,
-         "vue": null,
-         "regen": null,
-         "armPhy": null,
-         "armMag": null,
-         "mm": null,
-         "rm": null,
-         "dla": null,
-         "dlaUse": null,
-         "coldBlod": null,
-         "thief": null,
-         "powerRange": null
+         "power1": "	Venin - Affecte : PV | Durée 2 tour(s)",
+         "power2": null,
+         "hp": [130,150],
+         "att": [9,11],
+         "esq": [10,12],
+         "degat": [5,7],
+         "vue": [5,7],
+         "regen": '>8',
+         "armPhy": [0,4],
+         "armMag": [13,15],
+         "mm": [1700,1900],
+         "rm": [5900,6100],
+         "dla": [5,7],
+         "dlaUse": "Milieu",
+         "coldBlod": "Moyen",
+         "fly": true,
+         "powerRange": "Au toucher"
      },
      "Abishaii Vert": {
          "name": "Abishaii vert",
@@ -104,7 +104,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ame-en-peine": {
@@ -131,7 +131,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Amibe Géante": {
@@ -158,7 +158,7 @@
          "dla": [9, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Anaconda des Catacombes": {
@@ -185,7 +185,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ankheg": {
@@ -212,7 +212,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Anoploure Purpurin": {
@@ -239,7 +239,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Araignée Géante": {
@@ -266,7 +266,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ashashin": {
@@ -293,7 +293,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Pititabeille": {
@@ -320,7 +320,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Balrog": {
@@ -347,7 +347,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Banshee": {
@@ -374,7 +374,7 @@
          "dla": 10,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Barghest": {
@@ -401,7 +401,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Basilisk": {
@@ -428,7 +428,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Behemoth": {
@@ -455,7 +455,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Behir": {
@@ -482,7 +482,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Beholder": {
@@ -509,7 +509,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Boggart": {
@@ -536,7 +536,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Bondin": {
@@ -563,7 +563,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Bouj'Dla": {
@@ -590,7 +590,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Bouj'Dla Placide": {
@@ -617,7 +617,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Bulette": {
@@ -644,7 +644,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Caillouteux": {
@@ -671,7 +671,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Capitan": {
@@ -698,7 +698,7 @@
          "dla": [8, 10],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Carnosaure": {
@@ -725,7 +725,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Champi-Glouton": {
@@ -752,7 +752,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Chauve-Souris Géante": {
@@ -779,7 +779,7 @@
          "dla": [8, 14],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Cheval à Dents de Sabre": {
@@ -806,7 +806,7 @@
          "dla": [6, 12],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Chevalier du Chaos": {
@@ -833,7 +833,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Chimère": {
@@ -860,7 +860,7 @@
          "dla": [13, 17],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Chonchon": {
@@ -887,7 +887,7 @@
          "dla": 8,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Coccicruelle": {
@@ -914,7 +914,7 @@
          "dla": 9,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Cockatrice": {
@@ -941,7 +941,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Crasc": {
@@ -968,7 +968,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Crasc Maexus": {
@@ -995,7 +995,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Crasc Médius": {
@@ -1022,7 +1022,7 @@
          "dla": [7, 13],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Croquemitaine": {
@@ -1050,7 +1050,7 @@
          "dla": [11, 13],
          "dlaUse": "Début",
          "coldBlod": "Faible",
-         "thief": null
+         "fly": null
      },
      "Cube Gélatineux": {
          "name": "Cube Gélatineux",
@@ -1076,7 +1076,7 @@
          "dla": [14, 22],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Daemonite": {
@@ -1103,7 +1103,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Diablotin": {
@@ -1130,7 +1130,7 @@
          "dla": 14,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Dindon": {
@@ -1157,7 +1157,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Djinn": {
@@ -1184,7 +1184,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ectoplasme": {
@@ -1211,7 +1211,7 @@
          "dla": 10,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Effrit": {
@@ -1238,7 +1238,7 @@
          "dla": [7, 9],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Elémentaire d'Air": {
@@ -1265,7 +1265,7 @@
          "dla": [7, 13],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Elémentaire de Feu": {
@@ -1292,7 +1292,7 @@
          "dla": [8, 14],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Elémentaire de Terre": {
@@ -1319,7 +1319,7 @@
          "dla": [9, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Elémentaire d'Eau": {
@@ -1346,7 +1346,7 @@
          "dla": [8, 14],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Elémentaire du Chaos": {
@@ -1373,7 +1373,7 @@
          "dla": [8, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Elémentaire Magmatique": {
@@ -1400,7 +1400,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Erinyes": {
@@ -1427,7 +1427,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Esprit-Follet": {
@@ -1454,7 +1454,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Essaim Cratérien": {
@@ -1481,7 +1481,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Essaim Sanguinaire": {
@@ -1508,7 +1508,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ettin": {
@@ -1535,7 +1535,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Familier": {
@@ -1562,7 +1562,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Fantôme": {
@@ -1589,7 +1589,7 @@
          "dla": [7, 13],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Feu Follet": {
@@ -1616,7 +1616,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Flagelleur Mental": {
@@ -1643,7 +1643,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Foudroyeur": {
@@ -1670,7 +1670,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Fumeux": {
@@ -1697,7 +1697,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Fungus Géant": {
@@ -1724,7 +1724,7 @@
          "dla": [11, 17],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Fungus Violet": {
@@ -1751,7 +1751,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Furgolin": {
@@ -1778,7 +1778,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gargouille": {
@@ -1805,7 +1805,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Géant de Pierre": {
@@ -1832,7 +1832,7 @@
          "dla": [10, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Géant des Gouffres": {
@@ -1859,7 +1859,7 @@
          "dla": [9, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Géant des Tempêtes": {
@@ -1886,7 +1886,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Geck'oo": {
@@ -1913,7 +1913,7 @@
          "dla": [7, 13],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Geck'oo majestueux": {
@@ -1940,7 +1940,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Glouton": {
@@ -1967,7 +1967,7 @@
          "dla": [8, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gnoll": {
@@ -1994,7 +1994,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gnu Domestique": {
@@ -2021,7 +2021,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gnu Sauvage": {
@@ -2048,7 +2048,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Goblin": {
@@ -2075,7 +2075,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gobelin Magique": {
@@ -2102,7 +2102,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Goblours": {
@@ -2129,7 +2129,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem d'Argile": {
@@ -2156,7 +2156,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem de Chair": {
@@ -2183,7 +2183,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem de cuir": {
@@ -2210,7 +2210,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem de Fer": {
@@ -2237,7 +2237,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem de métal": {
@@ -2264,7 +2264,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem de mithril": {
@@ -2291,7 +2291,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem de papier": {
@@ -2318,7 +2318,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Golem de Pierre": {
@@ -2345,7 +2345,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gorgone": {
@@ -2372,7 +2372,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Goule": {
@@ -2399,7 +2399,7 @@
          "dla": 12,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gowap Apprivoisé": {
@@ -2426,7 +2426,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gowap Sauvage": {
@@ -2453,7 +2453,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gremlins": {
@@ -2480,7 +2480,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Gritche": {
@@ -2507,7 +2507,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Grouilleux": {
@@ -2534,7 +2534,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Grylle": {
@@ -2561,7 +2561,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Harpie": {
@@ -2588,7 +2588,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Hellrot": {
@@ -2615,7 +2615,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Homme-Lezard": {
@@ -2642,7 +2642,7 @@
          "dla": [10, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Hurleur": {
@@ -2669,7 +2669,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Hydre": {
@@ -2696,7 +2696,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Incube": {
@@ -2723,7 +2723,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Kobold": {
@@ -2750,7 +2750,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Labeilleux": {
@@ -2777,7 +2777,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Lézard Géant": {
@@ -2804,7 +2804,7 @@
          "dla": [7, 17],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Liche": {
@@ -2831,7 +2831,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Limace Géante": {
@@ -2858,7 +2858,7 @@
          "dla": [7, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Loup-Garou": {
@@ -2885,7 +2885,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Lutin": {
@@ -2912,7 +2912,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mante Fulcreuse": {
@@ -2939,7 +2939,7 @@
          "dla": [10, 12],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Manticore": {
@@ -2966,7 +2966,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Marilith": {
@@ -2993,7 +2993,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Méduse": {
@@ -3020,7 +3020,7 @@
          "dla": [8, 14],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mégacéphale": {
@@ -3047,7 +3047,7 @@
          "dla": [7, 13],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mille-Pattes Géant": {
@@ -3074,7 +3074,7 @@
          "dla": [8, 14],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mimique": {
@@ -3101,7 +3101,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Minotaure": {
@@ -3128,7 +3128,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Molosse Satanique": {
@@ -3155,7 +3155,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Momie": {
@@ -3182,7 +3182,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Monstre Rouilleur": {
@@ -3209,7 +3209,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mouch'oo Sauvage": {
@@ -3236,7 +3236,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mouch'oo Majestueux Sauvage": {
@@ -3263,7 +3263,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mouch'oo Domestique": {
@@ -3290,7 +3290,7 @@
          "dla": [8, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Mouch'oo Domestique Sauvage": {
@@ -3317,7 +3317,7 @@
          "dla": [8, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Naga": {
@@ -3344,7 +3344,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Nécrochore": {
@@ -3371,7 +3371,7 @@
          "dla": [11, 17],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Nécromant": {
@@ -3398,7 +3398,7 @@
          "dla": [8, 14],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Nécrophage": {
@@ -3425,7 +3425,7 @@
          "dla": [7, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Nuage d'Insectes": {
@@ -3452,7 +3452,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Nuée de Vermine": {
@@ -3479,7 +3479,7 @@
          "dla": [8, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ogre": {
@@ -3506,7 +3506,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ombre": {
@@ -3533,7 +3533,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ombre de Roches": {
@@ -3560,7 +3560,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Orque": {
@@ -3587,7 +3587,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ours-Garou": {
@@ -3614,7 +3614,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Palefroi Infernal": {
@@ -3641,7 +3641,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Phoenix": {
@@ -3668,7 +3668,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Plante Carnivore": {
@@ -3695,7 +3695,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Pseudo-Dragon": {
@@ -3722,7 +3722,7 @@
          "dla": 10,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Raquettou": {
@@ -3749,7 +3749,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Rat Géant": {
@@ -3776,7 +3776,7 @@
          "dla": [9, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Rat-Garou": {
@@ -3803,7 +3803,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Rocketeux": {
@@ -3830,7 +3830,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Sagouin": {
@@ -3857,7 +3857,7 @@
          "dla": [9, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Scarabée Géant": {
@@ -3884,7 +3884,7 @@
          "dla": [10, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Scorpion Géant": {
@@ -3911,7 +3911,7 @@
          "dla": [10, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Shai": {
@@ -3938,7 +3938,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Sirène": {
@@ -3965,7 +3965,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Slaad": {
@@ -3992,7 +3992,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Sorcière": {
@@ -4019,7 +4019,7 @@
          "dla": [8, 14],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Spectre": {
@@ -4046,7 +4046,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Sphinx": {
@@ -4073,7 +4073,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Squelette": {
@@ -4100,7 +4100,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Strige": {
@@ -4127,7 +4127,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Succube": {
@@ -4154,7 +4154,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Tertre Errant": {
@@ -4181,7 +4181,7 @@
          "dla": [14, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Thri-kreen": {
@@ -4208,7 +4208,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Tigre-Garou": {
@@ -4235,7 +4235,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Titan": {
@@ -4262,7 +4262,7 @@
          "dla": 13,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Trancheur": {
@@ -4289,7 +4289,7 @@
          "dla": 8,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Tubercule Tueur": {
@@ -4316,7 +4316,7 @@
          "dla": [7, 15],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Tutoki": {
@@ -4343,7 +4343,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "T-Rex": {
@@ -4370,7 +4370,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Vampire": {
@@ -4397,7 +4397,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Ver Carnivore Géant": {
@@ -4424,7 +4424,7 @@
          "dla": [8, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Veskan du Chaos": {
@@ -4451,7 +4451,7 @@
          "dla": [7, 11],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Vouivre": {
@@ -4478,7 +4478,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Worg": {
@@ -4505,7 +4505,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Xorn": {
@@ -4532,7 +4532,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Yéti": {
@@ -4559,7 +4559,7 @@
          "dla": [8, 16],
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Yuan-ti": {
@@ -4586,7 +4586,7 @@
          "dla": 13,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      },
      "Zombie": {
@@ -4613,7 +4613,7 @@
          "dla": null,
          "dlaUse": null,
          "coldBlod": null,
-         "thief": null,
+         "fly": null,
          "powerRange": null
      }
  };
