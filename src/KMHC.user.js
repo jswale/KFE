@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.2-8
+// @version       0.1.2-9
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2014-10-21_12-00
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-21_12-00
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-21_18-56
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-21_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-21_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-21_12-00
@@ -1626,7 +1626,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     fnShowCarac(monster, monsterTemplate, monstreAge, "speed", "Vitesse de Déplacement"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "dla", "Durée tour", "heures"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "dlaUse", "DLA"),
-                    fnShowCarac(monster, monsterTemplate, monstreAge, "thief", "Vole"),
+                    fnShowCarac(monster, monsterTemplate, monstreAge, "fly", "Vole"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "coldBlod", "Sang froid"),
                 ], function(o){return o;});
                 
