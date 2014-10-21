@@ -9,6 +9,10 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.2-9
+- Mise à jour des données des monstres
+- Reduction de la hauteur des lignes dans la vue
+
 v.0.1.2-7
 - Beauyfication des bulles d'informations des caractéristiques des monstres
 - Mise à jour des données de base des monstres à partir des CdM issues de pharoz.net (date > 2013)
