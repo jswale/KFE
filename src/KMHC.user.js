@@ -1593,7 +1593,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 			var extract = fnExtract(monsterFullName);
             var monster = extract.monster;
            
-            var container = $("<td/>").css("position", "relative").css("padding", "0");
+            var container = $("<td/>").css("position", "relative").css("padding", "0px 0px 0px 1px");
             if(!Utils.isUndefined(monster)) {
                 
                   var monstreAge = DB_monsterAges[monster.familly][monstreAgeName];
