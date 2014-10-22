@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.3-1
+- Ajout de l'export des informations de mission
+
 v.0.1.2-9
 - Mise à jour des données des monstres
 - Reduction de la hauteur des lignes dans la vue
