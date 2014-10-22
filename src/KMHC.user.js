@@ -19,7 +19,7 @@
 // ==/UserScript==
 
 // Here we are...
-var Utils = function() {
+var Utils = function() { 
     var CONF_KEY = "KMHC_",
         VAL_KEY  = "KMHV_";
 
