@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.3-2
+- Gniééééééééééééé
+
 v.0.1.3-1
 - Ajout de l'export des informations de mission
 
