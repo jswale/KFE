@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-2
+// @version       0.1.3-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -19,7 +19,7 @@
 // ==/UserScript==
 
 // Here we are...
-var Utils = function() { 
+var Utils = function() {
     var CONF_KEY = "KMHC_",
         VAL_KEY  = "KMHV_";
 
@@ -553,6 +553,33 @@ var MH_Missions_Mission_Equipe = $.extend({}, MH_Page, {
         });        
     }
 });
+
+var MH_Missions_Mission_Recompense = $.extend({}, MH_Page, {
+    init : function() {
+        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
+        var idMission = tmp[1];
+        
+        var recompenses = $("tr.mh_tdpage").map(function(){
+            var tr = $(this);
+            var recompense = /(\d+)/.exec(tr.find("td:nth-child(1)").text())[1];
+            var description = tr.find("td:nth-child(2)").text().trim();
+            
+            return {
+                recompense : recompense,
+                description : description
+            };
+        }).get();
+        
+        this.callAPIMiltown({
+            api : "mission",
+            call : "recompense",
+            data : {
+            	mission : idMission,
+            	recompenses : recompenses
+        	}
+        });        
+    }
+}); 
 
 var MH_Missions_Mission_Etape = $.extend({}, MH_Page, {
     init : function() {
