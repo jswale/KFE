@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-1
+// @version       0.1.3-2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -583,6 +583,8 @@ var MH_Missions_Mission_Etape = $.extend({}, MH_Page, {
 
 var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
     init : function() {
+        
+        $("<a href='http://mh.swale.fr/ihm/mission.php'>Résumé des missions</a>").insertAfter($(".titre2:first"));
         
         var missions = $("table.mh_tdborder:first tr.mh_tdtitre").map(function(){
             
