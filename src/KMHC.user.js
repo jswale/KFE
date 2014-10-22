@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.2-9
+// @version       0.1.3-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -218,6 +218,27 @@ var MH_Page = function() {
                 }
             }, conf.scope || this));
         },
+        
+        callAPIMiltown : function(conf) {
+            this.debug("Calling API", conf);
+            $.ajax({
+                type: "POST",
+                url: "http://mh.swale.fr/api/" + conf.api + ".php?rnd=" + new Date().getTime(),
+                data : {"call" : conf.call, "encoding" : "UTF-8", "data" : conf.data}
+            }).done($.proxy(function(data, result, request){
+                if(result == Utils.success) {
+                    if(Utils.isUndefined(typeof conf.callback)) {
+                        this.warn("No callback found");
+                    } else {
+                        this.debug("Result", data);
+                        conf.callback.apply(this, arguments);
+                    }
+                } else {
+                    this.error("Error while executing the API call");
+                    this.error(arguments);
+                }
+            }, conf.scope || this));
+        },        
 
         mhButton : function(label, callback) {
             return $("<input/>")
@@ -496,11 +517,110 @@ var MH_Play_PlayStart = $.extend({}, MH_Page, {
     }
 });
 
+var MH_Missions_Mission_Equipe = $.extend({}, MH_Page, {
+    init : function() {
+        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
+        var idMission = tmp[1];
+        
+        var team = $("form tr.mh_tdpage").map(function(){
+            var tr = $(this);
+            var id = tr.find("td:nth-child(2)").text().trim();
+            var nom = tr.find("td:nth-child(3)").text().trim();
+            var race = tr.find("td:nth-child(4)").text().trim();
+            var level = tr.find("td:nth-child(5)").text().trim();
+            var email = tr.find("td:nth-child(6)").text().trim();
+            var rang = tr.find("td:nth-child(7)").text().trim();
+            var date = tr.find("td:nth-child(8)").text().trim();
+            
+            return {
+                id : id,
+                nom : nom,
+                race : race,
+                niveau : level,
+                email : email,
+                rang : rang,
+                date : date
+            };
+        }).get();
+        
+        this.callAPIMiltown({
+            api : "mission",
+            call : "equipe",
+            data : {
+            	mission : idMission,
+            	team : team
+        	}
+        });        
+    }
+});
+
+var MH_Missions_Mission_Etape = $.extend({}, MH_Page, {
+    init : function() {
+        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
+        var idMission = tmp[1];
+        
+        var steps = $("form tr.mh_tdpage").map(function(){
+            var tr = $(this);
+            var step = /(\d+)/.exec(tr.find("td:nth-child(1)").text())[1];
+            var description = tr.find("td:nth-child(2)").text().trim();
+            
+            return {
+                step : step,
+                description : description
+            };
+        }).get();
+        
+        this.callAPIMiltown({
+            api : "mission",
+            call : "etape",
+            data : {
+            	mission : idMission,
+            	steps : steps
+        	}
+        });        
+    }
+});
+
 var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
     init : function() {
-        $("table:nth-child(3) div.mh_titre3").each(function(){
-            var me = $(this);
-            var tmp = /Mission \[(\d+)\]/.exec(me.text());
+        
+        var missions = $("table.mh_tdborder:first tr.mh_tdtitre").map(function(){
+            
+            var tr = $(this);
+            
+            var tmp = /Mission \[(\d+)\]/.exec(tr.find("div.mh_titre3").text());
+            var idMission = tmp[1];
+            
+
+            var tmp = /(\d+) étapes? - (\d+) récompenses? - Meneur : (.*)/.exec(tr.find("div.mh_titre4").text());
+            var noSteps = tmp[1];
+            var noAwards = tmp[2];
+            var leader = tmp[3];
+            
+            var description = tr.next("tr").text().trim();            
+
+            return {
+                mission : idMission,
+                description : description,
+                noSteps : noSteps,
+                noAwards : noAwards,
+                leader : leader
+            };            
+        }).get();
+        
+        this.callAPIMiltown({
+            api : "mission",
+            call : "liste",
+            data : {
+            	missions : missions
+        	}
+        });  
+        
+        $("table.mh_tdborder:first tr.mh_tdtitre").each(function(){
+            
+            var tr = $(this);
+            
+            var tmp = /Mission \[(\d+)\]/.exec(tr.find("div.mh_titre3").text());
             var idMission = tmp[1];
             
             $("<tr/>")
@@ -523,8 +643,8 @@ var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
                     .append('<a href="/mountyhall/MH_Missions/Mission_Aide.php?ai_idMission=' + idMission + '">[Aide]</a>')
                 )
             )
-            .insertAfter(me.parents("tr:first"));
-        })
+            .insertAfter(tr);
+        });
     }
 });
 
