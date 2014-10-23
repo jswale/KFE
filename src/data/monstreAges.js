@@ -26,6 +26,9 @@ var DB_monsterAges = {
 		},
 		"Ancêtre" : {
 			"level" : 7
+		},
+		"Chef de harde" : {
+			"level" : 0
 		}
 	},
 	"Démon" : {
