@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-3
+// @version       0.1.3-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -626,6 +626,9 @@ var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
             var noAwards = tmp[2];
             var leader = tmp[3];
             
+            var tmp = /EnterPJView\((\d+),750,550\)/.exec(tr.find("div.mh_titre4 a").attr("href"));
+            var leaderId = tmp[1];
+            
             var description = tr.next("tr").text().trim();            
 
             return {
@@ -633,6 +636,7 @@ var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
                 description : description,
                 noSteps : noSteps,
                 noAwards : noAwards,
+                leaderId : leaderId,
                 leader : leader
             };            
         }).get();
