@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-4
+// @version       0.1.3-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2014-10-21_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-21_18-56
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-21_12-00
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-23_21-22
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-21_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-21_12-00
 // @require		  https://github.com/jswale/KFE/raw/master/src/addon/editables.js
@@ -1752,9 +1752,20 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                   var monstreAge = DB_monsterAges[monster.familly][monstreAgeName];
 	              var monsterTemplateName = extract.template;
     	       	  var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
+                
+                if(Utils.isUndefined(monstreAge)) {
+                    console.log("Unable to find the age " + monstreAgeName );
+                    return;
+                }
+                
+              	if(Utils.isUndefined(monsterTemplate)) {
+                    console.log("Unable to find the template " + monsterTemplate );
+                    return;
+                }                
+                
+           		 //console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
+
             
-        		  //console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
-                                
                 Storage["monster-" + monsterId] = $.grep([
                     fnShowCarac(monster, monsterTemplate, monstreAge, "familly", "Famille"),                            
                     fnShowCarac(monster, monsterTemplate, monstreAge, "level", "Niveau"),
@@ -1782,6 +1793,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     fnShowCarac(monster, monsterTemplate, monstreAge, "fly", "Vole"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "coldBlod", "Sang froid"),
                 ], function(o){return o;});
+                                        
                 
                 container.append(
                     $("<div/>")
