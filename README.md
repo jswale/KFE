@@ -9,6 +9,9 @@ Précision Magique, Puissance Magique
 
 Changelog :
 
+v.0.1.3-4
+- Ajout de l'id du leader dans les données des missions
+
 v.0.1.3-3
 - Ajout des récompenses dans l'écran de recap des missions
 
