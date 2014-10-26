@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-5
+// @version       0.1.3-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2014-10-21_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-21_18-56
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-23_21-22
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-21_12-00
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-26_18-25
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-21_12-00
 // @require		  https://github.com/jswale/KFE/raw/master/src/addon/editables.js
 // @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
@@ -1668,53 +1668,58 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         };
         
         var fnShowCarac = function(monster, template, age, key, name, suffix) {            
-            var v = monster[key];
-            if(Utils.isUndefined(v) || null == v) {
-                return null;
-            }
-            
-            var fnMerge = function(v, m) {
-                if(m === true) {
-                    v = true;
-                } else if($.type( v ) === "number") {
-                    v = parseInt(v) + parseInt(m);
-                } else if($.isArray(v)) {
-                    if($.type( m ) === "string") {
-                        v[0] = eval((v[0] + m));
-                        v[1] = eval((v[1] + m));
-                    } else {
-                        v[0] = parseInt(v[0]) + parseInt(m);
-                        v[1] = parseInt(v[1]) + parseInt(m);
+            try {
+                var v = monster[key];
+                if(Utils.isUndefined(v) || null == v) {
+                    return null;
+                }
+                
+                var fnMerge = function(v, m) {
+                    if(m === true) {
+                        v = true;
+                    } else if($.type( v ) === "number") {
+                        v = parseInt(v) + parseInt(m);
+                    } else if($.isArray(v)) {
+                        if($.type( m ) === "string") {
+                            v[0] = eval((v[0] + m));
+                            v[1] = eval((v[1] + m));
+                        } else {
+                            v[0] = parseInt(v[0]) + parseInt(m);
+                            v[1] = parseInt(v[1]) + parseInt(m);
+                        }
+                    }
+                    return v;
+                };
+                
+                var a = age[key];
+                if(!Utils.isUndefined(a)) {
+                    v = fnMerge(v, a);
+                }
+                
+                if(null != template) {                
+                    var m = template[key];
+                    if(!Utils.isUndefined(m)) {
+                        v = fnMerge(v, m);
                     }
                 }
-                return v;
-            };
-            
-			var a = age[key];
-            if(!Utils.isUndefined(a)) {
-                v = fnMerge(v, a);
-            }
-            
-            if(null != template) {                
-                var m = template[key];
-                if(!Utils.isUndefined(m)) {
-                    v = fnMerge(v, m);
+                
+                if($.isArray(v) && v[0] == v[1]) {
+                    v = v[0];
                 }
-            }
-            
-            if($.isArray(v) && v[0] == v[1]) {
-                v = v[0];
-            }
-            
-            if(v === false) {
+                
+                if(v === false) {
+                    return null;
+                }
+                
+                if(v === true) {
+                    v = "Oui";
+                }
+                
+                return [name, ($.isArray(v) ? (" entre " + v.join(" et ")) : v) + ' ' + (suffix || '')];
+            } catch(e) {
+                console.log("Error parsing data for " + name + " [" + key + "]");
                 return null;
             }
-            
-            if(v === true) {
-                v = "Oui";
-            }
-            
-            return [name, ($.isArray(v) ? (" entre " + v.join(" et ")) : v) + ' ' + (suffix || '')];
         };    
         
         Utils.addGlobalStyle([
@@ -1745,7 +1750,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             
 			var extract = fnExtract(monsterFullName);
             var monster = extract.monster;
-           
+                       
             var container = $("<td/>").css("position", "relative").css("padding", "0px 0px 0px 1px");
             if(!Utils.isUndefined(monster)) {
                 
@@ -1763,8 +1768,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     return;
                 }                
                 
-           		 //console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
-
+           		//console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
             
                 Storage["monster-" + monsterId] = $.grep([
                     fnShowCarac(monster, monsterTemplate, monstreAge, "familly", "Famille"),                            
@@ -1792,7 +1796,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     fnShowCarac(monster, monsterTemplate, monstreAge, "dlaUse", "DLA"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "fly", "Vole"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "coldBlod", "Sang froid"),
-                ], function(o){return o;});
+                ], function(o){return o;});                    
                                         
                 
                 container.append(
