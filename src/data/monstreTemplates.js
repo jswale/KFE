@@ -43,7 +43,6 @@ var DB_monsterTemplate = {
 		"arm" : "*3",
 		"rm" : "*3",
 		"mm" : "*3",
-		"vue" : "normal",
 		"power" : "*3",
 		"spe" : "DLA plus Lente",
 		"familly" : "Insecte"
