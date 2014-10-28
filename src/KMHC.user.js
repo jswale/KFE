@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-6
+// @version       0.1.3-7
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1642,24 +1642,41 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 monsterFullName = alias;
             }
             
-            var p = monsterFullName.split(" ");
-            var i = 0, j;
-            do {
-                j = i+1;
+            var search = true;
+            
+            {
+                var exceptions = ["Bouj'Dla Placide"];
+                for(var ex = 0; ex < exceptions.length; ex++) {
+                    var exception = exceptions[ex];
+                    if(monsterFullName.indexOf(exception) == 0) {
+                        monster = DB_monstres[exception];
+                        template = monsterFullName.substring(exception.length+1);
+                        search = false;
+                        break;
+                    }
+                }
+            }
+            
+            if(search) {
+                var p = monsterFullName.split(" ");
+                var i = 0, j;
                 do {
-	              	var t = p.slice(i, j);
-                  	monster = DB_monstres[t.join(" ")];
-                    if(!Utils.isUndefined(monster) && monster != monsterFullName) {
-                        if(i > 0) {
-                          template = p.slice(0, i).join(" ");
-                        } else {
-                          template = p.slice(j, p.length).join(" ");
-                        }                        
-                    }                    
-                    j++;
-                } while(monster == null && j <= p.length);
-                i++;
-            } while(monster == null && i < p.length);
+                    j = i+1;
+                    do {
+                        var t = p.slice(i, j);
+                        monster = DB_monstres[t.join(" ")];                    
+                        if(!Utils.isUndefined(monster) && monster != monsterFullName) {
+                            if(i > 0) {
+                              template = p.slice(0, i).join(" ");
+                            } else {
+                              template = p.slice(j, p.length).join(" ");
+                            }                        
+                        }                    
+                        j++;
+                    } while(monster == null && j <= p.length);
+                    i++;
+                } while(monster == null && i < p.length);
+            }            
 
             return {
                 monster : monster,
@@ -1748,8 +1765,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             var monstreAgeName = tmp[2];
             var monsterFullName = tmp[1];
             
-			var extract = fnExtract(monsterFullName);
-            var monster = extract.monster;
+            var extract = fnExtract(monsterFullName);
+            var monster = extract.monster;            
                        
             var container = $("<td/>").css("position", "relative").css("padding", "0px 0px 0px 1px");
             if(!Utils.isUndefined(monster)) {
@@ -1768,7 +1785,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     return;
                 }                
                 
-           		//console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
+           		console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
             
                 Storage["monster-" + monsterId] = $.grep([
                     fnShowCarac(monster, monsterTemplate, monstreAge, "familly", "Famille"),                            
