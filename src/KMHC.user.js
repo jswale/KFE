@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-7
+// @version       0.1.3-8
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -629,7 +629,7 @@ var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
             var tmp = /EnterPJView\((\d+),750,550\)/.exec(tr.find("div.mh_titre4 a").attr("href"));
             var leaderId = tmp[1];
             
-            var description = tr.next("tr").text().trim();            
+            var description = tr.next("tr").text().trim();                       
 
             return {
                 mission : idMission,
@@ -655,6 +655,25 @@ var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
             
             var tmp = /Mission \[(\d+)\]/.exec(tr.find("div.mh_titre3").text());
             var idMission = tmp[1];
+            
+ 			$("<iframe/>")
+            .css("display", "none")
+            .attr("src", "/mountyhall/MH_Missions/Mission_Equipe.php?ai_idMission=" + idMission)
+            .attr("name", "KMHC_mission_equipe_" + idMission)
+            .on("load", function() {
+                $(this).remove();
+            })
+            .appendTo("body");
+            
+ 			$("<iframe/>")
+            .css("display", "none")
+            .attr("src", "/mountyhall/MH_Missions/Mission_Etape.php?ai_idMission=" + idMission)
+            .attr("name", "KMHC_mission_etape_" + idMission)
+            .on("load", function() {
+                $(this).remove();
+            });
+            .appendTo("body");
+            
             
             $("<tr/>")
             .addClass("mh_tdtitre")
@@ -1389,7 +1408,11 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
-
+        
+        $("#mh_vue_hidden_tresors").parents("p:first").attr("data-view", "main");
+        
+        //this.addBaliseContainer();
+        
         this.addPharozViewLinks();
         
         this.highlightTreasures();
@@ -1412,9 +1435,225 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");        
     },
     
+    addBaliseContainer : function() {
+        $("<div/>")
+        .css("margin-bottom", "20px")
+        .append(
+            $('<table/>')
+            .attr("width", "98%")
+            .attr("border", "0")
+            .attr("cellspacing", "1")
+            .attr("cellpadding", "2")
+            .attr("align", "center")
+            .addClass("mh_tdborder")
+            .append(
+                $("<tbody/>")
+                .append(
+                    $('<tr />')
+                    .addClass("mh_tdtitre")
+                    .append(
+                        $('<td />')
+                        .append(
+                            $('<table />')
+                            .attr("width", "100%")
+                            .append(
+                                $("<tbody/>")
+                                .append(
+                                    $('<tr />')
+                                    .append(
+                                        $('<td />')
+                                        .attr("width", "25")
+                                        .attr("nowrap", "")
+                                        .append(
+                                            $("<a/>")
+                                            .attr("href", "javascript:afficheDetailTrPlus('mh_vue_hidden_balise','mh_vue_plus_balise');")
+                                            .attr("id", "mh_vue_plus_balise")
+                                            .addClass("AllLinks")
+                                            .text("[-]")
+                                        )
+                                    )
+                                    .append(
+                                        $('<td />')
+                                        .append(
+                                            $("<a/>")
+                                            .attr("name", "balise")
+                                            .attr("id", "mh_vue_plus_balise")
+                                            .addClass("AllLinks")
+                                            .append("<b>BALISES</b>")
+                                        )
+                                    )
+                                )
+                            )
+                        )                            
+                    )
+                )
+            )
+        )
+        .append(
+            $('<table/>')
+            .attr("width", "98%")
+            .attr("border", "0")
+            .attr("cellspacing", "0")
+            .attr("cellpadding", "0")
+            .attr("align", "center")
+            .append(
+                $("<tbody/>")
+                .append(
+                    $('<tr />')
+                    .addClass("mh_tdtitre")
+                    .attr("id", "mh_vue_hidden_balise")
+                    .append(
+                        $('<td />')
+                        .append(
+                            $('<table />')
+                            .attr("width", "100%")
+                            .attr("border", "0")
+                            .attr("cellspacing", "1")
+                            .attr("cellpadding", "2")
+                            .addClass("mh_tdborder")
+                            .append(
+                                $("<tbody/>")
+                                .append(
+                                    $('<tr />')
+                                    .addClass("mh_tdtitre")
+                                    .append(
+                                        $('<td />')
+                                        .attr("width", "30")
+                                        .append("<b>Dist.</b>")
+                                    )
+                                    .append(
+                                        $('<td />')
+                                        .attr("width", "100")
+                                        .attr("align", "center")
+                                        .append("<b>Action</b>")
+                                    )
+                                    .append(
+                                        $('<td />')
+                                        .append("<b>Description</b>")
+                                    )
+                                    .append(
+                                        $('<td />')
+                                        .attr("width", "30")
+                                        .attr("align", "center")
+                                        .append("<b>X</b>")
+                                    )
+                                    .append(
+                                        $('<td />')
+                                        .attr("width", "30")
+                                        .attr("align", "center")
+                                        .append("<b>Y</b>")
+                                    )
+                                    .append(
+                                        $('<td />')
+                                        .attr("width", "30")
+                                        .attr("align", "center")
+                                        .append("<b>N</b>")
+                                    )
+                                )                                                                    
+                            )
+                        )                            
+                    )
+                )
+            )
+        )                                                                                                                                                                                                        
+        .prependTo($('[data-view="main"]'));
+        
+        // Ajout de la ligne d'ajout
+        var txt = $("form[name='LimitViewForm']").text();
+
+        var currentX = parseInt(txt.match(/.*X = (-?\d+)/)[1]);
+        var currentY = parseInt(txt.match(/.*Y = (-?\d+)/)[1]);
+        var currentN = parseInt(txt.match(/.*N = (-?\d+)/)[1]);
+        
+        $("#mh_vue_hidden_balise table > tbody")
+        .append(
+            $('<tr />')
+            .addClass("mh_tdpage")
+            .append(
+                $('<td />')
+                .attr("width", "30")
+            )
+            .append(
+                $('<td />')
+                .attr("width", "80")
+                .append(
+                    $("<input/>")
+                    .attr("type", "button")
+                    .css("width", "100%")
+                    .css("text-align", "center")
+                    .attr("value", "Ajouter")
+                    .click($.proxy(function(e){
+                        var el = $(e.target);
+                        var tr = el.parents("tr:first");
+                        var name = tr.find('[data-balise-data="name"]').val();
+                        var x = tr.find('[data-balise-data="x"]').val();
+                        var y = tr.find('[data-balise-data="y"]').val();
+                        var n = tr.find('[data-balise-data="n"]').val();
+                        
+                        if(!name || !x || !y || !n) {
+                            return;
+                        }
+                        
+                        this.callAPIMiltown({
+                            api : "balise",
+                            call : "add",
+                            data : {
+                                name : name,
+                                x : x,
+                                y : y,
+                                n : n
+                            }
+                        });        
+                    },this))
+                ) 
+            )
+            .append(
+                $('<td />')
+                .append(
+                    $("<input/>")
+                    .attr("type", "text")
+                    .attr("data-balise-data", "name")
+                    .css("width", "100%")
+                )                                            
+            )
+            .append(
+                $('<td />')
+                .attr("width", "30")
+                .append(
+                    $("<input/>")
+                    .attr("type", "text")
+                    .attr("data-balise-data", "x")
+                    .css("width", "100%")
+                    .val(currentX)
+                )                                            
+            )
+            .append(
+                $('<td />')
+                .attr("width", "30")
+                .append(
+                    $("<input/>")
+                    .attr("type", "text")
+                    .attr("data-balise-data", "y")
+                    .css("width", "100%")
+                    .val(currentY)
+                )                                            
+            )
+            .append(
+                $('<td />')
+                .attr("width", "30")
+                .append(
+                    $("<input/>")
+                    .attr("type", "text")
+                    .attr("data-balise-data", "n")
+                    .css("width", "100%")
+                    .val(currentN)
+                )                                            
+            )
+        );
+    },
+    
     addPharozViewLinks : function() {
-        var mainView = $("#mh_vue_hidden_tresors").parents("p:first");
-        mainView.attr("data-view", "main");
+        var mainView = $('[data-view="main"]');
         
         var altView = $("<iframe/>")
         .css("display", "none")
@@ -1785,7 +2024,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     return;
                 }                
                 
-           		console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
+           		//console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
             
                 Storage["monster-" + monsterId] = $.grep([
                     fnShowCarac(monster, monsterTemplate, monstreAge, "familly", "Famille"),                            
