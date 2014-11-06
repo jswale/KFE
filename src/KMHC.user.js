@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-8
+// @version       0.1.3-8-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -671,7 +671,7 @@ var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
             .attr("name", "KMHC_mission_etape_" + idMission)
             .on("load", function() {
                 $(this).remove();
-            });
+            })
             .appendTo("body");
             
             
