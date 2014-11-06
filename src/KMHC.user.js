@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-8-1
+// @version       0.1.3-9
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -2828,6 +2828,81 @@ var Messagerie_ViewMessage = $.extend({}, MH_Page, {
             var reply = $($(this).closest('tr').prev().children()[0]).html();
             Utils.setValue('lastReply', reply);
         });
+    }
+});
+
+var View_TresorHistory = $.extend({}, MH_Page, {
+    init : function() {
+        var objectType = $("table:nth-child(2) table > tbody > tr:nth-child(1) > td:nth-child(2)").text();
+        if(objectType == "Parchemin") {
+            var node = $("table:nth-child(2) > tbody > tr:nth-child(3) > td:nth-child(1)");
+            if(1 == node.length) {
+                var description = node.text().trim();
+                
+                var duree = null;                
+                if(/.*«.*(courte?\s+\w+)/.test(description)) {
+                    duree = "Courte (1-2 étapes)";
+                } else if(/.*«.*(moyennement\s+(long|longue))/.test(description)) {
+                    duree = "Moyenne (3-5 étapes)";
+                } else if(/.*«.*((?!moyennement\s+)(long|longue)\s+\w+)/.test(description)) {
+                    duree = "Longue (6-7 étapes)";
+                }
+                
+                var reward = null;
+                if(/une nouvelle mouche/.test(description)) {
+                    reward = "Nouvelle mouche aléatoire";
+                } else if(/une de mes mouches/.test(description)) {
+                    reward = "Nouvelle mouche aléatoire";
+                } else if(/parfaire ta connaissance d'un sort ou d'une compétence/.test(description)) {
+                    reward = "Pourcentage suplémentaire sur un sort ou compétence";
+                } else if(/dépasser les connaissances normales/.test(description)) {
+                    reward = "Pourcentage suplémentaire sur un sort ou compétence";
+                } else if(/des gigots de gob à foison/.test(description)) {
+                    reward = "Des GG's";
+                } else if(/L'expérience que tu te taperas/.test(description)) {
+                    reward = "Des PXs";
+                } else if(/choisir la mouche qui te quittera/.test(description)) {
+                    reward = "Nouvelle mouche";
+                } else if(/cette arme m'a bien servie/.test(description)) {
+                    reward = "Arme";
+                } else if(/ce petit caillou brillant/.test(description)) {
+                    reward = "Minerais";
+                } else if(/un sortilège à apprendre/.test(description)) {
+                    reward = "Sort";
+                } else if(/en récompense un parchemin de sort/.test(description)) {
+                    reward = "Sort";
+                } else if(/les accessoires sont toujours utiles/.test(description)) {
+                    reward = "Petit objet";
+                } else if(/cette bricole/.test(description)) {
+                    reward = "Objet à MM ou à template";
+                } else if(/onguent magique/.test(description)) {
+                    reward = "Ajout de template";
+                } else if(/arme magique/.test(description)) {
+                    reward = "Arme avec template";
+                } else if(/armure magique/.test(description)) {
+                    reward = "Armure avec template";
+                } else if(/arnaque de haut vol/.test(description)) {
+                    reward = "Renomnage";
+                } else if(/le regard des dieux se posera temporairement/.test(description)) {
+                    reward = "Bénédiction";
+                } else if(/cette armure/.test(description)) {
+                    reward = "Armure";
+                } else if(/cette arme/.test(description)) {
+                    reward = "Arme";
+                } else if(/aaa/.test(description)) {
+                    reward = "Sort";
+                }
+                
+                node.append("<br/>");
+                if(null != duree) {
+                	node.append("<br/><b>Durée: </b>" + duree);
+                }
+                if(null != reward) {
+                	node.append("<br/><b>Récompense: </b>" + reward);
+                }
+                
+            }            
+        }
     }
 });
 
