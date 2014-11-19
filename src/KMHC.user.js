@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-9
+// @version       0.1.3-10
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2014-10-21_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-21_18-56
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-23_21-22
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-10-26_18-25
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-11-19_10-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-21_12-00
 // @require		  https://github.com/jswale/KFE/raw/master/src/addon/editables.js
 // @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
@@ -1903,7 +1903,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     j = i+1;
                     do {
                         var t = p.slice(i, j);
-                        monster = DB_monstres[t.join(" ")];                    
+                        monster = DB_monstres[t.join(" ")];    
                         if(!Utils.isUndefined(monster) && monster != monsterFullName) {
                             if(i > 0) {
                               template = p.slice(0, i).join(" ");
@@ -2000,19 +2000,21 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             var monsterId = $(tr).children("td:nth-child("+refColId+")").text();
             
             var tdName = $($(tr).children("td:nth-child("+nomColId+")"));
+            //tdName.find("a").text("Manticore Colossale [Nouvelle]");
             var tmp = tdName.find("a").text().match(/(.*)\s\[(.*)\]/);
             var monstreAgeName = tmp[2];
-            var monsterFullName = tmp[1];
+            var monsterFullName = tmp[1];                        
             
-            var extract = fnExtract(monsterFullName);
+            var extract = fnExtract(monsterFullName);      
             var monster = extract.monster;            
                        
             var container = $("<td/>").css("position", "relative").css("padding", "0px 0px 0px 1px");
+	        $(tr).children('td:nth-child(' + nomColId + ')').after(container);
             if(!Utils.isUndefined(monster)) {
                 
-                  var monstreAge = DB_monsterAges[monster.familly][monstreAgeName];
-	              var monsterTemplateName = extract.template;
-    	       	  var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
+                var monstreAge = DB_monsterAges[monster.familly][monstreAgeName];
+	            var monsterTemplateName = extract.template;
+    	       	var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
                 
                 if(Utils.isUndefined(monstreAge)) {
                     console.log("Unable to find the age " + monstreAgeName );
@@ -2139,10 +2141,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 				if(monster.attDist || (monsterTemplate && !!monsterTemplate.attDist)) {
                     container.append($("<div/>").addClass("monsterDbInfoAttDist").attr("title", "Attaque à distance"));
 				}                    
-            }                     
-                      
-                      
-           $(tr).children('td:nth-child(' + nomColId + ')').after(container);
+            }                              
             
         }, this));        
     },
