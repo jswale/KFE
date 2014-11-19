@@ -161,8 +161,8 @@ var DB_monsterTemplate = {
 		"arm" : 2,
 		"familly" : "Monstre"
 	},
-	"Colossalle" : {
-		"name" : "Colossalle",
+	"Colossale" : {
+		"name" : "Colossale",
 		"level" : 7,
 		"attDist" : false,
 		"vlc" : false,
