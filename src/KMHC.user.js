@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-10
+// @version       0.1.3-11
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1422,6 +1422,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             this.addMonsterLevel();
             this.addSharingUI();
         }
+        
+        this.addBarycentreUI();
 
         this.addMonsterInfos();
         this.addMonsterCdmLink();
@@ -1433,6 +1435,51 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");        
+    },
+    
+    addBarycentreUI : function() {
+        
+        $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_tresors"], $.proxy(function(i, tableId) {
+            
+            $("#" + tableId + " table:first").parents("table").prev().find("td:nth-child(2) > a").parents("tr").first()
+                    .append(
+                        $("<td/>")                        
+                        .attr("align", "left")
+                        .attr("width", "50")
+                        .append(
+                            $("<input/>")
+		                    .addClass("mh_form_submit")
+                            .attr("type", "button")
+                            .attr("value", "Barycentre")
+                            .on('click', $.proxy(function(evt){
+                                var cmp = $(evt.target);
+                                
+                                var xColId = this.getColumnId(tableId, "X");
+                                var yColId = this.getColumnId(tableId, "Y");
+                                var nColId = this.getColumnId(tableId, "N");                                
+                                
+                                var Ex = 0, Ey = 0, En = 0;
+                                var trs = $("#" + tableId + " table:first tr.mh_tdpage");
+                                trs.each($.proxy(function(iTr, tr) {
+                                    Ex += parseInt($(tr).find("td:nth-child(" + xColId + ")").text());
+                                    Ey += parseInt($(tr).find("td:nth-child(" + yColId + ")").text());
+                                    En += parseInt($(tr).find("td:nth-child(" + nColId + ")").text());
+                                }, this));
+                                    
+                                cmp.val("X: " + Math.round(Ex/trs.length) + " | Y: " + Math.round(Ey/trs.length) + " | N: " + Math.round(En/trs.length));
+                                cmp.attr("disabled", "disabled");
+                                cmp.attr("type", "text");
+                                cmp.addClass('TextboxV2');
+                                cmp.css("text-align", "center");
+                                cmp.removeClass('mh_form_submit');
+                                
+                                
+                            },this))
+                         )
+                    );
+                    
+            }, this)
+        );
     },
     
     addBaliseContainer : function() {
@@ -2332,7 +2379,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     addSameXYN : function() {        
         $("<style type='text/css'> tr.xyn td { background-color:beige;} </style>").appendTo("head");
         
-        $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_lieux", "mh_vue_hidden_tresors"], $.proxy(function(idx, tableId){
+        $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_lieux", "mh_vue_hidden_tresors", "mh_vue_hidden_champignons"], $.proxy(function(idx, tableId){
             var xId = this.getColumnId(tableId, "X");
             var yId = this.getColumnId(tableId, "Y");
             var nId = this.getColumnId(tableId, "N");            
