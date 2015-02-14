@@ -1,12 +1,12 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-11
+// @version       0.1.3-12
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2014-10-21_12-00
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2014-10-21_18-56
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2015-02-13_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-23_21-22
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-11-19_10-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2014-10-21_12-00
@@ -1768,7 +1768,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     [
                         ["Gigots de Gob'", "<b style='color:#ff8000'>piécettes à Miltown</b>"],
                         [/(Gigots de Gob)/, "<b style='color:#ff8000'>$1</b>"],
-                        [/(Carte|Coquillage|Conteneur|Minerai|Parchemin|Spécial)/, "<b style='color:#900090'>$1</b>"]
+                        [/(Carte|Coquillage|Conteneur|Minerai|Parchemin|Tête Réduite|Spécial)/, "<b style='color:#900090'>$1</b>"]
                     ], function(i, r) {
                         txt = txt.replace(r[0], r[1]);
                     });
@@ -2972,6 +2972,40 @@ var MH_Play_Liste_Vente_ListeVente_view = $.extend({}, MH_Page, {
                 var cbs = $(this).parents('tbody').find("input[type='checkbox']");
                 cbs.prop("checked", ! cbs.prop("checked"));
             });
+    }
+});
+
+var MH_Play_Actions_Competences_Play_a_Competence43b = $.extend({}, MH_Page, {
+    init : function() {
+        var sons = {
+            '1': [ 'Booong', 'DEG: +1 | ESQ: -1', { seuil: 1, deg: 1, esq: -1 } ],
+            '2': [ 'Bababoum', 'ATT: +1', { seuil: 1, att: 1 } ],
+            '3': [ 'Zbouing', 'REG: +1', { seuil: 1, reg: 1 } ],
+            '6': [ 'Whoooom', 'Concentration: +2', { seuil: 1, concentration: 2 } ],
+            '7': [ 'Krouiiik', 'Concentration: -2', { seuil: 1, concentration: -2 } ],
+            '8': [ 'Tagadagada', 'Tour: +0.5', { seuil: 2, tour: 1 } ],
+            '9': [ 'Tuutuuuut', 'ATT: -1', { seuil: 1, att: -1 } ],
+            '15': [ 'Sssrileur', 'Visible', { seuil: 6, visible: true } ]        
+/*
+[ "Gaaaw", "FATIGUE +1", { seuil: 1, fatigue: 1 } ],
+[ "Huitsch", "DEG -1", { seuil: 1, deg: -1 } ],
+[ "Kliketiiik", "ESQ -1 / CONCENTRATION -1", { seuil: 1, esq: -1 } ],
+[ "Kssksss", "ESQ +1", { seuil: 1, esq: 1 } ],
+[ "Praaaouuut", "REG -1", { seuil: 1, reg: -1 } ],
+*/
+        };
+        var sel = $('select.SelectboxV2');
+        sel.find('option').each(function() {
+            var s = sons[$(this).val()];
+            if (s) {
+                $(this).text($(this).text() + ' (' + s[1] + ')');
+            }
+        });
+        sel.on('change', function() {
+            var s = sons[$(this).find('option:selected').val()],
+                t = s ? s[1] : '***';
+            $(this).next().replaceWith("<span>&nbsp;" + t + "</span>");
+        });
     }
 });
 
