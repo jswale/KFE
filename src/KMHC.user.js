@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-11
+// @version       0.1.3-12
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -2494,7 +2494,15 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
                 var isInvisible = false;
 
+                var trollIds = $.map(json.trolls, $.proxy(function(trollId, data){
+                    return trollId;
+                }, this));
+
                 $.each(json.invis, $.proxy(function(trollId, data){
+                    if($.inArray(trollId, trollIds)) {
+                        return;
+                    }
+                    
                     if(trollId == Utils.getConf("login")) {
                         isInvisible = true;
                     }
