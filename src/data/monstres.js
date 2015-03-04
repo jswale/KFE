@@ -1,4 +1,4 @@
- var DB_monstres =   {
+ var DB_monstres = {
      "Abishaii Bleu": {
          "name": "Abishaii bleu",
          "familly": "Démon",
@@ -4022,6 +4022,33 @@
          "fly": null,
          "powerRange": null
      },
+     "Archi-Sorcière": {
+         "name": "Sorcière",
+         "familly": "Humanoïde",
+         "level": 17,
+         "noAtt": 1,
+         "attMag": true,
+         "attDist": true,
+         "speed": "Rapide",
+         "vlc": true,
+         "power1": "Charme - Zone",
+         "power2": null,
+         "hp": [110, 140],
+         "att": [10, 13],
+         "esq": [16, 19],
+         "degat": [7, 10],
+         "vue": [2, 6],
+         "regen": [2, 4],
+         "armPhy": [11, 14],
+         "armMag": null,
+         "mm": [3500, 3800],
+         "rm": [2000, 2300],
+         "dla": [8, 14],
+         "dlaUse": null,
+         "coldBlod": null,
+         "fly": null,
+         "powerRange": null
+     },     
      "Spectre": {
          "name": "Spectre",
          "familly": "Mort-Vivant",
