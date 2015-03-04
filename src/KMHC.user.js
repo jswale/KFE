@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-12
+// @version       0.1.3-14
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1084,7 +1084,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Magie
         var text = getText(10);
-        var tmp = / Magie Résistance à la Magie...................: (\d+) points ([+-]\d+) Maîtrise de la Magie....................: (\d+) points ([+-]\d+) Bonus de Concentration : (\d+) %/.exec(text);
+        var tmp = / Magie Résistance à la Magie...................: (\d+) points ([+-]\d+) Maîtrise de la Magie....................: (\d+) points ([+-]\d+) Bonus de Concentration : (-?\d+) %/.exec(text);
         stats.magie = {
             rm : {
                 value : parseInt(tmp[1]),
