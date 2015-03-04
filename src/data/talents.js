@@ -600,7 +600,36 @@ var DB_talents = {
         },
         43 : {
             name : "Baroufle",
-            description : "Vous voulez encourager vos compagnons de chasse ? Ramassez quelques Coquillages, et en avant la musique !"
+            sons : {
+                1: [ "Booong", "DEG +1 / ESQ -1", { seuil: 1, deg: 1, esq: -1 } ],
+                2: [ "Bababoum", "ATT +1", { seuil: 1, att: 1 } ],
+                3: [ "Zbouing", "REG +1", { seuil: 1, reg: 1 } ],
+                6: [ "Whoooom", "Concentration +2", { seuil: 1, concentration: 2 } ],
+                7: [ "Krouiiik", "Concentration -2", { seuil: 1, concentration: -2 } ],
+                8: [ "Tagadagada", "Tour +0.5", { seuil: 2, tour: 1 } ],
+                9: [ "Tuutuuuut", "ATT -1", { seuil: 1, att: -1 } ],
+                15: [ "Sssrileur", "Visible", { seuil: 6, visible: true } ],
+                '?1': [ "Gaaaw", "Fatigue +1", { seuil: 1, fatigue: 1 } ],
+                '?2': [ "Huitsch", "DEG -1", { seuil: 1, deg: -1 } ],
+                '?3': [ "Kliketiiik", "ESQ -1 | Concentration -1", { seuil: 1, esq: -1, concentration: -1 } ],
+                '?4': [ "Kssksss", "ESQ +1", { seuil: 1, esq: 1 } ],
+                '?5': [ "Praaaouuut", "REG -1", { seuil: 1, reg: -1 } ]
+            },
+            description : function() {
+                var ctn = $("<table/>");
+                ctn.append(
+                    $("<tr/>")
+                    .append($("<td/>").attr("colspan", 2).html("Vous voulez encourager vos compagnons de chasse&nbsp;?<br/>Ramassez quelques Coquillages, et en avant la musique !<hr/>"))
+                );
+                $.each(DB_talents["Comp"][43].sons, function (i, v) {
+                    ctn.append(
+                        $("<tr/>")
+                        .append($("<th/>").html(v[0]))
+                        .append($("<td/>").html(v[1]))
+                    );
+                });
+                return ctn;
+            } 
         },
         44 : {
             name : "Course",
