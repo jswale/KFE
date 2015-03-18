@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.3-15
+// @version       0.1.4-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -849,6 +849,46 @@ var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
     }
 });
 
+
+var MH_Play_Actions_Play_a_Drop = $.extend({}, MH_Page, {
+    init : function() {
+        var monsterIds = $('select[name="ai_DropTo"] option').map(function(){
+            return $(this).prop("value");
+        }).filter(function(idx, value){
+            return /^\d{2,}$/.test(value);
+        }).get();
+
+        var tresorIds = $('select[name="ai_IdTarget"] option').map(function(){
+            return $(this).prop("value");
+        }).filter(function(idx, value){
+            return /^\d{2,}$/.test(value);
+        }).get();
+        
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "invi" : 0,
+                "m" : monsterIds,
+                "o" : tresorIds
+            },
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                $.each(json.tags, $.proxy(function(key, data){
+                    var tmp = key.split(";");
+                    if(tmp[0] == "1") {
+                        var o = $('select[name="ai_DropTo"] option[value="' + tmp[1] + '"]');
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                    if(tmp[0] == "3") {
+                        var o = $('select[name="ai_IdTarget"] option[value="' + tmp[1] + '"]');
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                },this));
+            }
+        });
+
+    }
+});
 
 var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, { // TELEK
 });
@@ -2998,6 +3038,40 @@ var MH_Play_Actions_Competences_Play_a_Competence43b = $.extend({}, MH_Page, {
       t = s ? s[1] : '***';
       $(this).next().replaceWith("<span>&nbsp;" + t + "</span>");
     });
+  }
+});
+
+
+var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
+  init : function() {
+      $('form td.mh_titre3').each(function(){
+          var id = $(this).find("a").first().text().trim().replace(/^(\d+)(\..*)$/, "$1");
+          
+          $("<tr/>")
+          .append(
+              $("<td/>")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Profil.php?ai_IdFollower=" + id + "'>Profil</a>")
+              .append(" - ")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Ordres.php?ai_IdFollower=" + id + "'>Ordres</a>")
+              .append(" - ")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Equipement.php?ai_IdFollower=" + id + "'>Equipement</a>")
+              .append(" - ")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Description.php?ai_IdFollower=" + id + "'>Description</a>")
+          )
+          .insertAfter( $(this).parents("tr:first") );
+      })
+  }
+});
+
+var MH_Follower_FO_NewOrderOK = $.extend({}, MH_Page, {
+  init : function() {
+      $('form').submit();
+  }
+});
+
+var MH_Follower_FO_DeleteOrder = $.extend({}, MH_Page, {
+  init : function() {
+      $('form').submit();
   }
 });
 
