@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-2
+// @version       0.1.4-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -2849,6 +2849,30 @@ var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
   }
 });
 
+var MH_Follower_FO_NewOrder = $.extend({}, MH_Page, {
+  doc : null,
+  init : function() {
+      try {
+          this.doc = window.parent.parent.parent.Sommaire.document;
+      } catch(e) {}
+      
+      if(null != this.doc) {
+          if($('[name="ai_X"],[name="ai_Y"],[name="ai_N"]').length == 3) {
+              $('div.Action').append(
+                  $("<span>Ma position</span>")
+                  .css("cursor", "hand")
+                  .click($.proxy(function() {
+                      var tmp = /X=(-?\d+)\|Y=(-?\d+)\|N=(-?\d+)/.exec($("div.infoMenu", this.doc).first().text());                
+                      $('[name="ai_X"]').val(tmp[1]);
+                      $('[name="ai_Y"]').val(tmp[2]);
+                      $('[name="ai_N"]').val(tmp[3]);
+                  }, this))
+              );
+          }
+      }
+  }
+});
+
 var MH_Follower_FO_NewOrderOK = $.extend({}, MH_Page, {
   init : function() {
       $('form').submit();
@@ -2875,7 +2899,7 @@ $(document).ready(function() {
         module = eval(moduleName);
     } catch(e) {
 //        console.log('catched!', e);
-    }
+    }    
 
     if(Utils.isUndefined(typeof module)) {
         console.log("Unable to find the module " + moduleName + " for URL " + pathname);
@@ -2883,3 +2907,4 @@ $(document).ready(function() {
         module.load();
     }
 });
+
