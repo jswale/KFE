@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-3
+// @version       0.1.4-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -759,7 +759,7 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, { //
     },
 
     tune : function() {
-        $("select option:contains('Gowap')").css("color", "#808080");
+        $("select option:contains('Gowap'),select option:contains('Golem de')").css("color", "#808080");
     },
 
     showInfo : function() {
@@ -779,6 +779,58 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, { //
                     var tmp = key.split(";");
                     if(tmp[0] == "1") {
                         var o = $("select option[value='ME_" + tmp[1] + "']");
+                        o.text(o.text() + " " + data.tag);
+                    }
+                },this));
+
+                $.each(json.monsters, $.proxy(function(key, data) {
+                    var o = $("select option[value='ME_" + key + "']");
+                    o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
+                },this));
+            }
+        });
+    }
+});
+
+var MH_Play_Actions_Play_a_Attack = $.extend({}, MH_Page, {
+
+    init : function() {
+        this.tune();
+        this.showInfo();
+    },
+
+    tune : function() {
+        $("select option:contains('Gowap'),select option:contains('Golem de')").css("color", "#808080");
+    },
+
+    showInfo : function() {
+        var monsterIds = $("select option[value!='']").map(function(){
+            var m = $(this).prop("value").match(/^ME_(\d+)$/);
+            return m ? m[1] : null;
+        }).get();
+        
+        var trollIds = $("select option[value!='']").map(function(){
+            var m = $(this).prop("value").match(/^(\d+)$/);
+            return m ? m[1] : null;
+        }).get();
+        
+
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "invi" : 0,
+                "m" : monsterIds,
+                "t" : trollIds
+            },
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                $.each(json.tags, $.proxy(function(key, data) {
+                    var tmp = key.split(";");
+                    if(tmp[0] == "1") {
+                        var o = $("select option[value='ME_" + tmp[1] + "']");
+                        o.text(o.text() + " " + data.tag);
+                    } else if(tmp[0] == "2") {
+                        var o = $("select option[value='" + tmp[1] + "']");
                         o.text(o.text() + " " + data.tag);
                     }
                 },this));
@@ -1472,7 +1524,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.addSameXYN();
 
         // Tune ihm
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé')").css("color", "#000");        
+        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de')").css("color", "#000");        
     },
     
     addBarycentreUI : function() {
