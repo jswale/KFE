@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-4
+// @version       0.1.4-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1053,7 +1053,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Echéance du Tour
         var text = getText(2);
-        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes. Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);
+        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);
         stats.pa = parseInt(tmp[2]);
         stats.dla = {
             next :tmp[1],
@@ -1079,7 +1079,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                     min : parseInt(tmp[12])
                 }
             }
-        };
+        };                
 
         // Vue
         var text = getText(3);
@@ -1220,7 +1220,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
     },
 
     tuneIHM : function() {
-        var stats = this.getStats();
+        var stats = this.getStats();        
 
         var getContainer = function(id) {
             return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
