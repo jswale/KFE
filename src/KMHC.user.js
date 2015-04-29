@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-5
+// @version       0.1.4-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -210,7 +210,7 @@ var MH_Page = function() {
                         this.warn("No callback found");
                     } else {
                         this.debug("Result", data);
-                        conf.callback.apply(this, arguments);
+                        conf.callback.apply(this, [data.replace(/\s+/g, " "), result, request]);
                     }
                 } else {
                     this.error("Error while executing the API call");
@@ -1688,11 +1688,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 ["mh_vue_hidden_monstres", "Réf.", "Nom", 1],
                 ["mh_vue_hidden_trolls", "Réf.", "Nom", 2],
                 ["mh_vue_hidden_tresors", "Réf.", "Type", 3],
-                //["mh_vue_hidden_champignons", "", "", 4],
+                //["mh_vue_hidden_champignons", ["X","Y","N"], "-", 4],
                 ["mh_vue_hidden_lieux", "Réf.", "Nom", 5]
-            ], $.proxy(function(i, data) {
-                var refColId = this.getColumnId(data[0], data[1]);
+            ], $.proxy(function(i, data) {                
                 var nomColId = this.getColumnId(data[0], data[2]);
+                var refColId = this.getColumnId(data[0], data[1]);
+                
                 $("#" + data[0] + " table:first tr.mh_tdpage").each($.proxy(function(iTr, tr) {
                     this.addTagEditionForCell($(tr), refColId, nomColId, data[3]);
                 }, this));
@@ -2348,10 +2349,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var r = txt.match(/L'affichage est limité à (\d+) cases horizontalement et (\d+) verticalement/);
         var rH = parseInt(r[1]);
         var rV = parseInt(r[2]);
-
+        
         // Fix
         $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");
-
+        
         this.callAPIConnected({
             api : "viewInfo",
             data : {
@@ -2368,6 +2369,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "c" : []
             },
             callback : function(datas) {
+                datas = datas.replace(/\s+/g, " ");
                 var json = $.parseJSON(datas);
 
                 var isInvisible = false;
