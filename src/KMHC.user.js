@@ -2714,7 +2714,13 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
     init : function() {
         if(document.location.search.match(/^\?cat=9/)) {
             $("form[name=botForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
-            
+
+        } else if(document.location.search.match(/^\?cat=1/)) {
+            $("form[name=mailboxForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
+
+        } else if(document.location.search.match(/^\?cat=2/)) {
+            $("form[name=sendboxForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
+
         } else if(document.location.search.match(/^\?cat=3/)) {            
             var ti = $("input[name=Titre]"),
                 ta = $("textarea[name='Message']"),
