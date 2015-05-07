@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-6
+// @version       0.1.4-7
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -210,7 +210,7 @@ var MH_Page = function() {
                         this.warn("No callback found");
                     } else {
                         this.debug("Result", data);
-                        conf.callback.apply(this, [data.replace(/\s+/g, " "), result, request]);
+                        conf.callback.apply(this, [data.replace(/\s/g, " "), result, request]);
                     }
                 } else {
                     this.error("Error while executing the API call");
@@ -1506,6 +1506,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.addPharozViewLinks();
         
         this.highlightTreasures();
+        this.addChampignonsRef();
         this.addTagEdition();
 
         if(Utils.getConf("mountyzilla") != "true") {
@@ -1525,6 +1526,38 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de')").css("color", "#000");        
+    },
+    
+    addChampignonsRef : function() {
+        // Ajout de a colonne titre
+        var distColId = this.getColumnId("mh_vue_hidden_champignons", "Dist.");
+        $("#mh_vue_hidden_champignons table:first tr.mh_tdtitre:first td:nth-child("+distColId+")").after('<td width="160px"><b>Réf.</b></td>');
+        
+        var xColId = this.getColumnId("mh_vue_hidden_champignons", "X");
+        var yColId = this.getColumnId("mh_vue_hidden_champignons", "Y");
+        var nColId = this.getColumnId("mh_vue_hidden_champignons", "N");
+        var nameColId = this.getColumnId("mh_vue_hidden_champignons", "-");
+        
+        $("#mh_vue_hidden_champignons table:first tr.mh_tdpage").each($.proxy(function(iTr, tr) {
+            var container = $("<td/>");
+	        $(tr).children('td:nth-child(' + distColId + ')').after(container);
+            
+            var ref = "";
+            $.each([xColId, yColId, nColId], function(i, colId) {
+                var coord = parseInt($(tr).children('td:nth-child(' + colId + ')').text());
+                var pad = "10000";
+                if(coord < 0) {
+                    coord = -coord;
+                    pad = "20000";
+                }
+                coord = "" + coord;
+                coord = pad.substring(0, pad.length - coord.length) + coord;
+                ref += coord;
+            });
+            
+            container.text(parseInt(ref));
+            
+        }, this));
     },
     
     addBarycentreUI : function() {
@@ -1688,7 +1721,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 ["mh_vue_hidden_monstres", "Réf.", "Nom", 1],
                 ["mh_vue_hidden_trolls", "Réf.", "Nom", 2],
                 ["mh_vue_hidden_tresors", "Réf.", "Type", 3],
-                //["mh_vue_hidden_champignons", ["X","Y","N"], "-", 4],
+                ["mh_vue_hidden_champignons", "Réf.", "-", 4],
                 ["mh_vue_hidden_lieux", "Réf.", "Nom", 5]
             ], $.proxy(function(i, data) {                
                 var nomColId = this.getColumnId(data[0], data[2]);
@@ -1699,6 +1732,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 }, this));
             }, this)
         );
+        
     },
 
     handleTagEdition: function() {
@@ -2299,10 +2333,10 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+nameColId+")").css("width", "45%");
 
         	var ids = $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
-            var id = $(this).text();
-            $(this).parent("tr").attr("data-troll-info", id);
-            return id;
-        }).get();
+                var id = $(this).text();
+                $(this).parent("tr").attr("data-troll-info", id);
+                return id;
+            }).get();
         ids.push(Utils.getConf("login"));
         return ids;
     },
@@ -2337,7 +2371,16 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             $(this).parent("tr").attr("data-lieu-info", id);
             return id;
         }).get();
+    },
 
+    getChampigonIds : function() {
+        var refColId = this.getColumnId("mh_vue_hidden_champignons", "Réf.");
+
+        return $("#mh_vue_hidden_champignons table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+            var id = $(this).text();
+            $(this).parent("tr").attr("data-champignon-info", id);
+            return id;
+        }).get();
     },
 
     addInfos : function() {
@@ -2366,7 +2409,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 "t" : this.getTrollIds(),
                 "o" : this.getTresorIds(),
                 "l" : this.getLieuIds(),
-                "c" : []
+                "c" : this.getChampigonIds()
             },
             callback : function(datas) {
                 datas = datas.replace(/\s+/g, " ");
