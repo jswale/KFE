@@ -2712,7 +2712,10 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
 
 var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
     init : function() {
-        if(document.location.search.match(/^\?cat=3/)) {
+        if(document.location.search.match(/^\?cat=9/)) {
+            $("form[name=botForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
+            
+        } else if(document.location.search.match(/^\?cat=3/)) {            
             var ti = $("input[name=Titre]"),
                 ta = $("textarea[name='Message']"),
                 bt = $("input[name='bsSend']"),
