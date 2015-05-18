@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-7
+// @version       0.1.4-9
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -67,6 +67,23 @@ var Utils = function() {
         sign : function(i) {
             return (i >=0 ? '+' : '') + i;
         },
+        
+        getCoordRef : function(x,y,n, pad) {
+            pad = pad || "0000";
+            var ref = "";
+            $.each([x, y, n], function(i, coord) {
+                var fpad = "1" + pad;
+                if(coord < 0) {
+                    coord = -coord;
+                    fpad = "2" + pad;
+                }
+                coord = "" + coord;
+                coord = fpad.substring(0, fpad.length - coord.length) + coord;
+                ref += coord;
+            });
+
+            return parseInt(ref);
+        },        
 
         getPortee : function(param) {
             return Math.ceil( Math.sqrt( 2*param+10.75 )-3.5 );
@@ -206,7 +223,7 @@ var MH_Page = function() {
                 data : $.extend(conf.data, {"page" : conf.api, "popup" : 0, "encoding" : "UTF-8"})
             }).done($.proxy(function(data, result, request){
                 if(result == Utils.success) {
-                    if(Utils.isUndefined(typeof conf.callback)) {
+                    if(Utils.isUndefined(conf.callback)) {
                         this.warn("No callback found");
                     } else {
                         this.debug("Result", data);
@@ -1483,6 +1500,19 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
                 "tag" : tmp[2]
             };
         }
+        
+
+        if(title.indexOf("Compétence : Identification des Champignons") > -1) {
+            console.log(body);
+            var tmp = /Vous avez reconnu le Champignon :\s+(.*)(?:Salé|Sucré)\s+\(\d+\)\s+qui se trouvait en X=(-?\d+), Y=(-?\d+), N=(-?\d+)/.exec(body);
+            console.log(tmp);
+            api = "tag";
+            data =  {
+                "type" : 4,
+                "num" : Utils.getCoordRef(parseInt(tmp[2]),parseInt(tmp[3]),parseInt(tmp[4])),
+                "tag" : tmp[1],
+            };
+        }        
 
         if(null == api) {
             return;
@@ -1542,20 +1572,11 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             var container = $("<td/>");
 	        $(tr).children('td:nth-child(' + distColId + ')').after(container);
             
-            var ref = "";
-            $.each([xColId, yColId, nColId], function(i, colId) {
-                var coord = parseInt($(tr).children('td:nth-child(' + colId + ')').text());
-                var pad = "10000";
-                if(coord < 0) {
-                    coord = -coord;
-                    pad = "20000";
-                }
-                coord = "" + coord;
-                coord = pad.substring(0, pad.length - coord.length) + coord;
-                ref += coord;
-            });
-            
-            container.text(parseInt(ref));
+            container.text(Utils.getCoordRef(
+                parseInt($(tr).children('td:nth-child(' + xColId + ')').text()),
+                parseInt($(tr).children('td:nth-child(' + yColId + ')').text()),
+                parseInt($(tr).children('td:nth-child(' + nColId + ')').text())
+            ));
             
         }, this));
     },
@@ -2956,27 +2977,41 @@ var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
 });
 
 var MH_Follower_FO_NewOrder = $.extend({}, MH_Page, {
-  doc : null,
   init : function() {
+      var ctn1 = null;
       try {
-          this.doc = window.parent.parent.parent.Sommaire.document;
+          ctn1 = window.parent.parent.parent.Sommaire.document;
+      } catch(e) {}
+
+      var ctn2 = null;
+      try {
+          ctn2 = window.parent.Contenu.document;
       } catch(e) {}
       
-      if(null != this.doc) {
-          if($('[name="ai_X"],[name="ai_Y"],[name="ai_N"]').length == 3) {
-              $('div.Action').append(
-                  $("<span>Ma position</span>")
-                  .css("cursor", "hand")
-                  .click($.proxy(function() {
-                      var tmp = /X=(-?\d+)\|Y=(-?\d+)\|N=(-?\d+)/.exec($("div.infoMenu", this.doc).first().text());                
-                      $('[name="ai_X"]').val(tmp[1]);
-                      $('[name="ai_Y"]').val(tmp[2]);
-                      $('[name="ai_N"]').val(tmp[3]);
-                  }, this))
-              );
-          }
-      }
-  }
+      this.showCoords(ctn1, "Ma position", "div.infoMenu");
+      this.showCoords(ctn2, "Sa position", "table.mh_tdborder_fo > tbody > tr.mh_tdtitre_fo table td:nth-child(4)");
+  },
+    
+    showCoords : function(doc, title, selector) {
+        if(null != doc) {
+            if($('[name="ai_X"],[name="ai_Y"],[name="ai_N"]').length == 3) {
+                $('div.Action').append(
+                    $("<span>[" + title + "]</span>")
+                    .css("cursor", "hand")
+                    .css("margin-left", "5px")
+                    .click($.proxy(function() {
+                        var coords = $(selector, doc).first().text();
+                        var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(coords);                
+                        $('[name="ai_X"]').val(tmp[1]);
+                        $('[name="ai_Y"]').val(tmp[2]);
+                        $('[name="ai_N"]').val(tmp[3]);
+                    }, this))
+                );
+            }
+        }          
+    }
+
+    
 });
 
 var MH_Follower_FO_NewOrderOK = $.extend({}, MH_Page, {
