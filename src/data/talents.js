@@ -1,4 +1,4 @@
-﻿var DB_talents = {
+var DB_talents = {
     "Comp" : {
         1  : {
             name : "Botte Secrète",
@@ -623,9 +623,9 @@
                 );
                 $.each(DB_talents["Comp"][43].sons, function (i, v) {
                     ctn.append(
-                    $("<tr/>")
-                      .append($("<th/>").html(v[0]))
-                      .append($("<td/>").html(v[1]))
+                        $("<tr/>")
+                        .append($("<th/>").html(v[0]))
+                        .append($("<td/>").html(v[1]))
                     );
                 });
                 return ctn;

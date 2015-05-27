@@ -1,4 +1,4 @@
-﻿ var DB_monstres =   {
+ var DB_monstres = {
      "Abishaii Bleu": {
          "name": "Abishaii bleu",
          "familly": "Démon",
@@ -4048,7 +4048,7 @@
          "coldBlod": null,
          "fly": null,
          "powerRange": null
-     },
+     },     
      "Spectre": {
          "name": "Spectre",
          "familly": "Mort-Vivant",

@@ -1,4 +1,8 @@
 var DB_monstreAlias = {
+  "Homme-Lézard" : "Homme-Lezard",
+  "Dindon du Chaos" : "Dindon",
+  "Dindon du Chaos Coriace" : "Dindon Coriace",
+
   "Rat" : "Petit Rat Géant",
   "Rat Gigantesque" : "Gros Rat Géant",
   "Rat Gargantuesque" : "Rat Géant Gargantuesque",
