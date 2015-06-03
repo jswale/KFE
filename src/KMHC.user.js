@@ -1,7 +1,7 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-10
+// @version       0.1.4-11
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -776,7 +776,7 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, { //
     },
 
     tune : function() {
-        $("select option:contains('Gowap'),select option:contains('Golem de')").css("color", "#808080");
+        $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
     },
 
     showInfo : function() {
@@ -817,7 +817,7 @@ var MH_Play_Actions_Play_a_Attack = $.extend({}, MH_Page, {
     },
 
     tune : function() {
-        $("select option:contains('Gowap'),select option:contains('Golem de')").css("color", "#808080");
+        $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
     },
 
     showInfo : function() {
@@ -1555,7 +1555,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.addSameXYN();
 
         // Tune ihm
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de')").css("color", "#000");
+        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
     },
 
     addChampignonsRef : function() {
