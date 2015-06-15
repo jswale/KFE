@@ -162,7 +162,7 @@ var Utils = function() {
                              .replace(/<\/t[dh][^>]*>/gi," ")
                              .replace(/<\/?[^>]+>/gi,"")
                              .replace(/\s+/gi," "));
-        },
+        }
     }
 }();
 
