@@ -231,8 +231,6 @@ var MH_Map = function() {
         },
         drawPos : function(map, xMH, yMH, color, p) {
             var x = this.xCtx(xMH, p), y = this.yCtx(yMH, p);
-            console.log("x", x);
-            console.log("y", y);
             map.ctx.strokeStyle = color;
             map.ctx.fillStyle = color;
             map.ctx.lineWidth = p.zf;
@@ -2809,7 +2807,6 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
         var tmp1 = /Portail de Téléportation\s+\(Lieu n° (\d+)\)/.exec($("div.titre2").text());
         if(tmp1) {
             var tmp2 = /(mène en X = (-?\d+) \| Y = (-?\d+)[^\.]*)/.exec($("#description").text());
-            console.log("tmp2", tmp2);
             MH_Map.drawPos(map, parseInt(tmp2[2]), parseInt(tmp2[3]), "rgba(0,0,0,0.5)", p);
 
             this.callAPIConnected({
