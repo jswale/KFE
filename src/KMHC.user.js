@@ -2818,7 +2818,7 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
                 }
             });
         }
-        $("#description").after(map.div);
+        $("#footer1").before(map.div);
     }
 });
 
