@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-14
+// @version       0.1.4-15
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -233,7 +233,7 @@ var MH_Map = function() {
             var x = this.xCtx(xMH, p), y = this.yCtx(yMH, p);
             map.ctx.strokeStyle = color;
             map.ctx.fillStyle = color;
-            map.ctx.lineWidth = p.zf;
+            map.ctx.lineWidth = p.lw || p.zf;
             map.ctx.beginPath();
             map.ctx.arc(x, y, p.zf, 0, Math.PI * 2, true);
             map.ctx.fill();
@@ -2850,14 +2850,17 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
     init : function() {
         var p = {zf: 2.0, dx: 30, dy: 30},
             map = MH_Map.getMap("map_mh", p);
-
+        
+        // Tanière
+        MH_Map.drawPos(map, 84, 27, "rgba(138,43,226,0.75)",  {zf: 2.0, dx: 30, dy: 30, lw: 1});                    
+        
         var ctn = null;
         try {
             ctn = window.parent.parent.parent.Sommaire.document;
         } catch(e) {}
         if (ctn) {
             var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
-            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,50,0,0.5)", p);
+            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,50,0,0.5)", p);           
         }
 
         var tmp1 = /Portail de Téléportation\s+\(Lieu n° (\d+)\)/.exec($("div.titre2").text());
