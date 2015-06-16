@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-15
+// @version       0.1.4-16
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -196,6 +196,11 @@ var MH_Map = function() {
         [74.5, 31.5, 2, 1.5, -69]
     ];
 
+    var LOCATIONS = {
+        "Véda": [-64, 47, -32, "rgba(138,43,226,0.75)"],
+        "Karlaaki": [84, 27, -50, "rgba(138,43,226,0.75)"]
+    };
+
     return {
         xCtx : function(xMH, p) { return (xMH + 100) * p.zf + p.dx; },
         yCtx : function(yMH, p) { return (100 - yMH) * p.zf + p.dy; },
@@ -227,19 +232,25 @@ var MH_Map = function() {
                 ctx.fill();
             }, this));
 
+            // known locations
+            var lp = $.extend({lw: 1}, p);
+            $.each(LOCATIONS, $.proxy(function (name, loc) {
+                this.drawPos(ctx, loc[0], loc[1], loc[3], lp);
+            }, this));
+
             return {div: div, canvas: canvas, ctx: ctx};
         },
-        drawPos : function(map, xMH, yMH, color, p) {
+        drawPos : function(ctx, xMH, yMH, color, p) {
             var x = this.xCtx(xMH, p), y = this.yCtx(yMH, p);
-            map.ctx.strokeStyle = color;
-            map.ctx.fillStyle = color;
-            map.ctx.lineWidth = p.lw || p.zf;
-            map.ctx.beginPath();
-            map.ctx.arc(x, y, p.zf, 0, Math.PI * 2, true);
-            map.ctx.fill();
-            map.ctx.beginPath();
-            map.ctx.arc(x, y, 3 * p.zf, 0, Math.PI * 2, true);
-            map.ctx.stroke();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = p.lw || p.zf;
+            ctx.beginPath();
+            ctx.arc(x, y, p.zf, 0, Math.PI * 2, true);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x, y, 3 * p.zf, 0, Math.PI * 2, true);
+            ctx.stroke();
         }
     }
 }();
@@ -414,8 +425,11 @@ var MH_Page = function() {
                 )
                 .append($("<br/>").css("clear","left"))
                 .append("<i>Les changements seront pris en compte au prochain affichage de cette page</i>")
-                .append($("<br/>"))
-                .append($("<span/>"))
+                .append($("<div/>")
+                    .css("text-align", "right")
+                    .css("font-size", "smaller")
+                    .append("[<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_new'>Recharger le script</a>]")
+                )
             )
             .appendTo($("body"));
 
@@ -2850,23 +2864,20 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
     init : function() {
         var p = {zf: 2.0, dx: 30, dy: 30},
             map = MH_Map.getMap("map_mh", p);
-        
-        // Tanière
-        MH_Map.drawPos(map, 84, 27, "rgba(138,43,226,0.75)",  {zf: 2.0, dx: 30, dy: 30, lw: 1});                    
-        
+
         var ctn = null;
         try {
             ctn = window.parent.parent.parent.Sommaire.document;
         } catch(e) {}
         if (ctn) {
             var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
-            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,50,0,0.5)", p);           
+            MH_Map.drawPos(map.ctx, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,50,0,0.5)", p);           
         }
 
         var tmp1 = /Portail de Téléportation\s+\(Lieu n° (\d+)\)/.exec($("div.titre2").text());
         if(tmp1) {
             var tmp2 = /(mène en X = (-?\d+) \| Y = (-?\d+)[^\.]*)/.exec($("#description").text());
-            MH_Map.drawPos(map, parseInt(tmp2[2]), parseInt(tmp2[3]), "rgba(0,0,0,0.5)", p);
+            MH_Map.drawPos(map.ctx, parseInt(tmp2[2]), parseInt(tmp2[3]), "rgba(0,0,0,0.5)", p);
 
             this.callAPIConnected({
                 api: "tag",
