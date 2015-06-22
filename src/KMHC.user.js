@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-16
+// @version       0.1.4-17
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -171,7 +171,7 @@ var Storage = {
 
 var MH_Map = function() {
     var HOLES = [
-        // X, Y, size, radius, Nstart, Nend
+        // X, Y, size, radius, Ndepth
         [-70.5, -7.5, 2, 1.5, -69],
         [-66.5, -37.5, 2, 1.5, -69],
         [-63.5, 8.5, 2, 1.5, -69],
@@ -204,6 +204,8 @@ var MH_Map = function() {
     return {
         xCtx : function(xMH, p) { return (xMH + 100) * p.zf + p.dx; },
         yCtx : function(yMH, p) { return (100 - yMH) * p.zf + p.dy; },
+        xMh : function(xCTX, p) { return Math.round((xCTX - p.dx) / p.zf - 100); },
+        yMh : function(yCTX, p) { return Math.round(100 - (yCTX - p.dy) / p.zf); },
 
         getMap : function(ref, p) {
             var div = $("<div/>",{id: ref})
@@ -211,7 +213,36 @@ var MH_Map = function() {
                 canvas = $("<canvas/>", {id: ref + "_canvas"})
                     .addClass("mh_tdtitre")
                     .appendTo(div)[0],
-                ctx = canvas.getContext("2d");
+                ctx = canvas.getContext("2d"),
+                tip = $("<div/>",{id: ref + "_tip"})
+                    .css("position", "absolute")
+                    .css("max-width", "700px")
+                    .css("border", "1px solid #CCC")
+                    .css("background-color", "#FFF")
+                    .css("border-radius", "5px")
+                    .css("z-index", "999")
+                    .css("display", "none")
+                    .appendTo(div),
+                tipH = $("<h2/>")
+                    .css("background", "#333")
+                    .css("border", "1px solid #111")
+                    .css("padding", "5px 10px")
+                    .css("font-size", "14px")
+                    .css("color", "white")
+                    .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
+                    .css("letter-spacing", "0")
+                    .css("border-radius", "5px 5px 0 0")
+                    .css("font-weight", "normal")
+                    .css("margin-bottom", "0px")
+                    .css("margin-top", "0px")
+                    .css("overflow", "hidden")
+                    .text("-")
+                    .appendTo(tip),
+                tipD = $("<div/>")
+                    .css("padding", "10px")
+                    .appendTo(tip);
+            var map = {div: div, ctx: ctx, places: []};
+
             canvas.width = 200 * p.zf + 2 * p.dx;
             canvas.height = 200 * p.zf + 2 * p.dy;
 
@@ -235,22 +266,58 @@ var MH_Map = function() {
             // known locations
             var lp = $.extend({lw: 1}, p);
             $.each(LOCATIONS, $.proxy(function (name, loc) {
-                this.drawPos(ctx, loc[0], loc[1], loc[3], lp);
+                this.drawPos(map, loc[0], loc[1], loc[3], lp, name + " : X=" + loc[0] + " | Y=" + loc[1] + " | N=" + loc[2]);
             }, this));
 
-            return {div: div, canvas: canvas, ctx: ctx};
+            // tooltip
+            var canvasOffset = null;
+            $(canvas)
+                .on('mouseenter', function() { canvasOffset = $(canvas).offset(); })
+                .on('mouseout', function() { tip.css("display", "none"); canvasOffset = null; })
+                .on('mousemove', $.proxy(function(e) {
+                    tip.css("left", (e.pageX + 20) + "px").css("top", (e.pageY + 10) + "px").css("display", "block");
+                    if(!canvasOffset) return;
+                    var pos = {
+                        x: e.pageX - canvasOffset.left,
+                        y: e.pageY - canvasOffset.top,
+                    };
+                    pos.xMh = this.xMh(pos.x, p);
+                    pos.yMh = this.yMh(pos.y, p);
+                    pos.description = "";
+                    tipH.text("[ X=" + pos.xMh + " | Y=" + pos.yMh + " ]");
+                    $.each(HOLES, function (i, h) {
+                        var dist = (pos.xMh - h[0]) * (pos.xMh - h[0]) + (pos.yMh - h[1]) * (pos.yMh - h[1]) - h[2];
+                        if(dist <= 0) {
+                            pos.description = "Trou de Météorite : N=-1 => N=" + h[4];
+                            return false;
+                        }
+                    });
+
+                    $.each(map.places, function (i, p) {
+                        var dist = (pos.xMh - p.x) * (pos.xMh - p.x) + (pos.yMh - p.y) * (pos.yMh - p.y);
+                        if(dist <= 0 && p.name) {
+                            pos.description = p.name;
+                            return false;
+                        }
+                    });
+
+                    tipD.text(pos.description);
+                }, this));
+
+            return map;
         },
-        drawPos : function(ctx, xMH, yMH, color, p) {
+        drawPos : function(map, xMH, yMH, color, p, text) {
             var x = this.xCtx(xMH, p), y = this.yCtx(yMH, p);
-            ctx.strokeStyle = color;
-            ctx.fillStyle = color;
-            ctx.lineWidth = p.lw || p.zf;
-            ctx.beginPath();
-            ctx.arc(x, y, p.zf, 0, Math.PI * 2, true);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x, y, 3 * p.zf, 0, Math.PI * 2, true);
-            ctx.stroke();
+            map.ctx.strokeStyle = color;
+            map.ctx.fillStyle = color;
+            map.ctx.lineWidth = p.lw || p.zf;
+            map.ctx.beginPath();
+            map.ctx.arc(x, y, p.zf, 0, Math.PI * 2, true);
+            map.ctx.fill();
+            map.ctx.beginPath();
+            map.ctx.arc(x, y, 3 * p.zf, 0, Math.PI * 2, true);
+            map.ctx.stroke();
+            map.places.push({x: xMH, y: yMH, name: text});
         }
     }
 }();
@@ -2865,19 +2932,21 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
         var p = {zf: 2.0, dx: 30, dy: 30},
             map = MH_Map.getMap("map_mh", p);
 
+        $("#footer1").before(map.div);
+
         var ctn = null;
         try {
             ctn = window.parent.parent.parent.Sommaire.document;
         } catch(e) {}
         if (ctn) {
             var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
-            MH_Map.drawPos(map.ctx, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,50,0,0.5)", p);           
+            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,50,0,0.5)", p, "Vous êtes ici");
         }
 
         var tmp1 = /Portail de Téléportation\s+\(Lieu n° (\d+)\)/.exec($("div.titre2").text());
         if(tmp1) {
             var tmp2 = /(mène en X = (-?\d+) \| Y = (-?\d+)[^\.]*)/.exec($("#description").text());
-            MH_Map.drawPos(map.ctx, parseInt(tmp2[2]), parseInt(tmp2[3]), "rgba(0,0,0,0.5)", p);
+            MH_Map.drawPos(map, parseInt(tmp2[2]), parseInt(tmp2[3]), "rgba(0,0,0,0.5)", p, "Destination TP");
 
             this.callAPIConnected({
                 api: "tag",
@@ -2888,7 +2957,6 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
                 }
             });
         }
-        $("#footer1").before(map.div);
     }
 });
 
@@ -2970,13 +3038,13 @@ var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
                 }, this));
             ta.on('keyup change', function(e) { render($(this), pr); });
             ti.val(function(i, v) {
-              if(v){
+              if(v) {
                   var re1 = /Re\s*:\s*/ig,
                       n = (v.match(re1) || []).length,
                       re2 = /Re\s*\(\d+\)\s*:\s*/ig;
                   n += (function() {
                       var p = 0,
-                          a = (v.match(re2) || []).join().match(/\d+/g);
+                          a = (v.match(re2) || []).join().match(/\d+/g) || [];
                       for(var i = 0; i < a.length; ++i) p += 1 * a[i];
                       return p; })();
                   v = v.replace(re1, '').replace(re2, '').replace(/^\s+/g,'');
