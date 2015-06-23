@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-18
+// @version       0.1.4-19
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -368,7 +368,7 @@ var MH_Page = function() {
         },
 
         callAPI : function(conf) {
-            this.debug("Calling API", conf);
+            //this.debug("Calling API", conf);
             $.ajax({
                 type: "POST",
                 url: "http://pharoz.net/MH/outil/api.php?rnd=" + new Date().getTime(),
@@ -377,9 +377,9 @@ var MH_Page = function() {
             }).done($.proxy(function(data, result, request){
                 if(result == Utils.success) {
                     if(Utils.isUndefined(conf.callback)) {
-                        this.warn("No callback found");
+                        //this.warn("No callback found");
                     } else {
-                        this.debug("Result", data);
+                        //this.debug("Result", data);
                         conf.callback.apply(this, [data.replace(/\s/g, " "), result, request]);
                     }
                 } else {
@@ -1715,9 +1715,7 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 
 
         if(title.indexOf("Compétence : Identification des Champignons") > -1) {
-            console.log(body);
             var tmp = /Vous avez reconnu le Champignon :\s+(.*)(?:Salé|Sucré)\s+\(\d+\)\s+qui se trouvait en X=(-?\d+), Y=(-?\d+), N=(-?\d+)/.exec(body);
-            console.log(tmp);
             api = "tag";
             data =  {
                 "type" : 4,
@@ -1761,10 +1759,11 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.addMonsterInfos();
         this.addMonsterCdmLink();
         this.addTrollEventLink();
-        this.addToggleTresors();
         this.fixTableSize();
 
         this.addInfos();
+        
+        this.addToggleTresors();        
 
         this.addSameXYN();
 
@@ -1798,17 +1797,20 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             .append(
                 $("<input/>")            
                 .attr("type", "checkbox")
-                .attr("id", "tresor-hideTagged")
-                .click(function(event) {
-                    var target = $(event.target);
+                .attr("id", "view-tresor-hideTagged")
+                .click(function(event) {                    
+                    var target = $(event.target);                    
                     var checked = target.is(':checked');
+                    Utils.setConf(target.attr("id"), checked);
                     $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr:has(label[title])")[checked ? "hide" : "show"]();
                 }),
                 $("<label/>")
-                .attr("for", "tresor-hideTagged")
+                .attr("for", "view-tresor-hideTagged")
                 .text("Objets identifiés")
               )
         );
+        // L'initialisation se fait dans la methode de recuperation des tags
+            
         $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"GG", alias:"piécettes à Miltown", everywhere : true}], $.proxy(function(idType, type) {
             var label = type;
             var alias = type;
@@ -1824,20 +1826,31 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 .append(
                     $("<input/>")            
                     .attr("type", "checkbox")
-                    .attr("id", "tresor-hide" + idType)
+                    .attr("id", "view-tresor-hide" + idType)
                     .click($.proxy(function(event) {
-                        this.showHideTresorLine($(event.target), alias, everywhere);
+                        var target = $(event.target);
+                        this.showHideTresorLine(target, alias, everywhere);
                     }, this)),
                     $("<label/>")
-                    .attr("for", "tresor-hide" + idType)
+                    .attr("for", "view-tresor-hide" + idType)
                     .text(label)
                 )
-            );        
+            );
+            if(Utils.getConf("view-tresor-hide" + idType)) {
+                $("#view-tresor-hide" + idType).click();
+            }
         }, this));
+    },
+    
+    initToggleTresors : function() {
+        if(Utils.getConf("view-tresor-hideTagged")) {
+            $("#view-tresor-hideTagged").click();
+        }        
     },
     
     showHideTresorLine : function(target, text, everywhere) {
         var checked = target.is(':checked');
+        Utils.setConf(target.attr("id"), checked);
         $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr > td:nth-child(3)").each(function(){
             var c = this.textContent || this.innerText;
             var io = c.trim().indexOf(text);
@@ -2912,6 +2925,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
                     .text(tag.tag);
                 }, this));
+                
+                this.initToggleTresors();
+                
                 this.handleTagEdition();
             },
             scope : this
