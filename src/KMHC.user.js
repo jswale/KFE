@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-17
+// @version       0.1.4-18
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1761,6 +1761,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.addMonsterInfos();
         this.addMonsterCdmLink();
         this.addTrollEventLink();
+        this.addToggleTresors();
+        this.fixTableSize();
 
         this.addInfos();
 
@@ -1768,6 +1770,81 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
+    },
+    
+    fixTableSize : function() {
+        $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_tresors"], function(idx, tableId) {
+            var widths = [];
+            $("#" + tableId + " table:first > tbody > tr.mh_tdtitre > td").each(function(idx, td){
+                widths[idx] = $(td).attr("width");
+            });
+            $("#" + tableId + " table:first > tbody > tr.mh_tdpage > td").each(function(){
+                $(this).attr("width", widths[$(this).parent().children().index(this)]);
+            });
+        });
+    },
+    
+    addToggleTresors : function() {
+        var td = $("#mh_vue_hidden_tresors table:first").parents("table").prev().find("a[name='tresors']").parents("td:first");
+        td.append(
+            $("<span/>")
+            .css("margin-left", "5px")
+            .css("font-weight", "bold")
+            .text("| Cacher: ")
+        );
+        td.append(
+            $("<span/>")
+            .css("margin-right", "5px")
+            .append(
+                $("<input/>")            
+                .attr("type", "checkbox")
+                .attr("id", "tresor-hideTagged")
+                .click(function(event) {
+                    var target = $(event.target);
+                    var checked = target.is(':checked');
+                    $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr:has(label[title])")[checked ? "hide" : "show"]();
+                }),
+                $("<label/>")
+                .attr("for", "tresor-hideTagged")
+                .text("Objets identifiés")
+              )
+        );
+        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"GG", alias:"piécettes à Miltown", everywhere : true}], $.proxy(function(idType, type) {
+            var label = type;
+            var alias = type;
+            var everywhere = false;
+            if($.type( type ) == "object") {
+                label = type.label;
+                alias = type.alias;
+                everywhere = type.everywhere;
+            }
+            td.append(
+                $("<span/>")
+                .css("margin-right", "5px")
+                .append(
+                    $("<input/>")            
+                    .attr("type", "checkbox")
+                    .attr("id", "tresor-hide" + idType)
+                    .click($.proxy(function(event) {
+                        this.showHideTresorLine($(event.target), alias, everywhere);
+                    }, this)),
+                    $("<label/>")
+                    .attr("for", "tresor-hide" + idType)
+                    .text(label)
+                )
+            );        
+        }, this));
+    },
+    
+    showHideTresorLine : function(target, text, everywhere) {
+        var checked = target.is(':checked');
+        $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr > td:nth-child(3)").each(function(){
+            var c = this.textContent || this.innerText;
+            var io = c.trim().indexOf(text);
+            if((everywhere && io > -1) || (!everywhere && io === 0)) {
+                $(this).parents("tr:first")[checked ? "hide" : "show"]()
+            }
+        });
     },
 
     addChampignonsRef : function() {
