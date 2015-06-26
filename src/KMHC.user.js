@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-19
+// @version       0.1.4-20
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1784,6 +1784,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     },
     
     addToggleTresors : function() {
+        
+        Utils.addGlobalStyle(['.view-tresor-hideTagged { display: none; }']);        
+        
         var td = $("#mh_vue_hidden_tresors table:first").parents("table").prev().find("a[name='tresors']").parents("td:first");
         td.append(
             $("<span/>")
@@ -1801,8 +1804,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 .click(function(event) {                    
                     var target = $(event.target);                    
                     var checked = target.is(':checked');
-                    Utils.setConf(target.attr("id"), checked);
-                    $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr:has(label[title])")[checked ? "hide" : "show"]();
+                    Utils.setConf(target.attr("id"), checked);                    
+                    $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr:has(label[title])")[checked ? "addClass" : "removeClass"](target.attr("id"));
                 }),
                 $("<label/>")
                 .attr("for", "view-tresor-hideTagged")
@@ -1811,7 +1814,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         );
         // L'initialisation se fait dans la methode de recuperation des tags
             
-        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"GG", alias:"piécettes à Miltown", everywhere : true}], $.proxy(function(idType, type) {
+        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"GG", alias:["piécettes à Miltown","Gigots de Gob"], everywhere : true}], $.proxy(function(idType, type) {
             var label = type;
             var alias = type;
             var everywhere = false;
@@ -1820,6 +1823,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 alias = type.alias;
                 everywhere = type.everywhere;
             }
+            Utils.addGlobalStyle(['.view-tresor-hide' + idType +' { display: none; }']);
             td.append(
                 $("<span/>")
                 .css("margin-right", "5px")
@@ -1848,15 +1852,20 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         }        
     },
     
-    showHideTresorLine : function(target, text, everywhere) {
+    showHideTresorLine : function(target, texts, everywhere) {
+        texts = $.isArray(texts) ? texts : [texts];
         var checked = target.is(':checked');
         Utils.setConf(target.attr("id"), checked);
         $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr > td:nth-child(3)").each(function(){
-            var c = this.textContent || this.innerText;
-            var io = c.trim().indexOf(text);
-            if((everywhere && io > -1) || (!everywhere && io === 0)) {
-                $(this).parents("tr:first")[checked ? "hide" : "show"]()
-            }
+            var td = this;
+            var c = td.textContent || td.innerText;
+            $.each(texts, function() {
+                var text = this;
+                var io = c.trim().indexOf(text);
+                if((everywhere && io > -1) || (!everywhere && io === 0)) {
+                    $(td).parents("tr:first")[checked ? "addClass" : "removeClass"](target.attr("id"));
+                }
+            });
         });
     },
 
@@ -1995,9 +2004,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             $(this).html((function(txt) {
                 $.each(
                     [
-                        ["Gigots de Gob'", "<b style='color:#ff8000'>piécettes à Miltown</b>"],
-                        [/(Gigots de Gob)/, "<b style='color:#ff8000'>$1</b>"],
-            [/(Carte|Coquillage|Conteneur|Minerai|Parchemin|Tête Réduite|Spécial)/, "<b style='color:#900090'>$1</b>"]
+                        [/Gigots de Gob'?/, "<b style='color:#ff8000'>Piécettes à Miltown</b>"],
+                        [/(Carte|Coquillage|Conteneur|Minerai|Parchemin|Tête Réduite|Spécial)/, "<b style='color:#900090'>$1</b>"]
                     ], function(i, r) {
                         txt = txt.replace(r[0], r[1]);
                     });
