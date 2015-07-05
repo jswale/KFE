@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-20
+// @version       0.1.4-21
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -329,7 +329,16 @@ var MH_Page = function() {
 
         load : function() {
             console.log("Module initializing");
+            
+            Utils.addGlobalStyle([
+                '.editable { margin-left: 10px; }',
+                '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 12px; height: 12px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAFhJREFUKFOVjgEKgCAQBH1m/v8hG3N5cdWmuDCgMCM2SVN6PwR5/wiVIcYysiKk/I6mMuNc46WcG+fnl1YybMmwJcMtV5E5GezrfzJEYCIrAwuphFa8UDsBgSOr5cVAQ8gAAAAASUVORK5CYII=); }',
+                'tr:hover .editable:after {display:inline-block; }',
+                '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }'
+            ]);
+            
             this.init();
+            
             console.log("Module initialized");
         },
 
@@ -357,6 +366,69 @@ var MH_Page = function() {
             return  (Utils.isDefined(typeof Utils.getConf("login")))
             &&  (Utils.isDefined(typeof Utils.getConf("pswd")));
         },
+
+        getEditionField : function(ref, type) {
+            return $("<span/>")
+            .append(
+                $("<label/>")
+                .addClass("editable")
+                .attr("data-type", "editable")
+                .attr("data-for", "#tag_" + ref)
+                .text(""))
+            .append(
+                $("<input/>")
+                .attr("id", "tag_" + ref)
+                .attr("data-tag-type", type)
+                .attr("data-tag-id", ref))
+            .on("paste", function(){
+                var input = this;
+                setTimeout(function() {
+                    $(input).attr('size', $(input).val().length + 2);
+                }, 10);
+            });        
+        },        
+        
+        handleTagEdition: function() {
+            var self = this;
+            $('body').editables({
+                editOn: 'click',
+                freezeOn: ['blur', 'keyup'],
+                beforeEdit: function(field) {
+                    field.data('undo', this.text());
+                    field.val(this.text());
+                    field.attr('size', field.val().length + 2);
+                },
+                beforeFreeze: function(display, ev) {
+                    display.text(this.val());
+                    //console.log(ev);
+                    if(ev.type == 'keyup') {
+                        if(ev.which == 13) return true;
+                        if(ev.which == 27) {
+                            display.text(this.data('undo'));
+                            this.val(this.data('undo'));
+                            return true;
+                        }
+                        this.attr('size', this.val().length + 2);
+                        return false;
+                    }
+                    return true;
+                },
+                onFreeze: function() {
+                    if($(this).val() != $(this).data('undo')) {
+                        self.callAPIConnected({
+                            api : "tag",
+                            data : {
+                                "type" : $(this).attr("data-tag-type"),
+                                "num" : $(this).attr("data-tag-id"),
+                                "tag" : $(this).val()
+                            },
+                            callback : $.noop,
+                            scope : self
+                        });
+                    }
+                }
+            });
+        },        
 
         callAPIConnected : function(conf) {
             if(!this.isInitialized()) {
@@ -1814,7 +1886,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         );
         // L'initialisation se fait dans la methode de recuperation des tags
             
-        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"GG", alias:["piécettes à Miltown","Gigots de Gob"], everywhere : true}], $.proxy(function(idType, type) {
+        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"GG", alias:["Piécettes à Miltown","Gigots de Gob"], everywhere : true}], $.proxy(function(idType, type) {
             var label = type;
             var alias = type;
             var everywhere = false;
@@ -1840,14 +1912,14 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     .text(label)
                 )
             );
-            if(Utils.getConf("view-tresor-hide" + idType)) {
+            if("true" === Utils.getConf("view-tresor-hide" + idType)) {
                 $("#view-tresor-hide" + idType).click();
             }
         }, this));
     },
     
     initToggleTresors : function() {
-        if(Utils.getConf("view-tresor-hideTagged")) {
+        if("true" === Utils.getConf("view-tresor-hideTagged")) {            
             $("#view-tresor-hideTagged").click();
         }        
     },
@@ -2013,40 +2085,13 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             })($(this).html()));
         });
     },
-
+    
     addTagEditionForCell : function(cell, refColId, nomColId, type) {
         var ref = $(cell.children("td:nth-child(" + refColId + ")")).text();
-        cell.children("td:nth-child(" + nomColId + ")")
-        .append(
-            $("<span/>")
-            .append(
-                $("<label/>")
-                .addClass("editable")
-                .attr("data-type", "editable")
-                .attr("data-for", "#tag_" + ref)
-                .text(""))
-            .append(
-                $("<input/>")
-                .attr("id", "tag_" + ref)
-                .attr("data-tag-type", type)
-                .attr("data-tag-id", ref))
-                .on("paste", function(){
-                    var input = this;
-                    setTimeout(function() {
-                        $(input).attr('size', $(input).val().length + 2);
-                    }, 10);
-                })
-        )
+        cell.children("td:nth-child(" + nomColId + ")").append(this.getEditionField(ref, type));
     },
 
     addTagEdition: function() {
-        Utils.addGlobalStyle([
-            '.editable { margin-left: 10px; }',
-            '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 12px; height: 12px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAFhJREFUKFOVjgEKgCAQBH1m/v8hG3N5cdWmuDCgMCM2SVN6PwR5/wiVIcYysiKk/I6mMuNc46WcG+fnl1YybMmwJcMtV5E5GezrfzJEYCIrAwuphFa8UDsBgSOr5cVAQ8gAAAAASUVORK5CYII=); }',
-            'tr.mh_tdpage:hover .editable:after {display:inline-block; }',
-            '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }'
-        ]);
-
         $.each(
             [
                 ["mh_vue_hidden_monstres", "Réf.", "Nom", 1],
@@ -2063,50 +2108,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 }, this));
             }, this)
         );
-
     },
-
-    handleTagEdition: function() {
-        var self = this;
-        $('body').editables({
-            editOn: 'click',
-            freezeOn: ['blur', 'keyup'],
-            beforeEdit: function(field) {
-                field.data('undo', this.text());
-                field.val(this.text());
-                field.attr('size', field.val().length + 2);
-            },
-            beforeFreeze: function(display, ev) {
-                display.text(this.val());
-                //console.log(ev);
-                if(ev.type == 'keyup') {
-                    if(ev.which == 13) return true;
-                    if(ev.which == 27) {
-                        display.text(this.data('undo'));
-                        this.val(this.data('undo'));
-                        return true;
-                    }
-                    this.attr('size', this.val().length + 2);
-                    return false;
-                }
-                return true;
-            },
-            onFreeze: function() {
-                if($(this).val() != $(this).data('undo')) {
-                    self.callAPIConnected({
-                        api : "tag",
-                        data : {
-                            "type" : $(this).attr("data-tag-type"),
-                            "num" : $(this).attr("data-tag-id"),
-                            "tag" : $(this).val()
-                        },
-                        callback : $.noop,
-                        scope : self
-                    });
-                }
-            }
-        });
-    },
+    
 
     sendView : function() {
         function extractData(id, title) {
@@ -3286,9 +3289,32 @@ var MH_Play_Actions_Competences_Play_a_Competence43b = $.extend({}, MH_Page, {
 
 
 var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
-  init : function() {
+    init : function() {
+      
+        var map = this.addMap();
+        this.addActions(map);
+        this.addEdition();
+        this.displayTags();
+    },
+    
+    addMap : function() {
+        var p = {zf: 2.0, dx: 30, dy: 30},
+            map = MH_Map.getMap("map_mh", p);      
+        $("form[action='Play_action_Equipement.php']").after(map.div);
+        return {p : p, map : map};
+    },
+    
+    addActions: function(map) {
+      // Actions
       $('form td.mh_titre3').each(function(){
-          var id = $(this).find("a").first().text().trim().replace(/^(\d+)(\..*)$/, "$1");
+          var fullname = $(this).find("a:first").text().trim();
+          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+          var id = tmp[1];
+          var name = tmp[2];
+          
+          var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec($(this).siblings(":nth-child(4)").text().trim());
+          MH_Map.drawPos(map.map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(50,50,0,0.5)", map.p, fullname);
+
 
           $("<tr/>")
           .append(
@@ -3302,8 +3328,61 @@ var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
               .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Description.php?ai_IdFollower=" + id + "'>Description</a>")
           )
           .insertAfter( $(this).parents("tr:first") );
-      })
-  }
+      });
+    },
+    
+    addEdition : function() {
+        Utils.addGlobalStyle([
+            'td.mh_titre3 label.editable {font-size:12px !important; }',            
+        ]);
+        
+      // Edition
+      $('form td.mh_titre3').each($.proxy(function(i, td){
+          var fullname = $(td).find("a:first").text().trim();
+          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+          var id = tmp[1];
+          var edition = this.getEditionField(id, 1);
+          $(td).append(edition);
+      }, this));        
+    },
+    
+    getMonsterIds : function() {
+      return $('form td.mh_titre3').map(function(i, td){
+          var fullname = $(td).find("a:first").text().trim();
+          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+          var id = tmp[1];
+          return id;
+      }).get();        
+    },
+    
+    displayTags : function() {
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "xMin" : -1000,
+                "xMax" : 1000,
+                "yMin" : -1000,
+                "yMax" : 1000,
+                "nMin" : 0,
+                "nMax" : -1000,
+                "m" : this.getMonsterIds()
+            },
+            callback : function(datas) {
+                datas = datas.replace(/\s+/g, " ");
+                var json = $.parseJSON(datas);
+                // populate tags and start handling
+                $.each(json.tags, $.proxy(function(key, tag){
+                    key = key.split(";");
+                    $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']").prev()
+                    .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
+                    .text(tag.tag);
+                }, this));
+                
+                this.handleTagEdition();
+            },
+            scope : this
+        });        
+    }
 });
 
 var MH_Follower_FO_NewOrder = $.extend({}, MH_Page, {
