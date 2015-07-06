@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-21
+// @version       0.1.4-22
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -333,7 +333,7 @@ var MH_Page = function() {
             Utils.addGlobalStyle([
                 '.editable { margin-left: 10px; }',
                 '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 12px; height: 12px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAFhJREFUKFOVjgEKgCAQBH1m/v8hG3N5cdWmuDCgMCM2SVN6PwR5/wiVIcYysiKk/I6mMuNc46WcG+fnl1YybMmwJcMtV5E5GezrfzJEYCIrAwuphFa8UDsBgSOr5cVAQ8gAAAAASUVORK5CYII=); }',
-                'tr:hover .editable:after {display:inline-block; }',
+                '.editable_ctn:hover .editable:after {display:inline-block; }',
                 '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }'
             ]);
             
@@ -2088,7 +2088,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     
     addTagEditionForCell : function(cell, refColId, nomColId, type) {
         var ref = $(cell.children("td:nth-child(" + refColId + ")")).text();
-        cell.children("td:nth-child(" + nomColId + ")").append(this.getEditionField(ref, type));
+        cell.children("td:nth-child(" + nomColId + ")").addClass("editable_ctn").append(this.getEditionField(ref, type));
     },
 
     addTagEdition: function() {
@@ -3341,8 +3341,7 @@ var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
           var fullname = $(td).find("a:first").text().trim();
           var tmp = /^(\d+)\.(.*)$/.exec(fullname);
           var id = tmp[1];
-          var edition = this.getEditionField(id, 1);
-          $(td).append(edition);
+          $(td).addClass("editable_ctn").append(this.getEditionField(id, 1));
       }, this));        
     },
     
