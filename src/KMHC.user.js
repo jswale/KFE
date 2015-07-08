@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.5-1
+// @version       0.1.5-2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1827,6 +1827,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         this.addChampignonsRef();
         this.addTagEdition();
         this.addMonsterInfos();
+        
         if(Utils.getConf("mountyzilla") != "true") {
             this.addMonsterLevel();
             this.addSharingUI();
@@ -1857,7 +1858,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     
     addToggleTresors : function() {
         
-        Utils.addGlobalStyle(['.view-tresor-hideTagged { display: none; }']);        
+        Utils.addGlobalStyle(['.view-tresor-hideTagged { display: none !important; }']);        
         
         var td = $("#mh_vue_hidden_tresors table:first").parents("table").prev().find("a[name='tresors']").parents("td:first");
         td.append(
@@ -1895,7 +1896,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 alias = type.alias;
                 everywhere = type.everywhere;
             }
-            Utils.addGlobalStyle(['.view-tresor-hide' + idType +' { display: none; }']);
+            Utils.addGlobalStyle(['.view-tresor-hide' + idType +' { display: none !important; }']);
             td.append(
                 $("<span/>")
                 .css("margin-right", "5px")
@@ -1925,15 +1926,17 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     },
     
     showHideTresorLine : function(target, texts, everywhere) {
+        var typeColId = this.getColumnId("mh_vue_hidden_tresors", "Type");
+        
         texts = $.isArray(texts) ? texts : [texts];
         var checked = target.is(':checked');
         Utils.setConf(target.attr("id"), checked);
-        $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr > td:nth-child(3)").each(function(){
+        $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr > td:nth-child(" + typeColId + ")").each(function(){            
             var td = this;
-            var c = td.textContent || td.innerText;
+            var c = (td.textContent || td.innerText).trim();
             $.each(texts, function() {
                 var text = this;
-                var io = c.trim().indexOf(text);
+                var io = c.indexOf(text);
                 if((everywhere && io > -1) || (!everywhere && io === 0)) {
                     $(td).parents("tr:first")[checked ? "addClass" : "removeClass"](target.attr("id"));
                 }
@@ -1944,7 +1947,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     addChampignonsRef : function() {
         // Ajout de a colonne titre
         var distColId = this.getColumnId("mh_vue_hidden_champignons", "Actions");
-        $("#mh_vue_hidden_champignons table:first thead tr.mh_tdtitre:first th:nth-child("+distColId+")").after('<td width="160px"><b>Réf.</b></td>');
+        $("#mh_vue_hidden_champignons table:first thead tr.mh_tdtitre:first th:nth-child("+distColId+")").after('<th width="160px"><b>Réf.</b></th>');
 
         var xColId = this.getColumnId("mh_vue_hidden_champignons", "X");
         var yColId = this.getColumnId("mh_vue_hidden_champignons", "Y");
@@ -2155,7 +2158,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             }
         });
         if(null == i) {
-            console.error("Unable to getColumnId('"+id+"', '"+name+"')");
+            // console.error("Unable to getColumnId('"+id+"', '"+name+"')");
         }
         return i;
     },
@@ -2284,7 +2287,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");        
 
         // Ajout de a colonne titre
-        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child("+nomColId+")").after('<td width="160px"><b>Infos</b></td>');
+        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child("+nomColId+")").after('<th width="160px"><b>Infos</b></th>');
 
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tbody tr.mh_tdpage").each($.proxy(function(idx, tr){
@@ -2509,7 +2512,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var monsterIds = [];
 
         // Ajout de la colonne titre
-        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child(2)").after('<td width="50px"><b>Niveau</b></td>');
+        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child(2)").after('<th width="50px"><b>Niveau</b></th>');
 
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
@@ -2810,6 +2813,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                         .attr("data-xyn", x + ";" + y + ";" + n)
                         .addClass("mh_tdpage")
                         .append($("<td/>").text(0))
+                        .append($("<td/>").text('-'))
                         .append($("<td/>").append('<a class="mh_trolls_1" href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);">' + trollId + '</a>'))
                         .append($("<td/>").text('Mon troll'))
                         .append($("<td/>").text('-'))
