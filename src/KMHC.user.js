@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.5-2
+// @version       0.1.5-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1293,14 +1293,27 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         var stats = {};
 
         var getText = function(id) {
-            var text = $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + "):first").text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
-            console.log("getText", text);
+            var text = $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + "):first > td:nth-child(2)").text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
             return text;
         };
-
+        
+        var extract = function(src, key, pattern) {
+            var r = (key + "(?:\\s*\\.*\\s*:\\s*)" + pattern);
+            var p = new RegExp(r);
+            console.log(p);
+            var r = p.exec(src);
+            if(null == r) {
+                return null;
+            } else {
+                r.shift();
+                return 1 == r.length ? r.shift() : r;
+            }            
+        };
+        
+        
         // Echéance du Tour
         var text = getText(2);
-        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour\.*\s?:\s?(\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée\.*\s?:\s?(-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures\.*\s?:\s?(\d+) heures et (\d+) minutes. Poids de l'équipement\.*\s?:\s?(\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour\.*\s?:\s?(\d+) heures et (\d+) minutes./.exec(text);
+        var tmp = /Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée(?:\s*\.*\s*:\s*)(-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. Poids de l'équipement(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes./.exec(text);
         stats.pa = parseInt(tmp[2]);
         stats.dla = {
             next :tmp[1],
@@ -1330,8 +1343,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Vue
         var text = getText(3);
-
-        var tmp = /Position X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue\.*\s?:\s?(-?\d+) Cases ([+-]\d+)/.exec(text);
+        var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue(?:\s*\.*\s*:\s*)(-?\d+) Cases ([+-]\d+)/.exec(text);
         stats.position = {
             x : parseInt(tmp[1]),
             y : parseInt(tmp[2]),
@@ -1345,7 +1357,8 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // XP
         var text = getText(4);
-        var tmp = /Expérience Niveau\.*\s?:\s?(\d+) \((\d+) PI\) PX\.*\s?:\s?(\d+) PX Personnels\.*\s?:\s?(\d+) PI\.*\s?:\s?(\d+)/.exec(text);
+        //console.log(extract(text, "Niveau", "(\\d+)"));        
+        var tmp = /Niveau(?:\s*\.*\s*:\s*)(\d+) \((\d+) PI\) PX(?:\s*\.*\s*:\s*)(\d+) PX Personnels(?:\s*\.*\s*:\s*)(\d+) PI(?:\s*\.*\s*:\s*)(\d+)/.exec(text);
         stats.xp = {
             level : parseInt(tmp[1]),
             PI : {
@@ -1360,12 +1373,12 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         tmp = /PM.............: (\d+) Niveau Calculé : (\d+)/.exec(text);
         stats.xp.PM = tmp ? parseInt(tmp[1]) : stats.xp.PI.all;
         stats.xp.vlevel = tmp ? parseInt(tmp[2]) : stats.xp.level;
-        tmp = /Karma.........: (.*) /.exec(text);
+        tmp = /Karma(?:\s*\.*\s*:\s*)(.*) /.exec(text);
         stats.karma = tmp[1];
 
         // HP
         var text = getText(5);
-        var tmp = /Point de Vie Actuels\.*\s?:\s?(\d+) Maximum\.*\s?:\s?(\d+)\s?([+-]\d+)? Fatigue\.*\s?:\s?(.*) \( (\d+)\s?([+-]\d+)? \)/.exec(text);
+        var tmp = /Actuels(?:\s*\.*\s*:\s*)(\d+) Maximum(?:\s*\.*\s*:\s*)(\d+)\s?([+-]\d+)? Fatigue(?:\s*\.*\s*:\s*)(.*) \( (\d+)\s?([+-]\d+)? \)/.exec(text);
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
@@ -1381,7 +1394,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Caracs
         var text = getText(6);
-        var tmp = /Caractéristiques Régénération\.*: (\d+) D3 ([+-]\d+) ([+-]\d+) Attaque\.*: (\d+) D6 ([+-]\d+) ([+-]\d+) Esquive\.*: (\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts\.*: (\d+) D3 ([+-]\d+) ([+-]\d+) Armure\.*: (\d+)\s?D3( \/ \d+ D3)? ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :\s?-\s?Corpulence\.*: (\d+)\s?points\s?- Agilité\.*: (\d+)\s?points/.exec(text);
+        var tmp = /Régénération(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Attaque(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Esquive(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Armure(?:\s*\.*\s*:\s*)(\d+)\s?D3( \/ \d+ D3)? ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :\s?-\s?Corpulence(?:\s*\.*\s*:\s*)(\d+)\s?points\s?- Agilité(?:\s*\.*\s*:\s*)(\d+)\s?points/.exec(text);
         stats.regen = {
             des : parseInt(tmp[1]),
             physique : parseInt(tmp[2]),
@@ -1412,7 +1425,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Combat
         var text = getText(7);
-        var tmp = /Combat Pour ce tour : - Dés d'attaque en moins ................: (\d+) - Dés d'esquive en moins ................: (\d+) - Dés d'armure en moins .................: (\d+) Nombre d'Adversaires tués......: (\d+) Nombre de Décès...................: (\d+)/.exec(text);
+        var tmp = /Pour ce tour : - Dés d'attaque en moins(?:\s*\.*\s*:\s*)(\d+) - Dés d'esquive en moins(?:\s*\.*\s*:\s*)(\d+) - Dés d'armure en moins(?:\s*\.*\s*:\s*)(\d+) Nombre d'Adversaires tués(?:\s*\.*\s*:\s*)(\d+) Nombre de Décès(?:\s*\.*\s*:\s*)(\d+)/.exec(text);
         stats.roundMalus = {
             attaque : parseInt(tmp[1]),
             esquive : parseInt(tmp[2]),
@@ -1423,7 +1436,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Magie
         var text = getText(10);
-        var tmp = / Magie Résistance à la Magie...................: (\d+) points ([+-]\d+) Maîtrise de la Magie....................: (\d+) points ([+-]\d+) Bonus de Concentration : (-?\d+) %/.exec(text);
+        var tmp = /Résistance à la Magie(?:\s*\.*\s*:\s*)(\d+) points ([+-]\d+) Maîtrise de la Magie(?:\s*\.*\s*:\s*)(\d+) points ([+-]\d+) Bonus de Concentration : (-?\d+) %/.exec(text);
         stats.magie = {
             rm : {
                 value : parseInt(tmp[1]),
@@ -2287,7 +2300,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");        
 
         // Ajout de a colonne titre
-        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child("+nomColId+")").after('<th width="160px"><b>Infos</b></th>');
+        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child("+nomColId+")").after('<th width="160px" data-sort-ignore="true"><b>Infos</b></th>');
 
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tbody tr.mh_tdpage").each($.proxy(function(idx, tr){
@@ -2512,7 +2525,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var monsterIds = [];
 
         // Ajout de la colonne titre
-        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child(2)").after('<th width="50px"><b>Niveau</b></th>');
+        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child(2)").after('<th width="50px" data-type="numeric" class="footable-visible footable-sortable"><b>Niveau</b><span class="footable-sort-indicator"></span></th>');
 
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
@@ -2525,10 +2538,16 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             $(this).children('td:nth-child(2)').after(
                 $("<td/>")
                 .css("text-align", "center")
+                .addClass("footable-visible")
                 .attr("id", "view-monster-id-" + monsterId)
                 .text("-")
             );
-        });
+        });        
+
+        $(function () {
+            unsafeWindow.$('#VueMONSTRE').removeClass("footable-loaded").footable();
+        });        
+        
 
         // Appel de l'API
         this.callAPIConnected({
