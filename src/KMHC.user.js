@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.4-22
+// @version       0.1.5-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1293,12 +1293,14 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         var stats = {};
 
         var getText = function(id) {
-            return $("table.mh_tdborder:first tr:nth-child(" + id + "):first").text().replace(/[\n\r\t]+/gi,"").replace(/\s+/gi," ");
+            var text = $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + "):first").text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
+            console.log("getText", text);
+            return text;
         };
 
         // Echéance du Tour
         var text = getText(2);
-        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour.............: (\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée.................: (-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures.......: (\d+) heures et (\d+) minutes. Poids de l'équipement......................: (\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour.....: (\d+) heures et (\d+) minutes./.exec(text);
+        var tmp = /Echéance du Tour Date Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour\.*\s?:\s?(\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée\.*\s?:\s?(-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures\.*\s?:\s?(\d+) heures et (\d+) minutes. Poids de l'équipement\.*\s?:\s?(\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour\.*\s?:\s?(\d+) heures et (\d+) minutes./.exec(text);
         stats.pa = parseInt(tmp[2]);
         stats.dla = {
             next :tmp[1],
@@ -1329,7 +1331,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         // Vue
         var text = getText(3);
 
-        var tmp = /Position X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue.......: (-?\d+) Cases ([+-]\d+)/.exec(text);
+        var tmp = /Position X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue\.*\s?:\s?(-?\d+) Cases ([+-]\d+)/.exec(text);
         stats.position = {
             x : parseInt(tmp[1]),
             y : parseInt(tmp[2]),
@@ -1343,7 +1345,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // XP
         var text = getText(4);
-        var tmp = /Expérience Niveau........: (\d+) \((\d+) PI\) PX..............: (\d+) PX Personnels...... : (\d+) PI..............: (\d+)/.exec(text);
+        var tmp = /Expérience Niveau\.*\s?:\s?(\d+) \((\d+) PI\) PX\.*\s?:\s?(\d+) PX Personnels\.*\s?:\s?(\d+) PI\.*\s?:\s?(\d+)/.exec(text);
         stats.xp = {
             level : parseInt(tmp[1]),
             PI : {
@@ -1363,7 +1365,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // HP
         var text = getText(5);
-        var tmp = /Point de Vie Actuels............: (\d+) Maximum.........: (\d+)\s?([+-]\d+)? Fatigue............: (.*) \( (\d+)\s?([+-]\d+)? \)/.exec(text);
+        var tmp = /Point de Vie Actuels\.*\s?:\s?(\d+) Maximum\.*\s?:\s?(\d+)\s?([+-]\d+)? Fatigue\.*\s?:\s?(.*) \( (\d+)\s?([+-]\d+)? \)/.exec(text);
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
@@ -1379,7 +1381,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         // Caracs
         var text = getText(6);
-        var tmp = /Caractéristiques Régénération.....: (\d+) D3 ([+-]\d+) ([+-]\d+) Attaque............: (\d+) D6 ([+-]\d+) ([+-]\d+) Esquive.............: (\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts..............: (\d+) D3 ([+-]\d+) ([+-]\d+) Armure.............: (\d+) D3( \/ \d+ D3)? ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :-Corpulence.....: (\d+)points- Agilité.............: (\d+)points/.exec(text);
+        var tmp = /Caractéristiques Régénération\.*: (\d+) D3 ([+-]\d+) ([+-]\d+) Attaque\.*: (\d+) D6 ([+-]\d+) ([+-]\d+) Esquive\.*: (\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts\.*: (\d+) D3 ([+-]\d+) ([+-]\d+) Armure\.*: (\d+)\s?D3( \/ \d+ D3)? ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :\s?-\s?Corpulence\.*: (\d+)\s?points\s?- Agilité\.*: (\d+)\s?points/.exec(text);
         stats.regen = {
             des : parseInt(tmp[1]),
             physique : parseInt(tmp[2]),
@@ -1719,7 +1721,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
     },
 
     sendData : function() {
-        var result = $($("table")[1]).text();
+        var result = $("table:first").text();
         result = result.replace(/<\/(TD|TH)[^>]*>/gi,"");
         result = result.replace(/<\/(TABLE|TR)[^>]*>/gi,"\n");
         result = result.replace(/<\/?[^>]+>/gi,"");
@@ -1812,33 +1814,25 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
-
         $("#mh_vue_hidden_tresors").parents("p:first").attr("data-view", "main");
-
+        
+        this.fixTableSize();
         this.addPharozViewLinks();
-
         this.highlightTreasures();
+        this.addMonsterCdmLink();
+        this.addBarycentreUI();
+        this.addSameXYN();
+        this.addToggleTresors();        
+        
         this.addChampignonsRef();
         this.addTagEdition();
-
+        this.addMonsterInfos();
         if(Utils.getConf("mountyzilla") != "true") {
             this.addMonsterLevel();
             this.addSharingUI();
         }
-
-        this.addBarycentreUI();
-
-        this.addMonsterInfos();
-        this.addMonsterCdmLink();
         this.addTrollEventLink();
-        this.fixTableSize();
-
         this.addInfos();
-        
-        this.addToggleTresors();        
-
-        this.addSameXYN();
-
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
     },
@@ -1846,8 +1840,14 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     fixTableSize : function() {
         $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_tresors"], function(idx, tableId) {
             var widths = [];
-            $("#" + tableId + " table:first > tbody > tr.mh_tdtitre > td").each(function(idx, td){
-                widths[idx] = $(td).attr("width");
+            $("#" + tableId + " table:first > thead > tr.mh_tdtitre > th").each(function(idx, th){
+                var width = $(th).attr("width");
+                if(Utils.isUndefined(width)) {
+                    width = $(th).width();
+                }
+                width += ((""+width).endsWith("px") ? "" : "px");
+                widths[idx] = width;
+                $(th).attr("width", width);
             });
             $("#" + tableId + " table:first > tbody > tr.mh_tdpage > td").each(function(){
                 $(this).attr("width", widths[$(this).parent().children().index(this)]);
@@ -1886,7 +1886,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         );
         // L'initialisation se fait dans la methode de recuperation des tags
             
-        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"GG", alias:["Piécettes à Miltown","Gigots de Gob"], everywhere : true}], $.proxy(function(idType, type) {
+        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"Bidouille", alias:["[Bidouille]"]}, {label:"GG", alias:["Piécettes à Miltown","Gigots de Gob"], everywhere : true}], $.proxy(function(idType, type) {
             var label = type;
             var alias = type;
             var everywhere = false;
@@ -1943,15 +1943,15 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
     addChampignonsRef : function() {
         // Ajout de a colonne titre
-        var distColId = this.getColumnId("mh_vue_hidden_champignons", "Dist.");
-        $("#mh_vue_hidden_champignons table:first tr.mh_tdtitre:first td:nth-child("+distColId+")").after('<td width="160px"><b>Réf.</b></td>');
+        var distColId = this.getColumnId("mh_vue_hidden_champignons", "Actions");
+        $("#mh_vue_hidden_champignons table:first thead tr.mh_tdtitre:first th:nth-child("+distColId+")").after('<td width="160px"><b>Réf.</b></td>');
 
         var xColId = this.getColumnId("mh_vue_hidden_champignons", "X");
         var yColId = this.getColumnId("mh_vue_hidden_champignons", "Y");
         var nColId = this.getColumnId("mh_vue_hidden_champignons", "N");
-        var nameColId = this.getColumnId("mh_vue_hidden_champignons", "-");
+        var nameColId = this.getColumnId("mh_vue_hidden_champignons", "Champignon");
 
-        $("#mh_vue_hidden_champignons table:first tr.mh_tdpage").each($.proxy(function(iTr, tr) {
+        $("#mh_vue_hidden_champignons table:first tbody tr.mh_tdpage").each($.proxy(function(iTr, tr) {
             var container = $("<td/>");
             $(tr).children('td:nth-child(' + distColId + ')').after(container);
 
@@ -2097,13 +2097,13 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 ["mh_vue_hidden_monstres", "Réf.", "Nom", 1],
                 ["mh_vue_hidden_trolls", "Réf.", "Nom", 2],
                 ["mh_vue_hidden_tresors", "Réf.", "Type", 3],
-                ["mh_vue_hidden_champignons", "Réf.", "-", 4],
+                ["mh_vue_hidden_champignons", "Réf.", "Champignon", 4],
                 ["mh_vue_hidden_lieux", "Réf.", "Nom", 5]
             ], $.proxy(function(i, data) {
                 var nomColId = this.getColumnId(data[0], data[2]);
                 var refColId = this.getColumnId(data[0], data[1]);
 
-                $("#" + data[0] + " table:first tr.mh_tdpage").each($.proxy(function(iTr, tr) {
+                $("#" + data[0] + " table:first tbody tr.mh_tdpage").each($.proxy(function(iTr, tr) {
                     this.addTagEditionForCell($(tr), refColId, nomColId, data[3]);
                 }, this));
             }, this)
@@ -2136,7 +2136,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         result = result.concat(extractData("mh_vue_hidden_lieux", "LIEUX"));
         result = result.concat(extractData("mh_vue_hidden_cadavres", "CÉNOTAPHES"));
 
-        result = result.join("\r\n");
+        result = result.join("\r\n");        
 
         // Appel de l'API
         this.callAPIConnected({
@@ -2149,18 +2149,18 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
     getColumnId : function(id, name) {
         var i = null;
-        $("#" + id + " table:first tr.mh_tdtitre td").each(function(idx){
-            if($(this).text().indexOf(name) > -1) {
+        $("#" + id + " table:first thead tr.mh_tdtitre th").each(function(idx){
+            if($(this).text().indexOf(name) > -1) {                
                 i = idx+1;
             }
         });
+        if(null == i) {
+            console.error("Unable to getColumnId('"+id+"', '"+name+"')");
+        }
         return i;
     },
 
     addMonsterInfos : function() {
-        var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
-        var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");
-
         var fnExtract = function(monsterFullName) {
             var monster = null;
             var template = null;
@@ -2279,12 +2279,15 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             ".dl-horizontal dt {clear: left; float: left; overflow: hidden; text-align: right; text-overflow: ellipsis; white-space: nowrap; width: 140px;}",
             ".dl-horizontal dd { margin-left: 150px;}"
         ]);
+        
+        var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
+        var refColId = this.getColumnId("mh_vue_hidden_monstres", "Réf.");        
 
         // Ajout de a colonne titre
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdtitre:first td:nth-child("+nomColId+")").after('<td width="160px"><b>Infos</b></td>');
+        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child("+nomColId+")").after('<td width="160px"><b>Infos</b></td>');
 
         // Extraction des données
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each($.proxy(function(idx, tr){
+        $("#mh_vue_hidden_monstres table:first tbody tr.mh_tdpage").each($.proxy(function(idx, tr){
 
             var monsterId = $(tr).children("td:nth-child("+refColId+")").text();
             var tdName = $($(tr).children("td:nth-child("+nomColId+")"));
@@ -2445,7 +2448,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var nomColId = this.getColumnId("mh_vue_hidden_monstres", "Nom");
 
         // Extraction des données
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
+        $("#mh_vue_hidden_monstres table:first tbody tr.mh_tdpage").each(function(){
             var tdName = $($(this).children("td:nth-child("+nomColId+")"));
             var monsterName = tdName.text();
 
@@ -2505,8 +2508,8 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         var monsterNames = [];
         var monsterIds = [];
 
-        // Ajout de a colonne titre
-        $("#mh_vue_hidden_monstres table:first tr.mh_tdtitre:first td:nth-child(2)").after('<td width="50px"><b>Niveau</b></td>');
+        // Ajout de la colonne titre
+        $("#mh_vue_hidden_monstres table:first thead tr.mh_tdtitre:first th:nth-child(2)").after('<td width="50px"><b>Niveau</b></td>');
 
         // Extraction des données
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage").each(function(){
@@ -2710,7 +2713,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
     getChampigonIds : function() {
         var refColId = this.getColumnId("mh_vue_hidden_champignons", "Réf.");
 
-        return $("#mh_vue_hidden_champignons table:first tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
+        return $("#mh_vue_hidden_champignons table:first tbody tr.mh_tdpage td:nth-child("+refColId+")").map(function(){
             var id = $(this).text();
             $(this).parent("tr").attr("data-champignon-info", id);
             return id;
@@ -2719,16 +2722,16 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
     addInfos : function() {
         var txt = $("form[name='LimitViewForm']").text();
-
-        var x = parseInt(txt.match(/.*X = (-?\d+)/)[1]);
-        var y = parseInt(txt.match(/.*Y = (-?\d+)/)[1]);
-        var n = parseInt(txt.match(/.*N = (-?\d+)/)[1]);
-        var r = txt.match(/L'affichage est limité à (\d+) cases horizontalement et (\d+) verticalement/);
+        
+        var x = parseInt(txt.match(/.*X\s*=\s*(-?\d+)/)[1]);
+        var y = parseInt(txt.match(/.*Y\s*=\s*(-?\d+)/)[1]);
+        var n = parseInt(txt.match(/.*N\s*=\s*(-?\d+)/)[1]);
+        var r = txt.match(/(\d+) cases horizontalement et (\d+) verticalement/);
         var rH = parseInt(r[1]);
         var rV = parseInt(r[2]);
 
         // Fix
-        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");
+        //$("#mh_vue_hidden_trolls table:first thead tr.mh_tdpage th:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");
 
         this.callAPIConnected({
             api : "viewInfo",
