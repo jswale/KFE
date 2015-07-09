@@ -1811,14 +1811,23 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
             };
         }
 
+        var tdStatus = $("table:first tr:nth-child(4) td:first");        
         if(null == api) {
+            tdStatus.html("<center><i>Message non reconnu</i></center>");
             return;
         }
+        
+        tdStatus.html("<center><b>Données en cours d'envoi...</b></center>");
 
         // Appel de l'API
         this.callAPIConnected({
             api : api,
-            data : data
+            data : data,
+            callback : function() {
+                tdStatus.html("<center><b>Données envoyées</b></center>");
+            },
+            scope : this
+            
         });
     }
 });
