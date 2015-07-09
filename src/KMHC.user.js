@@ -1040,6 +1040,7 @@ var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, { //
 var MH_Play_Actions_Play_a_Attack = $.extend({}, MH_Page, {
 
     init : function() {
+        $(".titre3, .titre4").css("font-size", "12px");
         this.tune();
         this.showInfo();
     },
@@ -3281,8 +3282,22 @@ var View_TresorHistory = $.extend({}, MH_Page, {
     }
 });
 
+var MH_Play_Actions_Abstract = $.extend({}, MH_Page, {
+    init : function() {
+        $(".titre3, .titre4").css("font-size", "12px");
+    }
+});
+
+var MH_Play_Actions_Sorts_Play_a_SortYY = $.extend({}, MH_Play_Actions_Abstract, {});
+var MH_Play_Actions_Sorts_Play_a_SortXX = $.extend({}, MH_Play_Actions_Abstract, {});
+var MH_Play_Actions_Play_a_ActionYY = $.extend({}, MH_Play_Actions_Abstract, {});
+var MH_Play_Actions_Competences_Play_a_CompetenceYY = $.extend({}, MH_Play_Actions_Abstract, {});
+var MH_Play_Actions_Play_a_NoAction = $.extend({}, MH_Play_Actions_Abstract, {});
+var MH_Play_Actions_Play_a_Move = $.extend({}, MH_Play_Actions_Abstract, {});
+
 var MH_Play_Play_action = $.extend({}, MH_Page, {
     init : function() {
+        $(".titre3").css("font-size", "12px");
         $('select').find('optgroup').each(function(){
             if($(this).prop('label') == "** Actions Spéciales **") {
               $(this).css("background-color", "#99CCFF");
