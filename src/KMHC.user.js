@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.5-4
+// @version       0.1.5-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -995,294 +995,6 @@ var MH_Play_Play_news = $.extend({}, MH_Page, {
             });
     }
 });
-
-var MH_Play_Actions_Competences_Play_a_Competence16 = $.extend({}, MH_Page, { // CdM
-
-    init : function() {
-        this.tune();
-        this.showInfo();
-    },
-
-    tune : function() {
-        $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
-    },
-
-    showInfo : function() {
-        var monsterIds = $("select option[value!='']").map(function(){
-            return $(this).prop("value").match(/(\d+)/)[1];
-        }).get();
-
-        this.callAPIConnected({
-            api : "viewInfo",
-            data : {
-                "invi" : 0,
-                "m" : monsterIds
-            },
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                $.each(json.tags, $.proxy(function(key, data) {
-                    var tmp = key.split(";");
-                    if(tmp[0] == "1") {
-                        var o = $("select option[value='ME_" + tmp[1] + "']");
-                        o.text(o.text() + " " + data.tag);
-                    }
-                },this));
-
-                $.each(json.monsters, $.proxy(function(key, data) {
-                    var o = $("select option[value='ME_" + key + "']");
-                    o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
-                },this));
-            }
-        });
-    }
-});
-
-var MH_Play_Actions_Play_a_Attack = $.extend({}, MH_Page, {
-
-    init : function() {
-        $(".titre3, .titre4").css("font-size", "12px");
-        this.tune();
-        this.showInfo();
-    },
-
-    tune : function() {
-        $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
-    },
-
-    showInfo : function() {
-        var monsterIds = $("select option[value!='']").map(function(){
-            var m = $(this).prop("value").match(/^ME_(\d+)$/);
-            return m ? m[1] : null;
-        }).get();
-
-        var trollIds = $("select option[value!='']").map(function(){
-            var m = $(this).prop("value").match(/^(\d+)$/);
-            return m ? m[1] : null;
-        }).get();
-
-
-        this.callAPIConnected({
-            api : "viewInfo",
-            data : {
-                "invi" : 0,
-                "m" : monsterIds,
-                "t" : trollIds
-            },
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                $.each(json.tags, $.proxy(function(key, data) {
-                    var tmp = key.split(";");
-                    if(tmp[0] == "1") {
-                        var o = $("select option[value='ME_" + tmp[1] + "']");
-                        o.text(o.text() + " " + data.tag);
-                    } else if(tmp[0] == "2") {
-                        var o = $("select option[value='" + tmp[1] + "']");
-                        o.text(o.text() + " " + data.tag);
-                    }
-                },this));
-
-                $.each(json.monsters, $.proxy(function(key, data) {
-                    var o = $("select option[value='ME_" + key + "']");
-                    o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
-                },this));
-            }
-        });
-    }
-});
-
-
-var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { // CdM
-    init : function() {
-        var result = Utils.cleanup($("form[name='ActionForm']:first").html());
-        if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
-            // Appel de l'API
-            MH_Page.callAPIConnected({
-                api : "cdm",
-                data : {
-                    "cdm" : result
-                }
-            });
-        }
-    }
-});
-
-var MH_Play_Actions_Sorts_Play_a_Sort13 = $.extend({}, MH_Page, { // TP
-    init : function() {
-        Utils.setConf("action", "Sort13");
-    }
-});
-
-var MH_Play_Actions_Sorts_Play_a_Sort20 = $.extend({}, MH_Page, { // AA
-    init : function() {
-        Utils.setConf("action", "Sort20");
-    }
-});
-
-var MH_Play_Actions_Play_a_PickTresor_Abstract = $.extend({}, MH_Page, {
-    suffix : '',
-
-    init : function() {
-        var tresorIds = $("select option[value!='']").map(function(){
-            return $(this).prop("value");
-        }).get();
-
-        this.callAPIConnected({
-            api : "viewInfo",
-            data : {
-                "invi" : 0,
-                "o" : tresorIds
-            },
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                $.each(json.tags, $.proxy(function(key, data){
-                    var tmp = key.split(";");
-                    if(tmp[0] == "3") {
-                        var o = $("select option[value='" + tmp[1] + this.suffix + "']");
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                },this));
-            }
-        });
-
-    }
-});
-
-
-var MH_Play_Actions_Play_a_Drop = $.extend({}, MH_Page, {
-    init : function() {
-        var monsterIds = $('select[name="ai_DropTo"] option').map(function(){
-            return $(this).prop("value");
-        }).filter(function(idx, value){
-            return /^\d{2,}$/.test(value);
-        }).get();
-
-        var tresorIds = $('select[name="ai_IdTarget"] option').map(function(){
-            return $(this).prop("value");
-        }).filter(function(idx, value){
-            return /^\d{2,}$/.test(value);
-        }).get();
-
-        this.callAPIConnected({
-            api : "viewInfo",
-            data : {
-                "invi" : 0,
-                "m" : monsterIds,
-                "o" : tresorIds
-            },
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                $.each(json.tags, $.proxy(function(key, data){
-                    var tmp = key.split(";");
-                    if(tmp[0] == "1") {
-                        var o = $('select[name="ai_DropTo"] option[value="' + tmp[1] + '"]');
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                    if(tmp[0] == "3") {
-                        var o = $('select[name="ai_IdTarget"] option[value="' + tmp[1] + '"]');
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                },this));
-            }
-        });
-
-    }
-});
-
-var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, { // TELEK
-});
-
-var MH_Play_Actions_Play_a_PickTresor = $.extend({}, MH_Play_Actions_Play_a_PickTresor_Abstract, {
-    suffix : '_TE'
-});
-
-var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, { // IdT
-    init : function() {
-        Utils.setConf("action", "Sort10");
-        this.injectInfo();
-    },
-
-    injectInfo : function() {
-         var tresorIds = $("select option[value!='']").map(function(){
-            return $(this).prop("value").substr(2);
-        }).get();
-
-        this.callAPIConnected({
-            api : "viewInfo",
-            data : {
-                "invi" : 0,
-                "o" : tresorIds
-            },
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                $.each(json.tags, $.proxy(function(key, data){
-                    var tmp = key.split(";");
-                    if(tmp[0] == "3") {
-                        var o = $("select option[value='2_" + tmp[1] + "']");
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                },this));
-            }
-        });
-    }
-});
-
-var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
-    init : function() {
-        var result = $("table:first").text();
-        if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
-
-            if(Utils.getConf("action") == "Sort20") { // AA
-                // Appel de l'API
-                this.callAPIConnected({
-                    api : "aa",
-                    data : {
-                        "aa" : result
-                    }
-                });
-            }
-
-            if(Utils.getConf("action") == "Sort13") { // TP
-                var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(result);
-                // Appel de l'API
-                this.callAPIConnected({
-                    api : "tag",
-                    data : {
-                        "type" : 5,
-                        "num" : tmp[1],
-                        "tag" : tmp[2]
-                    }
-                });
-            }
-
-            if(Utils.getConf("action") == "Sort10") { // IdT
-                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(result);
-
-                // Appel de l'API
-                this.callAPIConnected({
-                    api : "tag",
-                    data : {
-                        "type" : 3,
-                        "num" : data[1],
-                        "tag" : data[2],
-                    }
-                });
-            }
-        }
-        Utils.setConf("action", "");
-    }
-});
-
-var MH_Play_Actions_Play_a_AmeliorationView = $.extend({}, MH_Page, {
-    init : function() {
-        $("table.mh_tdborder a.AllLinks")
-        .hover($.proxy(function(event) {
-            this.showTalentPopup($(event.target), true);
-        }, this), $.proxy(function(event) {
-            this.hideTalentPopup($(event.target));
-        }, this));
-    }
-});
-
 var MH_Play_Play_profil = $.extend({}, MH_Page, {
     init : function() {
         this.sendData();
@@ -3282,28 +2994,288 @@ var View_TresorHistory = $.extend({}, MH_Page, {
     }
 });
 
-var MH_Play_Actions_Abstract = $.extend({}, MH_Page, {
-    init : function() {
+/********************************************/
+/************* ACTIONS **********************/
+/********************************************/
+
+var MH_Play_Actions_Play_Toolbox = {
+    injectTags : function(dataType, dataId, prefix, suffix) {
+        var ids = $("select option[value!='']").map(function(){
+            var v = $(this).prop("value");
+            v = v.substr(prefix.length, v.length - suffix.length);
+            return v;
+        }).get();
+        
+        var data = {
+                "invi" : 0,                
+            };
+        data[dataType] = ids;
+        
+        MH_Page.callAPIConnected({
+            api : "viewInfo",
+            data : data,
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                
+                $.each(json.tags, $.proxy(function(key, data){
+                    var tmp = key.split(";");
+                    if(tmp[0] == dataId) {
+                        var o = $("select option[value='" + prefix + + tmp[1] + suffix + "']");
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                },this));
+                
+                if("m" == dataType) {
+                    $.each(json.monsters, $.proxy(function(key, data) {
+                        var o = $("select option[value='" + prefix + key + suffix + "']");
+                        o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
+                    },this));
+                }
+            }
+        });
+    },
+    
+    injectMonstresTags : function(prefix, suffix) {
+        this.injectTags("m", "1", prefix, suffix);
+    },
+    
+    injectTrollsTags : function(prefix, suffix) {
+        this.injectTags("t", "2", prefix, suffix);
+    },
+    
+    injectTresorsTags : function(prefix, suffix) {
+        this.injectTags("o", "3", prefix, suffix);
+    },
+        
+    injectChampignonsTags : function(prefix, suffix) {
+        this.injectTags("c", "4", prefix, suffix);
+    },
+    
+    protectMonsters : function() {
+        $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
+    },
+    
+    normalizeFontSize : function () {        
         $(".titre3, .titre4").css("font-size", "12px");
     }
-});
+    
+};
 
+var MH_Play_Actions_Abstract = $.extend({}, MH_Page, {
+    init : function() {
+        MH_Play_Actions_Play_Toolbox.normalizeFontSize();
+        MH_Play_Actions_Play_Toolbox.protectMonsters();
+        
+        {
+            var id = $("[name='ai_IdSort'][value!='0']").val();
+            if(Utils.isDefined(id)) {
+                console.log("Sort " + id + " detected");
+                Utils.setConf("action", "Sort" + id);
+                this.initPageSort(id);
+                return;
+            }
+        }
+        {
+            var id = $("[name='ai_IdAction'][value!='0']").val();
+            if(Utils.isDefined(id)) {
+                console.log("Action " + id + " detected");
+                Utils.setConf("action", "Action" + id);
+                this.initPageAction(id);
+                return;
+            }
+        }
+    },
+    initPageSort : function(id) {
+        switch(id) {
+            case "10": // IdT
+                MH_Play_Actions_Play_Toolbox.injectTresorsTags("2_", "");
+                break;
+                
+            case "21": // Projection
+                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
+                break;
+                
+            case "17": // Sacrifice
+                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                break;
+        }
+    },
+    initPageAction : function(id) {
+        switch(id) {
+            case "4": // Ramasser un trésor
+                MH_Play_Actions_Play_Toolbox.injectTresorsTags("", "_TE");
+                break;
+
+            case "7": // Ramasser un champignon
+                MH_Play_Actions_Play_Toolbox.injectChampignonsTags("", "_??"); //TODO
+                break;
+
+            case "220": // AA
+                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                break;
+                
+            case "116": // CdM
+                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
+                break;
+                
+            case "118": // Insulte
+                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
+                break;
+                
+        }
+    }        
+});
 var MH_Play_Actions_Sorts_Play_a_SortYY = $.extend({}, MH_Play_Actions_Abstract, {});
-var MH_Play_Actions_Sorts_Play_a_SortXX = $.extend({}, MH_Play_Actions_Abstract, {});
 var MH_Play_Actions_Play_a_ActionYY = $.extend({}, MH_Play_Actions_Abstract, {});
+var MH_Play_Actions_Sorts_Play_a_SortXX = $.extend({}, MH_Play_Actions_Abstract, {});
 var MH_Play_Actions_Competences_Play_a_CompetenceYY = $.extend({}, MH_Play_Actions_Abstract, {});
 var MH_Play_Actions_Play_a_NoAction = $.extend({}, MH_Play_Actions_Abstract, {});
 var MH_Play_Actions_Play_a_Move = $.extend({}, MH_Play_Actions_Abstract, {});
 
 var MH_Play_Play_action = $.extend({}, MH_Page, {
     init : function() {
-        $(".titre3").css("font-size", "12px");
+        MH_Play_Actions_Play_Toolbox.normalizeFontSize();
         $('select').find('optgroup').each(function(){
             if($(this).prop('label') == "** Actions Spéciales **") {
               $(this).css("background-color", "#99CCFF");
               $(this).parent().css("background-color", "#99CCFF");
             }
         });
+    }
+});
+
+var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Page, { // TELEK
+    init : function() {
+        MH_Play_Actions_Play_Toolbox.injectTresorsTags("", "");
+    }
+});
+
+var MH_Play_Actions_Play_a_Attack = $.extend({}, MH_Page, {
+    init : function() {
+        MH_Play_Actions_Play_Toolbox.normalizeFontSize();
+        MH_Play_Actions_Play_Toolbox.protectMonsters();
+        MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");        
+        MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");        
+    }
+});
+
+
+var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { // CdM
+    init : function() {
+        var result = Utils.cleanup($("form[name='ActionForm']:first").html());
+        if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
+            // Appel de l'API
+            MH_Page.callAPIConnected({
+                api : "cdm",
+                data : {
+                    "cdm" : result
+                }
+            });
+        }
+    }
+});
+
+var MH_Play_Actions_Play_a_Drop = $.extend({}, MH_Page, {
+    init : function() {
+        var monsterIds = $('select[name="ai_DropTo"] option').map(function(){
+            return $(this).prop("value");
+        }).filter(function(idx, value){
+            return /^\d{2,}$/.test(value);
+        }).get();
+
+        var tresorIds = $('select[name="ai_IdTarget"] option').map(function(){
+            return $(this).prop("value");
+        }).filter(function(idx, value){
+            return /^\d{2,}$/.test(value);
+        }).get();
+
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "invi" : 0,
+                "m" : monsterIds,
+                "o" : tresorIds
+            },
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                $.each(json.tags, $.proxy(function(key, data){
+                    var tmp = key.split(";");
+                    if(tmp[0] == "1") {
+                        var o = $('select[name="ai_DropTo"] option[value="' + tmp[1] + '"]');
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                    if(tmp[0] == "3") {
+                        var o = $('select[name="ai_IdTarget"] option[value="' + tmp[1] + '"]');
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                },this));
+            }
+        });
+
+    }
+});
+
+
+
+var MH_Play_Actions_Play_a_AmeliorationView = $.extend({}, MH_Page, {
+    init : function() {
+        $("table.mh_tdborder a.AllLinks")
+        .hover($.proxy(function(event) {
+            this.showTalentPopup($(event.target), true);
+        }, this), $.proxy(function(event) {
+            this.hideTalentPopup($(event.target));
+        }, this));
+    }
+});
+
+var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
+    init : function() {
+        var result = $("table:first").text();
+        
+        console.log(result);
+        console.log(Utils.getConf("action"));
+        
+        if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
+
+            if(Utils.getConf("action") == "Sort20") { // AA
+                // Appel de l'API
+                this.callAPIConnected({
+                    api : "aa",
+                    data : {
+                        "aa" : result
+                    }
+                });
+            }
+
+            if(Utils.getConf("action") == "Sort13") { // TP
+                var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(result);
+                // Appel de l'API
+                this.callAPIConnected({
+                    api : "tag",
+                    data : {
+                        "type" : 5,
+                        "num" : tmp[1],
+                        "tag" : tmp[2]
+                    }
+                });
+            }
+
+            if(Utils.getConf("action") == "Sort10") { // IdT
+                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(result);
+
+                // Appel de l'API
+                this.callAPIConnected({
+                    api : "tag",
+                    data : {
+                        "type" : 3,
+                        "num" : data[1],
+                        "tag" : data[2],
+                    }
+                });
+            }
+        }
+        Utils.setConf("action", "");
     }
 });
 
