@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.5-3
+// @version       0.1.5-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1227,7 +1227,7 @@ var MH_Play_Actions_Sorts_Play_a_Sort10 = $.extend({}, MH_Page, { // IdT
 
 var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
     init : function() {
-        var result = $($("table")[2]).text();
+        var result = $("table:first").text();
         if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
 
             if(Utils.getConf("action") == "Sort20") { // AA
