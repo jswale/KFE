@@ -3161,16 +3161,20 @@ var MH_Play_Actions_Play_a_Attack = $.extend({}, MH_Page, {
 });
 
 
-var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { // CdM
+var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { // Résultat de CdM
     init : function() {
-        var result = Utils.cleanup($("form[name='ActionForm']:first").html());
+        var result = Utils.cleanup($("table:first").html());
         if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
             // Appel de l'API
             MH_Page.callAPIConnected({
                 api : "cdm",
                 data : {
                     "cdm" : result
-                }
+                },
+                callback : function() {
+                    $("form").append($("<div/>").html("<center><b>Données envoyées</b></center>"));
+                },
+                scope : this                
             });
         }
     }
