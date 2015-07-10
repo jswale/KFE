@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.5-6
+// @version       0.1.5-7
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -3094,27 +3094,35 @@ var MH_Play_Actions_Abstract = $.extend({}, MH_Page, {
         }
     },
     initPageSort : function(id) {
+        MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+        MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
+        
         switch(id) {
             case "10": // IdT
                 MH_Play_Actions_Play_Toolbox.injectTresorsTags("2_", "");
                 break;
                 
             case "21": // Projection
-                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
+                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                //MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
                 break;
                 
             case "2" : // Hypnotisme
-                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
+                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                //MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
                 break;
                 
             case "20": // AA
-                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                break;                
+                
+            case "12": // Faiblesse Pasagère
+                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                //MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
                 break;                
                 
             case "17": // Sacrifice
-                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
                 break;
         }
     },
@@ -3334,6 +3342,26 @@ var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
         this.addActions(map);
         this.addEdition();
         this.displayTags();
+        this.fixMoreLess();        
+    },
+    
+    fixMoreLess : function() {
+        /* Boulets */
+        $('a[href^="javascript:afficheDetailTrPlus"]').each(function(){
+            var a = $(this);
+            var tr = $(a.parents("tr")[2]);            
+            var trTitre = tr.prev("tr:first");
+            
+            var fullname = trTitre.find("a:first").text().trim();
+            var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+            var id = tmp[1];
+            
+            a.attr("id", id + "_" + a.attr("id"));
+            a.attr("href", a.attr("href").replace(/\('(.*)','(.*)'\)/, "('" + id + "_$1','" + id + "_$2')"));    
+            
+            var trHidden = $(a.parents("tr")[1]).next("tr:first");
+            trHidden.attr("id", id + "_" + trHidden.attr("id"));
+        });
     },
     
     addMap : function() {
