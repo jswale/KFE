@@ -1466,7 +1466,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         this.callAPIConnected({
             api : "profile",
             data : {
-                "profile" : result
+                "profile" : "MON PROFIL " + result
                 //,"troll" : troll
             }
         });
