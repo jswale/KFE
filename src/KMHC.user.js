@@ -1555,7 +1555,7 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 var MH_Play_Play_vue = $.extend({}, MH_Page, {
     init : function(){
         this.sendView();
-        $("#mh_vue_hidden_tresors").parents("p:first").attr("data-view", "main");
+        $("#mhPlay").attr("data-view", "main");
         
         this.fixTableSize();
         this.addPharozViewLinks();
@@ -1787,7 +1787,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             ;
         };
 
-        $("<p>")
+        $("<div/>")
         .append("<b>Vue dans l'outil</b> : ")
         .append(
             $("<a href='javascript:void(0)'>Vue 1</a>")
@@ -1810,7 +1810,9 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                 $('[data-view="KFE"]').hide();
             })
         )
-        .insertAfter( "h2" );
+        .css("background", "url(/MH_Packs/packMH_parchemin/fond/fond.jpg) repeat-y")
+        .css("text-align", "center")
+        .insertBefore( mainView );
     },
 
     highlightTreasures : function() {
