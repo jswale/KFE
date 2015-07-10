@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.5-5
+// @version       0.1.5-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.0.min.js
@@ -1023,7 +1023,6 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             }            
         };
         
-        
         // Echéance du Tour
         var text = getText(2);
         var tmp = /Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée(?:\s*\.*\s*:\s*)(-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. Poids de l'équipement(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes./.exec(text);
@@ -1104,7 +1103,7 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
                 bm : (tmp[6] ? parseInt(tmp[6]) : 0)
             }
         };
-
+        
         // Caracs
         var text = getText(6);
         var tmp = /Régénération(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Attaque(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Esquive(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Armure(?:\s*\.*\s*:\s*)(\d+)\s?D3( \/ \d+ D3)? ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :\s?-\s?Corpulence(?:\s*\.*\s*:\s*)(\d+)\s?points\s?- Agilité(?:\s*\.*\s*:\s*)(\d+)\s?points/.exec(text);
@@ -1198,6 +1197,13 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
         var getContainer = function(id) {
             return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
         };
+        
+        // Fix des boulets
+        var alt = stats.hp.current +" PV sur " + stats.hp.max.total;
+        $("img[src='/mountyhall/Images/Interface/droite.gif']").attr("alt", alt);
+        var jauge = $("img[src='/mountyhall/Images/Interface/milieu.gif']");
+        jauge.attr("alt", alt).attr("width", (stats.hp.current / stats.hp.max.total * parseInt(jauge.parents("table:first").attr("width"))));
+        //
 
         // Echéance du Tour
         {
@@ -2792,7 +2798,7 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
         } catch(e) {}
         if (ctn) {
             var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
-            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,50,0,0.5)", p, "Vous êtes ici");
+            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,80,200,0.75)", p, "Vous êtes ici");
         }
 
         var tmp1 = /Portail de Téléportation\s+\(Lieu n° (\d+)\)/.exec($("div.titre2").text());
@@ -3096,6 +3102,15 @@ var MH_Play_Actions_Abstract = $.extend({}, MH_Page, {
                 MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
                 break;
                 
+            case "2" : // Hypnotisme
+                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
+                break;
+                
+            case "20": // AA
+                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
+                break;                
+                
             case "17": // Sacrifice
                 MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
                 break;
@@ -3109,10 +3124,6 @@ var MH_Play_Actions_Abstract = $.extend({}, MH_Page, {
 
             case "7": // Ramasser un champignon
                 MH_Play_Actions_Play_Toolbox.injectChampignonsTags("", "_??"); //TODO
-                break;
-
-            case "220": // AA
-                MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
                 break;
                 
             case "116": // CdM
@@ -3327,6 +3338,13 @@ var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
         var p = {zf: 2.0, dx: 30, dy: 30},
             map = MH_Map.getMap("map_mh", p);      
         $("form[action='Play_action_Equipement.php']").after(map.div);
+        
+        try {
+            var ctn = window.parent.parent.parent.Sommaire.document;
+            var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
+            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,80,200,0.75)", p, "Vous êtes ici");
+        } catch(e) {}
+        
         return {p : p, map : map};
     },
     
