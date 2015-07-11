@@ -60,59 +60,7 @@ var Display = $.inherit({
         .attr("value", label)
         .on('click', $.proxy(callback, scope || this));
     },
-    
-    injectTags : function(dataType, dataId, prefix, suffix) {
-        var ids = $("select option[value!='']").map(function(){
-            var v = $(this).prop("value");
-            v = v.substr(prefix.length, v.length - suffix.length);
-            return v;
-        }).get();
         
-        var data = {
-                "invi" : 0,                
-            };
-        data[dataType] = ids;
-        
-        MH_Page.callAPIConnected({
-            api : "viewInfo",
-            data : data,
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                
-                $.each(json.tags, $.proxy(function(key, data){
-                    var tmp = key.split(";");
-                    if(tmp[0] == dataId) {
-                        var o = $("select option[value='" + prefix + + tmp[1] + suffix + "']");
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                },this));
-                
-                if("m" == dataType) {
-                    $.each(json.monsters, $.proxy(function(key, data) {
-                        var o = $("select option[value='" + prefix + key + suffix + "']");
-                        o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
-                    },this));
-                }
-            }
-        });
-    },
-    
-    injectMonstresTags : function(prefix, suffix) {
-        this.injectTags("m", "1", prefix, suffix);
-    },
-    
-    injectTrollsTags : function(prefix, suffix) {
-        this.injectTags("t", "2", prefix, suffix);
-    },
-    
-    injectTresorsTags : function(prefix, suffix) {
-        this.injectTags("o", "3", prefix, suffix);
-    },
-        
-    injectChampignonsTags : function(prefix, suffix) {
-        this.injectTags("c", "4", prefix, suffix);
-    },
-    
     protectMonsters : function() {
         $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
     },
@@ -460,6 +408,60 @@ var Page = $.inherit({
     },    
     
     /******************************************/
+    
+    injectTags : function(dataType, dataId, prefix, suffix) {
+        var ids = $("select option[value!='']").map(function(){
+            var v = $(this).prop("value");
+            v = v.substr(prefix.length, v.length - suffix.length);
+            return v;
+        }).get();
+        
+        var data = {
+                "invi" : 0,                
+            };
+        data[dataType] = ids;
+        
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : data,
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                
+                $.each(json.tags, $.proxy(function(key, data){
+                    var tmp = key.split(";");
+                    if(tmp[0] == dataId) {
+                        var o = $("select option[value='" + prefix + + tmp[1] + suffix + "']");
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                },this));
+                
+                if("m" == dataType) {
+                    $.each(json.monsters, $.proxy(function(key, data) {
+                        var o = $("select option[value='" + prefix + key + suffix + "']");
+                        o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
+                    },this));
+                }
+            }
+        });
+    },
+    
+    injectMonstresTags : function(prefix, suffix) {
+        this.injectTags("m", "1", prefix, suffix);
+    },
+    
+    injectTrollsTags : function(prefix, suffix) {
+        this.injectTags("t", "2", prefix, suffix);
+    },
+    
+    injectTresorsTags : function(prefix, suffix) {
+        this.injectTags("o", "3", prefix, suffix);
+    },
+        
+    injectChampignonsTags : function(prefix, suffix) {
+        this.injectTags("c", "4", prefix, suffix);
+    },    
+
+    /******************************************/    
 
     isInitialized : function() {
         return  (Utils.isDefined(typeof Utils.getConf("login")))
@@ -883,12 +885,12 @@ var MH_Play_Actions_Abstract = $.inherit(Page, {
         }
     },
     initPageSort : function(id) {
-        this.display.injectTrollsTags("PJ_","");
-        this.display.injectMonstresTags("ME_","");
+        this.injectTrollsTags("PJ_","");
+        this.injectMonstresTags("ME_","");
         
         switch(id) {
             case "10": // IdT
-                this.display.injectTresorsTags("2_", "");
+                this.injectTresorsTags("2_", "");
                 break;
                 
             case "21": // Projection
@@ -900,12 +902,12 @@ var MH_Play_Actions_Abstract = $.inherit(Page, {
         }
     },
     initPageAction : function(id) {
-        this.display.injectTrollsTags("PJ_", "");
-        this.display.injectMonstresTags("ME_","");
+        this.injectTrollsTags("PJ_", "");
+        this.injectMonstresTags("ME_","");
         
         switch(id) {
             case "4": // Ramasser un trésor
-                this.display.injectTresorsTags("", "_TE");
+                this.injectTresorsTags("", "_TE");
                 break;
 
             case "26": // Donner des GG
@@ -915,7 +917,7 @@ var MH_Play_Actions_Abstract = $.inherit(Page, {
                 break;
 
             case "7": // Ramasser un champignon
-                this.display.injectChampignonsTags("", "_??"); //TODO
+                this.injectChampignonsTags("", "_??"); //TODO
                 break;
                 
             case "116": // CdM
@@ -935,7 +937,7 @@ var MH_Play_Actions_Play_a_Move = $.inherit(MH_Play_Actions_Abstract);
 
 var MH_Play_Actions_Sorts_Play_a_Sort24 = $.inherit(Page, { // TELEK
     init : function() {
-        this.display.injectTresorsTags("", "");
+        this.injectTresorsTags("", "");
     }
 });
 
@@ -943,8 +945,8 @@ var MH_Play_Actions_Play_a_Attack = $.inherit(Page, {
     init : function() {
         this.display.normalizeFontSize();
         this.display.protectMonsters();
-        this.display.injectTrollsTags("PJ_","");        
-        this.display.injectMonstresTags("ME_","");        
+        this.injectTrollsTags("PJ_","");        
+        this.injectMonstresTags("ME_","");        
     }
 });
 
