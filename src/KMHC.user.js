@@ -3458,7 +3458,7 @@ var MH_Play_Actions_Competences_Play_a_Competence16b = $.inherit(Page, { // Rés
         var result = Utils.cleanup($("table:first").html());
         if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
             // Appel de l'API
-            MH_Page.callAPIConnected({
+            this.callAPIConnected({
                 api : "cdm",
                 data : {
                     "cdm" : result
