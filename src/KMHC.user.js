@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       0.1.5-7
+// @version       1.0.1-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
-// @require       http://code.jquery.com/jquery-2.1.0.min.js
+// @require       http://code.jquery.com/jquery-2.1.4.min.js
+// @require       https://github.com/dfilatov/jquery-plugins/raw/master/src/jquery.inherit/jquery.inherit.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2015-06-15_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2015-06-15_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-23_21-22
@@ -18,6 +19,110 @@
 // @icon          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAAAUDBQwKBxQKBBwKEBkTBBwaJCQUBCQcCS4cBzASBDwWBDIeGCQGJDweLCwjETQkDjQqFDw0HDQqNDw2NEAeFEAlCkIsCkElF0EsFkwpEUwuHEQzFkw0ElwtH1w6BFQ1EVM8FVw5F14+GEEqLEwiNEE1J0wzLE88LFgsNFQzKV40Jl88KWw+HGQzN2E7N2w2NEQ+THA+QFRDIFZELFxCIFxKJFxNMl9VP2dEGmRLGXRLF2dEKWhMJ2ZENGdNOmJSLmxUK2xXP3RKLHdMP3BeKHdaL3pUInRfOnhVMWRaRGheSH9FR3dVQ3ZaQHReRnRmTHxhRn9pV39xZ4A8RIRMOIRXKYxWJIxfJ4xaPIBgKYFgNoNnNY9oMY1pPoRwNJBhNpFvPZxvPpxwMpx3P6RsOKRyPKR4O4RNSIxGVJBSRJZYT4NnRo9gRIRiVIxiXIRwR45wToRwVIR2WJBnTpxnRJR4QJx+RJJ4U5R+VJxwVpx9UIxqYIxyZI94YZJ+YJx+YpR+cKluSad6T6d+T6l+Qax6QLRuTLR+QLR6XKR4YKR+bJ+FObCEO52DXYyCZJCEbJyKfKOESqGNX6yFWK+MXbKER7GMSbyDRryNR7SFXLyLWbyTT7SUXbyaVKGDcayUYK6QbqSRda+YeLSaZLyWYbyZb7efd7ySfLqgZrymcMSRQcSRT8SXTcyXTMufU8maXMeVY9ShW9imX8agbcugYMyqbMSmfsimccqsf9ambNSrZdytZtSseNyybNyweOC3dey+f4yOnJSGiKyKhKyYiLSSlLCgiLSmjLylibSqlLasnryskLyyqLy2xMSihMWskc+0gceyl8i2mNS4k9S+mNy5ksi5psq+ptS8qNy+tOS+gOC+lNzClMzCrNTEp9TKrN/Eo9jFt9rMtuTEjOzDi/DLlPzKnPTVmuDLqO7NqOTOtuzSoePTuvDVsPvdtPzevPzisOTaw+zUwe/cwu3dzeTa1Pbjw/TmzPzmzvzuxPvr1Pzy2fz35/z+9AAAAEG26sQAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAAA7CAAAOwgEVKEqAAAAAGHRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4wLjOM5pdQAAAGpElEQVRIS3WVD1wT5xnHwdUVWjacW9XQ4Ay6mipqV4MYyRlgeJBVtGrrXBKoiXRxBWxo1WXEqRXoulbSDUkiGqZAhVlJAiFX/oSYuI6mTLryJzUytTQ5SE0woHAsSd9j7EISTJT9Pnef5O6e7+d9nz/v80TMzKcJ4vZ6/f8f0byA2+QBAJsMPIVrPgC4unFsEP0POgoCb+YEwHyAt6fO9hWGT0+jk48QwNUzD4D3J4lu251O5323wxN45xcY+jP2OIBbSBKjpvl8/Q3tLac1ZAkAHNwB/DEAR2lS7YEDfHaaBBbobwQIL/EzeYNXiz/qNHCPMivfTaGvjIshQXACz9DqIqJLhMxhba/IvEDsMAwAU66b74jY8fE02s6XxLxqmCI3mKe9k6OD7cPVXHqWi1gnDJhAMeeO5zZGXXca9H36yuqa+N9ViD4UVUjlytPbIFENRtiEAhiKtZftQKVv3Ws8myNuq79YKTpDid4k5qZx2XDq7z/q9cUsFEBd7Tnxe77LO26WSYUFJ0XaUvFRFpmzS1TfWl8i7euz+QIQCngGoGcXbn5Qmd4ugeITV1MvZm08mgtxahrqilrtw87BKZ9RuA806o+//3bq5peTf/LzPSTG0qjVUAJLUl0vhaX3xlB0NsJhgGtVDHUXPTryiU//9feXYkm7agqfYRZIeq3adgxDv/HbhAL48Zi64Za9UYvWrGEyIRhyOHjiHSdQYL73wG2Z8GcwFAA26pC9hU1axjiULhR1s3giWFtd5PgcM1swy1zhhgKmz+82yzctJtcWFTR0pwspDL09Ncssue29iWFB+1AAN7VpK7kbY6Ph9LdS02tEsUkNPTRR20AtioGHp+8hgHc9ly7kMVY9sWzFy5bS/SIJZ8ni2B9JHA6LryLmNAeAgRN1EmHiD3+wujY5Op7COipnc5PJ5LQTJhBqPwcAy8d3jTr51lXH+h4c/+lpYZ4MptRB2hK4ogEPO0UBALi67C1NVQJ+cycy3MC+XCfN48HiZO5eurTPn7CggoBpuFOlbGxENE2I/njMSs4+saQoOyq1Gkq73D7PCvjN1hG1SqVSNjUXM0kLnqSXCugwi0rKkm6BOdqw5uEHQJdV5wNapBsWREZGbuTw8pI4/ByYDlfwc5tNjwHeyW57CwF0Nq+JjFwYtZDGgOvTuI1yAb/k/JH89485QohZAPx70K5TqzsNGd9bsGjRCgqtIO6AXNGmVZz9Y/5vX3yzuAaftZ1VALDZr3Yavn1/2ZMMiJ7CyTpDl6k62trUZ0/lv5KRnlHY+7DR+oH+HvzuvfG/rSdlCtj7c3icPq5cqdFfrpadyj+YuPPF7X/qm8u2H3Blf2azntwaBwnKeILSbtbFitN/RZDLFysOH8zftfXgkcYRR7D8ZoEZ0Lth/dq1MYvS+GV5PGl3Lixmy5s6Pvm44kj+YeHWQuSWEwumzw98d/PCH06KukzUndvgJEkuFyqAfoMYblsr39jOpK4vREbGgCuQPj/g6f3HByezPzicben5cHMydSmZxeLpjE5n9ivPpzNfKOkYGQdfYziOE67PAtO2C8UU8tIV8UuSsk7Umfp3xybmZiLG+wOJr65//mcZMt3I2HQtaefuWsIRHzBt2XMoDuKWyWT8fSkUyqYzPe8sZaXIDO6eTH7hwe2vNiFGO/72U8uXr81GfQMFdJGfSYK1ROY0KqWy/LUt8TuOQfp1ZYZxS+6l+uJzJUqdcWScxsjPf2P5bgIAJg68hDncqfQVn1KtuVKembghtyRFph9zceq1JeebEN1Ve83KPNmpvUUOEOEZ7dX/KmHgLqJUNaqUGm0rckWw8hfbEnhKg9OTxZFfamrp0F2tZu2vUr7OHyJ88Ixixl8Lh+7riNNwRYm0tSLKqn3wFnY5MuL97y9JcJ5coZALeLz3zr5e4psuEa5Dfbc4wtfM9mvGlsYqRUcH0qQSHJCX6+xW9PpiMo2Tk1dWXi57793SL2eTHdHPWsfJTYQozALxJY1GTVxqZXl5y1V9EZVMToI4ZQo1olYotOZAbUTMuBrERQlLoqOfejqOUXyuqpHYgEDxyY3eAfQbq9V6x2y+fcfhwnxDLgAAAMa+6v4L81wZn7WOkcFicY5+dAfz4tM4Tnxye9xTYX1mNtNegIOucWOnRrY/Ey6oG5xwT019gdps6KjLHdYBCPlricjeP4fG7deuIdKGUa9vcExd//QLFO1/2FODCgJet8VC7Hhg0BM0mQDA65uCjygIENuasKFE2w08/h/NzPwPOHaIyvrbq40AAAAASUVORK5CYII=
 // ==/UserScript==
 
+var Logger = $.inherit({
+}, { // Statics
+    _log : function(type, args) {        
+        switch(args.length) {
+            case 0:
+                return;
+                break;
+            case 1:
+                args=args[0];
+                break;
+        }
+        console[type](args);
+    },
+    
+    log : function() {
+        this._log("log", arguments);
+    },
+
+    debug : function() {
+        this._log("debug", arguments);
+    },
+
+    warn : function() {
+        this._log("warn", arguments);
+    },
+
+    error : function() {
+        this._log("error", arguments);
+    }
+});
+
+var Display = $.inherit({
+}, { // Statics
+    mhButton : function(label, callback, scope) {
+        return $("<input/>")
+        .addClass("mh_form_submit")
+        .css("margin", "auto 0px")
+        .attr("type", "button")
+        .attr("value", label)
+        .on('click', $.proxy(callback, scope || this));
+    },
+    
+    injectTags : function(dataType, dataId, prefix, suffix) {
+        var ids = $("select option[value!='']").map(function(){
+            var v = $(this).prop("value");
+            v = v.substr(prefix.length, v.length - suffix.length);
+            return v;
+        }).get();
+        
+        var data = {
+                "invi" : 0,                
+            };
+        data[dataType] = ids;
+        
+        MH_Page.callAPIConnected({
+            api : "viewInfo",
+            data : data,
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+                
+                $.each(json.tags, $.proxy(function(key, data){
+                    var tmp = key.split(";");
+                    if(tmp[0] == dataId) {
+                        var o = $("select option[value='" + prefix + + tmp[1] + suffix + "']");
+                        o.text(o.text() + " - " + data.tag);
+                    }
+                },this));
+                
+                if("m" == dataType) {
+                    $.each(json.monsters, $.proxy(function(key, data) {
+                        var o = $("select option[value='" + prefix + key + suffix + "']");
+                        o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
+                    },this));
+                }
+            }
+        });
+    },
+    
+    injectMonstresTags : function(prefix, suffix) {
+        this.injectTags("m", "1", prefix, suffix);
+    },
+    
+    injectTrollsTags : function(prefix, suffix) {
+        this.injectTags("t", "2", prefix, suffix);
+    },
+    
+    injectTresorsTags : function(prefix, suffix) {
+        this.injectTags("o", "3", prefix, suffix);
+    },
+        
+    injectChampignonsTags : function(prefix, suffix) {
+        this.injectTags("c", "4", prefix, suffix);
+    },
+    
+    protectMonsters : function() {
+        $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
+    },
+    
+    normalizeFontSize : function () {        
+        $(".titre3, .titre4").css("font-size", "12px");
+    }    
+});
+
+//TODO Decouper cette classe en Storrage, Parser et Utils
 // Here we are...
 var Utils = function() {
     var CONF_KEY = "KMHC_",
@@ -43,7 +148,7 @@ var Utils = function() {
         },
 
         initConf : function(key, value) {
-            if(this.isUndefined(typeof this.getConf(key))) {
+            if(this.isUndefined(this.getConf(key))) {
                 this.setConf(key, value);
             }
         },
@@ -162,15 +267,12 @@ var Utils = function() {
                              .replace(/<\/t[dh][^>]*>/gi," ")
                              .replace(/<\/?[^>]+>/gi,"")
                              .replace(/\s+/gi," "));
-        }
+        }                
     }
 }();
 
-var Storage = {
-};
-
-var MH_Map = function() {
-    var HOLES = [
+var Mapper = $.inherit({}, {
+    HOLES : [
         // X, Y, size, radius, Ndepth
         [-70.5, -7.5, 2, 1.5, -69],
         [-66.5, -37.5, 2, 1.5, -69],
@@ -194,562 +296,409 @@ var MH_Map = function() {
         [56.5, 23.5, 75, 8.7, -99],
         [64, 70, 0.25, 0.8, -59],
         [74.5, 31.5, 2, 1.5, -69]
-    ];
+    ],
 
-    var LOCATIONS = {
+    LOCATIONS : {
         "Véda": [-64, 47, -32, "rgba(138,43,226,0.75)"],
         "Karlaaki": [84, 27, -50, "rgba(138,43,226,0.75)"]
-    };
-
-    return {
-        xCtx : function(xMH, p) { return (xMH + 100) * p.zf + p.dx; },
-        yCtx : function(yMH, p) { return (100 - yMH) * p.zf + p.dy; },
-        xMh : function(xCTX, p) { return Math.round((xCTX - p.dx) / p.zf - 100); },
-        yMh : function(yCTX, p) { return Math.round(100 - (yCTX - p.dy) / p.zf); },
-
-        getMap : function(ref, p) {
-            var div = $("<div/>",{id: ref})
-                    .css("padding", "20px"),
-                canvas = $("<canvas/>", {id: ref + "_canvas"})
-                    .addClass("mh_tdtitre")
-                    .appendTo(div)[0],
-                ctx = canvas.getContext("2d"),
-                tip = $("<div/>",{id: ref + "_tip"})
-                    .css("position", "absolute")
-                    .css("max-width", "700px")
-                    .css("border", "1px solid #CCC")
-                    .css("background-color", "#FFF")
-                    .css("border-radius", "5px")
-                    .css("z-index", "999")
-                    .css("display", "none")
-                    .appendTo(div),
-                tipH = $("<h2/>")
-                    .css("background", "#333")
-                    .css("border", "1px solid #111")
-                    .css("padding", "5px 10px")
-                    .css("font-size", "14px")
-                    .css("color", "white")
-                    .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
-                    .css("letter-spacing", "0")
-                    .css("border-radius", "5px 5px 0 0")
-                    .css("font-weight", "normal")
-                    .css("margin-bottom", "0px")
-                    .css("margin-top", "0px")
-                    .css("overflow", "hidden")
-                    .text("-")
-                    .appendTo(tip),
-                tipD = $("<div/>")
-                    .css("padding", "10px")
-                    .appendTo(tip);
-            var map = {div: div, ctx: ctx, places: []};
-
-            canvas.width = 200 * p.zf + 2 * p.dx;
-            canvas.height = 200 * p.zf + 2 * p.dy;
-
-            // quadrants
-            ctx.beginPath();
-            ctx.moveTo(100 * p.zf + p.dx, p.dy);
-            ctx.lineTo(100 * p.zf + p.dx, 200 * p.zf + p.dy);
-            ctx.moveTo(p.dx, 100 * p.zf + p.dy);
-            ctx.lineTo(200 * p.zf + p.dx, 100 * p.zf + p.dy);
-            ctx.stroke();
-            ctx.strokeRect(p.dx, p.dy, p.zf * 200, p.zf * 200);
-
-            // holes
-            ctx.fillStyle = "rgb(200,0,0)";
-            $.each(HOLES, $.proxy(function (i, h) {
-                ctx.beginPath();
-                ctx.arc(this.xCtx(h[0], p), this.yCtx(h[1], p), h[3] * p.zf, 0, Math.PI * 2, true);
-                ctx.fill();
-            }, this));
-
-            // known locations
-            var lp = $.extend({lw: 1}, p);
-            $.each(LOCATIONS, $.proxy(function (name, loc) {
-                this.drawPos(map, loc[0], loc[1], loc[3], lp, name + " : X=" + loc[0] + " | Y=" + loc[1] + " | N=" + loc[2]);
-            }, this));
-
-            // tooltip
-            var canvasOffset = null;
-            $(canvas)
-                .on('mouseenter', function() { canvasOffset = $(canvas).offset(); })
-                .on('mouseout', function() { tip.css("display", "none"); canvasOffset = null; })
-                .on('mousemove', $.proxy(function(e) {
-                    tip.css("left", (e.pageX + 20) + "px").css("top", (e.pageY + 10) + "px").css("display", "block");
-                    if(!canvasOffset) return;
-                    var pos = {
-                        x: e.pageX - canvasOffset.left,
-                        y: e.pageY - canvasOffset.top,
-                    };
-                    pos.xMh = this.xMh(pos.x, p);
-                    pos.yMh = this.yMh(pos.y, p);
-                    pos.description = "";
-                    tipH.text("[ X=" + pos.xMh + " | Y=" + pos.yMh + " ]");
-                    $.each(HOLES, function (i, h) {
-                        var dist = (pos.xMh - h[0]) * (pos.xMh - h[0]) + (pos.yMh - h[1]) * (pos.yMh - h[1]) - h[2];
-                        if(dist <= 0) {
-                            pos.description = "Trou de Météorite : N=-1 => N=" + h[4];
-                            return false;
-                        }
-                    });
-
-                    $.each(map.places, function (i, p) {
-                        var dist = (pos.xMh - p.x) * (pos.xMh - p.x) + (pos.yMh - p.y) * (pos.yMh - p.y);
-                        if(dist <= 0 && p.name) {
-                            pos.description = p.name;
-                            return false;
-                        }
-                    });
-
-                    tipD.text(pos.description);
-                }, this));
-
-            return map;
-        },
-        drawPos : function(map, xMH, yMH, color, p, text) {
-            var x = this.xCtx(xMH, p), y = this.yCtx(yMH, p);
-            map.ctx.strokeStyle = color;
-            map.ctx.fillStyle = color;
-            map.ctx.lineWidth = p.lw || p.zf;
-            map.ctx.beginPath();
-            map.ctx.arc(x, y, p.zf, 0, Math.PI * 2, true);
-            map.ctx.fill();
-            map.ctx.beginPath();
-            map.ctx.arc(x, y, 3 * p.zf, 0, Math.PI * 2, true);
-            map.ctx.stroke();
-            map.places.push({x: xMH, y: yMH, name: text});
-        }
-    }
-}();
-
-var MH_Page = function() {
-    return {
-
-        utils : Utils,
-
-        load : function() {
-            console.log("Module initializing");
-            
-            Utils.addGlobalStyle([
-                '.editable { margin-left: 10px; }',
-                '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 12px; height: 12px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAFhJREFUKFOVjgEKgCAQBH1m/v8hG3N5cdWmuDCgMCM2SVN6PwR5/wiVIcYysiKk/I6mMuNc46WcG+fnl1YybMmwJcMtV5E5GezrfzJEYCIrAwuphFa8UDsBgSOr5cVAQ8gAAAAASUVORK5CYII=); }',
-                '.editable_ctn:hover .editable:after {display:inline-block; }',
-                '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }'
-            ]);
-            
-            this.init();
-            
-            console.log("Module initialized");
-        },
-
-        init : function() {
-            console.log("Not yet implemented");
-        },
-
-        log : function() {
-            console.log(arguments);
-        },
-
-        debug : function() {
-            console.debug(arguments);
-        },
-
-        warn : function() {
-            console.warn(arguments);
-        },
-
-        error : function() {
-            console.error(arguments);
-        },
-
-        isInitialized : function() {
-            return  (Utils.isDefined(typeof Utils.getConf("login")))
-            &&  (Utils.isDefined(typeof Utils.getConf("pswd")));
-        },
-
-        getEditionField : function(ref, type) {
-            return $("<span/>")
-            .append(
-                $("<label/>")
-                .addClass("editable")
-                .attr("data-type", "editable")
-                .attr("data-for", "#tag_" + ref)
-                .text(""))
-            .append(
-                $("<input/>")
-                .attr("id", "tag_" + ref)
-                .attr("data-tag-type", type)
-                .attr("data-tag-id", ref))
-            .on("paste", function(){
-                var input = this;
-                setTimeout(function() {
-                    $(input).attr('size', $(input).val().length + 2);
-                }, 10);
-            });        
-        },        
-        
-        handleTagEdition: function() {
-            var self = this;
-            $('body').editables({
-                editOn: 'click',
-                freezeOn: ['blur', 'keyup'],
-                beforeEdit: function(field) {
-                    field.data('undo', this.text());
-                    field.val(this.text());
-                    field.attr('size', field.val().length + 2);
-                },
-                beforeFreeze: function(display, ev) {
-                    display.text(this.val());
-                    //console.log(ev);
-                    if(ev.type == 'keyup') {
-                        if(ev.which == 13) return true;
-                        if(ev.which == 27) {
-                            display.text(this.data('undo'));
-                            this.val(this.data('undo'));
-                            return true;
-                        }
-                        this.attr('size', this.val().length + 2);
-                        return false;
-                    }
-                    return true;
-                },
-                onFreeze: function() {
-                    if($(this).val() != $(this).data('undo')) {
-                        self.callAPIConnected({
-                            api : "tag",
-                            data : {
-                                "type" : $(this).attr("data-tag-type"),
-                                "num" : $(this).attr("data-tag-id"),
-                                "tag" : $(this).val()
-                            },
-                            callback : $.noop,
-                            scope : self
-                        });
-                    }
-                }
-            });
-        },        
-
-        callAPIConnected : function(conf) {
-            if(!this.isInitialized()) {
-                this.error("Authentification required");
-                return;
-            }
-            conf.data = $.extend(conf.data, {"login" : Utils.getConf("login"),"password" : Utils.getConf("pswd")})
-            this.callAPI(conf);
-        },
-
-        callAPI : function(conf) {
-            //this.debug("Calling API", conf);
-            $.ajax({
-                type: "POST",
-                url: "http://pharoz.net/MH/outil/api.php?rnd=" + new Date().getTime(),
-                //contentType: "application/x-www-form-urlencoded;charset=ISO-8859-15",
-                data : $.extend(conf.data, {"page" : conf.api, "popup" : 0, "encoding" : "UTF-8"})
-            }).done($.proxy(function(data, result, request){
-                if(result == Utils.success) {
-                    if(Utils.isUndefined(conf.callback)) {
-                        //this.warn("No callback found");
-                    } else {
-                        //this.debug("Result", data);
-                        conf.callback.apply(this, [data.replace(/\s/g, " "), result, request]);
-                    }
-                } else {
-                    this.error("Error while executing the API call");
-                    this.error(arguments);
-                }
-            }, conf.scope || this));
-        },
-
-        callAPIMiltown : function(conf) {
-            this.debug("Calling API", conf);
-            $.ajax({
-                type: "POST",
-                url: "http://mh.swale.fr/api/" + conf.api + ".php?rnd=" + new Date().getTime(),
-                data : {"call" : conf.call, "encoding" : "UTF-8", "data" : conf.data}
-            }).done($.proxy(function(data, result, request){
-                if(result == Utils.success) {
-                    if(Utils.isUndefined(typeof conf.callback)) {
-                        this.warn("No callback found");
-                    } else {
-                        this.debug("Result", data);
-                        conf.callback.apply(this, arguments);
-                    }
-                } else {
-                    this.error("Error while executing the API call");
-                    this.error(arguments);
-                }
-            }, conf.scope || this));
-        },
-
-        mhButton : function(label, callback) {
-            return $("<input/>")
-                    .addClass("mh_form_submit")
-                    .css("margin", "auto 0px")
-                    .attr("type", "button")
-                    .attr("value", label)
-                    .on('click', callback);
-        },
-
-        addCssToLabel : function(o) {
-            return o
-            .css("float", "left")
-            .css("font-weight", "bold")
-            .css("padding", "5px")
-            .css("text-align", "left")
-            .css("width", "250px");
-        },
-
-        addCssToInput : function(o) {
-            return o
-            .css("border", "1px solid #1E2A63")
-            .css("font-size", "12px")
-            .css("background-color", "#FFFFEE")
-            .css("padding", "1px");
-        },
-
-        addConfigPanel : function(items, callback) {
-            var self = this;
-            $("<div/>")
-            .attr("id", Utils.getId("page-options"))
-            .addClass("mh_tdpage")
-            .css("position", "fixed")
-            .css("display", "none")
-            .css("right", "50px")
-            .css("top", "0px")
-            .css("border", "1px solid black")
-            .css("padding", "5px 10px")
-            .css("width", "500px")
-            .append(
-                $("<fieldset/>")
-                .attr("id", "KMHC_form")
-                .append($("<legend/>").text("Page options"))
-                .append($.map(items, $.proxy(function(item){
-                    var fieldValue = Utils.getConf(item.option) || "undefined";
-                    var field = $("<input/>")
-                    .attr("id", Utils.getId("page-options-"+item.option))
-                    .attr("type", item.type)
-                    .attr("name", item.option);
-
-                    if(item.type == "checkbox") {
-                        field.prop("checked", fieldValue == "true");
-                    } else {
-                        field.val(fieldValue);
-                    }
-
-                    return [
-                        this.addCssToLabel($("<label/>").text(item.label)),
-                        this.addCssToInput(field),
-                        $("<br/>").css("clear","left")
-                    ];
-                },this)
-                ))
-                .append(
-                    self.mhButton("Enregistrer", function(){
-                        $(this).val("Enregistré");
-                        $.each(items, $.proxy(function(id, item){
-                            var field = $("#" + Utils.getId("page-options-"+item.option));
-                            var value = field.val();
-                            if(item.type == "checkbox") {
-                                value = field.prop("checked");
-                            }
-                            Utils.setConf(item.option, value);
-                        }, this));
-                        if(typeof(callback) == "function") {
-                            callback.apply(this);
-                        } else {
-                            $("#" + Utils.getId("page-options")).toggle();
-                        }
-                      })
-                )
-                .append($("<br/>").css("clear","left"))
-                .append("<i>Les changements seront pris en compte au prochain affichage de cette page</i>")
-                .append($("<div/>")
-                    .css("text-align", "right")
-                    .css("font-size", "smaller")
-                    .append("[<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_new'>Recharger le script</a>]")
-                )
-            )
-            .appendTo($("body"));
-
-            $('<svg height="40" version="1.1" width="40" xmlns="http://www.w3.org/2000/svg">'+
-              '<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
-              '<linearGradient id="27190-_0050af-_002c62" x1="0" y1="1" x2="0" y2="0" gradientTransform="matrix(1,0,0,1,-4,-4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
-              '<stop offset="0%" stop-color="#D05900" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>'+
-              '<stop offset="100%" stop-color="#642A00" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>'+
-              '</linearGradient>'+
-              '</defs>'+
-              '<path fill="none" stroke="#ffffff" d="M31.229,17.736C31.293,17.165,31.333,16.588,31.333,16S31.293,14.834,31.229,14.263L26.852,12.706C26.634,11.99,26.348,11.305,26.001,10.655999999999999L27.994,6.463999999999999C27.269,5.5539999999999985,26.445,4.729999999999999,25.536,4.004999999999999L21.343000000000004,5.998999999999999C20.696000000000005,5.651999999999999,20.009000000000004,5.366999999999999,19.294000000000004,5.149999999999999L17.736000000000004,0.7719999999999985C17.165,0.708,16.588,0.667,16,0.667S14.834,0.7080000000000001,14.263,0.772L12.707,5.15C11.991000000000001,5.367,11.306000000000001,5.652,10.657,5.9990000000000006L6.464,4.005C5.554,4.73,4.73,5.554,4.005,6.464L5.999,10.656C5.651999999999999,11.304,5.367,11.99,5.1499999999999995,12.706L0.7719999999999994,14.263C0.708,14.834,0.667,15.412,0.667,16S0.7080000000000001,17.165,0.772,17.736L5.15,19.294C5.367,20.009,5.652,20.695,5.9990000000000006,21.343L4.005000000000001,25.536C4.73,26.445,5.554,27.269000000000002,6.464,27.994L10.656,26.001C11.304,26.348000000000003,11.99,26.634,12.706,26.852L14.263,31.229C14.834,31.293,15.411,31.333,16,31.333C16.588,31.333,17.165,31.293,17.736,31.229L19.294,26.852C20.009,26.634,20.693,26.348,21.343,26.001L25.536,27.994C26.445,27.269,27.269000000000002,26.445,27.994,25.536L26.001,21.343000000000004C26.348000000000003,20.696000000000005,26.634,20.009000000000004,26.852,19.294000000000004L31.229,17.736ZM16,20.871C13.31,20.871,11.128,18.689,11.128,15.999999999999998C11.128,13.309999999999999,13.31,11.127999999999998,16,11.127999999999998C18.689,11.127999999999998,20.871000000000002,13.309999999999999,20.871000000000002,15.999999999999998C20.871,18.689,18.689,20.871,16,20.871Z" stroke-width="3" stroke-linejoin="round" opacity="0" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: round; opacity: 0;"></path>'+
-              '<path fill="url(#27190-_0050af-_002c62)" stroke="none" d="M31.229,17.736C31.293,17.165,31.333,16.588,31.333,16S31.293,14.834,31.229,14.263L26.852,12.706C26.634,11.99,26.348,11.305,26.001,10.655999999999999L27.994,6.463999999999999C27.269,5.5539999999999985,26.445,4.729999999999999,25.536,4.004999999999999L21.343000000000004,5.998999999999999C20.696000000000005,5.651999999999999,20.009000000000004,5.366999999999999,19.294000000000004,5.149999999999999L17.736000000000004,0.7719999999999985C17.165,0.708,16.588,0.667,16,0.667S14.834,0.7080000000000001,14.263,0.772L12.707,5.15C11.991000000000001,5.367,11.306000000000001,5.652,10.657,5.9990000000000006L6.464,4.005C5.554,4.73,4.73,5.554,4.005,6.464L5.999,10.656C5.651999999999999,11.304,5.367,11.99,5.1499999999999995,12.706L0.7719999999999994,14.263C0.708,14.834,0.667,15.412,0.667,16S0.7080000000000001,17.165,0.772,17.736L5.15,19.294C5.367,20.009,5.652,20.695,5.9990000000000006,21.343L4.005000000000001,25.536C4.73,26.445,5.554,27.269000000000002,6.464,27.994L10.656,26.001C11.304,26.348000000000003,11.99,26.634,12.706,26.852L14.263,31.229C14.834,31.293,15.411,31.333,16,31.333C16.588,31.333,17.165,31.293,17.736,31.229L19.294,26.852C20.009,26.634,20.693,26.348,21.343,26.001L25.536,27.994C26.445,27.269,27.269000000000002,26.445,27.994,25.536L26.001,21.343000000000004C26.348000000000003,20.696000000000005,26.634,20.009000000000004,26.852,19.294000000000004L31.229,17.736ZM16,20.871C13.31,20.871,11.128,18.689,11.128,15.999999999999998C11.128,13.309999999999999,13.31,11.127999999999998,16,11.127999999999998C18.689,11.127999999999998,20.871000000000002,13.309999999999999,20.871000000000002,15.999999999999998C20.871,18.689,18.689,20.871,16,20.871Z" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1; fill-opacity: 1;" opacity="1" fill-opacity="1"></path>'+
-              '<rect x="0" y="0" width="32" height="32" r="0" rx="0" ry="0" fill="#000000" stroke="#000" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></rect>'+
-              '</svg>')
-            .attr("alt", "Options d'affichage")
-            .css("position", "fixed")
-            .css("top", "10px")
-            .css("right", "10px")
-            .on('click', $.proxy(function(){
-                $("#" + Utils.getId("page-options")).toggle();
-            }, this))
-            .appendTo($("body"));
-        },
-
-        showTalentPopup : function(link, boost) {
-            var popupId = link.attr("data-popup");
-            if(Utils.isDefined(popupId)) {
-                var popup = $('[action-popup-id="' + popupId + '"]');
-                popup.toggle();
-                return;
-            }
-
-            var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
-            var actionType = tmp[1];
-            var actionId = parseInt(tmp[2]);
-            var actionName = link.text().trim();
-            popupId = "info-" + actionType + "-" + actionId;
-
-            link.attr("data-actionType", actionType);
-            link.attr("data-actionId", actionId);
-            link.attr("data-popup", popupId);
-
-            // Extract levels
-            var levels = [];
-            if(boost) {
-                var prct = link.parents("tr:first").find("td:nth-child(2)").text().replace(/à\s+(\d+)\s+%/, "$1")
-                var tmp = /([^\(]*)(?:\(niveau (\d)\))?/.exec(actionName);
-                actionName = tmp[1].trim();
-                var levelMax = 1;
-                if(!Utils.isUndefined(tmp[2])) {
-                    levelMax = parseInt(tmp[2]);
-                }
-                for(var i = 0; i < levelMax; i++) {
-                    levels[i] = 90;
-                }
-                levels[levelMax] = parseInt(prct);
-
-            } else {
-                var tmp = link.parents("tr:first").find("td:nth-child(3)").text().replace(/[\n\s->niveau%\)]/g, "").split("(");
-                for(var j = 0; j < tmp.length; ++j) {
-                    var f = (tmp[j]).split(":");
-                    levels[f[0]] = f[1];
-                }
-            }
-            // ----------------
-
-            var entry = DB_talents[actionType][actionId];
-            if(Utils.isUndefined(entry)) {
-                console.log("Entry not found for " + actionName + " [" + actionId + "] in category " + actionType);
-                return;
-            }
-
-            var pos = link.position();
-
-            var popup = this.displayTalentPopup(entry, levels, actionName);
-            popup.css("position", "absolute")
-            popup.css("top", pos.top - popup.height() + "px");
-            popup.css("left", (pos.left) + "px");
-            popup.attr("action-popup-id", popupId);
-        },
-
-        hideTalentPopup : function(link) {
-            var popupId = link.attr("data-popup");
-            var popup = $('[action-popup-id="' + popupId + '"]');
-            popup.toggle();
-        },
-
-        displayTalentPopup : function(entry, levels, actionName) {
-            var stats = JSON.parse(Utils.getConf("profil_stats"));
-
-             // Description
-            var description = null;
-            if($.isFunction(entry.description)) {
-                description = entry.description(stats, levels, actionName);
-            } else if(Utils.isDefined(entry.description)) {
-                description = $("<i>" + entry.description + "</i>");
-            }
-
-            if(null == description) {
-                return;
-            }
-
-            var div = $("<div/>")
-            .addClass("actionPopup")
-            .css("max-width", "700px")
-            .css("border", "1px solid #CCC")
-            .css("background-color", "#FFF")
-            .css("border-radius", "5px");
-
-            // Title
-            var level = levels.length - 1;
-            var title = $("<h2/>")
-            .css("background", "#333")
-            .css("border", "1px solid #111")
-            .css("padding", "5px 10px")
-            .css("font-size", "14px")
-            .css("color", "white")
-            .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
-            .css("letter-spacing", "0")
-            .css("border-radius", "5px 5px 0 0")
-            .css("font-weight", "normal")
-            .css("margin-bottom", "0px")
-            .css("margin-top", "0px")
-            .css("overflow", "hidden")
-            .text(entry.name + " [niv." + level + " : " + levels[level] + "%]");
-            div.append(title);
-
-            // content
-            div.append($("<div/>")
-            .css("padding", "10px")
-            .append(description));
-
-            // Attach to DOM
-            div.prependTo($("body"));
-
-            return div;
-        }
-    }
-}();
-
-var MH_Play_Play_option = $.extend({}, MH_Page, {
-    init : function() {
-        this.addConfigPanel([
-            {
-                label : "Mot de passe",
-                option : "pswd",
-                type : "password"
-            },
-            {
-                label : "Mountyzilla activé",
-                option : "mountyzilla",
-                type : "checkbox"
-            }
-        ], this.checkConnect);
     },
 
-    checkConnect : function() {
-        this.callAPI({
-            api : "isLog",
-            data : {
-                "login" : Utils.getConf("login"),
-                "password" : Utils.getConf("pswd")
-            },
-            callback : function(data) {
-                var msg = $("#KMHC_form span:first");
-                if(data.indexOf("Une erreur est survenue lors de votre identification, veuillez recommencer") > -1) {
-                    msg
-                    .css("color", "#990000")
-                    .text("Une erreur est survenue lors de votre identification, veuillez vérifier votre mot de passe.");
-                } else {
-                    msg
-                    .css("color", "#009900")
-                    .text("Identifiants de connexion validés");
+    xCtx : function(xMH, p) { return (xMH + 100) * p.zf + p.dx; },
+    yCtx : function(yMH, p) { return (100 - yMH) * p.zf + p.dy; },
+    xMh : function(xCTX, p) { return Math.round((xCTX - p.dx) / p.zf - 100); },
+    yMh : function(yCTX, p) { return Math.round(100 - (yCTX - p.dy) / p.zf); },
+
+    getMap : function(ref, p) {
+        var div = $("<div/>",{id: ref})
+        .css("padding", "20px");
+        
+        var canvas = $("<canvas/>", {id: ref + "_canvas"})
+        .addClass("mh_tdtitre")
+        .appendTo(div)[0];
+        
+        var ctx = canvas.getContext("2d");
+        var tip = $("<div/>",{id: ref + "_tip"})
+        .css("position", "absolute")
+        .css("max-width", "700px")
+        .css("border", "1px solid #CCC")
+        .css("background-color", "#FFF")
+        .css("border-radius", "5px")
+        .css("z-index", "999")
+        .css("display", "none")
+        .appendTo(div);
+        
+        var tipH = $("<h2/>")
+        .css("background", "#333")
+        .css("border", "1px solid #111")
+        .css("padding", "5px 10px")
+        .css("font-size", "14px")
+        .css("color", "white")
+        .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
+        .css("letter-spacing", "0")
+        .css("border-radius", "5px 5px 0 0")
+        .css("font-weight", "normal")
+        .css("margin-bottom", "0px")
+        .css("margin-top", "0px")
+        .css("overflow", "hidden")
+        .text("-")
+        .appendTo(tip);
+        
+        var tipD = $("<div/>")
+        .css("padding", "10px")
+        .appendTo(tip);
+        
+        var map = {div: div, ctx: ctx, places: []};
+
+        canvas.width = 200 * p.zf + 2 * p.dx;
+        canvas.height = 200 * p.zf + 2 * p.dy;
+
+        // quadrants
+        ctx.beginPath();
+        ctx.moveTo(100 * p.zf + p.dx, p.dy);
+        ctx.lineTo(100 * p.zf + p.dx, 200 * p.zf + p.dy);
+        ctx.moveTo(p.dx, 100 * p.zf + p.dy);
+        ctx.lineTo(200 * p.zf + p.dx, 100 * p.zf + p.dy);
+        ctx.stroke();
+        ctx.strokeRect(p.dx, p.dy, p.zf * 200, p.zf * 200);
+
+        // holes
+        ctx.fillStyle = "rgb(200,0,0)";
+        $.each(this.HOLES, $.proxy(function (i, h) {
+            ctx.beginPath();
+            ctx.arc(this.xCtx(h[0], p), this.yCtx(h[1], p), h[3] * p.zf, 0, Math.PI * 2, true);
+            ctx.fill();
+        }, this));
+
+        // known locations
+        var lp = $.extend({lw: 1}, p);
+        $.each(this.LOCATIONS, $.proxy(function (name, loc) {
+            this.drawPos(map, loc[0], loc[1], loc[3], lp, name + " : X=" + loc[0] + " | Y=" + loc[1] + " | N=" + loc[2]);
+        }, this));
+
+        // tooltip
+        var canvasOffset = null;
+        $(canvas)
+        .on('mouseenter', function() { canvasOffset = $(canvas).offset(); })
+        .on('mouseout', function() { tip.css("display", "none"); canvasOffset = null; })
+        .on('mousemove', $.proxy(function(e) {
+            tip.css("left", (e.pageX + 20) + "px").css("top", (e.pageY + 10) + "px").css("display", "block");
+            if(!canvasOffset) return;
+            var pos = {
+                x: e.pageX - canvasOffset.left,
+                y: e.pageY - canvasOffset.top,
+            };
+            pos.xMh = this.xMh(pos.x, p);
+            pos.yMh = this.yMh(pos.y, p);
+            pos.description = "";
+            tipH.text("[ X=" + pos.xMh + " | Y=" + pos.yMh + " ]");
+            $.each(this.HOLES, function (i, h) {
+                var dist = (pos.xMh - h[0]) * (pos.xMh - h[0]) + (pos.yMh - h[1]) * (pos.yMh - h[1]) - h[2];
+                if(dist <= 0) {
+                    pos.description = "Trou de Météorite : N=-1 => N=" + h[4];
+                    return false;
                 }
-            },
-            scope : this
-        });
+            });
+
+            $.each(map.places, function (i, p) {
+                var dist = (pos.xMh - p.x) * (pos.xMh - p.x) + (pos.yMh - p.y) * (pos.yMh - p.y);
+                if(dist <= 0 && p.name) {
+                    pos.description = p.name;
+                    return false;
+                }
+            });
+
+            tipD.text(pos.description);
+        }, this));
+
+        return map;
+    },
+    drawPos : function(map, xMH, yMH, color, p, text) {
+        var x = this.xCtx(xMH, p), y = this.yCtx(yMH, p);
+        map.ctx.strokeStyle = color;
+        map.ctx.fillStyle = color;
+        map.ctx.lineWidth = p.lw || p.zf;
+        map.ctx.beginPath();
+        map.ctx.arc(x, y, p.zf, 0, Math.PI * 2, true);
+        map.ctx.fill();
+        map.ctx.beginPath();
+        map.ctx.arc(x, y, 3 * p.zf, 0, Math.PI * 2, true);
+        map.ctx.stroke();
+        map.places.push({x: xMH, y: yMH, name: text});
     }
 });
 
-var MH_Play_PlayStart = $.extend({}, MH_Page, {
+var Page = $.inherit({
+    
+    moduleName: null,
+    logger : Logger,
+    utils : Utils,
+    display : Display,
+    mapper : Mapper,
+    
+    __constructor : function(moduleName) { // constructor
+        this.moduleName = moduleName;
+        this.logger.debug("> Module " + this.moduleName + " founded");
+    },
+
+    load : function() {
+        this.logger.debug(" -- START Module " + this.moduleName);
+        
+        Utils.addGlobalStyle([
+            '.editable { margin-left: 10px; }',
+            '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 12px; height: 12px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAFhJREFUKFOVjgEKgCAQBH1m/v8hG3N5cdWmuDCgMCM2SVN6PwR5/wiVIcYysiKk/I6mMuNc46WcG+fnl1YybMmwJcMtV5E5GezrfzJEYCIrAwuphFa8UDsBgSOr5cVAQ8gAAAAASUVORK5CYII=); }',
+            '.editable_ctn:hover .editable:after {display:inline-block; }',
+            '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }'
+        ]);
+        
+        this.init();
+        
+        this.logger.debug(" -- STOP Module " + this.moduleName);
+    },
+
+    init : function() {
+        this.logger.error("  -> Not yet implemented");
+    },    
+    
+    /******************************************/
+
+    isInitialized : function() {
+        return  (Utils.isDefined(typeof Utils.getConf("login")))
+        &&  (Utils.isDefined(typeof Utils.getConf("pswd")));
+    },
+
+    callAPIConnected : function(conf) {
+        if(!this.isInitialized()) {
+            this.logger.error("Authentification required");
+            return;
+        }
+        conf.data = $.extend(conf.data, {"login" : Utils.getConf("login"),"password" : Utils.getConf("pswd")})
+        this.callAPI(conf);
+    },
+
+    callAPI : function(conf) {
+        //this.logger.debug("Calling API", conf);
+        $.ajax({
+            type: "POST",
+            url: "http://pharoz.net/MH/outil/api.php?rnd=" + new Date().getTime(),
+            //contentType: "application/x-www-form-urlencoded;charset=ISO-8859-15",
+            data : $.extend(conf.data, {"page" : conf.api, "popup" : 0, "encoding" : "UTF-8"})
+        }).done($.proxy(function(data, result, request){
+            if(result == Utils.success) {
+                if(Utils.isUndefined(conf.callback)) {
+                    //this.logger.warn("No callback found");
+                } else {
+                    //this.logger.debug("Result", data);
+                    conf.callback.apply(this, [data.replace(/\s/g, " "), result, request]);
+                }
+            } else {
+                this.logger.error("Error while executing the API call");
+                this.logger.error(arguments);
+            }
+        }, conf.scope || this));
+    },
+
+    callAPIMiltown : function(conf) {
+        this.logger.debug("Calling API", conf);
+        $.ajax({
+            type: "POST",
+            url: "http://mh.swale.fr/api/" + conf.api + ".php?rnd=" + new Date().getTime(),
+            data : {"call" : conf.call, "encoding" : "UTF-8", "data" : conf.data}
+        }).done($.proxy(function(data, result, request){
+            if(result == Utils.success) {
+                if(Utils.isUndefined(conf.callback)) {
+                    this.logger.warn("No callback found");
+                } else {                    
+                    this.logger.debug("Result", data);
+                    conf.callback.apply(this, arguments);
+                }
+            } else {
+                this.logger.error("Error while executing the API call");
+                this.logger.error(arguments);
+            }
+        }, conf.scope || this));
+    },
+    
+    getEditionField : function(ref, type) {
+        return $("<span/>")
+        .append(
+            $("<label/>")
+            .addClass("editable")
+            .attr("data-type", "editable")
+            .attr("data-for", "#tag_" + ref)
+            .text(""))
+        .append(
+            $("<input/>")
+            .attr("id", "tag_" + ref)
+            .attr("data-tag-type", type)
+            .attr("data-tag-id", ref))
+        .on("paste", function(){
+            var input = this;
+            setTimeout(function() {
+                $(input).attr('size', $(input).val().length + 2);
+            }, 10);
+        });        
+    },        
+
+    handleTagEdition: function() {
+        var self = this;
+        $('body').editables({
+            editOn: 'click',
+            freezeOn: ['blur', 'keyup'],
+            beforeEdit: function(field) {
+                field.data('undo', this.text());
+                field.val(this.text());
+                field.attr('size', field.val().length + 2);
+            },
+            beforeFreeze: function(display, ev) {
+                display.text(this.val());
+                //console.log(ev);
+                if(ev.type == 'keyup') {
+                    if(ev.which == 13) return true;
+                    if(ev.which == 27) {
+                        display.text(this.data('undo'));
+                        this.val(this.data('undo'));
+                        return true;
+                    }
+                    this.attr('size', this.val().length + 2);
+                    return false;
+                }
+                return true;
+            },
+            onFreeze: function() {
+                if($(this).val() != $(this).data('undo')) {
+                    self.callAPIConnected({
+                        api : "tag",
+                        data : {
+                            "type" : $(this).attr("data-tag-type"),
+                            "num" : $(this).attr("data-tag-id"),
+                            "tag" : $(this).val()
+                        },
+                        callback : $.noop,
+                        scope : self
+                    });
+                }
+            }
+        });
+    }        
+
+}, { // Statics
+    
+    showTalentPopup : function(link, boost) {
+        var popupId = link.attr("data-popup");
+        if(Utils.isDefined(popupId)) {
+            var popup = $('[action-popup-id="' + popupId + '"]');
+            popup.toggle();
+            return;
+        }
+
+        var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
+        var actionType = tmp[1];
+        var actionId = parseInt(tmp[2]);
+        var actionName = link.text().trim();
+        popupId = "info-" + actionType + "-" + actionId;
+
+        link.attr("data-actionType", actionType);
+        link.attr("data-actionId", actionId);
+        link.attr("data-popup", popupId);
+
+        // Extract levels
+        var levels = [];
+        if(boost) {
+            var prct = link.parents("tr:first").find("td:nth-child(2)").text().replace(/à\s+(\d+)\s+%/, "$1")
+            var tmp = /([^\(]*)(?:\(niveau (\d)\))?/.exec(actionName);
+            actionName = tmp[1].trim();
+            var levelMax = 1;
+            if(!Utils.isUndefined(tmp[2])) {
+                levelMax = parseInt(tmp[2]);
+            }
+            for(var i = 0; i < levelMax; i++) {
+                levels[i] = 90;
+            }
+            levels[levelMax] = parseInt(prct);
+
+        } else {
+            var tmp = link.parents("tr:first").find("td:nth-child(3)").text().replace(/[\n\s->niveau%\)]/g, "").split("(");
+            for(var j = 0; j < tmp.length; ++j) {
+                var f = (tmp[j]).split(":");
+                levels[f[0]] = f[1];
+            }
+        }
+        // ----------------
+
+        var entry = DB_talents[actionType][actionId];
+        if(Utils.isUndefined(entry)) {
+            console.log("Entry not found for " + actionName + " [" + actionId + "] in category " + actionType);
+            return;
+        }
+
+        var pos = link.position();
+
+        var popup = this.displayTalentPopup(entry, levels, actionName);
+        popup.css("position", "absolute")
+        popup.css("top", pos.top - popup.height() + "px");
+        popup.css("left", (pos.left) + "px");
+        popup.attr("action-popup-id", popupId);
+    },
+
+    hideTalentPopup : function(link) {
+        var popupId = link.attr("data-popup");
+        var popup = $('[action-popup-id="' + popupId + '"]');
+        popup.toggle();
+    },
+
+    displayTalentPopup : function(entry, levels, actionName) {
+        var stats = JSON.parse(Utils.getConf("profil_stats"));
+
+        // Description
+        var description = null;
+        if($.isFunction(entry.description)) {
+            description = entry.description(stats, levels, actionName);
+        } else if(Utils.isDefined(entry.description)) {
+            description = $("<i>" + entry.description + "</i>");
+        }
+
+        if(null == description) {
+            return;
+        }
+
+        var div = $("<div/>")
+        .addClass("actionPopup")
+        .css("max-width", "700px")
+        .css("border", "1px solid #CCC")
+        .css("background-color", "#FFF")
+        .css("border-radius", "5px");
+
+        // Title
+        var level = levels.length - 1;
+        var title = $("<h2/>")
+        .css("background", "#333")
+        .css("border", "1px solid #111")
+        .css("padding", "5px 10px")
+        .css("font-size", "14px")
+        .css("color", "white")
+        .css("text-shadow", "0 -1px 0 rgba(0, 0, 0, 0.5)")
+        .css("letter-spacing", "0")
+        .css("border-radius", "5px 5px 0 0")
+        .css("font-weight", "normal")
+        .css("margin-bottom", "0px")
+        .css("margin-top", "0px")
+        .css("overflow", "hidden")
+        .text(entry.name + " [niv." + level + " : " + levels[level] + "%]");
+        div.append(title);
+
+        // content
+        div.append($("<div/>")
+                   .css("padding", "10px")
+                   .append(description));
+
+        // Attach to DOM
+        div.prependTo($("body"));
+
+        return div;
+    }    
+});
+
+var MH_Play_PlayStart = $.inherit(Page, {
     init : function() {
         $("#viewbutton")
         .css("margin-right", "0.5em")
@@ -762,98 +711,245 @@ var MH_Play_PlayStart = $.extend({}, MH_Page, {
     }
 });
 
-var MH_Missions_Mission_Equipe = $.extend({}, MH_Page, {
+var MH_Play_TurnStart = $.inherit(Page, {
+    init : function(){
+        if(!this.isInitialized()) {
+            this.logger.error("Authentification required");
+            return;
+        }
+        this.autoConnect();
+    },
+
+    autoConnect : function() {
+        $("body")
+        .append(
+            $("<iframe/>")
+            .css("display", "none")
+            .attr("src", "http://pharoz.net/MH/outil/index.php4?login=" + Utils.getConf("login") + "&password=" + Utils.getConf("pswd"))
+            .attr("name", "KMHC_hidden_form")
+            .on("load", function() {
+                $(this).remove();
+            })
+        );
+    }
+});
+
+var MH_Play_Play_menu = $.inherit(Page, {
+    init : function(){
+        Utils.setConf("login", $("input[name='ai_IdPJ']").val());
+        this.addMenu();
+        this.addTimer();
+    },
+
+    addMenu : function() {
+        $("<div/>")
+        .css("position", "absolute")
+        .css("top", "35px")
+        .css("left", "35px")
+        .append(
+            $("<a/>")
+            .css("margin", "5px")
+            .css("color", "#ffffcc")
+            .attr("href", "http://pharoz.net/MH/outil/")
+            .attr("target", "KM_outil")
+            .text("Outil")
+        )
+        .append("|")
+            .css("color", "#ffffcc")
+        .append(
+            $("<a/>")
+            .css("margin", "5px")
+            .css("color", "#ffffcc")
+            .attr("href", "http://pharoz.net/MH/forum/")
+            .attr("target", "KM_forum")
+            .text("Forum")
+        )
+        .append("|")
+            .css("color", "#ffffcc")
+        .append(
+            $("<a/>")
+            .css("margin", "5px")
+            .css("color", "#ffffcc")
+            .attr("href", "https://github.com/jswale/KFE/raw/master/src/KMHC.user.js")
+            .text("MAJ")
+        )
+        .appendTo($("body"));
+    },
+
+    addTimer : function() {
+        var d = $("div.infoMenu"),
+            tmp = /DLA:\s+([^<]+)</.exec(d.html()),
+            dla = Utils.convertDate(tmp[1]),
+            cnt = $("<div/>").addClass("countdown");
+        d.css("top", "505px");
+        d.find("br").replaceWith(cnt);
+
+        var timer = setInterval(function() {
+            var diff = Utils.getDateDiff(new Date(), dla);
+            if(diff.length <= 0) {
+                diff = "<a href='/mountyhall/MH_Play/Activate_DLA.php' target='_top' style='color:#AEFFAE'>Vous pouvez réactiver!</a>";
+                clearInterval(timer);
+            }
+            cnt.html(diff);
+        }, 1000);
+    }
+});
+
+var MH_Play_Play_news = $.inherit(Page, {
+
     init : function() {
-        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
-        var idMission = tmp[1];
+        this.jubilaire();
+    },
 
-        var team = $("form tr.mh_tdpage").map(function(){
-            var tr = $(this);
-            var id = tr.find("td:nth-child(2)").text().trim();
-            var nom = tr.find("td:nth-child(3)").text().trim();
-            var race = tr.find("td:nth-child(4)").text().trim();
-            var level = tr.find("td:nth-child(5)").text().trim();
-            var email = tr.find("td:nth-child(6)").text().trim();
-            var rang = tr.find("td:nth-child(7)").text().trim();
-            var date = tr.find("td:nth-child(8)").text().trim();
+    jubilaire : function() {
+        $.get("http://mountyzilla.tilk.info/scripts/anniv.php",
+            function(data) {
+                var p = $($("p > a:contains('messagerie')")[0]).parent();
+                p.before($("<table/>")
+                    .addClass("mh_tdborder")
+                    .attr("cellSpacing", 1)
+                    .attr("cellPadding", 1)
+                    .css({"maxWidth": "98%",
+                          "marginLeft": "auto",
+                          "marginRight": "auto"
+                        })
+                    .append($("<tr/>")
+                        .addClass("mh_tdtitre")
+                        .append($("<td/>")
+                            .append($("<span/>")
+                                .attr("title", "Envoyez leur un message ou un cadeau !")
+                                .text("Les Trõlls qui fêtent leur anniversaire aujourd'hui:")
+                            )
+                        )
+                    )
+                    .append($("<tr/>")
+                        .addClass("mh_tdpage")
+                        .append($("<td/>")
+                            .css("text-align", "center")
+                            .append($("<small/>")
+                                .html((function(list){
+                                    if(!list || list.length == 0) return "...";
+                                    var text = [],
+                                        trolls = list.split("\n");
+                                    $.each(trolls, function(i, t) {
+                                        var r = t.split(";");
+                                        if(r.length != 3 || r[2] === '0') return;
+                                        text.push("<a href='javascript:EPV(" + r[0] +")'>" + r[1] + "</a> (" + r[2] + " an" + Utils.addS(r[2]) + ")");
+                                    });
+                                    return text.join(", ");
+                                })(data))
+                            )
+                        )
+                    )
+                );
+            });
+    }
+});
 
-            return {
-                id : id,
-                nom : nom,
-                race : race,
-                niveau : level,
-                email : email,
-                rang : rang,
-                date : date
-            };
-        }).get();
-
-        this.callAPIMiltown({
-            api : "mission",
-            call : "equipe",
-            data : {
-                mission : idMission,
-                team : team
+var MH_Play_Play_action = $.inherit(Page, {
+    init : function() {
+        this.display.normalizeFontSize();
+        $('select').find('optgroup').each(function(){
+            if($(this).prop('label') == "** Actions Spéciales **") {
+              $(this).css("background-color", "#99CCFF");
+              $(this).parent().css("background-color", "#99CCFF");
             }
         });
     }
 });
 
-var MH_Missions_Mission_Recompense = $.extend({}, MH_Page, {
+var MH_Play_Actions_Abstract = $.inherit(Page, {
     init : function() {
-        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
-        var idMission = tmp[1];
-
-        var recompenses = $("tr.mh_tdpage").map(function(){
-            var tr = $(this);
-            var recompense = /(\d+)/.exec(tr.find("td:nth-child(1)").text())[1];
-            var description = tr.find("td:nth-child(2)").text().trim();
-
-            return {
-                recompense : recompense,
-                description : description
-            };
-        }).get();
-
-        this.callAPIMiltown({
-            api : "mission",
-            call : "recompense",
-            data : {
-                mission : idMission,
-                recompenses : recompenses
+        this.display.normalizeFontSize();
+        this.display.protectMonsters();
+        
+        {
+            var id = $("[name='ai_IdSort'][value!='0']").val();
+            if(Utils.isDefined(id)) {
+                this.logger.log("Sort " + id + " detected");
+                Utils.setConf("action", "Sort" + id);
+                this.initPageSort(id);
+                return;
             }
-        });
+        }
+        {
+            var id = $("[name='ai_IdAction'][value!='0']").val();
+            if(Utils.isDefined(id)) {
+                this.logger.log("Action " + id + " detected");
+                Utils.setConf("action", "Action" + id);
+                this.initPageAction(id);
+                return;
+            }
+        }
+    },
+    initPageSort : function(id) {
+        this.display.injectTrollsTags("PJ_","");
+        this.display.injectMonstresTags("ME_","");
+        
+        switch(id) {
+            case "10": // IdT
+                this.display.injectTresorsTags("2_", "");
+                break;
+                
+            case "21": // Projection
+            case "2" : // Hypnotisme
+            case "20": // AA
+            case "12": // Faiblesse Pasagère
+            case "17": // Sacrifice
+                break;
+        }
+    },
+    initPageAction : function(id) {
+        this.display.injectTrollsTags("PJ_", "");
+        this.display.injectMonstresTags("ME_","");
+        
+        switch(id) {
+            case "4": // Ramasser un trésor
+                this.display.injectTresorsTags("", "_TE");
+                break;
+
+            case "26": // Donner des GG
+                break;
+                
+            case "11": // Utiliser un objet
+                break;
+
+            case "7": // Ramasser un champignon
+                this.display.injectChampignonsTags("", "_??"); //TODO
+                break;
+                
+            case "116": // CdM
+            case "118": // Insulte
+                break;
+                
+        }
+    }        
+});
+
+var MH_Play_Actions_Sorts_Play_a_SortYY = $.inherit(MH_Play_Actions_Abstract);
+var MH_Play_Actions_Play_a_ActionYY = $.inherit(MH_Play_Actions_Abstract);
+var MH_Play_Actions_Sorts_Play_a_SortXX = $.inherit(MH_Play_Actions_Abstract);
+var MH_Play_Actions_Competences_Play_a_CompetenceYY = $.inherit(MH_Play_Actions_Abstract);
+var MH_Play_Actions_Play_a_NoAction = $.inherit(MH_Play_Actions_Abstract);
+var MH_Play_Actions_Play_a_Move = $.inherit(MH_Play_Actions_Abstract);
+
+var MH_Play_Actions_Sorts_Play_a_Sort24 = $.inherit(Page, { // TELEK
+    init : function() {
+        this.display.injectTresorsTags("", "");
     }
 });
 
-var MH_Missions_Mission_Etape = $.extend({}, MH_Page, {
+var MH_Play_Actions_Play_a_Attack = $.inherit(Page, {
     init : function() {
-        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
-        var idMission = tmp[1];
-
-        var steps = $("form tr.mh_tdpage").map(function(){
-            var tr = $(this);
-            var step = /(\d+)/.exec(tr.find("td:nth-child(1)").text())[1];
-            var description = tr.find("td:nth-child(2)").text().trim();
-
-            return {
-                step : step,
-                description : description
-            };
-        }).get();
-
-        this.callAPIMiltown({
-            api : "mission",
-            call : "etape",
-            data : {
-                mission : idMission,
-                steps : steps
-            }
-        });
+        this.display.normalizeFontSize();
+        this.display.protectMonsters();
+        this.display.injectTrollsTags("PJ_","");        
+        this.display.injectMonstresTags("ME_","");        
     }
 });
 
-var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
+
+var MH_Missions_Mission_Liste = $.inherit(Page, {
     init : function() {
 
         $("<a href='http://mh.swale.fr/ihm/mission.php'>Résumé des missions</a>").insertAfter($(".titre2:first"));
@@ -945,252 +1041,128 @@ var MH_Missions_Mission_Liste = $.extend({}, MH_Page, {
     }
 });
 
-var MH_Play_Play_news = $.extend({}, MH_Page, {
-
+var MH_Missions_Mission_Equipe = $.inherit(Page, {
     init : function() {
-        this.jubilaire();
-    },
+        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
+        var idMission = tmp[1];
 
-    jubilaire : function() {
-        $.get("http://mountyzilla.tilk.info/scripts/anniv.php",
-            function(data) {
-                var p = $($("p > a:contains('messagerie')")[0]).parent();
-                p.before($("<table/>")
-                    .addClass("mh_tdborder")
-                    .attr("cellSpacing", 1)
-                    .attr("cellPadding", 1)
-                    .css({"maxWidth": "98%",
-                          "marginLeft": "auto",
-                          "marginRight": "auto"
-                        })
-                    .append($("<tr/>")
-                        .addClass("mh_tdtitre")
-                        .append($("<td/>")
-                            .append($("<span/>")
-                                .attr("title", "Envoyez leur un message ou un cadeau !")
-                                .text("Les Trõlls qui fêtent leur anniversaire aujourd'hui:")
-                            )
-                        )
-                    )
-                    .append($("<tr/>")
-                        .addClass("mh_tdpage")
-                        .append($("<td/>")
-                            .css("text-align", "center")
-                            .append($("<small/>")
-                                .html((function(list){
-                                    if(!list || list.length == 0) return "...";
-                                    var text = [],
-                                        trolls = list.split("\n");
-                                    $.each(trolls, function(i, t) {
-                                        var r = t.split(";");
-                                        if(r.length != 3 || r[2] === '0') return;
-                                        text.push("<a href='javascript:EPV(" + r[0] +")'>" + r[1] + "</a> (" + r[2] + " an" + Utils.addS(r[2]) + ")");
-                                    });
-                                    return text.join(", ");
-                                })(data))
-                            )
-                        )
-                    )
-                );
-            });
+        var team = $("form tr.mh_tdpage").map(function(){
+            var tr = $(this);
+            var id = tr.find("td:nth-child(2)").text().trim();
+            var nom = tr.find("td:nth-child(3)").text().trim();
+            var race = tr.find("td:nth-child(4)").text().trim();
+            var level = tr.find("td:nth-child(5)").text().trim();
+            var email = tr.find("td:nth-child(6)").text().trim();
+            var rang = tr.find("td:nth-child(7)").text().trim();
+            var date = tr.find("td:nth-child(8)").text().trim();
+
+            return {
+                id : id,
+                nom : nom,
+                race : race,
+                niveau : level,
+                email : email,
+                rang : rang,
+                date : date
+            };
+        }).get();
+
+        this.callAPIMiltown({
+            api : "mission",
+            call : "equipe",
+            data : {
+                mission : idMission,
+                team : team
+            }
+        });
     }
 });
-var MH_Play_Play_profil = $.extend({}, MH_Page, {
+
+var MH_Missions_Mission_Recompense = $.inherit(Page, {
+    init : function() {
+        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
+        var idMission = tmp[1];
+
+        var recompenses = $("tr.mh_tdpage").map(function(){
+            var tr = $(this);
+            var recompense = /(\d+)/.exec(tr.find("td:nth-child(1)").text())[1];
+            var description = tr.find("td:nth-child(2)").text().trim();
+
+            return {
+                recompense : recompense,
+                description : description
+            };
+        }).get();
+
+        this.callAPIMiltown({
+            api : "mission",
+            call : "recompense",
+            data : {
+                mission : idMission,
+                recompenses : recompenses
+            }
+        });
+    }
+});
+
+var MH_Missions_Mission_Etape = $.inherit(Page, {
+    init : function() {
+        var tmp = /Mission \[(\d+)\]/.exec($("div.titre2").text());
+        var idMission = tmp[1];
+
+        var steps = $("form tr.mh_tdpage").map(function(){
+            var tr = $(this);
+            var step = /(\d+)/.exec(tr.find("td:nth-child(1)").text())[1];
+            var description = tr.find("td:nth-child(2)").text().trim();
+
+            return {
+                step : step,
+                description : description
+            };
+        }).get();
+
+        this.callAPIMiltown({
+            api : "mission",
+            call : "etape",
+            data : {
+                mission : idMission,
+                steps : steps
+            }
+        });
+    }
+});
+
+var MH_Play_Play_profil = $.inherit(Page, {
     init : function() {
         this.sendData();
         this.removeAds();
         this.tuneIHM();
+    },   
+
+    sendData : function() {
+        var result = $("table:first").text();
+        result = result.replace(/<\/(TD|TH)[^>]*>/gi,"");
+        result = result.replace(/<\/(TABLE|TR)[^>]*>/gi,"\n");
+        result = result.replace(/<\/?[^>]+>/gi,"");
+        result = result.replace(/[\n\r\t]+/gi,"");
+        result = result.replace(/ +/gi," ");
+
+        var troll = result.match(/.*Identifiants[^\d]*(\d+)/)[1];
+
+        // Appel de l'API
+        this.callAPIConnected({
+            api : "profile",
+            data : {
+                "profile" : "MON PROFIL " + result
+                //,"troll" : troll
+            }
+        });
     },
-
-    getStats : function() {
-        var stats = {};
-
-        var getText = function(id) {
-            var text = $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + "):first > td:nth-child(2)").text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
-            return text;
-        };
-        
-        var extract = function(src, key, pattern) {
-            var r = (key + "(?:\\s*\\.*\\s*:\\s*)" + pattern);
-            var p = new RegExp(r);
-            console.log(p);
-            var r = p.exec(src);
-            if(null == r) {
-                return null;
-            } else {
-                r.shift();
-                return 1 == r.length ? r.shift() : r;
-            }            
-        };
-        
-        // Echéance du Tour
-        var text = getText(2);
-        var tmp = /Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée(?:\s*\.*\s*:\s*)(-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. Poids de l'équipement(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes./.exec(text);
-        stats.pa = parseInt(tmp[2]);
-        stats.dla = {
-            next :tmp[1],
-            duration : {
-                normal : {
-                    hour : parseInt(tmp[3]),
-                    min : parseInt(tmp[4])
-                },
-                bonus : {
-                    hour : parseInt(tmp[5]),
-                    min : parseInt(tmp[6])
-                },
-                injuries : {
-                    hour : parseInt(tmp[7]),
-                    min : parseInt(tmp[8])
-                },
-                stuf : {
-                    hour : parseInt(tmp[9]),
-                    min : parseInt(tmp[10])
-                },
-                total : {
-                    hour : parseInt(tmp[11]),
-                    min : parseInt(tmp[12])
-                }
-            }
-        };
-
-        // Vue
-        var text = getText(3);
-        var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue(?:\s*\.*\s*:\s*)(-?\d+) Cases ([+-]\d+)/.exec(text);
-        stats.position = {
-            x : parseInt(tmp[1]),
-            y : parseInt(tmp[2]),
-            n : parseInt(tmp[3]),
-        };
-
-        stats.view = {
-            range : parseInt(tmp[4]),
-            bonus : parseInt(tmp[5])
-        };
-
-        // XP
-        var text = getText(4);
-        //console.log(extract(text, "Niveau", "(\\d+)"));        
-        var tmp = /Niveau(?:\s*\.*\s*:\s*)(\d+) \((\d+) PI\) PX(?:\s*\.*\s*:\s*)(\d+) PX Personnels(?:\s*\.*\s*:\s*)(\d+) PI(?:\s*\.*\s*:\s*)(\d+)/.exec(text);
-        stats.xp = {
-            level : parseInt(tmp[1]),
-            PI : {
-                all : parseInt(tmp[2]),
-                current : parseInt(tmp[5])
-            },
-            PX : {
-                public : parseInt(tmp[3]),
-                private : parseInt(tmp[4])
-            }
-        };
-        tmp = /PM.............: (\d+) Niveau Calculé : (\d+)/.exec(text);
-        stats.xp.PM = tmp ? parseInt(tmp[1]) : stats.xp.PI.all;
-        stats.xp.vlevel = tmp ? parseInt(tmp[2]) : stats.xp.level;
-        tmp = /Karma(?:\s*\.*\s*:\s*)(.*) /.exec(text);
-        stats.karma = tmp[1];
-
-        // HP
-        var text = getText(5);
-        var tmp = /Actuels(?:\s*\.*\s*:\s*)(\d+) Maximum(?:\s*\.*\s*:\s*)(\d+)\s?([+-]\d+)? Fatigue(?:\s*\.*\s*:\s*)(.*) \( (\d+)\s?([+-]\d+)? \)/.exec(text);
-        stats.hp = {
-            current : parseInt(tmp[1]),
-            max : {
-                value : parseInt(tmp[2]),
-                bonus : (tmp[3] ? parseInt(tmp[3]) : 0)
-            },
-            fatigue : {
-                display : tmp[4],
-                value : parseInt(tmp[5]),
-                bm : (tmp[6] ? parseInt(tmp[6]) : 0)
-            }
-        };
-        
-        // Caracs
-        var text = getText(6);
-        var tmp = /Régénération(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Attaque(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Esquive(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Armure(?:\s*\.*\s*:\s*)(\d+)\s?D3( \/ \d+ D3)? ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :\s?-\s?Corpulence(?:\s*\.*\s*:\s*)(\d+)\s?points\s?- Agilité(?:\s*\.*\s*:\s*)(\d+)\s?points/.exec(text);
-        stats.regen = {
-            des : parseInt(tmp[1]),
-            physique : parseInt(tmp[2]),
-            magique : parseInt(tmp[3])
-        };
-        stats.attaque = {
-            des : parseInt(tmp[4]),
-            physique : parseInt(tmp[5]),
-            magique : parseInt(tmp[6])
-        };
-        stats.esquive = {
-            des : parseInt(tmp[7]),
-            physique : parseInt(tmp[8]),
-            magique : parseInt(tmp[9])
-        };
-        stats.degat = {
-            des : parseInt(tmp[10]) ,
-            physique : parseInt(tmp[11]),
-            magique : parseInt(tmp[12])
-        };
-        stats.armure = {
-            des : parseInt(tmp[13]),
-            physique : parseInt(tmp[15]),
-            magique : parseInt(tmp[16])
-        };
-        stats.corpulence = parseInt(tmp[16]);
-        stats.agilite = parseInt(tmp[17]);
-
-        // Combat
-        var text = getText(7);
-        var tmp = /Pour ce tour : - Dés d'attaque en moins(?:\s*\.*\s*:\s*)(\d+) - Dés d'esquive en moins(?:\s*\.*\s*:\s*)(\d+) - Dés d'armure en moins(?:\s*\.*\s*:\s*)(\d+) Nombre d'Adversaires tués(?:\s*\.*\s*:\s*)(\d+) Nombre de Décès(?:\s*\.*\s*:\s*)(\d+)/.exec(text);
-        stats.roundMalus = {
-            attaque : parseInt(tmp[1]),
-            esquive : parseInt(tmp[2]),
-            armure : parseInt(tmp[3]),
-        };
-        stats.kills = parseInt(tmp[4]);
-        stats.deaths = parseInt(tmp[5]);
-
-        // Magie
-        var text = getText(10);
-        var tmp = /Résistance à la Magie(?:\s*\.*\s*:\s*)(\d+) points ([+-]\d+) Maîtrise de la Magie(?:\s*\.*\s*:\s*)(\d+) points ([+-]\d+) Bonus de Concentration : (-?\d+) %/.exec(text);
-        stats.magie = {
-            rm : {
-                value : parseInt(tmp[1]),
-                bonus : parseInt(tmp[2])
-            },
-            mm : {
-                value : parseInt(tmp[3]),
-                bonus : parseInt(tmp[4])
-            }
-        };
-        stats.concentration = parseInt(tmp[5]);
-
-        // Computed
-        stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
-        stats.dla.duration.bonus.total = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
-        stats.dla.duration.injuries.total = stats.dla.duration.injuries.hour * 60 + stats.dla.duration.injuries.min;
-        stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
-        stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;
-
-        stats.hp.fatigue.total = stats.hp.fatigue.value + stats.hp.fatigue.bm;
-
-        stats.view.total = stats.view.range + stats.view.bonus;
-
-        stats.hp.max.total = stats.hp.max.value + stats.hp.max.bonus;
-
-        stats.attaque.bm = stats.attaque.physique + stats.attaque.magique;
-        stats.degat.bm   = stats.degat.physique + stats.degat.magique;
-        stats.esquive.bm = stats.esquive.physique + stats.esquive.magique;
-
-        stats.attaque.desReel = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
-        stats.esquive.desReel = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
-        stats.armure.desReel = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
-        stats.degat.desReel = stats.degat.des;
-
-        stats.attaque.moy = 3.5 * stats.attaque.desReel + stats.attaque.bm;
-        stats.degat.moy = 2 * stats.degat.desReel + stats.degat.bm;
-
-        Utils.setConf("profil_stats", JSON.stringify(stats))
-
-        return stats;
-    },
-
+    
+    removeAds : function () {
+        $("iframe").parent("td").remove();
+    },    
+    
     tuneIHM : function() {
         var stats = this.getStats();
 
@@ -1198,13 +1170,6 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
             return $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + ") > td:nth-child(2)");
         };
         
-        // Fix des boulets
-        var alt = stats.hp.current +" PV sur " + stats.hp.max.total;
-        $("img[src='/mountyhall/Images/Interface/droite.gif']").attr("alt", alt);
-        var jauge = $("img[src='/mountyhall/Images/Interface/milieu.gif']");
-        jauge.attr("alt", alt).attr("width", (stats.hp.current / stats.hp.max.total * parseInt(jauge.parents("table:first").attr("width"))));
-        //
-
         // Echéance du Tour
         {
             var ctn = getContainer(2);
@@ -1440,40 +1405,310 @@ var MH_Play_Play_profil = $.extend({}, MH_Page, {
 
         $($("table.mh_tdborder:first").next().find("table.mh_tdpage")).find("a.AllLinks")
         .hover($.proxy(function(event) {
-            this.showTalentPopup($(event.target), false);
+            Page.showTalentPopup($(event.target), false);
         }, this), $.proxy(function(event) {
-            this.hideTalentPopup($(event.target));
+            Page.hideTalentPopup($(event.target));
         }, this));
+    },    
 
-    },
+    getStats : function() {
+        var getText = function(id) {
+            var text = $("table.mh_tdborder:first > tbody > tr:nth-child(" + id + "):first > td:nth-child(2)").text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
+            return text;
+        };
+        
+        //TODO unused by now 
+        var extract = function(src, key, pattern) {
+            var r = (key + "(?:\\s*\\.*\\s*:\\s*)" + pattern);
+            var p = new RegExp(r);
+            var r = p.exec(src);
+            if(null == r) {
+                return null;
+            } else {
+                r.shift();
+                return 1 == r.length ? r.shift() : r;
+            }            
+        };
 
+        var stats = {};
 
-    removeAds : function () {
-        $("iframe").parent("td").remove();
-    },
-
-    sendData : function() {
-        var result = $("table:first").text();
-        result = result.replace(/<\/(TD|TH)[^>]*>/gi,"");
-        result = result.replace(/<\/(TABLE|TR)[^>]*>/gi,"\n");
-        result = result.replace(/<\/?[^>]+>/gi,"");
-        result = result.replace(/[\n\r\t]+/gi,"");
-        result = result.replace(/ +/gi," ");
-
-        var troll = result.match(/.*Identifiants[^\d]*(\d+)/)[1];
-
-        // Appel de l'API
-        this.callAPIConnected({
-            api : "profile",
-            data : {
-                "profile" : "MON PROFIL " + result
-                //,"troll" : troll
+        // Echéance du Tour
+        var text = getText(2);
+        var tmp = /Limite d'Action : (\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}:\d{2}) Il me reste (\d+) PA sur un total de 6 Durée normale de mon Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes(?: Bonus\/Malus sur la durée(?:\s*\.*\s*:\s*)(-?\d+) heures et (-?\d+) minutes.)? Augmentation due aux blessures(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. Poids de l'équipement(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes. ---> Durée de mon prochain Tour(?:\s*\.*\s*:\s*)(\d+) heures et (\d+) minutes./.exec(text);
+        stats.pa = parseInt(tmp[2]);
+        stats.dla = {
+            next :tmp[1],
+            duration : {
+                normal : {
+                    hour : parseInt(tmp[3]),
+                    min : parseInt(tmp[4])
+                },
+                bonus : {
+                    hour : parseInt(tmp[5]),
+                    min : parseInt(tmp[6])
+                },
+                injuries : {
+                    hour : parseInt(tmp[7]),
+                    min : parseInt(tmp[8])
+                },
+                stuf : {
+                    hour : parseInt(tmp[9]),
+                    min : parseInt(tmp[10])
+                },
+                total : {
+                    hour : parseInt(tmp[11]),
+                    min : parseInt(tmp[12])
+                }
             }
+        };
+
+        // Vue
+        var text = getText(3);
+        var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+).* Vue(?:\s*\.*\s*:\s*)(-?\d+) Cases ([+-]\d+)/.exec(text);
+        stats.position = {
+            x : parseInt(tmp[1]),
+            y : parseInt(tmp[2]),
+            n : parseInt(tmp[3]),
+        };
+
+        stats.view = {
+            range : parseInt(tmp[4]),
+            bonus : parseInt(tmp[5])
+        };
+
+        // XP
+        var text = getText(4);
+        //console.log(extract(text, "Niveau", "(\\d+)"));        
+        var tmp = /Niveau(?:\s*\.*\s*:\s*)(\d+) \((\d+) PI\) PX(?:\s*\.*\s*:\s*)(\d+) PX Personnels(?:\s*\.*\s*:\s*)(\d+) PI(?:\s*\.*\s*:\s*)(\d+)/.exec(text);
+        stats.xp = {
+            level : parseInt(tmp[1]),
+            PI : {
+                all : parseInt(tmp[2]),
+                current : parseInt(tmp[5])
+            },
+            PX : {
+                public : parseInt(tmp[3]),
+                private : parseInt(tmp[4])
+            }
+        };
+        tmp = /PM.............: (\d+) Niveau Calculé : (\d+)/.exec(text);
+        stats.xp.PM = tmp ? parseInt(tmp[1]) : stats.xp.PI.all;
+        stats.xp.vlevel = tmp ? parseInt(tmp[2]) : stats.xp.level;
+        tmp = /Karma(?:\s*\.*\s*:\s*)(.*) /.exec(text);
+        stats.karma = tmp[1];
+
+        // HP
+        var text = getText(5);
+        var tmp = /Actuels(?:\s*\.*\s*:\s*)(\d+) Maximum(?:\s*\.*\s*:\s*)(\d+)\s?([+-]\d+)? Fatigue(?:\s*\.*\s*:\s*)(.*) \( (\d+)\s?([+-]\d+)? \)/.exec(text);
+        stats.hp = {
+            current : parseInt(tmp[1]),
+            max : {
+                value : parseInt(tmp[2]),
+                bonus : (tmp[3] ? parseInt(tmp[3]) : 0)
+            },
+            fatigue : {
+                display : tmp[4],
+                value : parseInt(tmp[5]),
+                bm : (tmp[6] ? parseInt(tmp[6]) : 0)
+            }
+        };
+        
+        // Caracs
+        var text = getText(6);
+        var tmp = /Régénération(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Attaque(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Esquive(?:\s*\.*\s*:\s*)(\d+) D6 ([+-]\d+) ([+-]\d+) Dégâts(?:\s*\.*\s*:\s*)(\d+) D3 ([+-]\d+) ([+-]\d+) Armure(?:\s*\.*\s*:\s*)(\d+)\s?D3( \/ \d+ D3)? ([+-]\d+) ([+-]\d+) Caractéristiques Déduites :\s?-\s?Corpulence(?:\s*\.*\s*:\s*)(\d+)\s?points\s?- Agilité(?:\s*\.*\s*:\s*)(\d+)\s?points/.exec(text);
+        stats.regen = {
+            des : parseInt(tmp[1]),
+            physique : parseInt(tmp[2]),
+            magique : parseInt(tmp[3])
+        };
+        stats.attaque = {
+            des : parseInt(tmp[4]),
+            physique : parseInt(tmp[5]),
+            magique : parseInt(tmp[6])
+        };
+        stats.esquive = {
+            des : parseInt(tmp[7]),
+            physique : parseInt(tmp[8]),
+            magique : parseInt(tmp[9])
+        };
+        stats.degat = {
+            des : parseInt(tmp[10]) ,
+            physique : parseInt(tmp[11]),
+            magique : parseInt(tmp[12])
+        };
+        stats.armure = {
+            des : parseInt(tmp[13]),
+            physique : parseInt(tmp[15]),
+            magique : parseInt(tmp[16])
+        };
+        stats.corpulence = parseInt(tmp[16]);
+        stats.agilite = parseInt(tmp[17]);
+
+        // Combat
+        var text = getText(7);
+        var tmp = /Pour ce tour : - Dés d'attaque en moins(?:\s*\.*\s*:\s*)(\d+) - Dés d'esquive en moins(?:\s*\.*\s*:\s*)(\d+) - Dés d'armure en moins(?:\s*\.*\s*:\s*)(\d+) Nombre d'Adversaires tués(?:\s*\.*\s*:\s*)(\d+) Nombre de Décès(?:\s*\.*\s*:\s*)(\d+)/.exec(text);
+        stats.roundMalus = {
+            attaque : parseInt(tmp[1]),
+            esquive : parseInt(tmp[2]),
+            armure : parseInt(tmp[3]),
+        };
+        stats.kills = parseInt(tmp[4]);
+        stats.deaths = parseInt(tmp[5]);
+
+        // Magie
+        var text = getText(10);
+        var tmp = /Résistance à la Magie(?:\s*\.*\s*:\s*)(\d+) points ([+-]\d+) Maîtrise de la Magie(?:\s*\.*\s*:\s*)(\d+) points ([+-]\d+) Bonus de Concentration : (-?\d+) %/.exec(text);
+        stats.magie = {
+            rm : {
+                value : parseInt(tmp[1]),
+                bonus : parseInt(tmp[2])
+            },
+            mm : {
+                value : parseInt(tmp[3]),
+                bonus : parseInt(tmp[4])
+            }
+        };
+        stats.concentration = parseInt(tmp[5]);
+
+        // Computed
+        stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
+        stats.dla.duration.bonus.total = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
+        stats.dla.duration.injuries.total = stats.dla.duration.injuries.hour * 60 + stats.dla.duration.injuries.min;
+        stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
+        stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;
+
+        stats.hp.fatigue.total = stats.hp.fatigue.value + stats.hp.fatigue.bm;
+
+        stats.view.total = stats.view.range + stats.view.bonus;
+
+        stats.hp.max.total = stats.hp.max.value + stats.hp.max.bonus;
+
+        stats.attaque.bm = stats.attaque.physique + stats.attaque.magique;
+        stats.degat.bm   = stats.degat.physique + stats.degat.magique;
+        stats.esquive.bm = stats.esquive.physique + stats.esquive.magique;
+
+        stats.attaque.desReel = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
+        stats.esquive.desReel = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
+        stats.armure.desReel = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
+        stats.degat.desReel = stats.degat.des;
+
+        stats.attaque.moy = 3.5 * stats.attaque.desReel + stats.attaque.bm;
+        stats.degat.moy = 2 * stats.degat.desReel + stats.degat.bm;
+
+        Utils.setConf("profil_stats", JSON.stringify(stats))
+
+        return stats;
+    }
+});
+
+var Messagerie_MH_Messagerie = $.inherit(Page, {
+    init : function() {
+        if(document.location.search.match(/^\?cat=9/)) {
+            $("form[name=botForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
+
+        } else if(document.location.search.match(/^\?cat=1/)) {
+            $("form[name=mailboxForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
+
+        } else if(document.location.search.match(/^\?cat=2/)) {
+            $("form[name=sendboxForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
+
+        } else if(document.location.search.match(/^\?cat=3/)) {
+            var ti = $("input[name=Titre]"),
+                ta = $("textarea[name='Message']"),
+                bt = $("input[name='bsSend']"),
+                pr = (function(bt) {
+                  bt.closest( "tr" )
+                  .after(
+                    $("<tr>")
+                      .addClass("mh_tdpage")
+                    .append(
+                      $("<td>")
+                        .attr("colspan", 4)
+                      .append(
+                        $("<div>")
+                          .attr("id", "preview")
+                      )
+                    )
+                  );
+                  return $('#preview');
+                })(bt),
+                render = function(from, to) {
+                  to.html((function/*wordwrap*/(str, width, brk, cut){
+                    brk = brk || '\n';
+                    width = width || 75;
+                    cut = cut || false;
+                    if(!str)  return str;
+                    var regex = '.{0,' + width + '}(\\s|$)' + (cut ? '|.{' + width + '}|.+$' : '|\\S+?(\\s|$)');
+                    return str.match(RegExp(regex, 'g')).join(brk);
+                  })(from.val(), 75, '<br/>'));
+                },
+                enclose = function(ta, ts, te) {
+                  var beg = ta[0].selectionStart,
+                      end = ta[0].selectionEnd,
+                      sel = ta.val().substring(beg, end) || "copier le texte ici";
+                  ta.val(ta.val().substring(0, beg) + ts + sel + te + ta.val().substring(end, ta.val().length));
+                  ta.trigger("change");
+                };
+            bt.parent().append("&nbsp;&nbsp;&nbsp;");
+            $.each([
+                ["Citer",
+                function() {
+                    var reply = Utils.getValue('lastReply');
+                    if(reply) {
+                        reply = '> ' + reply.replace(/<br\/?>/gm, '\n> ');
+                        ta.val(reply);
+                    }
+                }],
+                ["Mémo.", function() { Utils.setValue('savedMsg', ta.val()); Utils.setValue('savedTitle', ti.val()); }],
+                ["Rappel", function() { ta.val(Utils.getValue('savedMsg')); ti.val(Utils.getValue('savedTitle')); }],
+                ["G", function() { enclose(ta, "<b>", "</b>"); }],
+                ["I", function() { enclose(ta, "<i>", "</i>"); }],
+                ["S", function() { enclose(ta, "<u>", "</u>"); }],
+                ["Quote", function() { enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); }],
+                ["Trõlldûctéûr",
+                function() {
+                    ta.val(
+                        ta.val()
+                        .replace(/°*y°*/g, '°y°')
+                        .replace(/a/g, 'à').replace(/e/g, 'é').replace(/i/g, 'ï').replace(/o/g, 'õ').replace(/u/g, 'û')
+                        .replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
+                    );
+                    ta.trigger("change");
+                }]], $.proxy(function(i, e) {
+                    bt.parent().append(this.display.mhButton(e[0], e[1])).append(" ");
+                }, this));
+            ta.on('keyup change', function(e) { render($(this), pr); });
+            ti.val(function(i, v) {
+              if(v) {
+                  var re1 = /Re\s*:\s*/ig,
+                      n = (v.match(re1) || []).length,
+                      re2 = /Re\s*\(\d+\)\s*:\s*/ig;
+                  n += (function() {
+                      var p = 0,
+                          a = (v.match(re2) || []).join().match(/\d+/g) || [];
+                      for(var i = 0; i < a.length; ++i) p += 1 * a[i];
+                      return p; })();
+                  v = v.replace(re1, '').replace(re2, '').replace(/^\s+/g,'');
+                  var t = v.match(/^\[.*\]\s?/);
+                  v = ((n > 1) ? ("Re(" + n + ") : ") : "Re : ") + v;
+                  if(t) v = t + v.replace(t, '');
+              }
+              return v;
+            });
+        }
+    }
+});
+
+var Messagerie_ViewMessage = $.inherit(Page, {
+    init : function() {
+        $("input[name='bAnswer'],input[name='bAnswerToAll']").on('click', function(e) {
+            var reply = $($(this).closest('tr').prev().children()[0]).html();
+            this.utils.setValue('lastReply', reply);
         });
     }
 });
 
-var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
+var Messagerie_ViewMessageBot = $.inherit(Page, {
     init : function() {
         this.analyseMessage();
     },
@@ -1552,7 +1787,10 @@ var Messagerie_ViewMessageBot = $.extend({}, MH_Page, {
 });
 
 
-var MH_Play_Play_vue = $.extend({}, MH_Page, {
+var MH_Play_Play_vue = $.inherit(Page, {
+    
+    monsterDatas : {},
+    
     init : function(){
         this.sendView();
         $("#mhPlay").attr("data-view", "main");
@@ -1904,7 +2142,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             // console.error("Unable to getColumnId('"+id+"', '"+name+"')");
         }
         return i;
-    },
+    },    
 
     addMonsterInfos : function() {
         var fnExtract = function(monsterFullName) {
@@ -2071,7 +2309,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
                 //console.log("Name: ", monsterFullName, "Age: ", monstreAgeName, monstreAge, "Template: ", monsterTemplateName, monsterTemplate, "Monstre: ", monster);
 
-                Storage["monster-" + monsterId] = $.grep([
+                this.monsterDatas["monster-" + monsterId] = $.grep([
                     fnShowCarac(monster, monsterTemplate, monstreAge, "familly", "Famille"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "level", "Niveau"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "power1", "Pouvoir"),
@@ -2094,7 +2332,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                     fnShowCarac(monster, monsterTemplate, monstreAge, "vlc", "Voir le Caché"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "speed", "Vitesse de Déplacement"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "dla", "Durée tour", "heures"),
-                    fnShowCarac(monster, monsterTemplate, monstreAge, "dlaUse", "DLA"),
+                    //fnShowCarac(monster, monsterTemplate, monstreAge, "dlaUse", "DLA"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "fly", "Vole"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "coldBlod", "Sang froid"),
                 ], function(o){return o;});
@@ -2154,7 +2392,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
                                 $("<dl/>")
                                 .addClass("dl-horizontal")
                                 .append(
-                                    $.map(Storage["monster-" + monsterId], function(attr){
+                                    $.map(this.monsterDatas["monster-" + monsterId], function(attr){
                                         return '<dt>' + attr[0] + '</dt><dd>' + attr[1] + '</dd>';
                                     })
                                 )
@@ -2332,7 +2570,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
 
                 $(this)
                 .before(
-                    self.mhButton("Annuler", function() {
+                    self.display.mhButton.mhButton("Annuler", function() {
                         $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first td:nth-child(3)").remove();
                         $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(3)").remove();
 
@@ -2374,7 +2612,7 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
         .after(
             $("<td/>")
             .attr("align", "left")
-            .append(self.mhButton("Envoyer...", selectCallback))
+            .append(self.display.mhButton("Envoyer...", selectCallback))
         );
     },
 
@@ -2700,97 +2938,12 @@ var MH_Play_Play_vue = $.extend({}, MH_Page, {
             scope : this
         });
     }
-
 });
 
-var MH_Play_Play_menu = $.extend({}, MH_Page, {
-    init : function(){
-        Utils.setConf("login", $("input[name='ai_IdPJ']").val());
-        this.addMenu();
-        this.addTimer();
-    },
-
-    addMenu : function() {
-        $("<div/>")
-        .css("position", "absolute")
-        .css("top", "35px")
-        .css("left", "35px")
-        .append(
-            $("<a/>")
-            .css("margin", "5px")
-            .css("color", "#ffffcc")
-            .attr("href", "http://pharoz.net/MH/outil/")
-            .attr("target", "KM_outil")
-            .text("Outil")
-        )
-        .append("|")
-            .css("color", "#ffffcc")
-        .append(
-            $("<a/>")
-            .css("margin", "5px")
-            .css("color", "#ffffcc")
-            .attr("href", "http://pharoz.net/MH/forum/")
-            .attr("target", "KM_forum")
-            .text("Forum")
-        )
-        .append("|")
-            .css("color", "#ffffcc")
-        .append(
-            $("<a/>")
-            .css("margin", "5px")
-            .css("color", "#ffffcc")
-            .attr("href", "https://github.com/jswale/KFE/raw/master/src/KMHC.user.js")
-            .text("MAJ")
-        )
-        .appendTo($("body"));
-    },
-
-    addTimer : function() {
-        var d = $("div.infoMenu"),
-            tmp = /DLA:\s+([^<]+)</.exec(d.html()),
-            dla = Utils.convertDate(tmp[1]),
-            cnt = $("<div/>").addClass("countdown");
-        d.css("top", "505px");
-        d.find("br").replaceWith(cnt);
-
-        var timer = setInterval(function() {
-            var diff = Utils.getDateDiff(new Date(), dla);
-            if(diff.length <= 0) {
-                diff = "<a href='/mountyhall/MH_Play/Activate_DLA.php' target='_top' style='color:#AEFFAE'>Vous pouvez réactiver!</a>";
-                clearInterval(timer);
-            }
-            cnt.html(diff);
-        }, 1000);
-    }
-});
-
-var MH_Play_TurnStart = $.extend({}, MH_Page, {
-    init : function(){
-        if(!this.isInitialized()) {
-            this.error("Authentification required");
-            return;
-        }
-        this.autoConnect();
-    },
-
-    autoConnect : function() {
-        $("body")
-        .append(
-            $("<iframe/>")
-            .css("display", "none")
-            .attr("src", "http://pharoz.net/MH/outil/index.php4?login=" + Utils.getConf("login") + "&password=" + Utils.getConf("pswd"))
-            .attr("name", "KMHC_hidden_form")
-            .on("load", function() {
-                $(this).remove();
-            })
-        );
-    }
-});
-
-var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
+var MH_Lieux_Lieu_Description = $.inherit(Page, {
     init : function() {
-        var p = {zf: 2.0, dx: 30, dy: 30},
-            map = MH_Map.getMap("map_mh", p);
+        var p = {zf: 2.0, dx: 30, dy: 30};
+        var map = this.mapper.getMap("map_mh", p);
 
         $("#footer1").before(map.div);
 
@@ -2800,13 +2953,13 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
         } catch(e) {}
         if (ctn) {
             var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
-            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,80,200,0.75)", p, "Vous êtes ici");
+            this.mapper.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,80,200,0.75)", p, "Vous êtes ici");
         }
 
         var tmp1 = /Portail de Téléportation\s+\(Lieu n° (\d+)\)/.exec($("div.titre2").text());
         if(tmp1) {
             var tmp2 = /(mène en X = (-?\d+) \| Y = (-?\d+)[^\.]*)/.exec($("#description").text());
-            MH_Map.drawPos(map, parseInt(tmp2[2]), parseInt(tmp2[3]), "rgba(0,0,0,0.5)", p, "Destination TP");
+            this.mapper.drawPos(map, parseInt(tmp2[2]), parseInt(tmp2[3]), "rgba(0,0,0,0.5)", p, "Destination TP");
 
             this.callAPIConnected({
                 api: "tag",
@@ -2820,114 +2973,266 @@ var MH_Lieux_Lieu_Description = $.extend({}, MH_Page, {
     }
 });
 
-var Messagerie_MH_Messagerie = $.extend({}, MH_Page, {
+var MH_Play_Liste_Vente_ListeVente_view = $.inherit(Page, {
     init : function() {
-        if(document.location.search.match(/^\?cat=9/)) {
-            $("form[name=botForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
-
-        } else if(document.location.search.match(/^\?cat=1/)) {
-            $("form[name=mailboxForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
-
-        } else if(document.location.search.match(/^\?cat=2/)) {
-            $("form[name=sendboxForm]").after($("#mhPlay > div.mh_tdtitre:first").clone(), $("<br/>"), $("#menu-msg").clone());
-
-        } else if(document.location.search.match(/^\?cat=3/)) {
-            var ti = $("input[name=Titre]"),
-                ta = $("textarea[name='Message']"),
-                bt = $("input[name='bsSend']"),
-                pr = (function(bt) {
-                  bt.closest( "tr" )
-                  .after(
-                    $("<tr>")
-                      .addClass("mh_tdpage")
-                    .append(
-                      $("<td>")
-                        .attr("colspan", 4)
-                      .append(
-                        $("<div>")
-                          .attr("id", "preview")
-                      )
-                    )
-                  );
-                  return $('#preview');
-                })(bt),
-                render = function(from, to) {
-                  to.html((function/*wordwrap*/(str, width, brk, cut){
-                    brk = brk || '\n';
-                    width = width || 75;
-                    cut = cut || false;
-                    if(!str)  return str;
-                    var regex = '.{0,' + width + '}(\\s|$)' + (cut ? '|.{' + width + '}|.+$' : '|\\S+?(\\s|$)');
-                    return str.match(RegExp(regex, 'g')).join(brk);
-                  })(from.val(), 75, '<br/>'));
-                },
-                enclose = function(ta, ts, te) {
-                  var beg = ta[0].selectionStart,
-                      end = ta[0].selectionEnd,
-                      sel = ta.val().substring(beg, end) || "copier le texte ici";
-                  ta.val(ta.val().substring(0, beg) + ts + sel + te + ta.val().substring(end, ta.val().length));
-                  ta.trigger("change");
-                };
-            bt.parent().append("&nbsp;&nbsp;&nbsp;");
-            $.each([
-                ["Citer",
-                function() {
-                    var reply = Utils.getValue('lastReply');
-                    if(reply) {
-                        reply = '> ' + reply.replace(/<br\/?>/gm, '\n> ');
-                        ta.val(reply);
-                    }
-                }],
-                ["Mémo.", function() { Utils.setValue('savedMsg', ta.val()); Utils.setValue('savedTitle', ti.val()); }],
-                ["Rappel", function() { ta.val(Utils.getValue('savedMsg')); ti.val(Utils.getValue('savedTitle')); }],
-                ["G", function() { enclose(ta, "<b>", "</b>"); }],
-                ["I", function() { enclose(ta, "<i>", "</i>"); }],
-                ["S", function() { enclose(ta, "<u>", "</u>"); }],
-                ["Quote", function() { enclose(ta, "<fieldset><legend></legend>", "</fieldset>"); }],
-                ["Trõlldûctéûr",
-                function() {
-                    ta.val(
-                        ta.val()
-                        .replace(/°*y°*/g, '°y°')
-                        .replace(/a/g, 'à').replace(/e/g, 'é').replace(/i/g, 'ï').replace(/o/g, 'õ').replace(/u/g, 'û')
-                        .replace(/A/g, 'À').replace(/E/g, 'É').replace(/I/g, 'Ï').replace(/O/g, 'Õ').replace(/U/g, 'Û')
-                    );
-                    ta.trigger("change");
-                }]], $.proxy(function(i, e) {
-                    bt.parent().append(this.mhButton(e[0], e[1])).append(" ");
-                }, this));
-            ta.on('keyup change', function(e) { render($(this), pr); });
-            ti.val(function(i, v) {
-              if(v) {
-                  var re1 = /Re\s*:\s*/ig,
-                      n = (v.match(re1) || []).length,
-                      re2 = /Re\s*\(\d+\)\s*:\s*/ig;
-                  n += (function() {
-                      var p = 0,
-                          a = (v.match(re2) || []).join().match(/\d+/g) || [];
-                      for(var i = 0; i < a.length; ++i) p += 1 * a[i];
-                      return p; })();
-                  v = v.replace(re1, '').replace(re2, '').replace(/^\s+/g,'');
-                  var t = v.match(/^\[.*\]\s?/);
-                  v = ((n > 1) ? ("Re(" + n + ") : ") : "Re : ") + v;
-                  if(t) v = t + v.replace(t, '');
-              }
-              return v;
+        var img = $("<img src='/mountyhall/Images/fleche_bas.gif' alt='v'>")
+            .appendTo($("form[name='VenteForm'] table:first table:first td:first"))
+            .on('mouseover', function() { $(this).css("cursor", "pointer"); })
+            .on('click', function() {
+                var cbs = $(this).parents('tbody').find("input[type='checkbox']");
+                cbs.prop("checked", ! cbs.prop("checked"));
             });
+    }
+});
+
+var MH_Play_Play_e_follo = $.inherit(Page, {
+    map : null,
+    init : function() {      
+        this.map = this.addMap();
+        this.addActions();
+        this.addEdition();
+        this.displayTags();
+        this.fixMoreLess();        
+    },
+    
+    fixMoreLess : function() {
+        /* Boulets */
+        $('a[href^="javascript:afficheDetailTrPlus"]').each(function(){
+            var a = $(this);
+            var tr = $(a.parents("tr")[2]);            
+            var trTitre = tr.prev("tr:first");
+            
+            var fullname = trTitre.find("a:first").text().trim();
+            var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+            var id = tmp[1];
+            
+            a.attr("id", id + "_" + a.attr("id"));
+            a.attr("href", a.attr("href").replace(/\('(.*)','(.*)'\)/, "('" + id + "_$1','" + id + "_$2')"));    
+            
+            var trHidden = $(a.parents("tr")[1]).next("tr:first");
+            trHidden.attr("id", id + "_" + trHidden.attr("id"));
+        });
+    },
+    
+    addMap : function() {
+        var p = {zf: 2.0, dx: 30, dy: 30},
+            map = this.mapper.getMap("map_mh", p);      
+        $("form[action='Play_action_Equipement.php']").after(map.div);
+        
+        try {
+            var ctn = window.parent.parent.parent.Sommaire.document;
+            var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
+            this.mapper.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,80,200,0.75)", p, "Vous êtes ici");
+        } catch(e) {}
+        
+        return {p : p, map : map};
+    },
+    
+    addActions: function() {
+      // Actions
+      $('form td.mh_titre3').each($.proxy(function(i, td){     
+          td = $(td);
+          var fullname = td.find("a:first").text().trim();
+          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+          var id = tmp[1];
+          var name = tmp[2];
+          
+          var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(td.siblings(":nth-child(4)").text().trim());
+          this.mapper.drawPos(this.map.map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(50,50,0,0.5)", this.map.p, fullname);
+
+          $("<tr/>")
+          .append(
+              $("<td/>")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Profil.php?ai_IdFollower=" + id + "'>Profil</a>")
+              .append(" - ")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Ordres.php?ai_IdFollower=" + id + "'>Ordres</a>")
+              .append(" - ")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Equipement.php?ai_IdFollower=" + id + "'>Equipement</a>")
+              .append(" - ")
+              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Description.php?ai_IdFollower=" + id + "'>Description</a>")
+          )
+          .insertAfter( td.parents("tr:first") );
+      }, this));
+    },
+    
+    addEdition : function() {
+        Utils.addGlobalStyle([
+            'td.mh_titre3 label.editable {font-size:12px !important; }',            
+        ]);
+        
+      // Edition
+      $('form td.mh_titre3').each($.proxy(function(i, td){
+          var fullname = $(td).find("a:first").text().trim();
+          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+          var id = tmp[1];
+          $(td).addClass("editable_ctn").append(this.getEditionField(id, 1));
+      }, this));        
+    },
+    
+    getMonsterIds : function() {
+      return $('form td.mh_titre3').map(function(i, td){
+          var fullname = $(td).find("a:first").text().trim();
+          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
+          var id = tmp[1];
+          return id;
+      }).get();        
+    },
+    
+    displayTags : function() {
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "xMin" : -1000,
+                "xMax" : 1000,
+                "yMin" : -1000,
+                "yMax" : 1000,
+                "nMin" : 0,
+                "nMax" : -1000,
+                "m" : this.getMonsterIds()
+            },
+            callback : function(datas) {
+                datas = datas.replace(/\s+/g, " ");
+                var json = $.parseJSON(datas);
+                // populate tags and start handling
+                $.each(json.tags, $.proxy(function(key, tag){
+                    key = key.split(";");
+                    $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']").prev()
+                    .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
+                    .text(tag.tag);
+                }, this));
+                
+                this.handleTagEdition();
+            },
+            scope : this
+        });        
+    }
+});
+
+var MH_Follower_FO_NewOrder = $.inherit(Page, {
+  init : function() {
+      var ctn1 = null;
+      try {
+          ctn1 = window.parent.parent.parent.Sommaire.document;
+      } catch(e) {}
+
+      var ctn2 = null;
+      try {
+          ctn2 = window.parent.Contenu.document;
+      } catch(e) {}
+
+      this.showCoords(ctn1, "Ma position", "div.infoMenu");
+      this.showCoords(ctn2, "Sa position", "table.mh_tdborder_fo > tbody > tr.mh_tdtitre_fo table td:nth-child(4)");
+  },
+
+    showCoords : function(doc, title, selector) {
+        if(null != doc) {
+            if($('[name="ai_X"],[name="ai_Y"],[name="ai_N"]').length == 3) {
+                $('div.Action').append(
+                    $("<span>[" + title + "]</span>")
+                    .css("cursor", "hand")
+                    .css("margin-left", "5px")
+                    .click($.proxy(function() {
+                        var coords = $(selector, doc).first().text();
+                        var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(coords);
+                        $('[name="ai_X"]').val(tmp[1]);
+                        $('[name="ai_Y"]').val(tmp[2]);
+                        $('[name="ai_N"]').val(tmp[3]);
+                    }, this))
+                );
+            }
         }
     }
 });
 
-var Messagerie_ViewMessage = $.extend({}, MH_Page, {
+var MH_Follower_FO_SubmitOrderAbstract = $.inherit(Page, {
+  init : function() {
+      $('form').submit();
+  }
+});
+
+var MH_Follower_FO_NewOrderOK = $.inherit(MH_Follower_FO_SubmitOrderAbstract);
+var MH_Follower_FO_DeleteOrder = $.inherit(MH_Follower_FO_SubmitOrderAbstract);
+
+
+var MH_Play_Actions_Competences_Play_a_Competence43b = $.inherit(Page, {
+  init : function() {
+    var sons = DB_talents["Comp"][43].sons;
+    var sel = $('select.SelectboxV2');
+    sel.find('option').each(function() {
+      var s = sons[$(this).val()];
+      if (s) {
+        $(this).text($(this).text() + ' (' + s[1] + ')');
+      }
+    });
+    sel.on('change', function() {
+      var s = sons[$(this).find('option:selected').val()],
+      t = s ? s[1] : '***';
+      $(this).next().replaceWith("<span>&nbsp;" + t + "</span>");
+    });
+  }
+});
+
+
+
+var MH_Play_Actions_Play_a_AmeliorationView = $.inherit(Page, {
     init : function() {
-        $("input[name='bAnswer'],input[name='bAnswerToAll']").on('click', function(e) {
-            var reply = $($(this).closest('tr').prev().children()[0]).html();
-            Utils.setValue('lastReply', reply);
-        });
+        $("table.mh_tdborder a.AllLinks")
+        .hover($.proxy(function(event) {
+            Page.showTalentPopup($(event.target), true);
+        }, this), $.proxy(function(event) {
+            Page.hideTalentPopup($(event.target));
+        }, this));
     }
 });
 
-var View_TresorHistory = $.extend({}, MH_Page, {
+var MH_Play_Actions_Play_a_SortResult = $.inherit(Page, {
+    init : function() {
+        var result = $("table:first").text();
+        
+        if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
+
+            if(Utils.getConf("action") == "Sort20") { // AA
+                // Appel de l'API
+                this.callAPIConnected({
+                    api : "aa",
+                    data : {
+                        "aa" : result
+                    }
+                });
+            }
+
+            if(Utils.getConf("action") == "Sort13") { // TP
+                var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(result);
+                // Appel de l'API
+                this.callAPIConnected({
+                    api : "tag",
+                    data : {
+                        "type" : 5,
+                        "num" : tmp[1],
+                        "tag" : tmp[2]
+                    }
+                });
+            }
+
+            if(Utils.getConf("action") == "Sort10") { // IdT
+                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(result);
+
+                // Appel de l'API
+                this.callAPIConnected({
+                    api : "tag",
+                    data : {
+                        "type" : 3,
+                        "num" : data[1],
+                        "tag" : data[2],
+                    }
+                });
+            }
+        }
+        Utils.setConf("action", "");
+    }
+});
+
+var View_TresorHistory = $.inherit(Page, {
     init : function() {
         var objectType = $("table:nth-child(2) table > tbody > tr:nth-child(1) > td:nth-child(2)").text();
         if(objectType == "Parchemin") {
@@ -3002,187 +3307,151 @@ var View_TresorHistory = $.extend({}, MH_Page, {
     }
 });
 
-/********************************************/
-/************* ACTIONS **********************/
-/********************************************/
 
-var MH_Play_Actions_Play_Toolbox = {
-    injectTags : function(dataType, dataId, prefix, suffix) {
-        var ids = $("select option[value!='']").map(function(){
-            var v = $(this).prop("value");
-            v = v.substr(prefix.length, v.length - suffix.length);
-            return v;
-        }).get();
-        
-        var data = {
-                "invi" : 0,                
-            };
-        data[dataType] = ids;
-        
-        MH_Page.callAPIConnected({
-            api : "viewInfo",
-            data : data,
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                
-                $.each(json.tags, $.proxy(function(key, data){
-                    var tmp = key.split(";");
-                    if(tmp[0] == dataId) {
-                        var o = $("select option[value='" + prefix + + tmp[1] + suffix + "']");
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                },this));
-                
-                if("m" == dataType) {
-                    $.each(json.monsters, $.proxy(function(key, data) {
-                        var o = $("select option[value='" + prefix + key + suffix + "']");
-                        o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
-                    },this));
+var MH_Play_Play_option = $.inherit(Page, {
+    init : function() {
+        this.addConfigPanel([
+            {
+                label : "Mot de passe",
+                option : "pswd",
+                type : "password"
+            },
+            {
+                label : "Mountyzilla activé",
+                option : "mountyzilla",
+                type : "checkbox"
+            }
+        ], this.checkConnect);
+    },
+    
+    addConfigPanel : function(items, callback) {
+        var self = this;
+        $("<div/>")
+        .attr("id", Utils.getId("page-options"))
+        .addClass("mh_tdpage")
+        .css("position", "fixed")
+        .css("display", "none")
+        .css("right", "50px")
+        .css("top", "0px")
+        .css("border", "1px solid black")
+        .css("padding", "5px 10px")
+        .css("width", "500px")
+        .append(
+            $("<fieldset/>")
+            .attr("id", "KMHC_form")
+            .append($("<legend/>").text("Page options"))
+            .append($.map(items, $.proxy(function(item){
+                var fieldValue = Utils.getConf(item.option) || "undefined";
+                var field = $("<input/>")
+                .attr("id", Utils.getId("page-options-"+item.option))
+                .attr("type", item.type)
+                .attr("name", item.option);
+
+                if(item.type == "checkbox") {
+                    field.prop("checked", fieldValue == "true");
+                } else {
+                    field.val(fieldValue);
                 }
-            }
-        });
-    },
-    
-    injectMonstresTags : function(prefix, suffix) {
-        this.injectTags("m", "1", prefix, suffix);
-    },
-    
-    injectTrollsTags : function(prefix, suffix) {
-        this.injectTags("t", "2", prefix, suffix);
-    },
-    
-    injectTresorsTags : function(prefix, suffix) {
-        this.injectTags("o", "3", prefix, suffix);
-    },
-        
-    injectChampignonsTags : function(prefix, suffix) {
-        this.injectTags("c", "4", prefix, suffix);
-    },
-    
-    protectMonsters : function() {
-        $("select option:contains('Gowap'),select option:contains('Golem de cuir'),select option:contains('Golem de métal'),select option:contains('Golem de papier'),select option:contains('Golem de mithril')").css("color", "#808080");
-    },
-    
-    normalizeFontSize : function () {        
-        $(".titre3, .titre4").css("font-size", "12px");
-    }
-    
-};
 
-var MH_Play_Actions_Abstract = $.extend({}, MH_Page, {
-    init : function() {
-        MH_Play_Actions_Play_Toolbox.normalizeFontSize();
-        MH_Play_Actions_Play_Toolbox.protectMonsters();
-        
-        {
-            var id = $("[name='ai_IdSort'][value!='0']").val();
-            if(Utils.isDefined(id)) {
-                console.log("Sort " + id + " detected");
-                Utils.setConf("action", "Sort" + id);
-                this.initPageSort(id);
-                return;
-            }
-        }
-        {
-            var id = $("[name='ai_IdAction'][value!='0']").val();
-            if(Utils.isDefined(id)) {
-                console.log("Action " + id + " detected");
-                Utils.setConf("action", "Action" + id);
-                this.initPageAction(id);
-                return;
-            }
-        }
-    },
-    initPageSort : function(id) {
-        MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-        MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
-        
-        switch(id) {
-            case "10": // IdT
-                MH_Play_Actions_Play_Toolbox.injectTresorsTags("2_", "");
-                break;
-                
-            case "21": // Projection
-                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-                //MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
-                break;
-                
-            case "2" : // Hypnotisme
-                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-                //MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
-                break;
-                
-            case "20": // AA
-                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-                break;                
-                
-            case "12": // Faiblesse Pasagère
-                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-                //MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
-                break;                
-                
-            case "17": // Sacrifice
-                //MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");
-                break;
-        }
-    },
-    initPageAction : function(id) {
-        switch(id) {
-            case "4": // Ramasser un trésor
-                MH_Play_Actions_Play_Toolbox.injectTresorsTags("", "_TE");
-                break;
+                return [
+                    this.addCssToLabel($("<label/>").text(item.label)),
+                    this.addCssToInput(field),
+                    $("<br/>").css("clear","left")
+                ];
+            },this)
+                         ))
+            .append(
+                self.display.mhButton("Enregistrer", function(){
+                    $(this).val("Enregistré");
+                    $.each(items, $.proxy(function(id, item){
+                        var field = $("#" + Utils.getId("page-options-"+item.option));
+                        var value = field.val();
+                        if(item.type == "checkbox") {
+                            value = field.prop("checked");
+                        }
+                        Utils.setConf(item.option, value);
+                    }, this));
+                    if(typeof(callback) == "function") {
+                        callback.apply(this);
+                    } else {
+                        $("#" + Utils.getId("page-options")).toggle();
+                    }
+                }, this)
+            )
+            .append($("<br/>").css("clear","left"))
+            .append("<i>Les changements seront pris en compte au prochain affichage de cette page</i>")
+            .append($("<div/>")
+                    .css("text-align", "right")
+                    .css("font-size", "smaller")
+                    .append("[<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_new'>Recharger le script</a>]")
+                   )
+        )
+        .appendTo($("body"));
 
-            case "7": // Ramasser un champignon
-                MH_Play_Actions_Play_Toolbox.injectChampignonsTags("", "_??"); //TODO
-                break;
-                
-            case "116": // CdM
-                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
-                break;
-                
-            case "118": // Insulte
-                MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");
-                break;
-                
-        }
-    }        
-});
-var MH_Play_Actions_Sorts_Play_a_SortYY = $.extend({}, MH_Play_Actions_Abstract, {});
-var MH_Play_Actions_Play_a_ActionYY = $.extend({}, MH_Play_Actions_Abstract, {});
-var MH_Play_Actions_Sorts_Play_a_SortXX = $.extend({}, MH_Play_Actions_Abstract, {});
-var MH_Play_Actions_Competences_Play_a_CompetenceYY = $.extend({}, MH_Play_Actions_Abstract, {});
-var MH_Play_Actions_Play_a_NoAction = $.extend({}, MH_Play_Actions_Abstract, {});
-var MH_Play_Actions_Play_a_Move = $.extend({}, MH_Play_Actions_Abstract, {});
+        $('<svg height="40" version="1.1" width="40" xmlns="http://www.w3.org/2000/svg">'+
+          '<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
+          '<linearGradient id="27190-_0050af-_002c62" x1="0" y1="1" x2="0" y2="0" gradientTransform="matrix(1,0,0,1,-4,-4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
+          '<stop offset="0%" stop-color="#D05900" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>'+
+          '<stop offset="100%" stop-color="#642A00" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>'+
+          '</linearGradient>'+
+          '</defs>'+
+          '<path fill="none" stroke="#ffffff" d="M31.229,17.736C31.293,17.165,31.333,16.588,31.333,16S31.293,14.834,31.229,14.263L26.852,12.706C26.634,11.99,26.348,11.305,26.001,10.655999999999999L27.994,6.463999999999999C27.269,5.5539999999999985,26.445,4.729999999999999,25.536,4.004999999999999L21.343000000000004,5.998999999999999C20.696000000000005,5.651999999999999,20.009000000000004,5.366999999999999,19.294000000000004,5.149999999999999L17.736000000000004,0.7719999999999985C17.165,0.708,16.588,0.667,16,0.667S14.834,0.7080000000000001,14.263,0.772L12.707,5.15C11.991000000000001,5.367,11.306000000000001,5.652,10.657,5.9990000000000006L6.464,4.005C5.554,4.73,4.73,5.554,4.005,6.464L5.999,10.656C5.651999999999999,11.304,5.367,11.99,5.1499999999999995,12.706L0.7719999999999994,14.263C0.708,14.834,0.667,15.412,0.667,16S0.7080000000000001,17.165,0.772,17.736L5.15,19.294C5.367,20.009,5.652,20.695,5.9990000000000006,21.343L4.005000000000001,25.536C4.73,26.445,5.554,27.269000000000002,6.464,27.994L10.656,26.001C11.304,26.348000000000003,11.99,26.634,12.706,26.852L14.263,31.229C14.834,31.293,15.411,31.333,16,31.333C16.588,31.333,17.165,31.293,17.736,31.229L19.294,26.852C20.009,26.634,20.693,26.348,21.343,26.001L25.536,27.994C26.445,27.269,27.269000000000002,26.445,27.994,25.536L26.001,21.343000000000004C26.348000000000003,20.696000000000005,26.634,20.009000000000004,26.852,19.294000000000004L31.229,17.736ZM16,20.871C13.31,20.871,11.128,18.689,11.128,15.999999999999998C11.128,13.309999999999999,13.31,11.127999999999998,16,11.127999999999998C18.689,11.127999999999998,20.871000000000002,13.309999999999999,20.871000000000002,15.999999999999998C20.871,18.689,18.689,20.871,16,20.871Z" stroke-width="3" stroke-linejoin="round" opacity="0" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: round; opacity: 0;"></path>'+
+          '<path fill="url(#27190-_0050af-_002c62)" stroke="none" d="M31.229,17.736C31.293,17.165,31.333,16.588,31.333,16S31.293,14.834,31.229,14.263L26.852,12.706C26.634,11.99,26.348,11.305,26.001,10.655999999999999L27.994,6.463999999999999C27.269,5.5539999999999985,26.445,4.729999999999999,25.536,4.004999999999999L21.343000000000004,5.998999999999999C20.696000000000005,5.651999999999999,20.009000000000004,5.366999999999999,19.294000000000004,5.149999999999999L17.736000000000004,0.7719999999999985C17.165,0.708,16.588,0.667,16,0.667S14.834,0.7080000000000001,14.263,0.772L12.707,5.15C11.991000000000001,5.367,11.306000000000001,5.652,10.657,5.9990000000000006L6.464,4.005C5.554,4.73,4.73,5.554,4.005,6.464L5.999,10.656C5.651999999999999,11.304,5.367,11.99,5.1499999999999995,12.706L0.7719999999999994,14.263C0.708,14.834,0.667,15.412,0.667,16S0.7080000000000001,17.165,0.772,17.736L5.15,19.294C5.367,20.009,5.652,20.695,5.9990000000000006,21.343L4.005000000000001,25.536C4.73,26.445,5.554,27.269000000000002,6.464,27.994L10.656,26.001C11.304,26.348000000000003,11.99,26.634,12.706,26.852L14.263,31.229C14.834,31.293,15.411,31.333,16,31.333C16.588,31.333,17.165,31.293,17.736,31.229L19.294,26.852C20.009,26.634,20.693,26.348,21.343,26.001L25.536,27.994C26.445,27.269,27.269000000000002,26.445,27.994,25.536L26.001,21.343000000000004C26.348000000000003,20.696000000000005,26.634,20.009000000000004,26.852,19.294000000000004L31.229,17.736ZM16,20.871C13.31,20.871,11.128,18.689,11.128,15.999999999999998C11.128,13.309999999999999,13.31,11.127999999999998,16,11.127999999999998C18.689,11.127999999999998,20.871000000000002,13.309999999999999,20.871000000000002,15.999999999999998C20.871,18.689,18.689,20.871,16,20.871Z" transform="matrix(1,0,0,1,4,4)" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 1; fill-opacity: 1;" opacity="1" fill-opacity="1"></path>'+
+          '<rect x="0" y="0" width="32" height="32" r="0" rx="0" ry="0" fill="#000000" stroke="#000" opacity="0" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); opacity: 0;"></rect>'+
+          '</svg>')
+        .attr("alt", "Options d'affichage")
+        .css("position", "fixed")
+        .css("top", "10px")
+        .css("right", "10px")
+        .on('click', $.proxy(function(){
+            $("#" + Utils.getId("page-options")).toggle();
+        }, this))
+        .appendTo($("body"));
+    },
 
-var MH_Play_Play_action = $.extend({}, MH_Page, {
-    init : function() {
-        MH_Play_Actions_Play_Toolbox.normalizeFontSize();
-        $('select').find('optgroup').each(function(){
-            if($(this).prop('label') == "** Actions Spéciales **") {
-              $(this).css("background-color", "#99CCFF");
-              $(this).parent().css("background-color", "#99CCFF");
-            }
+    addCssToLabel : function(o) {
+        return o
+        .css("float", "left")
+        .css("font-weight", "bold")
+        .css("padding", "5px")
+        .css("text-align", "left")
+        .css("width", "250px");
+    },
+
+    addCssToInput : function(o) {
+        return o
+        .css("border", "1px solid #1E2A63")
+        .css("font-size", "12px")
+        .css("background-color", "#FFFFEE")
+        .css("padding", "1px");
+    },
+    
+
+    checkConnect : function() {
+        this.callAPI({
+            api : "isLog",
+            data : {
+                "login" : Utils.getConf("login"),
+                "password" : Utils.getConf("pswd")
+            },
+            callback : function(data) {
+                var msg = $("#KMHC_form span:first");
+                if(data.indexOf("Une erreur est survenue lors de votre identification, veuillez recommencer") > -1) {
+                    msg
+                    .css("color", "#990000")
+                    .text("Une erreur est survenue lors de votre identification, veuillez vérifier votre mot de passe.");
+                } else {
+                    msg
+                    .css("color", "#009900")
+                    .text("Identifiants de connexion validés");
+                }
+            },
+            scope : this
         });
     }
 });
 
-var MH_Play_Actions_Sorts_Play_a_Sort24 = $.extend({}, MH_Page, { // TELEK
-    init : function() {
-        MH_Play_Actions_Play_Toolbox.injectTresorsTags("", "");
-    }
-});
-
-var MH_Play_Actions_Play_a_Attack = $.extend({}, MH_Page, {
-    init : function() {
-        MH_Play_Actions_Play_Toolbox.normalizeFontSize();
-        MH_Play_Actions_Play_Toolbox.protectMonsters();
-        MH_Play_Actions_Play_Toolbox.injectTrollsTags("PJ_","");        
-        MH_Play_Actions_Play_Toolbox.injectMonstresTags("ME_","");        
-    }
-});
-
-
-var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { // Résultat de CdM
+var MH_Play_Actions_Competences_Play_a_Competence16b = $.inherit(Page, { // Résultat de CdM
     init : function() {
         var result = Utils.cleanup($("table:first").html());
         if(result.indexOf("Vous avez RÉUSSI à utiliser cette compétence") > -1) {
@@ -3201,332 +3470,57 @@ var MH_Play_Actions_Competences_Play_a_Competence16b = $.extend({}, MH_Page, { /
     }
 });
 
-var MH_Play_Actions_Play_a_Drop = $.extend({}, MH_Page, {
-    init : function() {
-        var monsterIds = $('select[name="ai_DropTo"] option').map(function(){
-            return $(this).prop("value");
-        }).filter(function(idx, value){
-            return /^\d{2,}$/.test(value);
-        }).get();
 
-        var tresorIds = $('select[name="ai_IdTarget"] option').map(function(){
-            return $(this).prop("value");
-        }).filter(function(idx, value){
-            return /^\d{2,}$/.test(value);
-        }).get();
+/*******************************************/
+/************* LAUNCH **********************/
+/*******************************************/
 
-        this.callAPIConnected({
-            api : "viewInfo",
-            data : {
-                "invi" : 0,
-                "m" : monsterIds,
-                "o" : tresorIds
-            },
-            callback : function(datas) {
-                var json = $.parseJSON(datas);
-                $.each(json.tags, $.proxy(function(key, data){
-                    var tmp = key.split(";");
-                    if(tmp[0] == "1") {
-                        var o = $('select[name="ai_DropTo"] option[value="' + tmp[1] + '"]');
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                    if(tmp[0] == "3") {
-                        var o = $('select[name="ai_IdTarget"] option[value="' + tmp[1] + '"]');
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                },this));
-            }
-        });
-
-    }
-});
-
-
-
-var MH_Play_Actions_Play_a_AmeliorationView = $.extend({}, MH_Page, {
-    init : function() {
-        $("table.mh_tdborder a.AllLinks")
-        .hover($.proxy(function(event) {
-            this.showTalentPopup($(event.target), true);
-        }, this), $.proxy(function(event) {
-            this.hideTalentPopup($(event.target));
-        }, this));
-    }
-});
-
-var MH_Play_Actions_Play_a_SortResult = $.extend({}, MH_Page, {
-    init : function() {
-        var result = $("table:first").text();
-        
-        console.log(result);
-        console.log(Utils.getConf("action"));
-        
-        if(result.indexOf("Vous avez RÉUSSI à utiliser ce sortilège") > -1) {
-
-            if(Utils.getConf("action") == "Sort20") { // AA
-                // Appel de l'API
-                this.callAPIConnected({
-                    api : "aa",
-                    data : {
-                        "aa" : result
-                    }
-                });
-            }
-
-            if(Utils.getConf("action") == "Sort13") { // TP
-                var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(result);
-                // Appel de l'API
-                this.callAPIConnected({
-                    api : "tag",
-                    data : {
-                        "type" : 5,
-                        "num" : tmp[1],
-                        "tag" : tmp[2]
-                    }
-                });
-            }
-
-            if(Utils.getConf("action") == "Sort10") { // IdT
-                var data = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(result);
-
-                // Appel de l'API
-                this.callAPIConnected({
-                    api : "tag",
-                    data : {
-                        "type" : 3,
-                        "num" : data[1],
-                        "tag" : data[2],
-                    }
-                });
-            }
-        }
-        Utils.setConf("action", "");
-    }
-});
-
-var MH_Play_Liste_Vente_ListeVente_view = $.extend({}, MH_Page, {
-    init : function() {
-        var img = $("<img src='/mountyhall/Images/fleche_bas.gif' alt='v'>")
-            .appendTo($("form[name='VenteForm'] table:first table:first td:first"))
-            .on('mouseover', function() { $(this).css("cursor", "pointer"); })
-            .on('click', function() {
-                var cbs = $(this).parents('tbody').find("input[type='checkbox']");
-                cbs.prop("checked", ! cbs.prop("checked"));
-            });
-    }
-});
-
-var MH_Play_Actions_Competences_Play_a_Competence43b = $.extend({}, MH_Page, {
-  init : function() {
-    var sons = DB_talents["Comp"][43].sons;
-    var sel = $('select.SelectboxV2');
-    sel.find('option').each(function() {
-      var s = sons[$(this).val()];
-      if (s) {
-        $(this).text($(this).text() + ' (' + s[1] + ')');
-      }
-    });
-    sel.on('change', function() {
-      var s = sons[$(this).find('option:selected').val()],
-      t = s ? s[1] : '***';
-      $(this).next().replaceWith("<span>&nbsp;" + t + "</span>");
-    });
-  }
-});
-
-
-var MH_Play_Play_e_follo = $.extend({}, MH_Page, {
-    init : function() {
-      
-        var map = this.addMap();
-        this.addActions(map);
-        this.addEdition();
-        this.displayTags();
-        this.fixMoreLess();        
-    },
-    
-    fixMoreLess : function() {
-        /* Boulets */
-        $('a[href^="javascript:afficheDetailTrPlus"]').each(function(){
-            var a = $(this);
-            var tr = $(a.parents("tr")[2]);            
-            var trTitre = tr.prev("tr:first");
-            
-            var fullname = trTitre.find("a:first").text().trim();
-            var tmp = /^(\d+)\.(.*)$/.exec(fullname);
-            var id = tmp[1];
-            
-            a.attr("id", id + "_" + a.attr("id"));
-            a.attr("href", a.attr("href").replace(/\('(.*)','(.*)'\)/, "('" + id + "_$1','" + id + "_$2')"));    
-            
-            var trHidden = $(a.parents("tr")[1]).next("tr:first");
-            trHidden.attr("id", id + "_" + trHidden.attr("id"));
-        });
-    },
-    
-    addMap : function() {
-        var p = {zf: 2.0, dx: 30, dy: 30},
-            map = MH_Map.getMap("map_mh", p);      
-        $("form[action='Play_action_Equipement.php']").after(map.div);
-        
-        try {
-            var ctn = window.parent.parent.parent.Sommaire.document;
-            var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
-            MH_Map.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,80,200,0.75)", p, "Vous êtes ici");
-        } catch(e) {}
-        
-        return {p : p, map : map};
-    },
-    
-    addActions: function(map) {
-      // Actions
-      $('form td.mh_titre3').each(function(){
-          var fullname = $(this).find("a:first").text().trim();
-          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
-          var id = tmp[1];
-          var name = tmp[2];
-          
-          var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec($(this).siblings(":nth-child(4)").text().trim());
-          MH_Map.drawPos(map.map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(50,50,0,0.5)", map.p, fullname);
-
-
-          $("<tr/>")
-          .append(
-              $("<td/>")
-              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Profil.php?ai_IdFollower=" + id + "'>Profil</a>")
-              .append(" - ")
-              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Ordres.php?ai_IdFollower=" + id + "'>Ordres</a>")
-              .append(" - ")
-              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Equipement.php?ai_IdFollower=" + id + "'>Equipement</a>")
-              .append(" - ")
-              .append("<a href='http://games.mountyhall.com/mountyhall/MH_Follower/FO_Description.php?ai_IdFollower=" + id + "'>Description</a>")
-          )
-          .insertAfter( $(this).parents("tr:first") );
-      });
-    },
-    
-    addEdition : function() {
-        Utils.addGlobalStyle([
-            'td.mh_titre3 label.editable {font-size:12px !important; }',            
-        ]);
-        
-      // Edition
-      $('form td.mh_titre3').each($.proxy(function(i, td){
-          var fullname = $(td).find("a:first").text().trim();
-          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
-          var id = tmp[1];
-          $(td).addClass("editable_ctn").append(this.getEditionField(id, 1));
-      }, this));        
-    },
-    
-    getMonsterIds : function() {
-      return $('form td.mh_titre3').map(function(i, td){
-          var fullname = $(td).find("a:first").text().trim();
-          var tmp = /^(\d+)\.(.*)$/.exec(fullname);
-          var id = tmp[1];
-          return id;
-      }).get();        
-    },
-    
-    displayTags : function() {
-        this.callAPIConnected({
-            api : "viewInfo",
-            data : {
-                "xMin" : -1000,
-                "xMax" : 1000,
-                "yMin" : -1000,
-                "yMax" : 1000,
-                "nMin" : 0,
-                "nMax" : -1000,
-                "m" : this.getMonsterIds()
-            },
-            callback : function(datas) {
-                datas = datas.replace(/\s+/g, " ");
-                var json = $.parseJSON(datas);
-                // populate tags and start handling
-                $.each(json.tags, $.proxy(function(key, tag){
-                    key = key.split(";");
-                    $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']").prev()
-                    .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
-                    .text(tag.tag);
-                }, this));
-                
-                this.handleTagEdition();
-            },
-            scope : this
-        });        
-    }
-});
-
-var MH_Follower_FO_NewOrder = $.extend({}, MH_Page, {
-  init : function() {
-      var ctn1 = null;
-      try {
-          ctn1 = window.parent.parent.parent.Sommaire.document;
-      } catch(e) {}
-
-      var ctn2 = null;
-      try {
-          ctn2 = window.parent.Contenu.document;
-      } catch(e) {}
-
-      this.showCoords(ctn1, "Ma position", "div.infoMenu");
-      this.showCoords(ctn2, "Sa position", "table.mh_tdborder_fo > tbody > tr.mh_tdtitre_fo table td:nth-child(4)");
-  },
-
-    showCoords : function(doc, title, selector) {
-        if(null != doc) {
-            if($('[name="ai_X"],[name="ai_Y"],[name="ai_N"]').length == 3) {
-                $('div.Action').append(
-                    $("<span>[" + title + "]</span>")
-                    .css("cursor", "hand")
-                    .css("margin-left", "5px")
-                    .click($.proxy(function() {
-                        var coords = $(selector, doc).first().text();
-                        var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(coords);
-                        $('[name="ai_X"]').val(tmp[1]);
-                        $('[name="ai_Y"]').val(tmp[2]);
-                        $('[name="ai_N"]').val(tmp[3]);
-                    }, this))
-                );
-            }
-        }
-    }
-
-
-});
-
-var MH_Follower_FO_NewOrderOK = $.extend({}, MH_Page, {
-  init : function() {
-      $('form').submit();
-  }
-});
-
-var MH_Follower_FO_DeleteOrder = $.extend({}, MH_Page, {
-  init : function() {
-      $('form').submit();
-  }
-});
-
-$(document).ready(function() {
+$(document).ready($.proxy(function() {
     // Initialisation de la configuration
     Utils.initConfig();
 
     // Chargement du module spécifique
     var pathname = document.location.pathname;
     var moduleName = pathname.replace(/\/mountyhall\/(.*).php.*$/, "$1").replace(/\//g, "_");
-    console.log("Searching for module " + moduleName + " by URL " + pathname);
+    Logger.log("Searching for module " + moduleName + " by URL " + pathname);
 
-    var module;
-    try {
-        module = eval(moduleName);
-    } catch(e) {
-//        console.log('catched!', e);
+    var module = null;
+    
+    // New Way
+    {
+        try {
+            module = eval("new " + moduleName + "('"+moduleName+"')");
+            Logger.log(moduleName + " loaded new way");
+            module.load();
+        } catch(e) {        
+            if(e.message.indexOf(moduleName + " is not")>-1) {
+                //console.log("> Unable to find code for page " + moduleName);
+            } else {
+                Logger.error("Error in code");
+                Logger.error(e);
+            }
+        }
     }
-
-    if(Utils.isUndefined(typeof module)) {
-        console.log("Unable to find the module " + moduleName + " for URL " + pathname);
-    } else {
-        module.load();
+    
+    // Old way
+    /*
+    if(null == module) {
+        try {
+            module = eval(moduleName);
+            Logger.log(moduleName + " loaded old way");
+            module.load();
+        } catch(e) {
+            if(e.message.indexOf(moduleName + " is not defined")>-1) {
+                //console.log("> Unable to find code for page " + moduleName);
+            } else {
+                Logger.error("Error in code");
+                Logger.error(e);
+            }            
+        }
     }
-});
+    */
+    
+    if(null == module) {
+        Logger.warn(" > Unable to find the module " + moduleName + " for URL " + pathname);
+    }
+}, this));
