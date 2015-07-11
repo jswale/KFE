@@ -3016,21 +3016,44 @@ var MH_Play_Play_e_follo = $.inherit(Page, {
         });
     },
     
+    extractPosition : function(text) {
+        var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(text);                      
+        if(null == tmp) {
+            return null;
+        } 
+        return {
+            x: parseInt(tmp[1]),
+            y: parseInt(tmp[2]),
+            n: parseInt(tmp[3])
+        };
+    },
+    
+    getMyPosition : function() {
+        try {
+            var text = $("div.infoMenu:first", window.parent.parent.parent.Sommaire.document).text();
+            var myPos = this.extractPosition(text);
+            return myPos;
+         } catch(e) {}
+        return null;
+    },
+    
     addMap : function() {
         var p = {zf: 2.0, dx: 30, dy: 30},
             map = this.mapper.getMap("map_mh", p);      
         $("form[action='Play_action_Equipement.php']").after(map.div);
         
-        try {
-            var ctn = window.parent.parent.parent.Sommaire.document;
-            var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)/.exec($("div.infoMenu", ctn).first().text());
-            this.mapper.drawPos(map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(0,80,200,0.75)", p, "Vous êtes ici");
-        } catch(e) {}
+        var myPos = this.getMyPosition();
+        if(null != myPos) {
+            this.mapper.drawPos(map, myPos.x, myPos.y, "rgba(0,80,200,0.75)", p, "Vous êtes ici");
+        }
         
         return {p : p, map : map};
     },
     
     addActions: function() {
+        
+      var myPos = this.getMyPosition();
+        
       // Actions
       $('form td.mh_titre3').each($.proxy(function(i, td){     
           td = $(td);
@@ -3039,8 +3062,14 @@ var MH_Play_Play_e_follo = $.inherit(Page, {
           var id = tmp[1];
           var name = tmp[2];
           
-          var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(td.siblings(":nth-child(4)").text().trim());
-          this.mapper.drawPos(this.map.map, parseInt(tmp[1]), parseInt(tmp[2]), "rgba(50,50,0,0.5)", this.map.p, fullname);
+          var goPos = this.extractPosition(td.siblings(":nth-child(4)").text().trim());
+          if(null != goPos) {
+              var distance = "";
+              if(null != myPos) {
+                  distance = " (à " + Math.max(Math.abs(goPos.x-myPos.x),Math.abs(goPos.y-myPos.y),Math.abs(goPos.n-myPos.n)) + " cases)";
+              }
+              this.mapper.drawPos(this.map.map, goPos.x, goPos.y, "rgba(50,50,0,0.5)", this.map.p, fullname+distance);
+          }
 
           $("<tr/>")
           .append(
