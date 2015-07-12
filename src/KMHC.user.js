@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-1
+// @version       1.0.1-2
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -2541,7 +2541,8 @@ var MH_Play_Play_vue = $.inherit(Page, {
         var self = this,
             shareCallback = function() {
                 var ids = [];
-                $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(3) input:checked").each(function() {
+                var shareColId = self.getColumnId("mh_vue_hidden_trolls", "Envoyer");
+                $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(" + shareColId + ") input:checked").each(function() {
                     ids.push($(this).val());
                 });
                 window.open(
@@ -2553,13 +2554,14 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     "Contenu"
                 );
             },
-            selectCallback = function() {
+            selectCallback = function(event) {
+                var shareBtn = $(event.target);
                 var refColId = self.getColumnId("mh_vue_hidden_trolls", "Réf.");
 
-                $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first td:nth-child(2)").after($("<td/>"));
+                $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first th:nth-child(" + refColId + ")").before($("<th>Envoyer</th>"));
                 $("#mh_vue_hidden_trolls table:first tr.mh_tdpage").each(function() {
                     var trollId = $(this).children("td:nth-child("+refColId+")").text();
-                    $(this).children('td:nth-child(2)').after(
+                    $(this).children('td:nth-child(' + refColId + ')').before(
                         $("<td/>")
                         .attr("width", 5)
                         .append(
@@ -2570,17 +2572,17 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     );
                 });
 
-                $(this)
+                $(shareBtn)
                 .before(
-                    self.display.mhButton.mhButton("Annuler", function() {
-                        $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first td:nth-child(3)").remove();
-                        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(3)").remove();
+                    self.display.mhButton("Annuler", function(event) {
+                        var cancelBtn = $(event.target);
+                        var shareColId = self.getColumnId("mh_vue_hidden_trolls", "Envoyer");
+                        $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first th:nth-child("+shareColId+")").remove();
+                        $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child("+shareColId+")").remove();
 
-                        $(this).siblings("span").remove();
-                        $(this).next()
-                        .off()
-                        .on('click', selectCallback);
-                        $(this).remove();
+                        $(cancelBtn).siblings("span").remove();
+                        $(cancelBtn).next().off().on('click', selectCallback);
+                        $(cancelBtn).remove();
                     })
                 )
                 .after(
