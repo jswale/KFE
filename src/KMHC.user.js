@@ -385,7 +385,7 @@ var Page = $.inherit({
     
     __constructor : function(moduleName) { // constructor
         this.moduleName = moduleName;
-        this.logger.debug("> Module " + this.moduleName + " founded");
+        this.logger.debug("> Module " + this.moduleName + " found");
     },
 
     load : function() {
