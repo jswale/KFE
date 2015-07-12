@@ -5,13 +5,13 @@
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
-// @require       https://github.com/dfilatov/jquery-plugins/raw/master/src/jquery.inherit/jquery.inherit.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2015-06-15_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2015-06-15_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-23_21-22
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-11-19_10-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2015-03-09_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/addon/editables.js
+// @require       https://github.com/jswale/KFE/raw/master/src/addon/jquery.inherit.min.js
 // @downloadURL   https://github.com/jswale/KFE/raw/master/src/KMHC.user.js
 // @updateURL     https://github.com/jswale/KFE/raw/master/src/KMHC.meta.js
 // @grant         GM_addStyle
