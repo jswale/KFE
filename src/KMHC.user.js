@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-2
+// @version       1.0.1-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1797,11 +1797,13 @@ var MH_Play_Play_vue = $.inherit(Page, {
         this.sendView();
         $("#mhPlay").attr("data-view", "main");
         
-        this.fixTableSize();
+        this.addTrollInfoColumns();
+        
         this.addPharozViewLinks();
         this.highlightTreasures();
         this.addMonsterCdmLink();
         this.addBarycentreUI();
+        this.getBBcodeVersion();
         this.addSameXYN();
         this.addToggleTresors();        
         
@@ -1815,6 +1817,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
         }
         this.addTrollEventLink();
         this.addInfos();
+        this.fixTableSize();
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
     },
@@ -1835,6 +1838,87 @@ var MH_Play_Play_vue = $.inherit(Page, {
                 $(this).attr("width", widths[$(this).parent().children().index(this)]);
             });
         });
+    },
+    
+    addTrollInfoColumns : function() {
+        // Ajout de la colonne titre
+        var guildeColId = this.getColumnId("mh_vue_hidden_trolls", "Guilde");
+        $("#mh_vue_hidden_trolls table:first thead tr.mh_tdtitre:first th:nth-child("+guildeColId+")").after('<th width="160px" data-sort-ignore="true"><b>Infos</b></th>');
+
+        // Ajout des colonnes
+        $("#mh_vue_hidden_trolls table:first tbody tr.mh_tdpage").each(function(){
+            $(this).children('td:nth-child(' + guildeColId + ')').after($("<td/>"));
+        });         
+    },
+    
+    getBBcodeVersion : function() {
+       
+        $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_tresors"], $.proxy(function(i, tableId) {
+
+            $("#" + tableId + " table:first").parents("table").prev().find("td:nth-child(2) > a").parents("tr").first()
+                    .append(
+                        $("<td/>")
+                        .attr("align", "left")
+                        .attr("width", "50")
+                        .append(
+                            $("<input/>")
+                            .addClass("mh_form_submit")
+                            .attr("type", "button")
+                            .attr("value", "BBCode")
+                            .on('click', $.proxy(function(evt){
+                                var cmp = $(evt.target);
+                                
+                                var colsNames = ["Dist.", "Réf.", "Niveau", ["Nom", "Type"], "X", "Y", "N"];
+                                var columns = [];
+                                
+                                $.each(colsNames, $.proxy(function(i, names) {
+                                    names = $.isArray(names) ? names : [names];
+                                    $.each(names, $.proxy(function(i, name) {
+                                        var colId = this.getColumnId(tableId, name);
+                                        if(null != colId) {
+                                            columns.push({
+                                                id: colId, 
+                                                name:name
+                                            });
+                                            return false;
+                                        }
+                                    }, this));
+                                }, this));
+                                
+                                var lines = [];
+                                
+                                // Header
+                                var line = [];
+                                $.each(columns, $.proxy(function(i, column) {
+                                    line.push(column.name);
+                                }, this));
+                                lines.push(line);
+                                
+                                // Body
+                                var trs = $("#" + tableId + " table:first tr.mh_tdpage:visible");
+                                trs.each($.proxy(function(iTr, tr) {
+                                    var line = [];
+                                    $.each(columns, $.proxy(function(i, column) {
+                                        line.push($(tr).find("td:nth-child(" + column.id + ")").text());
+                                    }, this));
+                                    lines.push(line);
+                                }, this));
+                                
+                                // Format
+                                var bbcode = "[table]" + $.map(lines, function(cols, iLine) {
+                                    return "[tr]" + $.map(cols, function(col) {
+                                        return "[td]" + (0 == iLine ? ("[b]" + col + "[/b]") : col) + "[/td]";
+                                    }).join("") + "[/tr]";
+                                }).join("") + "[/table]";
+                                
+                                alert(bbcode);
+
+                            },this))
+                         )
+                    );
+
+            }, this)
+        );
     },
     
     addToggleTresors : function() {
@@ -2725,7 +2809,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
         var rV = parseInt(r[2]);
 
         // Fix
-        //$("#mh_vue_hidden_trolls table:first thead tr.mh_tdpage th:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");
+        //$("#mh_vue_hidden_trolls table:first thead tr.mh_tdpage th:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");                            
 
         this.callAPIConnected({
             api : "viewInfo",
@@ -2781,11 +2865,13 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     .attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
                     .addClass("mh_tdpage")
                     .append($("<td/>").text(d))
+                    .append($("<td/>").text('-'))
                     .append($("<td/>").append('<a href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);" class="mh_trolls_0">' + trollId + '</a>'))
                     .append($("<td/>").append('<a href="javascript:EPV(' + trollId + ')" class="mh_trolls_0">' + data.name + '</a> [' + (data.camou ? "Camouflé" : "") + (data.invi ? "Invisible" : "") + ']'))
                     .append($("<td/>").text(data.lvl))
                     .append($("<td/>").text(data.race))
                     .append($("<td/>").append(data.guildId ? ('<a href="javascript:EAV(' + data.guildId + ',750,550)" class="mh_links">' + data.guildName + '</a>') : ''))
+                    .append($("<td/>"))
                     .append(this.addSameXYN_hoverTd($("<td/>")).text(data.x).attr("align", "center"))
                     .append(this.addSameXYN_hoverTd($("<td/>")).text(data.y).attr("align", "center"))
                     .append(this.addSameXYN_hoverTd($("<td/>")).text(data.n).attr("align", "center"))
@@ -2810,6 +2896,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
                         .append($("<td/>").text('-'))
+                        .append($("<td/>"))                        
                         .append(this.addSameXYN_hoverTd($("<td/>")).text(x).attr("align", "center"))
                         .append(this.addSameXYN_hoverTd($("<td/>")).text(y).attr("align", "center"))
                         .append(this.addSameXYN_hoverTd($("<td/>")).text(n).attr("align", "center"))
@@ -2821,7 +2908,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
 
                     var pvMin = data.pv;
                     var pvMax = Math.max(data.pv, data.pvMax);
-                    $("[data-troll-info='" + trollId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")")
+                    $("[data-troll-info='" + trollId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Infos")+")")
                     .append(
                         $("<div/>")
                         .css("float", "right")
