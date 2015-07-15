@@ -109,10 +109,9 @@ var Utils = function() {
             return CONF_KEY + key;
         },
 
-        getScriptVersion() {
-            return (typeof (GM_info) != 'object')
-                ? { script: {version: GM_getMetadata("version").join('')} }
-                : GM_info.script.version;
+        getScriptInfo() {
+            return (typeof GM_info === 'undefined') ?
+            { name: GM_getMetadata("name"), version: GM_getMetadata("version").join('') } : GM_info.script;
         },
 
         convertDate : function(date) {
@@ -3521,7 +3520,7 @@ var MH_Play_Play_option = $.inherit(Page, {
             .append($("<div/>")
                     .css("text-align", "right")
                     .css("font-size", "smaller")
-                    .append("v" + Utils.getScriptVersion() + " [<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js'>Recharger le script</a>]")
+                    .append("<br/>" + Utils.getScriptInfo().name + " v" + Utils.getScriptInfo().version + " [<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_blank'>Recharger le script</a>]")
                    )
         )
         .appendTo($("body"));
