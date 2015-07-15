@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-3
+// @version       1.0.1-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -107,6 +107,12 @@ var Utils = function() {
 
         getId : function(key) {
             return CONF_KEY + key;
+        },
+
+        getScriptVersion() {
+            return (typeof (GM_info) != 'object')
+                ? { script: {version: GM_getMetadata("version").join('')} }
+                : GM_info.script.version;
         },
 
         convertDate : function(date) {
@@ -3515,7 +3521,7 @@ var MH_Play_Play_option = $.inherit(Page, {
             .append($("<div/>")
                     .css("text-align", "right")
                     .css("font-size", "smaller")
-                    .append("[<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_new'>Recharger le script</a>]")
+                    .append("v" + Utils.getScriptVersion() + " [<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js'>Recharger le script</a>]")
                    )
         )
         .appendTo($("body"));
