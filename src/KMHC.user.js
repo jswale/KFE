@@ -3520,7 +3520,7 @@ var MH_Play_Play_option = $.inherit(Page, {
             .append($("<div/>")
                     .css("text-align", "right")
                     .css("font-size", "smaller")
-                    .append("<br/>" + Utils.getScriptInfo().name + " v" + Utils.getScriptInfo().version + " [<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_blank'>Recharger le script</a>]")
+                    .append("<br/>" + Utils.getScriptInfo().name + " v" + Utils.getScriptInfo().version + " [<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_top'>Recharger le script</a>]")
                    )
         )
         .appendTo($("body"));
