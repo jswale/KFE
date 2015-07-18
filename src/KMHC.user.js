@@ -2960,7 +2960,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         $("<div/>")
                         .css("float", "left")
                         .css("margin", "0 2px 0 0")
-                        .css("width", "100")
+                        .css("width", "calc(100% - 35px)")
                         .css("height", "14")
                         .css("border", "1px solid black")
                         .css("background-color", "#FFFFFF")
