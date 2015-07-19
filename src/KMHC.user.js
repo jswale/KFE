@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-4
+// @version       1.0.1-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -109,9 +109,13 @@ var Utils = function() {
             return CONF_KEY + key;
         },
 
-        getScriptInfo() {
+        getScriptInfo() {            
             return (typeof GM_info === 'undefined') ?
-            { name: GM_getMetadata("name"), version: GM_getMetadata("version").join('') } : GM_info.script;
+            { 
+                name: GM_getMetadata("name"), 
+                version: GM_getMetadata("version").join(''),
+                downloadURL: GM_getMetadata("downloadURL")
+            } : GM_info.script;
         },
 
         convertDate : function(date) {
@@ -414,8 +418,9 @@ var Page = $.inherit({
     
     /******************************************/
     
-    injectTags : function(dataType, dataId, prefix, suffix) {
-        var ids = $("select option[value!='']").map(function(){
+    injectTags : function(dataType, dataId, prefix, suffix, selectName) {
+        var selectSelector = "select" + (selectName ? ("[name='" + selectName + "']") : "");
+        var ids = $(selectSelector + " option[value!='']").map(function(){
             var v = $(this).prop("value");
             v = v.substr(prefix.length, v.length - suffix.length);
             return v;
@@ -429,41 +434,41 @@ var Page = $.inherit({
         this.callAPIConnected({
             api : "viewInfo",
             data : data,
-            callback : function(datas) {
+            callback : $.proxy(function(datas) {
                 var json = $.parseJSON(datas);
                 
                 $.each(json.tags, $.proxy(function(key, data){
                     var tmp = key.split(";");
                     if(tmp[0] == dataId) {
-                        var o = $("select option[value='" + prefix + + tmp[1] + suffix + "']");
+                        var o = $(selectSelector + " option[value='" + prefix + + tmp[1] + suffix + "']");
                         o.text(o.text() + " - " + data.tag);
                     }
                 },this));
                 
                 if("m" == dataType) {
                     $.each(json.monsters, $.proxy(function(key, data) {
-                        var o = $("select option[value='" + prefix + key + suffix + "']");
+                        var o = $(selectSelector + " option[value='" + prefix + key + suffix + "']");
                         o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
                     },this));
                 }
-            }
+            }, this)
         });
     },
     
-    injectMonstresTags : function(prefix, suffix) {
-        this.injectTags("m", "1", prefix, suffix);
+    injectMonstresTags : function(prefix, suffix, selectName) {
+        this.injectTags("m", "1", prefix, suffix, selectName);
     },
     
-    injectTrollsTags : function(prefix, suffix) {
-        this.injectTags("t", "2", prefix, suffix);
+    injectTrollsTags : function(prefix, suffix, selectName) {
+        this.injectTags("t", "2", prefix, suffix, selectName);
     },
     
-    injectTresorsTags : function(prefix, suffix) {
-        this.injectTags("o", "3", prefix, suffix);
+    injectTresorsTags : function(prefix, suffix, selectName) {
+        this.injectTags("o", "3", prefix, suffix, selectName);
     },
         
-    injectChampignonsTags : function(prefix, suffix) {
-        this.injectTags("c", "4", prefix, suffix);
+    injectChampignonsTags : function(prefix, suffix, selectName) {
+        this.injectTags("c", "4", prefix, suffix, selectName);
     },    
 
     /******************************************/    
@@ -777,7 +782,9 @@ var MH_Play_Play_menu = $.inherit(Page, {
             $("<a/>")
             .css("margin", "5px")
             .css("color", "#ffffcc")
-            .attr("href", "https://github.com/jswale/KFE/raw/master/src/KMHC.user.js")
+            .attr("href", Utils.getScriptInfo().downloadURL)
+            .attr("title", Utils.getScriptInfo().name + " v" + Utils.getScriptInfo().version)
+            .attr("target", "_top")
             .text("MAJ")
         )
         .appendTo($("body"));
@@ -913,6 +920,10 @@ var MH_Play_Actions_Abstract = $.inherit(Page, {
         switch(id) {
             case "4": // Ramasser un trésor
                 this.injectTresorsTags("", "_TE");
+                break;
+                
+            case "15": // Abandonner
+                this.injectMonstresTags("","", "ai_DropTo");
                 break;
 
             case "26": // Donner des GG
@@ -3496,7 +3507,7 @@ var MH_Play_Play_option = $.inherit(Page, {
                     $("<br/>").css("clear","left")
                 ];
             },this)
-                         ))
+            ))
             .append(
                 self.display.mhButton("Enregistrer", function(){
                     $(this).val("Enregistré");
@@ -3520,10 +3531,10 @@ var MH_Play_Play_option = $.inherit(Page, {
             .append($("<div/>")
                     .css("text-align", "right")
                     .css("font-size", "smaller")
-                    .append("<br/>" + Utils.getScriptInfo().name + " v" + Utils.getScriptInfo().version + " [<a href='https://github.com/jswale/KFE/raw/master/src/KMHC.user.js' target='_top'>Recharger le script</a>]")
+                    .append("<br/>" + Utils.getScriptInfo().name + " v" + Utils.getScriptInfo().version + " [<a href='" + Utils.getScriptInfo().downloadURL + "' target='_top'>Recharger le script</a>]")
                    )
         )
-        .appendTo($("body"));
+        .appendTo($("body"));               
 
         $('<svg height="40" version="1.1" width="40" xmlns="http://www.w3.org/2000/svg">'+
           '<defs style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">'+
