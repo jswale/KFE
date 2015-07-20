@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-5
+// @version       1.0.1-6
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1951,6 +1951,8 @@ var MH_Play_Play_vue = $.inherit(Page, {
     addToggleTresors : function() {
         
         Utils.addGlobalStyle(['.view-tresor-hideTagged { display: none !important; }']);        
+        Utils.addGlobalStyle(['.view-tresor-disabled { -webkit-filter: grayscale(100%); -moz-filter: grayscale(100%); -o-filter: grayscale(100%); -ms-filter: grayscale(100%); filter: grayscale(100%);  }']);
+        Utils.addGlobalStyle(['.view-tresor input { display: none; }']);
         
         var td = $("#mh_vue_hidden_tresors table:first").parents("table").prev().find("a[name='tresors']").parents("td:first");
         td.append(
@@ -1961,6 +1963,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
         );
         td.append(
             $("<span/>")
+            .addClass("view-tresor")
             .css("margin-right", "5px")
             .append(
                 $("<input/>")            
@@ -1969,28 +1972,43 @@ var MH_Play_Play_vue = $.inherit(Page, {
                 .click(function(event) {                    
                     var target = $(event.target);                    
                     var checked = target.is(':checked');
-                    Utils.setConf(target.attr("id"), checked);                    
+                    target.parents("span:first").find("img").toggleClass("view-tresor-disabled");
+                    Utils.setConf(target.attr("id"), checked);
                     $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr:has(label[title])")[checked ? "addClass" : "removeClass"](target.attr("id"));
                 }),
                 $("<label/>")
                 .attr("for", "view-tresor-hideTagged")
-                .text("Objets identifiés")
+                .append($("<img src='http://games.mountyhall.com/mountyhall/Images/Icones/I_Book.png'/>").css("height", "20").attr("title", "Objets identifiés"))
               )
         );
         // L'initialisation se fait dans la methode de recuperation des tags
             
-        $.each(["Composant", "Potion", "Parchemin", "Carte", "Outils", "Minerai", {label:"Bidouille", alias:["[Bidouille]"]}, {label:"GG", alias:["Piécettes à Miltown","Gigots de Gob"], everywhere : true}], $.proxy(function(idType, type) {
-            var label = type;
-            var alias = type;
-            var everywhere = false;
+        $.each([
+            {label:"Composant", icon:'S_Shadow03'}, 
+            {label:"Potion", icon:'P_Medicine05'}, 
+            {label:"Parchemin", icon:'I_Scroll02'}, 
+            {label:"Carte", icon:'I_Map'}, 
+            {label:"Outils", icon:'W_Axe001'}, 
+            {label:"Minerai", icon:'I_Crystal01'}, 
+            {label:"Casque", icon:'C_Elm03'}, 
+            {label:"Armure", icon:'A_Armor05'}, 
+            {label:"Talisman", icon:'Ac_Necklace03'}, 
+            {label:"Bottes", icon:'A_Shoes02'}, 
+            {label:"Armes", icon:'S_Sword07', alias:["Arme (1 main)", "Arme (2 mains)", "Lame en pierre"]},
+            {label:"Bidouille", icon:'I_WolfFur', alias:["[Bidouille]"]}, 
+            {label:"GG", icon:'E_Gold02', alias:["Piécettes à Miltown","Gigots de Gob"], everywhere : true}
+        ], $.proxy(function(idType, type) {
+            var label, alias, everywhere, icon;
             if($.type( type ) == "object") {
                 label = type.label;
-                alias = type.alias;
-                everywhere = type.everywhere;
+                icon = type.icon;
+                alias = type.alias || type.label;
+                everywhere = type.everywhere || false;
             }
             Utils.addGlobalStyle(['.view-tresor-hide' + idType +' { display: none !important; }']);
             td.append(
                 $("<span/>")
+                .addClass("view-tresor")
                 .css("margin-right", "5px")
                 .append(
                     $("<input/>")            
@@ -2002,7 +2020,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     }, this)),
                     $("<label/>")
                     .attr("for", "view-tresor-hide" + idType)
-                    .text(label)
+                    .append($("<img src='http://games.mountyhall.com/mountyhall/Images/Icones/" + icon + ".png'/>").css("height", "20").attr("title", label))
                 )
             );
             if("true" === Utils.getConf("view-tresor-hide" + idType)) {
@@ -2021,6 +2039,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
         var typeColId = this.getColumnId("mh_vue_hidden_tresors", "Type");
         
         texts = $.isArray(texts) ? texts : [texts];
+        target.parents("span:first").find("img").toggleClass("view-tresor-disabled");
         var checked = target.is(':checked');
         Utils.setConf(target.attr("id"), checked);
         $("#mh_vue_hidden_tresors").find("> td > table > tbody > tr > td:nth-child(" + typeColId + ")").each(function(){            
