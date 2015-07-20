@@ -1988,7 +1988,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
             {label:"Potion", icon:'P_Medicine05'}, 
             {label:"Parchemin", icon:'I_Scroll02'}, 
             {label:"Carte", icon:'I_Map'}, 
-            {label:"Outils", icon:'W_Axe001'}, 
+            {label:"Outils", icon:'E_Gold01'}, 
             {label:"Minerai", icon:'I_Crystal01'}, 
             {label:"Casque", icon:'C_Elm03'}, 
             {label:"Armure", icon:'A_Armor05'}, 
