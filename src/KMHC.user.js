@@ -113,7 +113,7 @@ var Utils = function() {
             if(typeof GM_info !== 'undefined') {
                 return {
                     name: GM_info.script.name,
-                    version: GM_info.script.version.join(''),
+                    version: GM_info.script.version,
                     downloadURL: GM_info.scriptMetaStr.match(/@downloadURL\s+(.*)\s*/i)[1]
                 };
             }
