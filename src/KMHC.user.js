@@ -109,13 +109,19 @@ var Utils = function() {
             return CONF_KEY + key;
         },
 
-        getScriptInfo() {            
-            return (typeof GM_info === 'undefined') ?
-            { 
-                name: GM_getMetadata("name"), 
+        getScriptInfo() {
+            if(typeof GM_info !== 'undefined') {
+                return {
+                    name: GM_info.script.name,
+                    version: GM_info.script.version.join(''),
+                    downloadURL: GM_info.scriptMetaStr.match(/@downloadURL\s+(.*)\s*/i)[1]
+                };
+            }
+            return {
+                name: GM_getMetadata("name"),
                 version: GM_getMetadata("version").join(''),
                 downloadURL: GM_getMetadata("downloadURL")
-            } : GM_info.script;
+            };
         },
 
         convertDate : function(date) {
