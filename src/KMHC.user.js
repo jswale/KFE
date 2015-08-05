@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-9
+// @version       1.0.1-10
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -635,10 +635,10 @@ var Page = $.inherit({
             levels[levelMax] = parseInt(prct);
 
         } else {
-            var tmp = link.parents("tr:first").find("td:nth-child(3)").text().replace(/[\n\s->niveau%\)]/g, "").split("(");
+            var tmp = link.parents("tr:first").find("td:nth-child(8)").text().trim().split("\n");
             for(var j = 0; j < tmp.length; ++j) {
-                var f = (tmp[j]).split(":");
-                levels[f[0]] = f[1];
+                var p = /niveau\s+(\d+)\s+:\s+(\d+)\s+%/.exec(tmp[j]);
+                levels[p[1]] = p[2];
             }
         }
         // ----------------
@@ -1998,6 +1998,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
             {label:"Minerai", icon:'I_Crystal01'}, 
             {label:"Casque", icon:'C_Elm03'}, 
             {label:"Armure", icon:'A_Armor05'}, 
+            {label:"Bouclier", icon:'E_Metal02'}, 
             {label:"Talisman", icon:'Ac_Necklace03'}, 
             {label:"Bottes", icon:'A_Shoes02'}, 
             {label:"Armes", icon:'S_Sword07', alias:["Arme (1 main)", "Arme (2 mains)", "Lame en pierre"]},
