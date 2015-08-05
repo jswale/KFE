@@ -1391,7 +1391,7 @@ var MH_Play_Play_profil = $.inherit(Page, {
                 $("<tr/>")
                 .attr("data-actionType-addon", "true")
                 .hide()
-                .append($("<td/>"))                
+                .append($("<td/>"))
                 .append(
                     $("<td/>")
                     .append(
@@ -1403,9 +1403,18 @@ var MH_Play_Play_profil = $.inherit(Page, {
                 )
                 .append(
                     $("<td/>")
-                    .attr("align", "right")
-                    .append("<b><b>-&gt; niveau 1 : 10 %</b></b>")
+                    .attr("align", "middle")
+                    .append("<b>1</b>")
                 )
+                .append(
+                    $("<td/>")
+                    .append("<b>0 %</b>")
+                )
+                .append(
+                    $("<td/>")
+                    .append(("Sort" == actionType ? "80" : "90") + " %")
+                )
+                .append($("<td/>"))
                 .appendTo(ctn);
             }, this));
             
