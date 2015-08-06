@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-10
+// @version       1.0.1-11
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1828,9 +1828,10 @@ var MH_Play_Play_vue = $.inherit(Page, {
         this.sendView();
         $("#mhPlay").attr("data-view", "main");
         
-        this.changeTrollColumnsOrder();
-        this.addTrollInfoColumns();
+        $("#mh_vue_hidden_trolls table:first thead tr.mh_tdtitre th:nth-child(" + this.getColumnId("mh_vue_hidden_trolls", "Niv.") + ")").text("Niveau").width("60px");
         
+        this.changeTrollColumnsOrder()
+        this.addTrollInfoColumns();
         this.addPharozViewLinks();
         this.highlightTreasures();
         this.addMonsterCdmLink();
@@ -1850,6 +1851,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
         this.addTrollEventLink();
         this.addInfos();
         this.fixTableSize();
+        
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
     },
@@ -2889,7 +2891,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                 "l" : this.getLieuIds(),
                 "c" : this.getChampigonIds()
             },
-            callback : function(datas) {
+            callback : function(datas) {                
                 datas = datas.replace(/\s+/g, " ");
                 var json = $.parseJSON(datas);
 
