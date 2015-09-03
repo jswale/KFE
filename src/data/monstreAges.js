@@ -65,7 +65,7 @@ var DB_monsterAges = {
 		"Supérieure" : {
 			"level" : 5
 		},
-		"Suprème" : {
+		"Suprême" : {
 			"level" : 6
 		},
 		"Ultime" : {
