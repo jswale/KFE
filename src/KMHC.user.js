@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-11
+// @version       1.0.1-12
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2015-06-15_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2015-06-15_12-00
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2014-10-23_21-22
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2015-09-04_20-33
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-11-19_10-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2015-03-09_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/addon/editables.js
@@ -3086,7 +3086,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     ctn.attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
                     .text(tag.tag);
                     
-                    if("3" == key[0] && !tag.tag.match(/^Rune/) && tag.tag.match(/.*(de l'Aigle|des Béhémoths|des Cyclopes|des Enragés|de Feu|des Mages|de l'Orage|de l'Ours|du Pic|du Rat|de Résistance|de la Salamandre|du Temps|de la Terre|du Sable|des Vampires|des Duellistes|des Champions|des Anciens|du Roc|des Tortues|du Vent).*/)) {
+                    if("3" == key[0] && !tag.tag.match(/^Rune/) && tag.tag.match(/.*(de l'Aigle|des Béhémoths|des Cyclopes|des Enragés|de Feu|des Mages|de l'Orage|de l'Ours|du Pic|du Rat|de Résistance|de la Salamandre|du Temps|de la Terre|du Sable|des Vampires|des Duellistes|des Champions|des Anciens|du Roc|des Tortues|du Vent|en Mithril).*/)) {
                         ctn.parents("tr:first").find("> td").css("background-color", "#E9967A");
                     }                    
                     
