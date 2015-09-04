@@ -15,7 +15,10 @@ Manque les details pour les sorts: Précision Magique, Puissance Magique
 ### Features
 
 - Connexion automatique à l'outil
-- Envoi automatique des CdM/AA/profil/vue
 - Ajout de paramètres spécifiques dans les pages
-- Possibilité de taguer les monstres/trolls/lieux/trésors
+- Envoi automatique des CdM/AA/profil/vue (lors de l'action ou depuis la messagerie)
+- Système d'affichage/édition in-situ de tags sur les monstres/trolls/lieux/trésors
+- Affichage des trolls cachés/invisibles connus dans l'outil
+- Système de gestion de missions
+- Base interne de données de monstres
 - ...
