@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-15
+// @version       1.0.1-16
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -410,8 +410,7 @@ var Page = $.inherit({
             '.editable { margin-left: 10px; }',
             '.editable:after { content: ""; display: none; opacity: 1; margin-left: 8px; width: 12px; height: 12px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAFhJREFUKFOVjgEKgCAQBH1m/v8hG3N5cdWmuDCgMCM2SVN6PwR5/wiVIcYysiKk/I6mMuNc46WcG+fnl1YybMmwJcMtV5E5GezrfzJEYCIrAwuphFa8UDsBgSOr5cVAQ8gAAAAASUVORK5CYII=); }',
             '.editable_ctn:hover .editable:after {display:inline-block; }',
-            '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }',
-            'input.mh_form_submit { color: #AEFFAE; }'
+            '.editable + input { margin: 0 0 0 10px; font-family: monospace; font-size: 9pt; height: 14px; border: none; display: none; }'
         ]);
         
         this.init();
@@ -2781,7 +2780,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
     },
 
     addSameXYN : function() {
-        $("<style type='text/css'> tr.xyn td { background-color:beige;} </style>").appendTo("head");
+        $("<style type='text/css'> tr.xyn td { background-color:beige;} tr.xyn-locked td { background-color:Cornsilk !important;} </style>").appendTo("head");
 
         $.each(["mh_vue_hidden_monstres", "mh_vue_hidden_trolls", "mh_vue_hidden_lieux", "mh_vue_hidden_tresors", "mh_vue_hidden_champignons"], $.proxy(function(idx, tableId){
             var xId = this.getColumnId(tableId, "X");
@@ -2803,6 +2802,10 @@ var MH_Play_Play_vue = $.inherit(Page, {
     },
 
     addSameXYN_hoverTd : function(td) {
+        td.click(function(){
+            var tr = $(this).parent("tr");
+            $('tr[data-xyn="' + tr.attr("data-xyn") + '"]').toggleClass("xyn-locked");
+        });
         td.hover(
             function(){
                 var tr = $(this).parent("tr");
