@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-16
+// @version       1.0.1-17
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1859,9 +1859,83 @@ var MH_Play_Play_vue = $.inherit(Page, {
         this.addTrollEventLink();
         this.addInfos();
         this.fixTableSize();
+        this.addTeamRules();
         
         // Tune ihm
         $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
+    },
+    
+    addTeamRules : function() {
+        var self = this;
+        $("<div/>")
+        .addClass("mh_tdtitre")
+        .attr("id", "data-rules")
+        .css("border", "1px solid black")
+        .css("margin-bottom", "10px")
+        .append(
+            $("<div/>")
+            .css("font-weight", "bold")
+            .css("text-align", "center")
+            .text("Consignes")
+            .append(
+                $("<span/>")
+                .css("margin-left", "10px")
+                .css("font-size", "10px")
+                .addClass("rules-info")
+            )
+        )
+        .append(
+            $("<textarea/>")
+            .css("width", "100%")
+            .css("height", "120px")
+        )        
+        .append(
+            $("<input/>")
+            .attr("type", "button")
+            .addClass("mh_form_submit")
+            .css("text-align", "center")
+            .val("Mettre à jour")
+            .click(function(){
+                self.callAPIConnected({
+                    api : "tag",
+                    data : {
+                        "type" : "5",
+                        "num" : "1",
+                        "tag" : $("#data-rules textarea").val()
+                    },
+                    callback : function() {
+                        $("#data-rules input").val("Mis à jour...");
+                    },
+                    scope : self                    
+                });                
+                
+            })
+        )        
+        .insertAfter($("form[name='LimitViewForm']"));
+        
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+                "xMin" : -1000,
+                "xMax" : 1000,
+                "yMin" : -1000,
+                "yMax" : 1000,
+                "nMin" : 0,
+                "nMax" : -1000,
+                "l" : ["1"]
+            },
+            callback : function(datas) {
+                datas = datas.replace(/\s+/g, " ");
+                var json = $.parseJSON(datas);
+                // populate tags and start handling
+                var tag = json.tags["5;1"];
+                if(tag) {
+                    $("#data-rules textarea").val(tag.tag);
+                    $("#data-rules span.rules-info").text("(Par " + tag.trollName + " le " + this.utils.formatTime(tag.date)+")");
+                }
+            },
+            scope : this
+        });         
     },
     
     changeTrollColumnsOrder : function() {
