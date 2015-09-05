@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-12
+// @version       1.0.1-13
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -2014,6 +2014,8 @@ var MH_Play_Play_vue = $.inherit(Page, {
             {label:"Bottes", icon:'A_Shoes02'}, 
             {label:"Armes", icon:'S_Sword07', alias:["Arme (1 main)", "Arme (2 mains)", "Lame en pierre"]},
             {label:"Bidouille", icon:'I_WolfFur', alias:["[Bidouille]"]}, 
+            {label:"Coquillage", icon:'I_BirdsBeak'}, 
+            {label:"Apocryphe", icon:'S_Fire08'}, 
             {label:"GG", icon:'E_Gold02', alias:["Piécettes à Miltown","Gigots de Gob"], everywhere : true}
         ], $.proxy(function(idType, type) {
             var label, alias, everywhere, icon;
@@ -2973,6 +2975,9 @@ var MH_Play_Play_vue = $.inherit(Page, {
 
                     var pvMin = data.pv;
                     var pvMax = Math.max(data.pv, data.pvMax);
+                    var colors = ["#FF4500", "#FFA500", "#FFD700", "#9ACD32"];
+                    var color = colors[Math.round((pvMin/pvMax) * colors.length)-1];
+                    
                     $("[data-troll-info='" + trollId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Infos")+")")
                     .append(
                         $("<div/>")
@@ -2984,11 +2989,11 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         .css("border-right", "0px")
                         .css("background-color", "#FFF")
                         .css("position", "relative")
-                        .attr("title", "DLA " + this.utils.formatTime(data.dla))
+                        .attr("title", "DLA " + (false === data.dla ? "?" : this.utils.formatTime(data.dla)))
                         .append(
                             $("<div/>")
                             .css("height", "100%")
-                            .css("width", Math.round(data.pa/6*100) + "%")
+                            .css("width", Math.round((data.pa||0)/6*100) + "%")
                             .css("background-color", "#000")
                         )
                         .append(
@@ -3001,7 +3006,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text(data.pa + " PA")
+                            .text((data.pa||"?") + " PA")
                         )
                     )
                     .append(
@@ -3013,12 +3018,12 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         .css("border", "1px solid black")
                         .css("background-color", "#FFFFFF")
                         .css("position", "relative")
-                        .attr("title", "MAJ: " + this.utils.getDateDiff(new Date(data.updateDate*1000), new Date()))
+                        .attr("title", "MAJ: " + (false === data.updateDate ? "?" : this.utils.getDateDiff(new Date(data.updateDate*1000), new Date())))
                         .append(
                             $("<div/>")
                             .css("height", "100%")
                             .css("width", Math.min(100, Math.round(pvMin/pvMax*100)) + "%")
-                            .css("background-color", "#FF0000")
+                            .css("background-color", color)
                         )
                         .append(
                             $("<div/>")
@@ -3030,7 +3035,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text(pvMin != pvMax ? (pvMin + " / " + pvMax) : '')
+                            .text(pvMin != pvMax ? ((pvMin || "?") + " / " + (0==pvMax ? "?" : pvMax)) : '')
                         )
                     )
                     ;
@@ -3047,6 +3052,9 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         pvActMin = Math.max(1, Math.round((100 - data.bless - 5) * pvMin / 100));
                         pvActMax = Math.min(pvMax, Math.round((100 - data.bless + 5) * pvMax / 100));
                     }
+                    
+                    var colors = ["#FF4500", "#FFA500", "#FFD700", "#9ACD32"];
+                    var color = colors[colors.length - 1 - Math.round(parseInt(data.bless) / 100)];
 
                     $("[data-monster-info='" + monsterId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_monstres", "Infos")+")").append(
                         $("<div/>")
@@ -3062,7 +3070,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             $("<div/>")
                             .css("height", "100%")
                             .css("width", (100-data.bless) + "%")
-                            .css("background-color", "#FF0000")
+                            .css("background-color", color)
                         )
                         .append(
                             $("<div/>")
