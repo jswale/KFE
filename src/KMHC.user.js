@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-13
+// @version       1.0.1-14
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1389,6 +1389,7 @@ var MH_Play_Play_profil = $.inherit(Page, {
             
             $.each($(actions).not(currentActions), $.proxy(function(idx, actionId) {
                 $("<tr/>")
+                .css("display", "table-row;")
                 .attr("data-actionType-addon", "true")
                 .hide()
                 .append($("<td/>"))
@@ -1403,18 +1404,25 @@ var MH_Play_Play_profil = $.inherit(Page, {
                 )
                 .append(
                     $("<td/>")
-                    .attr("align", "middle")
+                    .attr("align", "middle")                    
                     .append("<b>1</b>")
                 )
                 .append(
                     $("<td/>")
+                    .attr("align", "right")
                     .append("<b>0 %</b>")
                 )
                 .append(
                     $("<td/>")
+                    .attr("align", "right")
                     .append(("Sort" == actionType ? "80" : "90") + " %")
                 )
                 .append($("<td/>"))
+                .append($("<td/>"))
+                .append(
+                    $("<td/>")
+                    .append("niveau 1 : 90 %")
+                )
                 .appendTo(ctn);
             }, this));
             
