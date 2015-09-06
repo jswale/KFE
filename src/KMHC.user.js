@@ -1877,12 +1877,6 @@ var MH_Play_Play_vue = $.inherit(Page, {
             .css("font-weight", "bold")
             .css("text-align", "center")
             .text("Consignes")
-            .append(
-                $("<span/>")
-                .css("margin-left", "10px")
-                .css("font-size", "10px")
-                .addClass("rules-info")
-            )
         )
         .append(
             $("<textarea/>")
@@ -1902,7 +1896,11 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     data : {
                         id : "vue",
                         description : $("#data-rules textarea").val()
-                    }
+                    },
+                    callback : function() {
+                        $("#data-rules input").val("Données envoyées");
+                    },
+                    scope : self
                 });
             })
         )        
