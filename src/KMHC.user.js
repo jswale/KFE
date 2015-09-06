@@ -2392,10 +2392,10 @@ var MH_Play_Play_vue = $.inherit(Page, {
             var search = true;
 
             {
-                var exceptions = ["Bouj'Dla Placide"];
+                var exceptions = ["Bouj'Dla Placide", "Crasc Maexus", "Crasc Medius"];
                 for(var ex = 0; ex < exceptions.length; ex++) {
                     var exception = exceptions[ex];
-                    if(monsterFullName.indexOf(exception) == 0) {
+                    if(monsterFullName.indexOf(exception) > -1) {
                         monster = DB_monstres[exception];
                         template = monsterFullName.substring(exception.length+1);
                         search = false;
