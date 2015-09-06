@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-17
+// @version       1.0.1-18
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -3128,9 +3128,15 @@ var MH_Play_Play_vue = $.inherit(Page, {
                 }, this));
 
                 $.each(json.monsters, $.proxy(function(monsterId, data){
-                    var pvs = data.pvRange.split("-");
-                    var pvMin = pvs[0];
-                    var pvMax = Math.max(pvs[0],pvs[1]);
+                    var pvMin, pvMax;
+                    if(data.pvRange[0] == ">") {
+                        pvMin = data.pvRange.substr(1);
+                        pvMax = "-1";
+                    } else {
+                        var pvs = data.pvRange.split("-");
+                        pvMin = pvs[0];
+                        pvMax = Math.max(pvs[0],pvs[1]);
+                    }
                     var pvActMin = pvMin;
                     var pvActMax = Math.max(pvMin, pvMax);
 
@@ -3168,7 +3174,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text((data.bless > 0 ? (pvActMin + "-" + pvActMax) : data.pvRange))
+                            .text((data.bless > 0 ? (pvActMin + "-" + (-1 == pvActMax ? "?" : pvActMax )) : data.pvRange))
                         )
                     );
                 }, this));
