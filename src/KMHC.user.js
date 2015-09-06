@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-20
+// @version       1.0.1-21
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1895,47 +1895,30 @@ var MH_Play_Play_vue = $.inherit(Page, {
             .addClass("mh_form_submit")
             .css("text-align", "center")
             .val("Mettre à jour")
-            .click(function(){
-                self.callAPIConnected({
+            .click(function(){                
+                self.callAPIMiltown({
                     api : "tag",
+                    call : "update",
                     data : {
-                        "type" : "5",
-                        "num" : "1",
-                        "tag" : $("#data-rules textarea").val()
-                    },
-                    callback : function() {
-                        $("#data-rules input").val("Mis à jour...");
-                    },
-                    scope : self                    
-                });                
-                
+                        id : "vue",
+                        description : $("#data-rules textarea").val()
+                    }
+                });
             })
         )        
         .insertAfter($("form[name='LimitViewForm']"));
         
-        this.callAPIConnected({
-            api : "viewInfo",
+        this.callAPIMiltown({
+            api : "tag",
+            call : "get",
             data : {
-                "xMin" : -1000,
-                "xMax" : 1000,
-                "yMin" : -1000,
-                "yMax" : 1000,
-                "nMin" : 0,
-                "nMax" : -1000,
-                "l" : ["1"]
-            },
-            callback : function(datas) {
-                datas = datas.replace(/\s+/g, " ");
-                var json = $.parseJSON(datas);
-                // populate tags and start handling
-                var tag = json.tags["5;1"];
-                if(tag) {
-                    $("#data-rules textarea").val(tag.tag);
-                    $("#data-rules span.rules-info").text("(Par " + tag.trollName + " le " + this.utils.formatTime(tag.date)+")");
-                }
+                id : "vue"
+            }, 
+            callback : function(tag) {
+                $("#data-rules textarea").val(tag);
             },
             scope : this
-        });         
+        });               
     },
     
     changeTrollColumnsOrder : function() {
