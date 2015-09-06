@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-19
+// @version       1.0.1-20
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -3186,9 +3186,13 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     ctn.attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
                     .text(tag.tag);
                     
-                    if("3" == key[0] && !tag.tag.match(/^Rune/) && tag.tag.match(/.*(de l'Aigle|des Béhémoths|des Cyclopes|des Enragés|de Feu|des Mages|de l'Orage|de l'Ours|du Pic|du Rat|de Résistance|de la Salamandre|du Temps|de la Terre|du Sable|des Vampires|des Duellistes|des Champions|des Anciens|du Roc|des Tortues|du Vent|en Mithril).*/)) {
+                    if(
+                        ("3" == key[0] && tag.tag.match(/.*(Parchemin Gribouillé|Invention Extraordinaire).*/))
+                        ||
+                        ("3" == key[0] && !tag.tag.match(/^Rune/) && tag.tag.match(/.*(de l'Aigle|des Béhémoths|des Cyclopes|des Enragés|de Feu|des Mages|de l'Orage|de l'Ours|du Pic|du Rat|de Résistance|de la Salamandre|du Temps|de la Terre|du Sable|des Vampires|des Duellistes|des Champions|des Anciens|du Roc|des Tortues|du Vent|en Mithril).*/))
+                    ) {
                         ctn.parents("tr:first").find("> td").css("background-color", "#E9967A");
-                    }                    
+                    }
                     
                 }, this));
                 
