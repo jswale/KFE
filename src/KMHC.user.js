@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.1-21
+// @version       1.0.1-22
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -415,7 +415,23 @@ var Page = $.inherit({
         
         this.init();
         
+        this.pinkLady();
+        
         this.logger.debug(" -- STOP Module " + this.moduleName);
+    },
+    
+    pinkLady : function() {
+        if(this.isInitialized() && ["2450", "2449"].indexOf(Utils.getConf("login")) != -1 ) {
+            Utils.addGlobalStyle([
+                'body { background: #FF80FF; }',
+                '#mhPlay {background:inherit !important;}',
+                '.mh_tdtitre {background: #D8B8D8;}',
+                '#mhBanner {display:none;}',
+                '.mh_tdpage {background: #EEADA2;}',
+                'a.AllLinks, a.AllLinks:visited {color:#476C8E !important;}',
+                '.mh_equip_standard {background: #FED6F3 !important;}'
+            ]);
+        }
     },
 
     init : function() {
@@ -3797,5 +3813,7 @@ $(document).ready($.proxy(function() {
     
     if(null == module) {
         Logger.warn(" > Unable to find the module " + moduleName + " for URL " + pathname);
+        module = eval("new Page('Page')");
+        module.load();        
     }
 }, this));
