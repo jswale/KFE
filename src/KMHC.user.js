@@ -2771,32 +2771,46 @@ var MH_Play_Play_vue = $.inherit(Page, {
         var self = this,
             shareCallback = function() {
                 var ids = [];
+                var hasLevel60 = false;
                 var shareColId = self.getColumnId("mh_vue_hidden_trolls", "Envoyer");
                 $("#mh_vue_hidden_trolls table:first tr.mh_tdpage td:nth-child(" + shareColId + ") input:checked").each(function() {
+                    if($(this).attr("trollLevel") == "60") {
+                        hasLevel60 = true;
+                    }
+                    
                     ids.push($(this).val());
                 });
-                window.open(
-                    (
-                        $("#mh_vue_hidden_trolls table:first").parents("table").prev().find("#radioPX").is(':checked')
+                
+                var isSharePx = $("#mh_vue_hidden_trolls table:first").parents("table").prev().find("#radioPX").is(':checked');
+                
+                if(isSharePx && hasLevel60) {
+                    alert("Attention, vous êtes sur le point de distribuer des PX à un ou plusieurs trõlls de niveau 60.");
+                }
+                                
+                var destination = isSharePx
                         ? "Actions/Play_a_DonPX.php?cat=8&dest="
-                        : "../Messagerie/MH_Messagerie.php?cat=3&dest="
-                    ) + ids.join(','),
+                        : "../Messagerie/MH_Messagerie.php?cat=3&dest=";
+                
+                window.open(destination + ids.join(','),
                     "Contenu"
                 );
             },
             selectCallback = function(event) {
                 var shareBtn = $(event.target);
                 var refColId = self.getColumnId("mh_vue_hidden_trolls", "Réf.");
+                var refColLevel = self.getColumnId("mh_vue_hidden_trolls", "Niveau");
 
                 $("#mh_vue_hidden_trolls table:first tr.mh_tdtitre:first th:nth-child(" + refColId + ")").before($("<th>Envoyer</th>"));
                 $("#mh_vue_hidden_trolls table:first tr.mh_tdpage").each(function() {
                     var trollId = $(this).children("td:nth-child("+refColId+")").text();
+                    var trollLevel = $(this).children("td:nth-child("+refColLevel+")").text();
                     $(this).children('td:nth-child(' + refColId + ')').before(
                         $("<td/>")
                         .attr("width", 5)
                         .append(
                             $("<input/>")
                             .attr("type", "checkbox")
+                            .attr("trollLevel", trollLevel)
                             .val(trollId)
                         )
                     );
