@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-02
+// @version       1.0.2-03
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1866,7 +1866,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             ctn.prepend(
                 $("<tr>")
                 .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Caractéristique"))
-                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Dés"))
+                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Dés / Valeur"))
                 .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Bonus"))
                 .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Physique"))
                 .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Magique"))
@@ -1998,7 +1998,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             return hm;
         };
         
-        var stats = {};
+        var stats = {};        
                 
         // Echéance du Tour
         stats.dla = {
@@ -2043,6 +2043,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 bonus : (tmp[3] ? parseInt(tmp[3]) : 0)
             }
         };
+        
         var tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("carac", "Fatigue"));
         stats.hp.fatigue = {
             display : tmp[1],
@@ -2079,8 +2080,8 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             range : parseInt(getText("carac", "Vue", 2)),
             bonus : parseInt(getText("carac", "Vue", 3))
         };
-        stats.corpulence = /Corpulence(?:\s*\.*\s*:\s*)(\d+)\s?points/.exec(getText("carac", "Caractéristiques Déduites"))[1];
-        stats.agilite = /Agilité(?:\s*\.*\s*:\s*)(\d+)\s?points/.exec(getText("carac", "Caractéristiques Déduites"))[1];
+        stats.corpulence = getText("carac", "Corpulence");
+        stats.agilite = getText("carac", "Agilité");
 
         stats.roundMalus = {
             attaque : parseInt(getText("comb", "Dés d'attaque en moins")),
@@ -2494,6 +2495,10 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                 
                                 // Body
                                 var trs = $("#" + tableId + " table:first tr.mh_tdpage:visible");
+                                var locked_trs = trs.filter(".xyn-locked");
+                                if(locked_trs.length > 0) {
+                                    trs = locked_trs;
+                                }
                                 trs.each($.proxy(function(iTr, tr) {
                                     var line = [];
                                     $.each(columns, $.proxy(function(i, column) {
@@ -2507,9 +2512,41 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                     return "[tr]" + $.map(cols, function(col) {
                                         return "[td]" + (0 == iLine ? ("[b]" + col + "[/b]") : col) + "[/td]";
                                     }).join("") + "[/tr]";
-                                }).join("") + "[/table]";
+                                }).join("\n") + "[/table]";
                                 
-                                alert(bbcode);
+                                $("<div/>")
+                                .css("width", "50%")
+                                .css("height", "260px")
+                                .css("overflow", "auto")
+                                .css("margin", "auto")
+                                .css("position", "absolute")
+                                .css("top", "0")
+                                .css("left", "0")
+                                .css("bottom", "0")
+                                .css("right", "0")
+                                .append(
+                                    $("<div/>")
+                                    .append(
+                                        $("<textarea/>")
+                                        .css("width", "100%")
+                                        .css("height", "240px")
+                                        .val(bbcode)                                        
+                                    )               
+                                )
+                                .append(
+                                    $("<input/>")
+                                    .attr("type", "button")
+                                    .attr("value", "Fermer")
+                                    .css("text-align", "center")
+                                    .addClass("mh_form_submit")
+                                    .click(function(){
+                                        $(this).parents("div:first").remove();
+                                    })
+                                )
+                                .appendTo($("body"))
+                                
+                                //console.debug(bbcode);
+                                //alert(bbcode);
 
                             },this))
                          )
