@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-01
+// @version       1.0.2-02
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1660,7 +1660,7 @@ var MH_Play_Play_profil = $.inherit(Page, {
 
 var MH_Play_Play_profil2 = $.inherit(Page, {
     init : function() {
-        //this.sendData();
+        this.sendData();
         this.removeAds();
         this.tuneIHM();
     },   
@@ -1677,7 +1677,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
 
         // Appel de l'API
         this.callAPIConnected({
-            api : "profile",
+            api : "profile2",
             data : {
                 "profile" : "MON PROFIL " + result
             }
@@ -1974,7 +1974,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
 
         }, this));        
 
-        $("#sortileges,#competences a.AllLinks")
+        $("#sortileges a.AllLinks, #competences a.AllLinks")
         .hover($.proxy(function(event) {
             Page.showTalentPopup($(event.target), false);
         }, this), $.proxy(function(event) {
@@ -2102,11 +2102,6 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             }
         };        
         
-/* Utile ???
-        tmp = /PM.............: (\d+) Niveau Calculé : (\d+)/.exec(text);
-        stats.xp.PM = tmp ? parseInt(tmp[1]) : stats.xp.PI.all;
-        stats.xp.vlevel = tmp ? parseInt(tmp[2]) : stats.xp.level;
-*/     
         // Computed
         stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
         stats.dla.duration.bonus.total = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
