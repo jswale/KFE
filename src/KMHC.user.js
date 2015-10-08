@@ -1891,8 +1891,11 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             ctn.find("tr > th:contains(Maîtrise de la Magie)").parents("tr:first").find("td:nth-child(4)").text("= "+ mmmax);
             
         }
+        $("<style type='text/css'> #content > div > table {width: inherit;} </style>").appendTo("head");
+        $("<style type='text/css'> #dla > table td, #exp > table td, #comb > table td {text-align: left;} </style>").appendTo("head");
         
         $("<style type='text/css'> div.actionPopup th { text-align:right;} </style>").appendTo("head");
+        
 
         $.each(["Comp", "Sort"], $.proxy(function(idx, actionType) {
             var ctn = $("#" + actionType.toLowerCase() + " > table > tbody");
