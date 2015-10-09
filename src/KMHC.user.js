@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-04
+// @version       1.0.2-05
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1689,7 +1689,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
     },    
     
     tuneIHM : function() {
-        var stats = this.getStats();
+        var stats = this.getStats();        
 
         // Echéance du Tour
         {
@@ -1843,7 +1843,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             $.each(ctn.find("tr"), function(i, v) {
                 if( -1 == patched.indexOf($(this).find("th").text().trim())) {
                     $(this).append(
-                        $("<td/>")
+                        $("<th/>")
                         .attr("colspan", "4")         
                     );
                 }
@@ -1857,17 +1857,21 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 .append($("<td/>").text(stabilite_des + " D6"))
                 .append($("<td/>").text((function(v) { return (v >= 0 ? "+" : "-") + v; })(stabilite_bonus)))
                 .append($("<td/>").text(0))
+                .append($("<th/>"))
                 .append($("<td/>").text(3.5 * stabilite_des + stabilite_bonus))
                 .append($("<td/>").text((stabilite_des + stabilite_bonus) + ' - ' + (stabilite_des * 6 + stabilite_bonus)))
                 .append($("<td/>").attr("colspan", "2"))
             );                                      
             
             // Header
-            ctn.prepend(
+            
+            $("#carac > table > thead > tr").remove();
+            $("#carac > table > thead").append(
                 $("<tr>")
                 .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Caractéristique"))
                 .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Dés / Valeur"))
                 .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Bonus"))
+                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Total"))
                 .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Physique"))
                 .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Magique"))
                 ,
@@ -1878,7 +1882,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 .append($("<th/>").css("text-align", "center").text("Min/Max"))
                 .append($("<th/>").css("text-align", "center").text("Moy."))
                 .append($("<th/>").css("text-align", "center").text("Min/Max"))
-            );  
+            );
             
         }
         
@@ -1891,8 +1895,8 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             ctn.find("tr > th:contains(Maîtrise de la Magie)").parents("tr:first").find("td:nth-child(4)").text("= "+ mmmax);
             
         }
-        $("<style type='text/css'> #content > div > table {width: inherit;} </style>").appendTo("head");
-        $("<style type='text/css'> #dla > table td, #exp > table td, #comb > table td {text-align: left;} </style>").appendTo("head");
+        //$("<style type='text/css'> #content > div > table {width: inherit;} </style>").appendTo("head");
+        //$("<style type='text/css'> #dla > table td, #exp > table td, #comb > table td {text-align: left;} </style>").appendTo("head");
         
         $("<style type='text/css'> div.actionPopup th { text-align:right;} </style>").appendTo("head");
         
@@ -1935,17 +1939,17 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 .append(
                     $("<td/>")
                     .addClass("numeric footable-visible")
-                    .text("0 %")
-                )
-                .append(
-                    $("<td/>")
-                    .addClass("numeric footable-visible")
                     .text(("Sort" == actionType ? "80" : "90") + " %")
                 )
                 .append(
                     $("<td/>")
-                    .addClass("numeric footable-visible footable-last-column")
-                    .text("")
+                    .css("display", "none")
+                    .text("0 %")
+                )
+                .append(
+                    $("<td/>")
+                    .css("display", "none")
+                    .text("0 % succès sur 0 jet")
                 )
                 .append(
                     $("<td/>")
@@ -1963,7 +1967,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             .append(
                 $("<td/>")
                 .attr("align", "center")
-                .attr("colspan", "6")
+                .attr("colspan", "4")
                 .text("Afficher/Cacher le savoir inconnu")
                 .addClass("mh_links")
                 .css("cursor","hand")
@@ -2023,7 +2027,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             y : parseInt(tmp[2]),
             n : parseInt(tmp[3]),
         };        
-
+        
         var tmp = /(\d+)\s+\((\d+)\s+PI\)/.exec(getText("PI"));
         stats.xp = {
             level : parseInt(getText("Niveau")),
@@ -2038,12 +2042,12 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         };
         stats.karma = getText("Karma");
         
-        var tmp = /(\d+)\/(\d+)\s?([+-]\d+)?/.exec(getText("Point de Vie"));
+        var tmp = /(\d+)\/(\d+)?/.exec(getText("Vie"));
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
                 value : parseInt(tmp[2]),
-                bonus : (tmp[3] ? parseInt(tmp[3]) : 0)
+                bonus : 0
             }
         };
         
