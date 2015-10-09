@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-03
+// @version       1.0.2-04
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1760,7 +1760,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                     .append(
                         $("<tr/>")
                         .append($("<th/>").text("Infos"))
-                        .append($("<td/>").attr("colspan", "2").append(texte))
+                        .append($("<td/>").append(texte))
                     );
                 }
             }
@@ -1986,9 +1986,9 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
     },    
 
     getStats : function() {
-        var getText = function(id, name, colId) {            
+        var getText = function(name, colId) {            
             var xpath = "td" + (Utils.isUndefined(colId) ? "" : (":nth-child(" + colId +")"));
-            var text = $("#" + id + " > table tr > th:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
+            var text = $("#content table tr > th:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
             return text;
         };
                 
@@ -2005,40 +2005,40 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 
         // Echéance du Tour
         stats.dla = {
-            next : getText("dla", "Date Limite d'Action"),
+            next : getText("Date Limite d'Action"),
             duration : {
-                normal : extractHM(getText("dla", "Durée normale de mon Tour")),
-                bonus : extractHM(getText("dla", "Bonus/Malus sur la durée")),
-                injuries : extractHM(getText("dla", "Augmentation due aux blessures")),
-                stuf : extractHM(getText("dla", "Poids de l'équipement")),
-                total : extractHM(getText("dla", "Durée de mon prochain Tour"))
+                normal : extractHM(getText("Durée normale de mon Tour")),
+                bonus : extractHM(getText("Bonus/Malus sur la durée")),
+                injuries : extractHM(getText("Augmentation due aux blessures")),
+                stuf : extractHM(getText("Poids de l'équipement")),
+                total : extractHM(getText("Durée de mon prochain Tour"))
             }
         };
         
-        stats.pa = /(\d) PA/.exec(getText("dla", "PA restant(s)"))[1];        
+        stats.pa = /(\d) PA/.exec(getText("PA restant(s)"))[1];        
         
-        var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+)/.exec(getText("pos", "Position"));
+        var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+)/.exec(getText("Position"));
         stats.position = {
             x : parseInt(tmp[1]),
             y : parseInt(tmp[2]),
             n : parseInt(tmp[3]),
         };        
 
-        var tmp = /(\d+)\s+\((\d+)\s+PI\)/.exec(getText("exp", "PI"));
+        var tmp = /(\d+)\s+\((\d+)\s+PI\)/.exec(getText("PI"));
         stats.xp = {
-            level : parseInt(getText("exp", "Niveau")),
+            level : parseInt(getText("Niveau")),
             PI : {
                 all : parseInt(tmp[2]),
                 current : parseInt(tmp[1])
             },
             PX : {
-                public : parseInt(getText("exp", "PX")),
-                private : parseInt(getText("exp", "PX Personnels"))
+                public : parseInt(getText("PX")),
+                private : parseInt(getText("PX Personnels"))
             }
         };
-        stats.karma = getText("exp", "Karma");
+        stats.karma = getText("Karma");
         
-        var tmp = /(\d+)\/(\d+)\s?([+-]\d+)?/.exec(getText("pos", "Vie"));
+        var tmp = /(\d+)\/(\d+)\s?([+-]\d+)?/.exec(getText("Point de Vie"));
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
@@ -2047,7 +2047,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             }
         };
         
-        var tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("carac", "Fatigue"));
+        var tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("Fatigue"));
         stats.hp.fatigue = {
             display : tmp[1],
             value : parseInt(tmp[2]),
@@ -2055,54 +2055,54 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         };
         
         stats.attaque = {
-            des : parseInt(getText("carac", "Attaque", 2)),
-            physique : parseInt(getText("carac", "Attaque", 3)),
-            magique : parseInt(getText("carac", "Attaque", 4))
+            des : parseInt(getText("Attaque", 2)),
+            physique : parseInt(getText("Attaque", 3)),
+            magique : parseInt(getText("Attaque", 4))
         };
         stats.esquive = {
-            des : parseInt(getText("carac", "Esquive", 2)),
-            physique : parseInt(getText("carac", "Esquive", 3)),
-            magique : parseInt(getText("carac", "Esquive", 4))
+            des : parseInt(getText("Esquive", 2)),
+            physique : parseInt(getText("Esquive", 3)),
+            magique : parseInt(getText("Esquive", 4))
         };
         stats.degat = {
-            des : parseInt(getText("carac", "Dégâts", 2)),
-            physique : parseInt(getText("carac", "Dégâts", 3)),
-            magique : parseInt(getText("carac", "Dégâts", 4))
+            des : parseInt(getText("Dégâts", 2)),
+            physique : parseInt(getText("Dégâts", 3)),
+            magique : parseInt(getText("Dégâts", 4))
         };        
         stats.regen = {
-            des : parseInt(getText("carac", "Régénération", 2)),
-            physique : parseInt(getText("carac", "Régénération", 3)),
-            magique : parseInt(getText("carac", "Régénération", 4))
+            des : parseInt(getText("Régénération", 2)),
+            physique : parseInt(getText("Régénération", 3)),
+            magique : parseInt(getText("Régénération", 4))
         };
         stats.armure = {
-            des : parseInt(getText("carac", "Armure", 2)),
-            physique : parseInt(getText("carac", "Armure", 3)),
-            magique : parseInt(getText("carac", "Armure", 4))
+            des : parseInt(getText("Armure", 2)),
+            physique : parseInt(getText("Armure", 3)),
+            magique : parseInt(getText("Armure", 4))
         };
         stats.view = {
-            range : parseInt(getText("carac", "Vue", 2)),
-            bonus : parseInt(getText("carac", "Vue", 3))
+            range : parseInt(getText("Vue", 2)),
+            bonus : parseInt(getText("Vue", 3))
         };
-        stats.corpulence = getText("carac", "Corpulence");
-        stats.agilite = getText("carac", "Agilité");
+        stats.corpulence = getText("Corpulence");
+        stats.agilite = getText("Agilité");
 
         stats.roundMalus = {
-            attaque : parseInt(getText("comb", "Dés d'attaque en moins")),
-            esquive : parseInt(getText("comb", "Dés d'esquive en moins")),
-            armure : parseInt(getText("comb", "Dés d'armure en moins"))
+            attaque : parseInt(getText("Dés d'attaque en moins")),
+            esquive : parseInt(getText("Dés d'esquive en moins")),
+            armure : parseInt(getText("Dés d'armure en moins"))
         };
-        stats.concentration = parseInt(getText("comb", "Bonus de Concentration"));
-        stats.kills = parseInt(getText("comb", "Nombre d'Adversaires tués"));
-        stats.deaths = parseInt(getText("comb", "Nombre de Décès"));
+        stats.concentration = parseInt(getText("Bonus de Concentration"));
+        stats.kills = parseInt(getText("Nombre d'Adversaires tués"));
+        stats.deaths = parseInt(getText("Nombre de Décès"));
         
         stats.magie = {
             rm : {
-                value : parseInt(getText("carac", "Résistance à la Magie", 2)),
-                bonus : parseInt(getText("carac", "Résistance à la Magie", 3))
+                value : parseInt(getText("Résistance à la Magie", 2)),
+                bonus : parseInt(getText("Résistance à la Magie", 3))
             },
             mm : {
-                value : parseInt(getText("carac", "Maîtrise de la Magie", 2)),
-                bonus : parseInt(getText("carac", "Maîtrise de la Magie", 3))
+                value : parseInt(getText("Maîtrise de la Magie", 2)),
+                bonus : parseInt(getText("Maîtrise de la Magie", 3))
             }
         };        
         
