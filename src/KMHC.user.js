@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-05
+// @version       1.0.2-06
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -651,7 +651,7 @@ var Page = $.inherit({
             levels[levelMax] = parseInt(prct);
 
         } else {
-            var tmp = link.parents("tr:first").find("td:nth-child(8)").text().trim().split("\n");
+            var tmp = link.parents("tr:first").find("td:nth-child(" + (actionType == "Comp" ? 9 : 8) + ")").text().trim().split("\n");
             for(var j = 0; j < tmp.length; ++j) {
                 var p = /niveau\s+(\d+)\s+:\s+(\d+)\s+%/.exec(tmp[j]);
                 levels[p[1]] = p[2];
@@ -1738,7 +1738,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         {
             var ctn = $("#pos > table > tbody");
 
-            var pvmax = stats.hp.max.total;
+            var pvmax = stats.hp.total;
 
             ctn.find("img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');
 
@@ -1764,18 +1764,11 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                     );
                 }
             }
-        }        
-
+        }    
+        
         // Caracs
-        {
-            var ctn = $("#carac > table > tbody"),
-                caracs = [
-                [
-                    "Régénération",
-                    stats.regen.des * 2   + stats.regen.physique + stats.regen.magique,
-                    stats.regen.des       + stats.regen.physique + stats.regen.magique,
-                    stats.regen.des * 3   + stats.regen.physique + stats.regen.magique
-                ],
+        if(true){
+                var caracs = [
                 [
                     "Attaque",
                     stats.attaque.moy,
@@ -1801,6 +1794,12 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                     stats.degat.des * 3 + stats.degat.magique
                 ],
                 [
+                    "Régénération",
+                    stats.regen.des * 2   + stats.regen.physique + stats.regen.magique,
+                    stats.regen.des       + stats.regen.physique + stats.regen.magique,
+                    stats.regen.des * 3   + stats.regen.physique + stats.regen.magique
+                ],
+                [
                     "Armure",
                     stats.armure.desReel * 2 + stats.armure.physique + stats.armure.magique,
                     stats.armure.desReel     + stats.armure.physique + stats.armure.magique,
@@ -1810,93 +1809,82 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                     stats.armure.desReel * 3 + stats.armure.magique
                 ]
             ];
-            var patched = [];
+            
+            var ctn = $("<table/>").css("margin-top", "15px");
+            ctn.append(
+                $("<thead/>")
+                .append(
+                $("<tr>")
+                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Nom"))
+                .append($("<th/>").attr("colspan", "3").css("text-align", "center").text("Physique"))
+                .append($("<th/>").attr("colspan", "3").css("text-align", "center").text("Magique"))
+                ,
+                $("<tr>")
+                .append($("<th/>").css("text-align", "center").text("Moy."))
+                .append($("<th/>").css("text-align", "center").text("Min"))
+                .append($("<th/>").css("text-align", "center").text("Max"))
+                .append($("<th/>").css("text-align", "center").text("Moy."))
+                .append($("<th/>").css("text-align", "center").text("Min"))
+                .append($("<th/>").css("text-align", "center").text("Max"))
+                )
+            );
+            ctn.append(
+                $("<tbody/>")
+            );            
+            ctn.insertAfter($("#caracs"));
+            
             $.each(caracs, function(i, v) {
-                var row = ctn.find("tr > th:contains(" + v[0] + ")").parents("tr:first");
-                patched.push(v[0]);
+                var row = $("<tr/>").css("display", "table-row").appendTo(ctn.find("tbody"));
+                row.append($("<td/>").text(v[0]));
                 row.append(
                     $("<td/>")
                     .attr("width", "30")
-                    .attr("align", "right")
+                    .addClass("numeric")
                     .append(v[1]))
                 .append(
                     $("<td/>")
-                    .attr("align", "left")
-                    .append(v[2] + " - " + v[3])
+                    .addClass("numeric")
+                    .append(v[2])
+                )
+                .append(
+                    $("<td/>")
+                    .addClass("numeric")
+                    .append(v[3])
                 );
                 if(v.length > 4) {
                     row.append(
                         $("<td/>")
                         .attr("width", "30")
-                        .attr("align", "right")
+                        .addClass("numeric")
                         .append(v[4]))
                     .append(
                         $("<td/>")
-                        .attr("align", "left")
-                        .append(v[5] + " - " + v[6])
+                        .addClass("numeric")
+                        .append(v[5])
+                    )
+                    .append(
+                        $("<td/>")
+                        .addClass("numeric")
+                        .append(v[6])
                     );
                 } else {
-                    row.append($("<td/>").attr("colspan", "2"));
+                    row.append($("<th/>").attr("colspan", "3"));
                 }
             });
-            
-            $.each(ctn.find("tr"), function(i, v) {
-                if( -1 == patched.indexOf($(this).find("th").text().trim())) {
-                    $(this).append(
-                        $("<th/>")
-                        .attr("colspan", "4")         
-                    );
-                }
-            });            
 
             var stabilite_des = Math.floor(2 * (stats.esquive.des + stats.regen.des) / 3),
                 stabilite_bonus = stats.esquive.physique + stats.esquive.magique;
-            ctn.append(
+            $("#carac th:contains(Agilité)").parents("tbody:first").append(
                 $("<tr>")
                 .append($("<th/>").text("Stabilité"))
-                .append($("<td/>").text(stabilite_des + " D6"))
-                .append($("<td/>").text((function(v) { return (v >= 0 ? "+" : "-") + v; })(stabilite_bonus)))
-                .append($("<td/>").text(0))
-                .append($("<th/>"))
+                .append($("<td/>").text((stabilite_des + " D6") + " " + (function(v) { return (v >= 0 ? "+" : "-") + v; })(stabilite_bonus)))
+            /*
                 .append($("<td/>").text(3.5 * stabilite_des + stabilite_bonus))
                 .append($("<td/>").text((stabilite_des + stabilite_bonus) + ' - ' + (stabilite_des * 6 + stabilite_bonus)))
                 .append($("<td/>").attr("colspan", "2"))
-            );                                      
-            
-            // Header
-            
-            $("#carac > table > thead > tr").remove();
-            $("#carac > table > thead").append(
-                $("<tr>")
-                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Caractéristique"))
-                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Dés / Valeur"))
-                .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Bonus"))
-                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Total"))
-                .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Physique"))
-                .append($("<th/>").attr("colspan", "2").css("text-align", "center").text("Magique"))
-                ,
-                $("<tr>")
-                .append($("<th/>").css("text-align", "center").text("Physique"))
-                .append($("<th/>").css("text-align", "center").text("Magique"))
-                .append($("<th/>").css("text-align", "center").text("Moy."))
-                .append($("<th/>").css("text-align", "center").text("Min/Max"))
-                .append($("<th/>").css("text-align", "center").text("Moy."))
-                .append($("<th/>").css("text-align", "center").text("Min/Max"))
-            );
-            
+                */
+            );                                                                     
         }
-        
-
-        // MM/RM
-        {
-            var rmmax = stats.magie.rm.value + stats.magie.rm.bonus;
-            var mmmax = stats.magie.mm.value + stats.magie.mm.bonus;
-            ctn.find("tr > th:contains(Résistance à la Magie)").parents("tr:first").find("td:nth-child(4)").text("= "+ rmmax);
-            ctn.find("tr > th:contains(Maîtrise de la Magie)").parents("tr:first").find("td:nth-child(4)").text("= "+ mmmax);
-            
-        }
-        //$("<style type='text/css'> #content > div > table {width: inherit;} </style>").appendTo("head");
-        //$("<style type='text/css'> #dla > table td, #exp > table td, #comb > table td {text-align: left;} </style>").appendTo("head");
         
         $("<style type='text/css'> div.actionPopup th { text-align:right;} </style>").appendTo("head");
         
@@ -1943,12 +1931,12 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 )
                 .append(
                     $("<td/>")
-                    .css("display", "none")
+                    .addClass("numeric footable-visible")
                     .text("0 %")
                 )
                 .append(
                     $("<td/>")
-                    .css("display", "none")
+                    .addClass("numeric footable-visible footable-last-column")
                     .text("0 % succès sur 0 jet")
                 )
                 .append(
@@ -1967,7 +1955,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             .append(
                 $("<td/>")
                 .attr("align", "center")
-                .attr("colspan", "4")
+                .attr("colspan", "6")
                 .text("Afficher/Cacher le savoir inconnu")
                 .addClass("mh_links")
                 .css("cursor","hand")
@@ -1995,6 +1983,12 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             var text = $("#content table tr > th:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
             return text;
         };
+        
+        var getTextTd = function(name, colId) {            
+            var xpath = "td" + (Utils.isUndefined(colId) ? "" : (":nth-child(" + colId +")"));
+            var text = $("#content table tr > td:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
+            return text;
+        };        
                 
         var extractHM = function(text) {
             var tmp = /(-?\d+)\s+h\s+(-?\d+)/.exec(text);
@@ -2041,60 +2035,84 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             }
         };
         stats.karma = getText("Karma");
+               
+        var caracs = [{
+            key:"attaque",
+            label : "Attaque",
+            dice : 6
+        }, {
+            key:"esquive",
+            label : "Esquive",
+            dice : 6
+        }, {
+            key:"degat",
+            label : "Dégâts",
+            dice : 3
+        }, {
+            key:"hp",
+            label : "Point de Vie",
+            dice : 1
+        }, {
+            key:"regen",
+            label : "Régénération",
+            dice : 3
+        }, {
+            key:"armure",
+            label : "Armure",
+            dice : 3
+        }, {
+            key:"view",
+            label : "Vue",
+            dice : 1
+        }];        
         
-        var tmp = /(\d+)\/(\d+)?/.exec(getText("Vie"));
+        $.each(caracs, $.proxy(function(i, carac) {
+            var key = carac.key;
+            var label = carac.label;
+            var dice = carac.dice;
+            
+            stats[key] = {
+                des : parseInt(getTextTd(label, 2)),
+                desReel : parseInt(getTextTd(label, 3)),
+                physique : parseInt(getTextTd(label, 4)),
+                magique : parseInt(getTextTd(label, 5))
+            };
+            
+            stats[key].desReel = stats[key].desReel || stats[key].des;
+            stats[key].bm = stats[key].physique + stats[key].magique;
+            stats[key].moy = (1+dice) / 2 * stats[key].desReel + stats[key].bm;
+            stats[key].total = stats[key].desReel + stats[key].bm;
+            
+        }, this));        
+        
+        var tmp = /(\d+)\/\d+/.exec(getText("Vie"));
+        var hp = stats.hp;
         stats.hp = {
             current : parseInt(tmp[1]),
             max : {
-                value : parseInt(tmp[2]),
-                bonus : 0
+                value : hp.desReel,
+                bonus : hp.bm,
+                total : hp.total
             }
-        };
+        }
         
+        var view = stats.view;
+        stats.view = {
+            range : view.desReel,
+            bonus : view.bm,
+            total : view.total
+        };        
+                
         var tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("Fatigue"));
         stats.hp.fatigue = {
             display : tmp[1],
             value : parseInt(tmp[2]),
             bm : (tmp[3] ? parseInt(tmp[3]) : 0)
-        };
+        };                
         
-        stats.attaque = {
-            des : parseInt(getText("Attaque", 2)),
-            physique : parseInt(getText("Attaque", 3)),
-            magique : parseInt(getText("Attaque", 4))
-        };
-        stats.esquive = {
-            des : parseInt(getText("Esquive", 2)),
-            physique : parseInt(getText("Esquive", 3)),
-            magique : parseInt(getText("Esquive", 4))
-        };
-        stats.degat = {
-            des : parseInt(getText("Dégâts", 2)),
-            physique : parseInt(getText("Dégâts", 3)),
-            magique : parseInt(getText("Dégâts", 4))
-        };        
-        stats.regen = {
-            des : parseInt(getText("Régénération", 2)),
-            physique : parseInt(getText("Régénération", 3)),
-            magique : parseInt(getText("Régénération", 4))
-        };
-        stats.armure = {
-            des : parseInt(getText("Armure", 2)),
-            physique : parseInt(getText("Armure", 3)),
-            magique : parseInt(getText("Armure", 4))
-        };
-        stats.view = {
-            range : parseInt(getText("Vue", 2)),
-            bonus : parseInt(getText("Vue", 3))
-        };
-        stats.corpulence = getText("Corpulence");
-        stats.agilite = getText("Agilité");
+        stats.corpulence = parseInt(getText("Corpulence"));
+        stats.agilite = parseInt(getText("Agilité"));
 
-        stats.roundMalus = {
-            attaque : parseInt(getText("Dés d'attaque en moins")),
-            esquive : parseInt(getText("Dés d'esquive en moins")),
-            armure : parseInt(getText("Dés d'armure en moins"))
-        };
         stats.concentration = parseInt(getText("Bonus de Concentration"));
         stats.kills = parseInt(getText("Nombre d'Adversaires tués"));
         stats.deaths = parseInt(getText("Nombre de Décès"));
@@ -2108,7 +2126,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 value : parseInt(getText("Maîtrise de la Magie", 2)),
                 bonus : parseInt(getText("Maîtrise de la Magie", 3))
             }
-        };        
+        };   
         
         // Computed
         stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
@@ -2116,25 +2134,9 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         stats.dla.duration.injuries.total = stats.dla.duration.injuries.hour * 60 + stats.dla.duration.injuries.min;
         stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
         stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;
-
+        
         stats.hp.fatigue.total = stats.hp.fatigue.value + stats.hp.fatigue.bm;
-
-        stats.view.total = stats.view.range + stats.view.bonus;
-
-        stats.hp.max.total = stats.hp.max.value + stats.hp.max.bonus;
-
-        stats.attaque.bm = stats.attaque.physique + stats.attaque.magique;
-        stats.degat.bm   = stats.degat.physique + stats.degat.magique;
-        stats.esquive.bm = stats.esquive.physique + stats.esquive.magique;
-
-        stats.attaque.desReel = Math.max(stats.attaque.des - stats.roundMalus.attaque, 0);
-        stats.esquive.desReel = Math.max(stats.esquive.des - stats.roundMalus.esquive, 0);
-        stats.armure.desReel = Math.max(stats.armure.des - stats.roundMalus.armure, 0);
-        stats.degat.desReel = stats.degat.des;
-
-        stats.attaque.moy = 3.5 * stats.attaque.desReel + stats.attaque.bm;
-        stats.degat.moy = 2 * stats.degat.desReel + stats.degat.bm;
-
+                
         Utils.setConf("profil_stats", JSON.stringify(stats))
 
         return stats;
