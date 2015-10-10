@@ -1833,8 +1833,11 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             );
             ctn.append(
                 $("<tbody/>")
-            );            
+            );
+            
             ctn.insertAfter($("#caracs"));
+            $("<h3/>").text("Valeurs calculées").insertAfter($("#caracs"));
+            $("<p/>").insertAfter($("#caracs"));
             
             $.each(caracs, function(i, v) {
                 var row = $("<tr/>").css("display", "table-row").appendTo(ctn.find("tbody"));
