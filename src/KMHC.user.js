@@ -617,7 +617,7 @@ var Page = $.inherit({
 
 }, { // Statics
     
-    showTalentPopup : function(link, boost) {
+    showTalentPopup : function(link, newIHM, boost) {
         var popupId = link.attr("data-popup");
         if(Utils.isDefined(popupId)) {
             var popup = $('[action-popup-id="' + popupId + '"]');
@@ -651,10 +651,13 @@ var Page = $.inherit({
             levels[levelMax] = parseInt(prct);
 
         } else {
-            var tmp = link.parents("tr:first").find("td:nth-child(" + (actionType == "Comp" ? 9 : 8) + ")").text().trim().split("\n");
-            for(var j = 0; j < tmp.length; ++j) {
-                var p = /niveau\s+(\d+)\s+:\s+(\d+)\s+%/.exec(tmp[j]);
-                levels[p[1]] = p[2];
+            var id = newIHM ? (actionType == "Comp" ? 9 : 8) : 8;
+            var tmp = link.parents("tr:first").find("td:nth-child(" + id + ")").text().trim().split("\n");            
+            for(var j = 0; j < tmp.length; ++j) {             
+                if(tmp[j] != "") {
+                    var p = /niveau\s+(\d+)\s+:\s+(\d+)\s+%/.exec(tmp[j]);                
+                    levels[p[1]] = p[2];
+                }
             }
         }
         // ----------------
@@ -1462,9 +1465,9 @@ var MH_Play_Play_profil = $.inherit(Page, {
 
         $($("table.mh_tdborder:first").next().find("table.mh_tdpage")).find("a.AllLinks")
         .hover($.proxy(function(event) {
-            Page.showTalentPopup($(event.target), false);
+            Page.showTalentPopup($(event.target), false, false);
         }, this), $.proxy(function(event) {
-            Page.hideTalentPopup($(event.target));
+            Page.hideTalentPopup($(event.target), false);
         }, this));
     },    
 
@@ -1971,9 +1974,9 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
 
         $("#sortileges a.AllLinks, #competences a.AllLinks")
         .hover($.proxy(function(event) {
-            Page.showTalentPopup($(event.target), false);
+            Page.showTalentPopup($(event.target), true, false);
         }, this), $.proxy(function(event) {
-            Page.hideTalentPopup($(event.target));
+            Page.hideTalentPopup($(event.target), true);
         }, this));
     },    
 
