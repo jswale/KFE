@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-06
+// @version       1.0.2-07
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1713,7 +1713,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         
 
         // Expérience
-        {
+        if(stats.xp.level < 60) {
             var pi_nextLvl = stats.xp.level * (stats.xp.level + 3) * 5;
             var px_ent = 2 * stats.xp.level;
             var px = stats.xp.PX.public + stats.xp.PX.private;
@@ -1721,7 +1721,6 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 px_ent = Math.max(px_ent, Math.min(px, 5));
             }
             var nb_ent = Math.ceil((pi_nextLvl - stats.xp.PI.all) / px_ent);
-            ctn.html(ctn.html().replace("PI)", 'PI | Niveau ' + (stats.xp.level + 1) + ' : ' + pi_nextLvl + ' PI => ' + nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '') + ")"));
 
             var trainingMsg;
             if(px < px_ent) {
@@ -1732,8 +1731,18 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             $("#exp > table > tbody")
             .append(
                 $("<tr/>")
+                .append($("<th/>").text("Niveau " + (stats.xp.level + 1)))
+                .append($("<td/>").append(nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : ''))),
+                $("<tr/>")
                 .append($("<th/>").text("Entrainement"))
                 .append($("<td/>").append(trainingMsg))
+            );
+        } else {
+            $("#exp > table > tbody")
+            .append(
+                $("<tr/>")
+                .append($("<th/>").text("Entrainement"))
+                .append($("<td/>").append("Impossible vous êtes trop gros !"))
             );
         }
 
@@ -1741,7 +1750,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         {
             var ctn = $("#pos > table > tbody");
 
-            var pvmax = stats.hp.total;
+            var pvmax = stats.hp.max.total;
 
             ctn.find("img").attr("title", '1 PV de perdu = +'+Math.floor(250 / pvmax) +' min ' + (Math.floor(15000/pvmax)%60) + ' sec');
 
@@ -1811,7 +1820,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                     stats.armure.desReel     + stats.armure.magique,
                     stats.armure.desReel * 3 + stats.armure.magique
                 ]
-            ];
+            ];           
             
             var ctn = $("<table/>").css("margin-top", "15px");
             ctn.append(
@@ -2036,10 +2045,11 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 current : parseInt(tmp[1])
             },
             PX : {
-                public : parseInt(getText("PX")),
-                private : parseInt(getText("PX Personnels"))
+                public : parseInt($("span#px").text()),
+                private : parseInt($("span#px_perso").text())
             }
         };
+        
         stats.karma = getText("Karma");
                
         var caracs = [{
