@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-07
+// @version       1.0.2-08
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -651,6 +651,7 @@ var Page = $.inherit({
             levels[levelMax] = parseInt(prct);
 
         } else {
+            
             var id = newIHM ? (actionType == "Comp" ? 9 : 8) : 8;
             var tmp = link.parents("tr:first").find("td:nth-child(" + id + ")").text().trim().split("\n");            
             for(var j = 0; j < tmp.length; ++j) {             
@@ -668,12 +669,13 @@ var Page = $.inherit({
             return;
         }
 
-        var pos = link.position();
+        var pos = link.offset();
 
         var popup = this.displayTalentPopup(entry, levels, actionName);
         popup.css("position", "absolute")
         popup.css("top", pos.top - popup.height() + "px");
         popup.css("left", (pos.left) + "px");
+        popup.css("zIndex", "100");
         popup.attr("action-popup-id", popupId);
     },
 
@@ -1696,20 +1698,21 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
 
         // Echéance du Tour
         {
-            var ctn = $("#dla > table > tfoot");
+            var insertAfter = $("#dla > div > table th:contains(Estimation DLA suivante)").append(" (1)").parents("tr:first");
             var nextDla = Utils.convertDate(stats.dla.next);            
             for(var i = 1 ; i <= 3 ; i++) {
                 nextDla.setHours(nextDla.getHours() + stats.dla.duration.total.hour);
                 nextDla.setMinutes(nextDla.getMinutes() + stats.dla.duration.total.min);
                 if(i>1) {
-                    ctn.append(
+                    insertAfter = 
                         $("<tr/>")
-                        .append($("<th/>").text("Estimation de la DLA suivante (" + i + ")"))
+                        .append($("<th/>").text("Estimation DLA suivante (" + i + ")"))
                         .append($("<td/>").append($("<i/>").text(Utils.dateToString(nextDla))))
-                    );
+                    .insertAfter(insertAfter);
                 }
             }
         }
+        
         
 
         // Expérience
@@ -1722,33 +1725,15 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             }
             var nb_ent = Math.ceil((pi_nextLvl - stats.xp.PI.all) / px_ent);
 
-            var trainingMsg;
-            if(px < px_ent) {
-                trainingMsg = 'Manque ' + (px_ent - px) + ' PX';
-            } else {
-                trainingMsg = 'Entraînement possible. Il vous restera ' + (px - px_ent) + ' PX';
-            }
-            $("#exp > table > tbody")
-            .append(
-                $("<tr/>")
-                .append($("<th/>").text("Niveau " + (stats.xp.level + 1)))
-                .append($("<td/>").append(nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : ''))),
-                $("<tr/>")
-                .append($("<th/>").text("Entrainement"))
-                .append($("<td/>").append(trainingMsg))
-            );
-        } else {
-            $("#exp > table > tbody")
-            .append(
-                $("<tr/>")
-                .append($("<th/>").text("Entrainement"))
-                .append($("<td/>").append("Impossible vous êtes trop gros !"))
-            );
+            $("<tr/>")
+            .append($("<th/>").text("Niveau " + (stats.xp.level + 1)))
+            .append($("<td/>").append(nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '')))
+            .insertAfter($("#exp table th:contains(Niveau)").parents("tr:first"));
         }
 
         // Point de Vie
         {
-            var ctn = $("#pos > table > tbody");
+            var ctn = $("#pos table > tbody");
 
             var pvmax = stats.hp.max.total;
 
@@ -1845,7 +1830,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             );
             
             ctn.insertAfter($("#caracs"));
-            $("<h3/>").text("Valeurs calculées").insertAfter($("#caracs"));
+            $("<h3/>").addClass("mh_tdtitre").text("Valeurs calculées").insertAfter($("#caracs"));
             $("<p/>").insertAfter($("#caracs"));
             
             $.each(caracs, function(i, v) {
@@ -1905,7 +1890,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         
 
         $.each(["Comp", "Sort"], $.proxy(function(idx, actionType) {
-            var ctn = $("#" + actionType.toLowerCase() + " > table > tbody");
+            var ctn = $("#" + actionType.toLowerCase() + " > div > table > tbody");
             var actions = Object.keys( DB_talents[actionType] );
             
             // Sort reservé
@@ -1927,6 +1912,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 .append($("<td/>"))
                 .append(
                     $("<td/>")
+                    .addClass("expand footable-visible")
                     .append(
                         $("<a/>")
                         .attr("href", "javascript:Enter"+actionType+"("+actionId+")")
@@ -1952,7 +1938,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 .append(
                     $("<td/>")
                     .addClass("numeric footable-visible footable-last-column")
-                    .text("0 % succès sur 0 jet")
+                    .text("0 % / 0 jet")
                 )
                 .append(
                     $("<td/>")
@@ -1995,18 +1981,19 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
     getStats : function() {
         var getText = function(name, colId) {            
             var xpath = "td" + (Utils.isUndefined(colId) ? "" : (":nth-child(" + colId +")"));
-            var text = $("#content table tr > th:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
+            var text = $("th:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
             return text;
         };
         
         var getTextTd = function(name, colId) {            
             var xpath = "td" + (Utils.isUndefined(colId) ? "" : (":nth-child(" + colId +")"));
-            var text = $("#content table tr > td:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
+            var text = $("td:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
             return text;
         };        
                 
         var extractHM = function(text) {
             var tmp = /(-?\d+)\s+h\s+(-?\d+)/.exec(text);
+            //console.log(text, tmp);
             var hm = {
                 hour : parseInt(tmp[1]),
                 min : parseInt(tmp[2])
@@ -2017,40 +2004,54 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         var stats = {};        
                 
         // Echéance du Tour
-        stats.dla = {
-            next : getText("Date Limite d'Action"),
-            duration : {
-                normal : extractHM(getText("Durée normale de mon Tour")),
-                bonus : extractHM(getText("Bonus/Malus sur la durée")),
-                injuries : extractHM(getText("Augmentation due aux blessures")),
-                stuf : extractHM(getText("Poids de l'équipement")),
-                total : extractHM(getText("Durée de mon prochain Tour"))
-            }
-        };
+        try {
+            stats.dla = {
+                next : getText("Date Limite d'Action"),
+                duration : {
+                    normal : extractHM(getText("Durée normale de mon Tour")),
+                    bonus : extractHM(getText("Bonus/Malus sur la durée")),
+                    injuries : extractHM(getText("Augmentation due aux blessures")),
+                    stuf : extractHM(getText("Poids de l'équipement")),
+                    total : extractHM(getText("Durée de mon prochain Tour"))
+                }
+            };
+        } catch(e) {
+            this.logger.error("Error while parsing DLA");
+        }
+
+        try {
+            stats.pa = /(\d) PA/.exec(getText("PA restant(s)"))[1];        
+        } catch(e) {
+            this.logger.error("Error while parsing PA");
+        }
         
-        stats.pa = /(\d) PA/.exec(getText("PA restant(s)"))[1];        
-        
-        var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+)/.exec(getText("Position"));
-        stats.position = {
-            x : parseInt(tmp[1]),
-            y : parseInt(tmp[2]),
-            n : parseInt(tmp[3]),
-        };        
-        
-        var tmp = /(\d+)\s+\((\d+)\s+PI\)/.exec(getText("PI"));
-        stats.xp = {
-            level : parseInt(getText("Niveau")),
-            PI : {
-                all : parseInt(tmp[2]),
-                current : parseInt(tmp[1])
-            },
-            PX : {
-                public : parseInt($("span#px").text()),
-                private : parseInt($("span#px_perso").text())
-            }
-        };
-        
-        stats.karma = getText("Karma");
+
+        try {
+            var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+)/.exec(getText("Position"));
+            stats.position = {
+                x : parseInt(tmp[1]),
+                y : parseInt(tmp[2]),
+                n : parseInt(tmp[3]),
+            };   
+        } catch(e) {
+            this.logger.error("Error while parsing Position");
+        }
+            
+        try {
+            stats.xp = {
+                level : parseInt(getText("Niveau")),
+                PI : {
+                    all : parseInt(getTextTd("Total",2)),
+                    current : parseInt(getText("PI", 3))
+                },
+                PX : {
+                    public : parseInt($("#px").text()),
+                    private : parseInt($("#px_perso").text())
+                }
+            };
+        } catch(e) {
+            this.logger.error("Error while parsing PI/level");
+        }
                
         var caracs = [{
             key:"attaque",
@@ -2080,78 +2081,115 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             key:"view",
             label : "Vue",
             dice : 1
+        }, {
+            key : "rm",
+            label : "Résistance à la Magie",
+            dice : 1
+        }, {
+            key : "mm",
+            label : "Maîtrise de la Magie",
+            dice : 1
         }];        
         
         $.each(caracs, $.proxy(function(i, carac) {
-            var key = carac.key;
-            var label = carac.label;
-            var dice = carac.dice;
-            
-            stats[key] = {
-                des : parseInt(getTextTd(label, 2)),
-                desReel : parseInt(getTextTd(label, 3)),
-                physique : parseInt(getTextTd(label, 4)),
-                magique : parseInt(getTextTd(label, 5))
-            };
-            
-            stats[key].desReel = stats[key].desReel || stats[key].des;
-            stats[key].bm = stats[key].physique + stats[key].magique;
-            stats[key].moy = (1+dice) / 2 * stats[key].desReel + stats[key].bm;
-            stats[key].total = stats[key].desReel + stats[key].bm;
-            
+            try {
+                var key = carac.key;
+                var label = carac.label;
+                var dice = carac.dice;
+
+                stats[key] = {
+                    des : parseInt(getTextTd(label, 2)) || 0,
+                    desReel : parseInt(getTextTd(label, 3)) || 0,
+                    physique : parseInt(getTextTd(label, 4)) || 0,
+                    magique : parseInt(getTextTd(label, 5)) || 0
+                };
+                
+                stats[key].desReel = stats[key].desReel || stats[key].des;
+                stats[key].bm = stats[key].physique + stats[key].magique;
+                stats[key].moy = (1+dice) / 2 * stats[key].desReel + stats[key].bm;
+                stats[key].total = stats[key].desReel + stats[key].bm;
+            } catch(e) {
+                this.logger.error("Error while parsing " + label);
+            }
+
         }, this));        
         
-        var tmp = /(\d+)\/\d+/.exec(getText("Vie"));
-        var hp = stats.hp;
-        stats.hp = {
-            current : parseInt(tmp[1]),
-            max : {
-                value : hp.desReel,
-                bonus : hp.bm,
-                total : hp.total
+        try {
+            var tmp = /(\d+)\/\d+/.exec(getText("Vie"));
+            var hp = stats.hp;
+            stats.hp = {
+                current : parseInt(tmp[1]),
+                max : {
+                    value : hp.desReel,
+                    bonus : hp.bm,
+                    total : hp.total
+                }
             }
+        } catch(e) {
+            this.logger.error("Error while parsing HP");
         }
         
-        var view = stats.view;
-        stats.view = {
-            range : view.desReel,
-            bonus : view.bm,
-            total : view.total
-        };        
-                
-        var tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("Fatigue"));
-        stats.hp.fatigue = {
-            display : tmp[1],
-            value : parseInt(tmp[2]),
-            bm : (tmp[3] ? parseInt(tmp[3]) : 0)
-        };                
-        
-        stats.corpulence = parseInt(getText("Corpulence"));
-        stats.agilite = parseInt(getText("Agilité"));
+        try {
+            var view = stats.view;
+            stats.view = {
+                range : view.desReel,
+                bonus : view.bm,
+                total : view.total
+            };   
+        } catch(e) {
+            this.logger.error("Error while parsing view");
+        }
+            
+        try {                
+            var tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("Fatigue"));
+            stats.hp.fatigue = {
+                display : tmp[1],
+                value : parseInt(tmp[2]),
+                bm : (tmp[3] ? parseInt(tmp[3]) : 0)
+            };   
+        } catch(e) {
+            this.logger.error("Error while parsing Fatigue");
+        }
+            
+        try {
+            stats.corpulence = parseInt(getText("Corpulence"));
+            stats.agilite = parseInt(getText("Agilité"));
+        } catch(e) {
+            this.logger.error("Error while parsing more");
+        }
 
-        stats.concentration = parseInt(getText("Bonus de Concentration"));
-        stats.kills = parseInt(getText("Nombre d'Adversaires tués"));
-        stats.deaths = parseInt(getText("Nombre de Décès"));
-        
-        stats.magie = {
-            rm : {
-                value : parseInt(getText("Résistance à la Magie", 2)),
-                bonus : parseInt(getText("Résistance à la Magie", 3))
-            },
-            mm : {
-                value : parseInt(getText("Maîtrise de la Magie", 2)),
-                bonus : parseInt(getText("Maîtrise de la Magie", 3))
-            }
-        };   
+        try {
+            stats.concentration = parseInt(getText("Bonus de Concentration"));
+            stats.kills = parseInt(getText("Meurtres"));
+            stats.deaths = parseInt(getText("Morts"));
+        } catch(e) {
+            this.logger.error("Error while parsing bonus");
+        }
         
         // Computed
-        stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
-        stats.dla.duration.bonus.total = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
-        stats.dla.duration.injuries.total = stats.dla.duration.injuries.hour * 60 + stats.dla.duration.injuries.min;
-        stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
-        stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;
-        
-        stats.hp.fatigue.total = stats.hp.fatigue.value + stats.hp.fatigue.bm;
+        try {
+            stats.dla.duration.normal.total = stats.dla.duration.normal.hour * 60 + stats.dla.duration.normal.min;
+            stats.dla.duration.bonus.total = stats.dla.duration.bonus.hour * 60 + stats.dla.duration.bonus.min;
+            stats.dla.duration.injuries.total = stats.dla.duration.injuries.hour * 60 + stats.dla.duration.injuries.min;
+            stats.dla.duration.stuf.total = stats.dla.duration.stuf.hour * 60 + stats.dla.duration.stuf.min;
+            stats.dla.duration.total.total = stats.dla.duration.total.hour * 60 + stats.dla.duration.total.min;
+
+            stats.hp.fatigue.total = stats.hp.fatigue.value + stats.hp.fatigue.bm;
+            
+            stats.magie = {
+                rm : {
+                    value : stats.rm.desReel,
+                    bonus : stats.rm.bm
+                },
+                mm : {
+                    value : stats.mm.desReel,
+                    bonus : stats.mm.bm
+                }
+            };   
+            
+        } catch(e) {
+            this.logger.error("Error while computing");
+        }
                 
         Utils.setConf("profil_stats", JSON.stringify(stats))
 
