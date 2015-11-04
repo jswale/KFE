@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-08
+// @version       1.0.2-09
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -625,7 +625,12 @@ var Page = $.inherit({
             return;
         }
 
-        var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
+        var tmp;
+        if(newIHM) {
+            tmp = /ai_ID(Comp|Sort)=(\d+)/.exec(link.attr("href"));
+        } else {
+            tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
+        }
         var actionType = tmp[1];
         var actionId = parseInt(tmp[2]);
         var actionName = link.text().trim();
@@ -1671,6 +1676,16 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
     },   
 
     sendData : function() {
+        $("<iframe/>")
+        .css("display", "none")
+        .attr("src", "/mountyhall/MH_Play/Play_profil.php")
+        .attr("name", "KMHC_play_profil")
+        .on("load", function() {
+            $(this).remove();
+        })
+        .appendTo("body");
+        return;
+        
         var result = $("table:first").text();
         result = result.replace(/<\/(TD|TH)[^>]*>/gi,"");
         result = result.replace(/<\/(TABLE|TR)[^>]*>/gi,"\n");
@@ -1727,7 +1742,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
 
             $("<tr/>")
             .append($("<th/>").text("Niveau " + (stats.xp.level + 1)))
-            .append($("<td/>").append(nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '')))
+            .append($("<td/>").attr("colspan", "2").append(nb_ent + ' entraînement' + (nb_ent > 1 ? 's' : '')))
             .insertAfter($("#exp table th:contains(Niveau)").parents("tr:first"));
         }
 
@@ -1817,12 +1832,12 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 .append($("<th/>").attr("colspan", "3").css("text-align", "center").text("Magique"))
                 ,
                 $("<tr>")
-                .append($("<th/>").css("text-align", "center").text("Moy."))
-                .append($("<th/>").css("text-align", "center").text("Min"))
-                .append($("<th/>").css("text-align", "center").text("Max"))
-                .append($("<th/>").css("text-align", "center").text("Moy."))
-                .append($("<th/>").css("text-align", "center").text("Min"))
-                .append($("<th/>").css("text-align", "center").text("Max"))
+                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Moy."))
+                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Min"))
+                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Max"))
+                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Moy."))
+                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Min"))
+                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Max"))
                 )
             );
             ctn.append(
@@ -1899,8 +1914,8 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             }            
             
             var currentActions = $.map(ctn.find("> tr > td:nth-child(2) > a"), function(link){
-                link = $(link);
-                var tmp = /javascript:Enter(Comp|Sort)\((\d+)\)/.exec(link.attr("href"));
+                link = $(link);                
+                var tmp = /ai_ID(Comp|Sort)=(\d+)/.exec(link.attr("href"));
                 return tmp[2];
             });                        
             
@@ -1915,9 +1930,15 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                     .addClass("expand footable-visible")
                     .append(
                         $("<a/>")
-                        .attr("href", "javascript:Enter"+actionType+"("+actionId+")")
+                        .attr("href", "/mountyhall/View/Detail"+actionType+".php?ai_ID"+actionType+"="+actionId)
                         .addClass("AllLinks")
                         .text(DB_talents[actionType][actionId].name)
+                        .click(function() {
+                            $('#modal #content').load( $(this).attr('href'));
+                            $('#modal').css('opacity', 1);
+                            $('#modal').css('pointer-events', 'auto');
+                            return false;
+                        })                        
                     )
                 )
                 .append(
@@ -1943,6 +1964,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 .append(
                     $("<td/>")
                     .css("display", "none")
+                    .text("1")
                 )
                 .append(
                     $("<td/>")
@@ -3777,7 +3799,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         if(
                             ("3" == key[0] && tag.tag.match(/.*(Parchemin Gribouillé|Invention Extraordinaire).*/))
                             ||
-                            ("3" == key[0] && !tag.tag.match(/^Rune/) && tag.tag.match(/.*(de l'Aigle|des Béhémoths|des Cyclopes|des Enragés|de Feu|des Mages|de l'Orage|de l'Ours|du Pic|du Rat|de Résistance|de la Salamandre|du Temps|de la Terre|du Sable|des Vampires|des Duellistes|des Champions|des Anciens|du Roc|des Tortues|du Vent|en Mithril).*/))
+                            ("3" == key[0] && !tag.tag.match(/^(Rune|Elixir)/) && tag.tag.match(/.*(de l'Aigle|des Béhémoths|des Cyclopes|des Enragés|de Feu|des Mages|de l'Orage|de l'Ours|du Pic|du Rat|de Résistance|de la Salamandre|du Temps|de la Terre|du Sable|des Vampires|des Duellistes|des Champions|des Anciens|du Roc|des Tortues|du Vent|en Mithril).*/))
                         ) {
                             ctn.parents("tr:first").find("> td").css("background-color", "#E9967A");
                         }
