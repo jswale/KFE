@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-09
+// @version       1.0.2-10
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -134,6 +134,10 @@ var Utils = function() {
 
         sign : function(i) {
             return (i >=0 ? '+' : '') + i;
+        },
+        
+        getRandomInt : function(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         },
 
         getCoordRef : function(x,y,n, pad) {
@@ -1779,7 +1783,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         }    
         
         // Caracs
-        if(true){
+        {
                 var caracs = [
                 [
                     "Attaque",
@@ -2012,7 +2016,12 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             var text = $("td:contains(" + name + ")").parents("tr:first").find(xpath).text().replace(/[\n\r\t]+/gi," ").replace(/\s+/gi," ");
             return text;
         };        
-                
+
+        var setTextTd = function(name, colId, text) {            
+            var xpath = "td" + (Utils.isUndefined(colId) ? "" : (":nth-child(" + colId +")"));
+            $("td:contains(" + name + ")").parents("tr:first").find(xpath).text(text);
+        };        
+        
         var extractHM = function(text) {
             var tmp = /(-?\d+)\s+h\s+(-?\d+)/.exec(text);
             //console.log(text, tmp);
@@ -2118,18 +2127,18 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 var key = carac.key;
                 var label = carac.label;
                 var dice = carac.dice;
-
+                
                 stats[key] = {
                     des : parseInt(getTextTd(label, 2)) || 0,
-                    desReel : parseInt(getTextTd(label, 3)) || 0,
+                    desMalus : parseInt(getTextTd(label, 3)) || 0,
                     physique : parseInt(getTextTd(label, 4)) || 0,
                     magique : parseInt(getTextTd(label, 5)) || 0
                 };
                 
-                stats[key].desReel = stats[key].desReel || stats[key].des;
+                stats[key].desReel = stats[key].des + (stats[key].desMalus || 0);
                 stats[key].bm = stats[key].physique + stats[key].magique;
                 stats[key].moy = (1+dice) / 2 * stats[key].desReel + stats[key].bm;
-                stats[key].total = stats[key].desReel + stats[key].bm;
+                stats[key].total = stats[key].desReel + stats[key].bm;                
             } catch(e) {
                 this.logger.error("Error while parsing " + label);
             }
