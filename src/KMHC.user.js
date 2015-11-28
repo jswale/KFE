@@ -3163,7 +3163,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     fnShowCarac(monster, monsterTemplate, monstreAge, "noAtt", "Nombre d'attaques"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "att", "Dés d'Attaque", "D6"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "esq", "Dés d'Esquive", "D6"),
-                    fnShowCarac(monster, monsterTemplate, monstreAge, "deg", "Dés de Dégât", "D3"),
+                    fnShowCarac(monster, monsterTemplate, monstreAge, "degat", "Dés de Dégât", "D3"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "rm", "Résistance Magique"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "mm", "Maitrise Magique"),
                     fnShowCarac(monster, monsterTemplate, monstreAge, "vue", "Vue"),
