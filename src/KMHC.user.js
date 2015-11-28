@@ -3678,8 +3678,11 @@ var MH_Play_Play_vue = $.inherit(Page, {
 
                     var pvMin = data.pv;
                     var pvMax = Math.max(data.pv, data.pvMax);
-                    var colors = ["#FF4500", "#FFA500", "#FFD700", "#9ACD32"];
-                    var color = colors[Math.round((pvMin/pvMax) * colors.length)-1];
+                    var pvColors = ["#FF4500", "#FFA500", "#FFD700", "#9ACD32"];
+                    var pvColor = pvColors[Math.round((pvMin/pvMax) * pvColors.length)-1];
+                    
+                    var dlaOver = data.dla * 1000 < Date.now();
+                    var dlaColor = "red";
                     
                     $("[data-troll-info='" + trollId + "'] td:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Infos")+")")
                     .append(
@@ -3696,20 +3699,20 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         .append(
                             $("<div/>")
                             .css("height", "100%")
-                            .css("width", Math.round((data.pa||0)/6*100) + "%")
-                            .css("background-color", "#000")
+                            .css("width", dlaOver ? "0%" : Math.round((data.pa||0)/6*100) + "%")
+                            .css("background-color", "#000" )
                         )
                         .append(
                             $("<div/>")
                             .css("height", "100%")
                             .css("width", "100%")
-                            .css("color", "#999")
+                            .css("color", dlaOver ? dlaColor : "#999")
                             .css("font-size", "11px")
                             .css("text-align", "center")
                             .css("position", "absolute")
                             .css("top", "0")
                             .css("left", "0")
-                            .text((data.pa||"?") + " PA")
+                            .text(dlaOver ? "DLA" : (data.pa||"?") + " PA")
                         )
                     )
                     .append(
