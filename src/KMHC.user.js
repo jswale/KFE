@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-10
+// @version       1.0.2-11
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -3729,7 +3729,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             $("<div/>")
                             .css("height", "100%")
                             .css("width", Math.min(100, Math.round(pvMin/pvMax*100)) + "%")
-                            .css("background-color", color)
+                            .css("background-color", pvColor)
                         )
                         .append(
                             $("<div/>")
