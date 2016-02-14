@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-12
+// @version       1.0.2-13
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
-// @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2015-06-15_12-00
+// @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2016-02-14_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2015-06-15_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2015-09-04_20-33
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-11-19_10-00
