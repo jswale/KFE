@@ -606,17 +606,17 @@ var DB_talents = {
                 2: [ "Bababoum", "ATT +1", { seuil: 1, att: 1 } ],
                 3: [ "Zbouing", "REG +1", { seuil: 1, reg: 1 } ],
                 4: [ "Kliketiiik", "ESQ -1 | Concentration -1", { seuil: 1, esq: -1, concentration: -1 } ],
+                5: [ "Whaaag", "Portée Horizontale +1/4", { seuil: 1, portee: 1, base: 4 } ],
                 6: [ "Whoooom", "Concentration +2", { seuil: 1, concentration: 2 } ],
                 7: [ "Krouiiik", "Concentration -2", { seuil: 1, concentration: -2 } ],
                 8: [ "Tagadagada", "Tour +1/2", { seuil: 2, tour: 1, base: 2 } ],
                 9: [ "Tuutuuuut", "ATT -1", { seuil: 1, att: -1 } ],
+                11: [ "Kssksss", "ESQ +1", { seuil: 1, esq: 1 } ],
                 12: [ "Gaaaw", "Fatigue +1", { seuil: 1, fatigue: 1 } ],
+                13: [ "Huitsch", "DEG -1", { seuil: 1, deg: -1 } ],
                 15: [ "Sssrileur", "Visible", { seuil: 6, visible: true } ],
-                '?2': [ "Huitsch", "DEG -1", { seuil: 1, deg: -1 } ],
-                '?4': [ "Kssksss", "ESQ +1", { seuil: 1, esq: 1 } ],
                 '?5': [ "Praaaouuut", "REG -1", { seuil: 1, reg: -1 } ],
-                '?6': [ "Ytseukayndof", "Bonus magiques", { seuil: 2, bm: true } ],
-                '?7': [ "Whaaag", "Portée Horizontale +1/4", { seuil: 1, portee: 1, base: 4 } ]
+                '?6': [ "Ytseukayndof", "Bonus magiques", { seuil: 2, bm: true } ]
             },
             description : function() {
                 var ctn = $("<table/>");
