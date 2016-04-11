@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-13
+// @version       1.0.2-14
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1959,65 +1959,86 @@ var MH_Play_Play_vue = $.inherit(Page, {
 				this.addTrollEventLink();
 				this.addInfos();
 				this.fixTableSize();
-				this.addTeamRules();
+        this.addOwnRules();
+        this.addTeamRules();
 
 				// Tune ihm
 				$("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
 		},
 
-		addTeamRules : function() {
-				var self = this;
-				$("<div/>")
-				.addClass("mh_tdtitre")
-				.attr("id", "data-rules")
-				.css("border", "1px solid black")
-				.css("margin-bottom", "10px")
-				.append(
-						$("<div/>")
-						.css("font-weight", "bold")
-						.css("text-align", "center")
-						.text("Consignes")
-				)
-				.append(
-						$("<textarea/>")
-						.css("width", "100%")
-						.css("height", "120px")
-				)
-				.append(
-						$("<input/>")
-						.attr("type", "button")
-						.addClass("mh_form_submit")
-						.css("text-align", "center")
-						.val("Mettre à jour")
-						.click(function(){
-								self.callAPIMiltown({
-										api : "tag",
-										call : "update",
-										data : {
-												id : "vue",
-												description : $("#data-rules textarea").val()
-										},
-										callback : function() {
-												$("#data-rules input").val("Données envoyées");
-										},
-										scope : self
-								});
-						})
-				)
-				.insertAfter($("form[name='LimitViewForm']"));
-
-				this.callAPIMiltown({
-						api : "tag",
-						call : "get",
-						data : {
-								id : "vue"
-						},
-						callback : function(tag) {
-								$("#data-rules textarea").val(tag);
-						},
-						scope : this
-				});
-		},
+    addTeamRules : function() {
+      this.addXRules("Consignes", "vue");
+  },
+  addOwnRules : function() {
+      this.addXRules("Notes perso", "vue-" + Utils.getConf("login"));
+  },
+  
+  toggleRules: function(ctnId) {
+      var ctn = $("#" + ctnId);
+      ctn.find("textarea,input").toggle();        
+  },
+  
+  addXRules : function(title, id) {
+      var ctnId = "data-rules-" + id;
+      var self = this;
+      $("<div/>")
+      .addClass("mh_tdtitre")
+      .attr("id", ctnId)
+      .css("border", "1px solid black")
+      .css("margin-bottom", "10px")
+      .append(
+          $("<div/>")
+          .css("font-weight", "bold")
+          .css("text-align", "center")
+          .text(title)
+          .click(function(){
+              self.toggleRules(ctnId);
+          })
+      )
+      .append(
+          $("<textarea/>")
+          .css("width", "100%")
+          .css("height", "120px")
+      )        
+      .append(
+          $("<input/>")
+          .attr("type", "button")
+          .addClass("mh_form_submit")
+          .css("text-align", "center")
+          .val("Mettre à jour")
+          .click(function(){       
+              var ctn = $("#" + ctnId);
+              self.callAPIMiltown({
+                  api : "tag",
+                  call : "update",
+                  data : {
+                      id : id,
+                      description : ctn.find("textarea").val()
+                  },
+                  callback : function() {
+                      ctn.find("input").val("Données envoyées");
+                  },
+                  scope : self
+              });
+          })
+      )        
+      .insertAfter($("form[name='LimitViewForm']"));
+      
+      this.callAPIMiltown({
+          api : "tag",
+          call : "get",
+          data : {
+              id : id
+          }, 
+          callback : function(tag) {
+              $("#" + ctnId + " textarea").val(tag);
+              if("" == tag) {
+                  self.toggleRules(ctnId);
+              }
+          },
+          scope : this
+      });               
+  },
 
 		changeTrollColumnsOrder : function() {
 				var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
