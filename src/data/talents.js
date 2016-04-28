@@ -343,7 +343,7 @@ var DB_talents = {
                     var reg = stats.regen.des;
                     var fatigue = stats.hp.fatigue.total;
                     var vuetotale = stats.view.total;
-                    var portee = Math.min(Utils.getPortee(reg+Math.floor(pv/10))-Math.floor((fatigue)/5), vuetotale);
+                    var portee = Math.min(Math.max(1, Utils.getPortee(reg+Math.ceil(pv/10))-Math.floor((fatigue)/5)), vuetotale);
                     
                     if(portee < 1) {
                         return $("<div/>").append("Impossible de charger !");
