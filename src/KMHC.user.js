@@ -3162,11 +3162,6 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                         )
                                         .append(
                                             $('<th/>')
-                                            .attr('width', '50')
-                                            .text('Réf.')
-                                        )
-                                        .append(
-                                            $('<th/>')
                                             .text('Troll piégeur')
                                         )
                                         .append(
@@ -3189,7 +3184,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                 .append(
                                     $('<tbody/>')
                                     .append(
-                                        $.map(json.traps, $.proxy(function(data, trapId) {
+                                        $.map(json.traps, $.proxy(function(data) {
                                             console.log(arguments);
                                             var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
                                             return $('<tr/>')
@@ -3197,7 +3192,6 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                             .attr("data-lieu-info", trapId)
                                             .attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
                                             .append($('<td/>').text(d))
-                                            .append($('<td/>').text(trapId))
                                             .append($('<td/>').text(data.troll))
                                             .append(this.addSameXYN_hoverTd($("<td/>")).text(data.x).attr("align", "center"))
                                             .append(this.addSameXYN_hoverTd($("<td/>")).text(data.y).attr("align", "center"))
@@ -3231,7 +3225,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
 								.addClass("mh_tdpage")
 								.append($("<td/>").text(d))
 								.append($("<td/>").text(''))
-								.append($("<td/>").text(trapId))
+								.append($("<td/>").text(''))
 								.append($("<td/>").text("Piège de " + data.troll))
 								.append(this.addSameXYN_hoverTd($("<td/>")).text(data.x).attr("align", "center"))
 								.append(this.addSameXYN_hoverTd($("<td/>")).text(data.y).attr("align", "center"))
