@@ -3189,7 +3189,6 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                             var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
                                             return $('<tr/>')
                                             .addClass('mh_tdpage')
-                                            .attr("data-lieu-info", trapId)
                                             .attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
                                             .append($('<td/>').text(d))
                                             .append($('<td/>').text(data.troll))
@@ -3203,7 +3202,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             }
 								
                             
-                            $.each(json.traps, $.proxy(function(trapId, data){
+                            $.each(json.traps, $.proxy(function(data){
                                 var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
                                 
 								var previous = [];
@@ -3220,7 +3219,6 @@ var MH_Play_Play_vue = $.inherit(Page, {
 								}
 
 								var tr = $("<tr/>")
-								.attr("data-lieu-info", trapId)
 								.attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
 								.addClass("mh_tdpage")
 								.append($("<td/>").text(d))
