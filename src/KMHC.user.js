@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.2-15
+// @version       1.0.3-1
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -1930,55 +1930,55 @@ var Messagerie_ViewMessageBot = $.inherit(Page, {
 
 var MH_Play_Play_vue = $.inherit(Page, {
 
-		monsterDatas : {},
+    monsterDatas : {},
 
-		init : function(){
-				this.sendView();
-				$("#mhPlay").attr("data-view", "main");
+	init : function(){
+		this.sendView();
+		$("#mhPlay").attr("data-view", "main");
 
-				$("#mh_vue_hidden_trolls table:first thead tr.mh_tdtitre th:nth-child(" + this.getColumnId("mh_vue_hidden_trolls", "Niv.") + ")").text("Niveau").width("60px");
+		$("#mh_vue_hidden_trolls table:first thead tr.mh_tdtitre th:nth-child(" + this.getColumnId("mh_vue_hidden_trolls", "Niv.") + ")").text("Niveau").width("60px");
 
-				this.changeTrollColumnsOrder()
-				this.addTrollInfoColumns();
-				this.addPharozViewLinks();
-				this.highlightTreasures();
-				this.addMonsterCdmLink();
-				this.addBarycentreUI();
-				this.getBBcodeVersion();
-				this.addSameXYN();
-				this.addToggleTresors();
+		this.changeTrollColumnsOrder()
+		this.addTrollInfoColumns();
+		this.addPharozViewLinks();
+		this.highlightTreasures();
+		this.addMonsterCdmLink();
+		this.addBarycentreUI();
+		this.getBBcodeVersion();
+		this.addSameXYN();
+		this.addToggleTresors();
+		this.addChampignonsRef();
+		this.addTagEdition();
+		this.addMonsterInfos();
 
-				this.addChampignonsRef();
-				this.addTagEdition();
-				this.addMonsterInfos();
-
-				if(Utils.getConf("mountyzilla") != "true") {
-						this.addMonsterLevel();
-						this.addSharingUI();
-				}
-				this.addTrollEventLink();
-				this.addInfos();
-				this.fixTableSize();
+		if(Utils.getConf("mountyzilla") != "true") {
+            this.addMonsterLevel();
+			this.addSharingUI();
+		}
+		this.addTrollEventLink();
+		this.addInfos();
+		this.fixTableSize();
         this.addOwnRules();
         this.addTeamRules();
 
 				// Tune ihm
-				$("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
-		},
-
+		$("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
+    },
+    
     addTeamRules : function() {
       this.addXRules("Consignes", "vue");
-  },
-  addOwnRules : function() {
+    },
+    
+    addOwnRules : function() {
       this.addXRules("Notes perso", "vue-" + Utils.getConf("login"));
-  },
+    },
   
-  toggleRules: function(ctnId) {
+    toggleRules: function(ctnId) {
       var ctn = $("#" + ctnId);
       ctn.find("textarea,input").toggle();        
-  },
+    },
   
-  addXRules : function(title, id) {
+    addXRules : function(title, id) {
       var ctnId = "data-rules-" + id;
       var self = this;
       $("<div/>")
@@ -3119,17 +3119,18 @@ var MH_Play_Play_vue = $.inherit(Page, {
 				this.callAPIConnected({
 						api : "viewInfo",
 						data : {
-								"xMin" : x - rH,
-								"xMax" : x + rH,
-								"yMin" : y - rH,
-								"yMax" : y + rH,
-								"nMin" : n - rV,
-								"nMax" : n + rV,
-								"m" : this.getMonsterIds(),
-								"t" : this.getTrollIds(),
-								"o" : this.getTresorIds(),
-								"l" : this.getLieuIds(),
-								"c" : this.getChampigonIds()
+							"xMin" : x - rH,
+							"xMax" : x + rH,
+							"yMin" : y - rH,
+							"yMax" : y + rH,
+							"nMin" : n - rV,
+							"nMax" : n + rV,
+                            "trap" : 1,
+							"m" : this.getMonsterIds(),
+							"t" : this.getTrollIds(),
+							"o" : this.getTresorIds(),
+							"l" : this.getLieuIds(),
+							"c" : this.getChampigonIds()
 						},
 						callback : function(datas) {
 								datas = datas.replace(/\s+/g, " ");
@@ -3140,6 +3141,105 @@ var MH_Play_Play_vue = $.inherit(Page, {
 								var trollIds = $.map(json.trolls, $.proxy(function(trollId, data){
 										return trollId;
 								}, this));
+                            
+                            if($(json.traps).size() > 0) {
+                                $('<table>')
+                                .attr('width', '100%')
+                                .attr('border', '0')
+                                .css('margin-bottom', '10px')
+                                .attr('cellspacing', '1')
+                                .attr('cellpadding', '2')
+                                .addClass('mh_tdborder')
+                                .append(
+                                    $('<thead/>')
+                                    .append(
+                                        $('<tr/>')
+                                        .addClass('mh_tdtitre')
+                                        .append(
+                                            $('<th/>')
+                                            .attr('width', '40')
+                                            .text('Dist.')
+                                        )
+                                        .append(
+                                            $('<th/>')
+                                            .attr('width', '50')
+                                            .text('Réf.')
+                                        )
+                                        .append(
+                                            $('<th/>')
+                                            .text('Troll piégeur')
+                                        )
+                                        .append(
+                                            $('<th/>')
+                                            .attr('width', '30')
+                                            .text('X')
+                                        )
+                                        .append(
+                                            $('<th/>')
+                                            .attr('width', '30')
+                                            .text('Y')
+                                        )
+                                        .append(
+                                            $('<th/>')
+                                            .attr('width', '30')
+                                            .text('N')
+                                        )
+                                    )
+                                )
+                                .append(
+                                    $('<tbody/>')
+                                    .append(
+                                        $.map(json.traps, $.proxy(function(data, trapId) {
+                                            console.log(arguments);
+                                            var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
+                                            return $('<tr/>')
+                                            .addClass('mh_tdpage')
+                                            .attr("data-lieu-info", trapId)
+                                            .attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
+                                            .append($('<td/>').text(d))
+                                            .append($('<td/>').text(trapId))
+                                            .append($('<td/>').text(data.troll))
+                                            .append(this.addSameXYN_hoverTd($("<td/>")).text(data.x).attr("align", "center"))
+                                            .append(this.addSameXYN_hoverTd($("<td/>")).text(data.y).attr("align", "center"))
+                                            .append(this.addSameXYN_hoverTd($("<td/>")).text(data.n).attr("align", "center"));
+                                        }, this))
+                                    )
+                                )
+                                .insertAfter($("form[name='LimitViewForm']"));
+                            }
+								
+                            
+                            $.each(json.traps, $.proxy(function(trapId, data){
+                                var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
+                                
+								var previous = [];
+								var pd = d;
+								do {
+                                    previous = $("#mh_vue_hidden_lieux table:first tr.mh_tdpage td:nth-child(1)").filter(function() {
+                                        return $(this).text() == pd;
+									}).last().parent("tr");
+									pd--;
+								} while(pd > 0 && previous.length == 0);
+
+								if(previous.length == 0) {
+									previous = $("#mh_vue_hidden_lieux table:nth-child(1) tr.mh_tdtitre").first();
+								}
+
+								var tr = $("<tr/>")
+								.attr("data-lieu-info", trapId)
+								.attr("data-xyn", data.x + ";" + data.y + ";" + data.n)
+								.addClass("mh_tdpage")
+								.append($("<td/>").text(d))
+								.append($("<td/>").text(''))
+								.append($("<td/>").text(trapId))
+								.append($("<td/>").text("Piège de " + data.troll))
+								.append(this.addSameXYN_hoverTd($("<td/>")).text(data.x).attr("align", "center"))
+								.append(this.addSameXYN_hoverTd($("<td/>")).text(data.y).attr("align", "center"))
+								.append(this.addSameXYN_hoverTd($("<td/>")).text(data.n).attr("align", "center"))
+								.insertAfter(previous)
+								;
+
+                            }, this));
 
 								$.each(json.invis, $.proxy(function(trollId, data){
 										if($.inArray(trollId, trollIds)) {
