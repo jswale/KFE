@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3-2
+// @version       1.0.3-3
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -3115,7 +3115,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
         var rV = parseInt(r[2]);
 
         // Fix
-        //$("#mh_vue_hidden_trolls table:first thead tr.mh_tdpage th:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");
+        //$("#mh_vue_hidden_trolls table:first thead tr.mh_tdpage th:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");        
 
         this.callAPIConnected({
             api : "viewInfo",
@@ -4036,6 +4036,63 @@ var MH_Play_Actions_Competences_Play_a_Competence15 = $.inherit(Page, { // Résu
     }
 });
 
+var MH_Play_Actions_Play_a_Move = $.inherit(Page, { // DE
+    init : function() {
+        
+        Utils.addGlobalStyle([
+            '.trapOn { color:#FFF; background:darkred; }'
+        ]);        
+        
+        var x = parseInt($("[name='ai_XDepart']").val());
+        var y = parseInt($("[name='ai_YDepart']").val());
+        var n = parseInt($("[name='ai_NDepart']").val());
+        var xMin = x + parseInt($( "table.mh_tdborder td:contains('X')").closest("tr").find("input[type='radio']:first").val());
+        var xMax = x + parseInt($( "table.mh_tdborder td:contains('X')").closest("tr").find("input[type='radio']:last").val());
+        var yMin = y + parseInt($( "table.mh_tdborder td:contains('Y')").closest("tr").find("input[type='radio']:first").val());
+        var yMax = y + parseInt($( "table.mh_tdborder td:contains('Y')").closest("tr").find("input[type='radio']:last").val());
+        var nMin = n + parseInt($( "table.mh_tdborder td:contains('N')").closest("tr").find("input[type='radio']:first").val());
+        var nMax = n + parseInt($( "table.mh_tdborder td:contains('N')").closest("tr").find("input[type='radio']:last").val());
+        this.callAPIConnected({
+            api : "viewInfo",
+            data : {
+              "xMin" : xMin,
+              "xMax" : xMax,
+              "yMin" : yMin,
+              "yMax" : yMax,
+              "nMin" : nMin,
+              "nMax" : nMax,
+              "trap" : 1
+            },
+            callback : function(datas) {
+                var json = $.parseJSON(datas);
+
+                var traps = [];
+                $.each(json.traps, $.proxy(function(dataId, data){
+                    traps.push(data.x+";"+data.y+";"+data.n);
+                },this));
+                
+                var fnCheckTrap = function() {
+                    var nX = x + parseInt($("input[type='radio'][name='ai_DeplX']:checked").val());
+                    var nY = y + parseInt($("input[type='radio'][name='ai_DeplY']:checked").val());
+                    var nN = n + parseInt($("input[type='radio'][name='ai_DeplN']:checked").val());
+                    if(traps.indexOf(nX + ";" + nY + ";" + nN) > -1) {
+                        $("input[type='radio']:checked").closest("td").addClass("trapOn");
+                    } else {
+                        $("input[type='radio']").closest("td").removeClass("trapOn");
+                    }
+                };
+                
+                $.each($("input[type='radio']"), function() {
+                    $(this).click(fnCheckTrap);
+                });
+                
+                
+
+            }, scope : this
+ });
+        
+    }
+});         
 
 /*******************************************/
 /************* LAUNCH **********************/
