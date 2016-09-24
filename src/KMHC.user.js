@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3-3
+// @version       1.0.3-4
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -463,7 +463,7 @@ var Page = $.inherit({
             callback : $.proxy(function(datas) {
                 var json = $.parseJSON(datas);
 
-                $.each(json.tags, $.proxy(function(key, data){
+                $.each(json.tags || [], $.proxy(function(key, data){
                     var tmp = key.split(";");
                     if(tmp[0] == dataId) {
                         var o = $(selectSelector + " option[value='" + prefix + + tmp[1] + suffix + "']");
@@ -472,7 +472,7 @@ var Page = $.inherit({
                 },this));
 
                 if("m" == dataType) {
-                    $.each(json.monsters, $.proxy(function(key, data) {
+                    $.each(json.monsters || [], $.proxy(function(key, data) {
                         var o = $(selectSelector + " option[value='" + prefix + key + suffix + "']");
                         o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
                     },this));
@@ -3139,7 +3139,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
 
                 var isInvisible = false;
 
-                var trollIds = $.map(json.trolls, $.proxy(function(trollId, data){
+                var trollIds = $.map(json.trolls || [], $.proxy(function(trollId, data){
                     return trollId;
                 }, this));
                             
@@ -3185,7 +3185,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                 .append(
                                     $('<tbody/>')
                                     .append(
-                                        $.map(json.traps, $.proxy(function(data) {                                            
+                                        $.map(json.traps || [], $.proxy(function(data) {                                            
                                             var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
                                             return $('<tr/>')
                                             .addClass('mh_tdpage')
@@ -3202,7 +3202,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             }
                 
                             
-                            $.each(json.traps, $.proxy(function(dataId, data){
+                            $.each(json.traps || [], $.proxy(function(dataId, data){
                                 var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
                                 
                 var previous = [];
@@ -3233,7 +3233,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
 
                             }, this));
 
-                $.each(json.invis, $.proxy(function(trollId, data){
+                $.each(json.invis || [], $.proxy(function(trollId, data){
                     if($.inArray(trollId, trollIds)) {
                         return;
                     }
@@ -3278,7 +3278,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     this.addTagEditionForCell(tr, this.getColumnId("mh_vue_hidden_trolls", "Réf."), this.getColumnId("mh_vue_hidden_trolls", "Nom"), 2);
                 }, this));
 
-                $.each(json.trolls, $.proxy(function(trollId, data){
+                $.each(json.trolls || [], $.proxy(function(trollId, data){
 
                     // Création de la ligne pour son troll
                     if(trollId == Utils.getConf("login") && !isInvisible) {
@@ -3374,7 +3374,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     ;
                 }, this));
 
-                $.each(json.monsters, $.proxy(function(monsterId, data){
+                $.each(json.monsters || [], $.proxy(function(monsterId, data){
                     var pvMin, pvMax;
                     if(data.pvRange[0] == ">") {
                         pvMin = data.pvRange.substr(1);
@@ -3427,7 +3427,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                 }, this));
 
                 // populate tags and start handling
-                $.each(json.tags, $.proxy(function(key, tag){
+                $.each(json.tags || [], $.proxy(function(key, tag){
                     key = key.split(";");
                     $.each($("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']"), $.proxy(function(i, o) {
                         var ctn = $(o).prev();
@@ -3637,7 +3637,7 @@ var MH_Play_Play_e_follo = $.inherit(Page, {
                 datas = datas.replace(/\s+/g, " ");
                 var json = $.parseJSON(datas);
                 // populate tags and start handling
-                $.each(json.tags, $.proxy(function(key, tag){
+                $.each(json.tags || [], $.proxy(function(key, tag){
                     key = key.split(";");
                     $("[data-tag-type='" + key[0] + "'][data-tag-id='" + key[1] + "']").prev()
                     .attr("title",  "Par " + tag.trollName + " le " + this.utils.formatTime(tag.date))
@@ -4067,7 +4067,7 @@ var MH_Play_Actions_Play_a_Move = $.inherit(Page, { // DE
                 var json = $.parseJSON(datas);
 
                 var traps = [];
-                $.each(json.traps, $.proxy(function(dataId, data){
+                $.each(json.traps || [], $.proxy(function(dataId, data){
                     traps.push(data.x+";"+data.y+";"+data.n);
                 },this));
                 
