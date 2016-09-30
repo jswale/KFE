@@ -467,8 +467,13 @@ var Page = $.inherit({
                     $.each(json.tags || [], $.proxy(function(key, data){
                         var tmp = key.split(";");
                         if(tmp[0] == dataId) {
-                            var o = $(selectSelector + " option[value='" + prefix + + tmp[1] + suffix + "']");
-                            o.text(o.text() + " - " + data.tag);
+                            var o = $(selectSelector + " option[value='" + prefix + tmp[1] + suffix + "']");
+                            var cleared = o.text().split(" - ").slice(1).join(" - ");                            
+                            if(data.tag.indexOf(cleared.split("(")[0]) == 0) {
+                                o.text(tmp[1] + " - " + data.tag);
+                            } else {
+                                o.text(o.text() + " - " + data.tag);
+                            }
                         }
                     },this));
 
