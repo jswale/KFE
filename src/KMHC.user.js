@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3-4
+// @version       1.0.3-5
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -444,7 +444,7 @@ var Page = $.inherit({
 
     /******************************************/
 
-    injectTags : function(dataType, dataId, prefix, suffix, selectName) {
+    injectTags : function(dataType, dataId, prefix, suffix, selectName, cb) {
         var selectSelector = "select" + (selectName ? ("[name='" + selectName + "']") : "");
         var ids = $(selectSelector + " option[value!='']").map(function(){
             var v = $(this).prop("value");
@@ -461,21 +461,27 @@ var Page = $.inherit({
             api : "viewInfo",
             data : data,
             callback : $.proxy(function(datas) {
-                var json = $.parseJSON(datas);
+                if("" != datas) {
+                    var json = $.parseJSON(datas);
 
-                $.each(json.tags || [], $.proxy(function(key, data){
-                    var tmp = key.split(";");
-                    if(tmp[0] == dataId) {
-                        var o = $(selectSelector + " option[value='" + prefix + + tmp[1] + suffix + "']");
-                        o.text(o.text() + " - " + data.tag);
-                    }
-                },this));
-
-                if("m" == dataType) {
-                    $.each(json.monsters || [], $.proxy(function(key, data) {
-                        var o = $(selectSelector + " option[value='" + prefix + key + suffix + "']");
-                        o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
+                    $.each(json.tags || [], $.proxy(function(key, data){
+                        var tmp = key.split(";");
+                        if(tmp[0] == dataId) {
+                            var o = $(selectSelector + " option[value='" + prefix + + tmp[1] + suffix + "']");
+                            o.text(o.text() + " - " + data.tag);
+                        }
                     },this));
+
+                    if("m" == dataType) {
+                        $.each(json.monsters || [], $.proxy(function(key, data) {
+                            var o = $(selectSelector + " option[value='" + prefix + key + suffix + "']");
+                            o.text(o.text() + " (CdM: " + this.utils.getDateDiff(new Date(data.cdmDate*1000), new Date()) + ")");
+                        },this));
+                    }
+                }
+                
+                if(Utils.isDefined(cb)) {
+                    cb();
                 }
             }, this)
         });
@@ -489,8 +495,21 @@ var Page = $.inherit({
         this.injectTags("t", "2", prefix, suffix, selectName);
     },
 
-    injectTresorsTags : function(prefix, suffix, selectName) {
-        this.injectTags("o", "3", prefix, suffix, selectName);
+    injectTresorsTags : function(prefix, suffix, selectName) {       
+        var cb = function() {
+            // From dession
+            var selectSelector = "select" + (selectName ? ("[name='" + selectName + "']") : "");
+            $(selectSelector + " option[value!='']").each(function(){
+                var v = $(this).prop("value");
+                var id = v.substr(prefix.length, v.length - suffix.length);
+                var desc = Utils.getValue("ITEM_DESC_" + id);
+                if(Utils.isDefined(desc) && $(this).text().indexOf(desc) == -1) {
+                    $(this).text($(this).text() + " - " + desc);
+                }
+            });
+        };
+        this.injectTags("o", "3", prefix, suffix, selectName, cb);
+
     },
 
     injectChampignonsTags : function(prefix, suffix, selectName) {
@@ -972,6 +991,10 @@ var MH_Play_Actions_Abstract = $.inherit(Page, {
                 this.injectChampignonsTags("", "_??"); //TODO
                 break;
 
+            case "123": // Lancer de potion
+                this.injectTresorsTags("", "");
+                break;
+                
             case "116": // CdM
             case "118": // Insulte
                 break;
@@ -4033,6 +4056,18 @@ var MH_Play_Actions_Competences_Play_a_Competence15 = $.inherit(Page, { // Résu
               scope : this
           });
         }
+    }
+});
+
+var MH_Play_Play_equipement = $.inherit(Page, { // DE
+    init : function() {
+        $("[id^='mh_objet_hidden_'] table > tbody > tr").each(function(){
+            var tr = $(this);
+            var id = tr.find("td:nth-child(3)").text();
+            var name = tr.find("td:nth-child(4)").text();
+            var desc = tr.find("td:nth-child(5)").text();
+            Utils.setValue("ITEM_DESC_" + id, desc);
+        });
     }
 });
 
