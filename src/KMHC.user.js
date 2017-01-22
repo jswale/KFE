@@ -227,6 +227,14 @@ var Utils = function() {
             sessionStorage[VAL_KEY + key] = value;
         },
 
+        storeMZpos : function(id, pos) {
+            if (id && pos) {
+                localStorage[id + ".position.X"] = pos.x;
+                localStorage[id + ".position.Y"] = pos.y;
+                localStorage[id + ".position.N"] = pos.n;
+            }
+        },
+
         cleanup : function(str) {
             return $.trim(str.replace(/<br\/?>/gi, "\r\n")
                             .replace(/<\/p>/gi, "\r\n")
@@ -343,7 +351,7 @@ var Page = $.inherit({
         this.injectTags("t", "2", prefix, suffix, selectName);
     },
 
-    injectTresorsTags : function(prefix, suffix, selectName) {       
+    injectTresorsTags : function(prefix, suffix, selectName) {
         var cb = function() {
             // From dession
             var selectSelector = "select" + (selectName ? ("[name='" + selectName + "']") : "");
@@ -484,6 +492,31 @@ var Page = $.inherit({
                 }
             }
         });
+    },
+
+    extractPosition : function(text) {
+        var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(text);
+        return tmp ? {
+            x: parseInt(tmp[1]),
+            y: parseInt(tmp[2]),
+            n: parseInt(tmp[3])
+        } : null;
+    },
+
+    getMyPosition : function() {
+        try {
+            var text = $("div.infoMenu:first", window.parent.parent.parent.Sommaire.document).text();
+            var myPos = this.extractPosition(text);
+            return myPos;
+        } catch(e) {}
+        return null;
+    },
+
+    getMyId : function () {
+        try {
+            return $("input[name='ai_IdPJ']", window.parent.parent.parent.Sommaire.document).val();
+        } catch(e) {}
+        return null;
     }
 
 }, { // Statics
@@ -650,8 +683,13 @@ var MH_Play_TurnStart = $.inherit(Page, {
 });
 
 var MH_Play_Play_menu = $.inherit(Page, {
-    init : function(){
-        Utils.setConf("login", $("input[name='ai_IdPJ']").val());
+    init : function () {
+        var id =  $("input[name='ai_IdPJ']").val(),
+            pos = this.extractPosition($("div.infoMenu:first").text());
+
+        Utils.setConf("login", id);
+        Utils.storeMZpos(id, pos);
+
         this.addMenu();
         this.addTimer();
     },
@@ -856,7 +894,6 @@ var MH_Play_Actions_Play_a_ActionYY = $.inherit(MH_Play_Actions_Abstract);
 var MH_Play_Actions_Sorts_Play_a_SortXX = $.inherit(MH_Play_Actions_Abstract);
 var MH_Play_Actions_Competences_Play_a_CompetenceYY = $.inherit(MH_Play_Actions_Abstract);
 var MH_Play_Actions_Play_a_NoAction = $.inherit(MH_Play_Actions_Abstract);
-var MH_Play_Actions_Play_a_Move = $.inherit(MH_Play_Actions_Abstract);
 
 var MH_Play_Actions_Sorts_Play_a_Sort24 = $.inherit(Page, { // TELEK
     init : function() {
@@ -3383,27 +3420,6 @@ var MH_Play_Play_e_follo = $.inherit(Page, {
             var trHidden = $(a.parents("tr")[1]).next("tr:first");
             trHidden.attr("id", id + "_" + trHidden.attr("id"));
         });
-    },
-
-    extractPosition : function(text) {
-        var tmp = /X\s*=\s*(-?\d+)\s*\|\s*Y\s*=\s*(-?\d+)\s*\|\s*N\s*=\s*(-?\d+)/.exec(text);
-        if(null == tmp) {
-            return null;
-        }
-        return {
-            x: parseInt(tmp[1]),
-            y: parseInt(tmp[2]),
-            n: parseInt(tmp[3])
-        };
-    },
-
-    getMyPosition : function() {
-        try {
-            var text = $("div.infoMenu:first", window.parent.parent.parent.Sommaire.document).text();
-            var myPos = this.extractPosition(text);
-            return myPos;
-        } catch(e) {}
-        return null;
     },
 
     addActions: function() {
