@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3-6
+// @version       1.0.3-7
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -517,6 +517,69 @@ var Page = $.inherit({
             return $("input[name='ai_IdPJ']", window.parent.parent.parent.Sommaire.document).val();
         } catch(e) {}
         return null;
+    },
+
+    addXRules : function(title, id, after) {
+      var ctnId = "data-rules-" + id,
+          self = this;
+
+      $("<div/>")
+      .addClass("mh_tdtitre")
+      .attr("id", ctnId)
+      .css("border", "1px solid black")
+      .css("margin-bottom", "10px")
+      .append(
+          $("<div/>")
+          .css("font-weight", "bold")
+          .css("text-align", "center")
+          .text(title)
+          .click(function(){
+              $("#" + ctnId).find("textarea,input").toggle();
+          })
+      )
+      .append(
+          $("<textarea/>")
+          .css("width", "100%")
+          .css("height", "120px")
+      )
+      .append(
+          $("<input/>")
+          .attr("type", "button")
+          .addClass("mh_form_submit")
+          .css("text-align", "center")
+          .val("Mettre à jour")
+          .click(function(){
+              var ctn = $("#" + ctnId);
+              self.callAPIMiltown({
+                  api : "tag",
+                  call : "update",
+                  data : {
+                      id : id,
+                      description : ctn.find("textarea").val()
+                  },
+                  callback : function() {
+                      ctn.find("input").val("Données envoyées");
+                  },
+                  scope : self
+              });
+          })
+      )
+      .insertAfter(after || $("form[name='LimitViewForm']"));
+
+      this.callAPIMiltown({
+          api : "tag",
+          call : "get",
+          data : {
+              id : id
+          },
+          callback : function(tag) {
+              $("#" + ctnId + " textarea").val(tag);
+              if("" == tag) {
+                  $("#" + ctnId).find("textarea,input").toggle();
+              }
+          },
+          scope : this
+      });
     }
 
 }, { // Statics
@@ -1861,93 +1924,26 @@ var MH_Play_Play_vue = $.inherit(Page, {
     this.addMonsterInfos();
 
     if(Utils.getConf("mountyzilla") != "true") {
-            this.addMonsterLevel();
+      this.addMonsterLevel();
       this.addSharingUI();
     }
     this.addTrollEventLink();
     this.addInfos();
     this.fixTableSize();
-        this.addOwnRules();
-        this.addTeamRules();
+    this.addOwnRules();
+    this.addTeamRules();
 
         // Tune ihm
     $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
     },
-    
+
     addTeamRules : function() {
       this.addXRules("Consignes", "vue");
     },
-    
+
     addOwnRules : function() {
       this.addXRules("Notes perso", "vue-" + Utils.getConf("login"));
     },
-  
-    toggleRules: function(ctnId) {
-      var ctn = $("#" + ctnId);
-      ctn.find("textarea,input").toggle();        
-    },
-  
-    addXRules : function(title, id) {
-      var ctnId = "data-rules-" + id;
-      var self = this;
-      $("<div/>")
-      .addClass("mh_tdtitre")
-      .attr("id", ctnId)
-      .css("border", "1px solid black")
-      .css("margin-bottom", "10px")
-      .append(
-          $("<div/>")
-          .css("font-weight", "bold")
-          .css("text-align", "center")
-          .text(title)
-          .click(function(){
-              self.toggleRules(ctnId);
-          })
-      )
-      .append(
-          $("<textarea/>")
-          .css("width", "100%")
-          .css("height", "120px")
-      )        
-      .append(
-          $("<input/>")
-          .attr("type", "button")
-          .addClass("mh_form_submit")
-          .css("text-align", "center")
-          .val("Mettre à jour")
-          .click(function(){       
-              var ctn = $("#" + ctnId);
-              self.callAPIMiltown({
-                  api : "tag",
-                  call : "update",
-                  data : {
-                      id : id,
-                      description : ctn.find("textarea").val()
-                  },
-                  callback : function() {
-                      ctn.find("input").val("Données envoyées");
-                  },
-                  scope : self
-              });
-          })
-      )        
-      .insertAfter($("form[name='LimitViewForm']"));
-      
-      this.callAPIMiltown({
-          api : "tag",
-          call : "get",
-          data : {
-              id : id
-          }, 
-          callback : function(tag) {
-              $("#" + ctnId + " textarea").val(tag);
-              if("" == tag) {
-                  self.toggleRules(ctnId);
-              }
-          },
-          scope : this
-      });               
-  },
 
     changeTrollColumnsOrder : function() {
         var refColId = this.getColumnId("mh_vue_hidden_trolls", "Réf.");
@@ -3093,7 +3089,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                 .append(
                                     $('<tbody/>')
                                     .append(
-                                        $.map(json.traps || [], $.proxy(function(data) {                                            
+                                        $.map(json.traps || [], $.proxy(function(data) {
                                             var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
                                             return $('<tr/>')
                                             .addClass('mh_tdpage')
@@ -3108,11 +3104,11 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                 )
                                 .insertAfter($("form[name='LimitViewForm']"));
                             }
-                
+
                             
                             $.each(json.traps || [], $.proxy(function(dataId, data){
                                 var d = Math.max(Math.abs(data.x-x), Math.abs(data.y-y), Math.abs(data.n-n));
-                                
+
                 var previous = [];
                 var pd = d;
                 do {
@@ -3904,6 +3900,10 @@ var MH_Play_Play_equipement = $.inherit(Page, { // DE
             var desc = tr.find("td:nth-child(5)").text();
             Utils.setValue("ITEM_DESC_" + id, desc);
         });
+
+        var after = $('#menu-evt + br');
+        this.addXRules("Notes perso", "vue-" + Utils.getConf("login"), after);
+        this.addXRules("Consignes", "vue", after);
     }
 });
 
