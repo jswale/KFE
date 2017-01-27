@@ -816,7 +816,7 @@ var MH_Play_Play_menu = $.inherit(Page, {
 var MH_Play_Play_news = $.inherit(Page, {
 
     init : function() {
-        this.jubilaire();
+        //this.jubilaire();
     },
 
     jubilaire : function() {
