@@ -2576,12 +2576,12 @@ var MH_Play_Play_vue = $.inherit(Page, {
                 var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
 
                 if(Utils.isUndefined(monstreAge)) {
-                    console.log("Unable to find the age '" + monstreAgeName + "'");
+                    console.log("Unable to find the age '" + monstreAgeName + "' for monster #" + monsterId);
                     return;
                 }
 
                 if(Utils.isUndefined(monsterTemplate)) {
-                    console.log("Unable to find the template '" + monsterTemplateName + "'");
+                    console.log("Unable to find the template '" + monsterTemplateName + "' for monster #" + monsterId);
                     return;
                 }
 
