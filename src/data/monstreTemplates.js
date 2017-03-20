@@ -672,6 +672,13 @@ var DB_monsterTemplate = {
 		"vlc" : false,
 		"familly" : "Insecte"
 	},
+	"Parasitus" : {
+		"name" : "Parasitus",
+		"attDist" : false,
+		"vlc" : false,
+		"spe" : "Crascs spéciaux",
+		"familly" : "Monstre"
+	},
 	"Paysan" : {
 		"name" : "Paysan",
 		"level" : -1,
