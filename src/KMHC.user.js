@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3-7
+// @version       1.0.3-8
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
@@ -2576,12 +2576,12 @@ var MH_Play_Play_vue = $.inherit(Page, {
                 var monsterTemplate = null == monsterTemplateName ? null : DB_monsterTemplate[monsterTemplateName];
 
                 if(Utils.isUndefined(monstreAge)) {
-                    console.log("Unable to find the age " + monstreAgeName );
+                    console.log("Unable to find the age '" + monstreAgeName + "'");
                     return;
                 }
 
                 if(Utils.isUndefined(monsterTemplate)) {
-                    console.log("Unable to find the template " + monsterTemplate );
+                    console.log("Unable to find the template '" + monsterTemplateName + "'");
                     return;
                 }
 
