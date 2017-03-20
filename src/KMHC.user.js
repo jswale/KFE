@@ -8,7 +8,7 @@
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2016-04-15_00-25
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2015-06-15_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAges.js?v=2015-09-04_20-33
-// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2014-11-19_10-00
+// @require       https://github.com/jswale/KFE/raw/master/src/data/monstreTemplates.js?v=2017-03-20_14-00
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstreAlias.js?v=2015-03-09_12-00
 // @require       https://github.com/jswale/KFE/raw/master/src/addon/editables.js
 // @require       https://github.com/jswale/KFE/raw/master/src/addon/jquery.inherit.min.js
