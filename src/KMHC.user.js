@@ -4,6 +4,7 @@
 // @version       1.0.3-8
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
+// @match         https://games.mountyhall.com/*
 // @require       http://code.jquery.com/jquery-2.1.4.min.js
 // @require       https://github.com/jswale/KFE/raw/master/src/data/talents.js?v=2016-04-15_00-25
 // @require       https://github.com/jswale/KFE/raw/master/src/data/monstres.js?v=2015-06-15_12-00
