@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3.9
+// @version       1.0.3.10
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @match         https://games.mountyhall.com/*
@@ -750,6 +750,7 @@ var MH_Play_Play_menu = $.inherit(Page, {
     init : function () {
         //var id =  $("input[name='ai_IdPJ']").val();
         //Utils.setConf("login", id);
+        var id = Utils.getConf("login");
 
         var pos = this.extractPosition($("div.infoMenu:first").text());
         Utils.storeMZpos(id, pos);
