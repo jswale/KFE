@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3.10
+// @version       1.0.3.11
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @match         https://games.mountyhall.com/*
@@ -3920,7 +3920,14 @@ var MH_Play_Actions_Play_a_Move = $.inherit(Page, { // DE
         Utils.addGlobalStyle([
             '.trapOn { color:#FFF; background:darkred; }'
         ]);
-
+        
+        $("input[type='radio'][name='ai_DeplX'][value=-1] + label").append("<small>Oxhykan</small>");
+        $("input[type='radio'][name='ai_DeplX'][value=1] + label").append("<small>Orhykan</small>");
+        $("input[type='radio'][name='ai_DeplY'][value=-1] + label").append("<small>Midikan</small>");
+        $("input[type='radio'][name='ai_DeplY'][value=1] + label").append("<small>Nordikan</small>");
+        $("input[type='radio'][name='ai_DeplN'][value=-1] + label").append("<small>Bas</small>");
+        $("input[type='radio'][name='ai_DeplN'][value=1] + label").append("<small>Haut</small>");
+        
         var x = parseInt($("[name='ai_XDepart']").val());
         var y = parseInt($("[name='ai_YDepart']").val());
         var n = parseInt($("[name='ai_NDepart']").val());
