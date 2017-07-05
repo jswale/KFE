@@ -710,7 +710,7 @@ var Page = $.inherit({
     }
 });
 
-var MH_Play_PlayStart = $.inherit(Page, {
+var MH_Play_PlayStart2 = $.inherit(Page, {
     init : function() {
         $("#viewbutton")
         .css("margin-right", "0.5em")
