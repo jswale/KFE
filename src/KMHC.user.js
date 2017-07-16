@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3.13
+// @version       1.0.3.14
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @match         https://games.mountyhall.com/*
