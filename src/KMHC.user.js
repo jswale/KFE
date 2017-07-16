@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3.12
+// @version       1.0.3.13
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @match         https://games.mountyhall.com/*
@@ -3192,14 +3192,14 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         .attr("data-troll-info", trollId)
                         .attr("data-xyn", x + ";" + y + ";" + n)
                         .addClass("mh_tdpage")
-                        .append($("<td/>").text(0))
-                        .append($("<td/>").text('-'))
+                        .append($("<td/>").text(0)) // Distance
+                        .append($("<td/>").text('-')) // Actions
                         .append($("<td/>").append('<a class="mh_trolls_1" href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);">' + trollId + '</a>'))
-                        .append($("<td/>").text('-').css("text-align", "center"))
+                        .append($("<td/>").text('-').css("text-align", "center")) // Niveau
                         .append($("<td/>").text('Mon troll'))
-                        .append($("<td/>").text('-'))
-                        .append($("<td/>").text('-'))
-                        .append($("<td/>"))
+                        .append($("<td/>").text('-')) // Guilde
+                        .append($("<td/>")) // Placeholder pour Infos
+                        .append($("<td/>").text('-')) // Race
                         .append(this.addSameXYN_hoverTd($("<td/>")).text(x).attr("align", "center"))
                         .append(this.addSameXYN_hoverTd($("<td/>")).text(y).attr("align", "center"))
                         .append(this.addSameXYN_hoverTd($("<td/>")).text(n).attr("align", "center"))
