@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3.14
+// @version       1.0.3.15
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @match         https://games.mountyhall.com/*
@@ -3140,10 +3140,6 @@ var MH_Play_Play_vue = $.inherit(Page, {
                             }, this));
 
                 $.each(json.invis || [], $.proxy(function(trollId, data){
-                    if($.inArray(trollId, trollIds)) {
-                        return;
-                    }
-
                     if(trollId == Utils.getConf("login")) {
                         isInvisible = true;
                     }
@@ -3172,9 +3168,9 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     .append($("<td/>").append('<a href="javascript:Enter(\'/mountyhall/View/PJView_Events.php?ai_IDPJ=' + trollId + '\', 750, 550);" class="mh_trolls_0">' + trollId + '</a>'))
                     .append($("<td/>").text(data.lvl).css("text-align", "center"))
                     .append($("<td/>").append('<a href="javascript:EPV(' + trollId + ')" class="mh_trolls_0">' + data.name + '</a> [' + (data.camou ? "Camouflé" : "") + (data.invi ? "Invisible" : "") + ']'))
-                    .append($("<td/>").text(data.race))
                     .append($("<td/>").append(data.guildId ? ('<a href="javascript:EAV(' + data.guildId + ',750,550)" class="mh_links">' + data.guildName + '</a>') : ''))
                     .append($("<td/>"))
+                    .append($("<td/>").text(data.race))
                     .append(this.addSameXYN_hoverTd($("<td/>")).text(data.x).attr("align", "center"))
                     .append(this.addSameXYN_hoverTd($("<td/>")).text(data.y).attr("align", "center"))
                     .append(this.addSameXYN_hoverTd($("<td/>")).text(data.n).attr("align", "center"))
