@@ -801,7 +801,7 @@ var MH_Play_Play_menu = $.inherit(Page, {
             tmp = /DLA:\s+([^<]+)</.exec(d.html()),
             dla = Utils.convertDate(tmp[1]),
             cnt = $("<div/>").addClass("countdown");
-        d.css("top", "505px");
+        d.css("top", "540px");
         d.find("br").replaceWith(cnt);
 
         var timer = setInterval(function() {
