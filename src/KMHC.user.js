@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          KFE
 // @namespace     pharoz.net
-// @version       1.0.3.15
+// @version       1.0.3.16
 // @description   Pharoz.net MH Connector
 // @match         http://games.mountyhall.com/*
 // @match         https://games.mountyhall.com/*
@@ -19,6 +19,7 @@
 // @copyright     2014+, Miltown, Grul & disciple
 // @icon          data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAMAUExURQAAAAUDBQwKBxQKBBwKEBkTBBwaJCQUBCQcCS4cBzASBDwWBDIeGCQGJDweLCwjETQkDjQqFDw0HDQqNDw2NEAeFEAlCkIsCkElF0EsFkwpEUwuHEQzFkw0ElwtH1w6BFQ1EVM8FVw5F14+GEEqLEwiNEE1J0wzLE88LFgsNFQzKV40Jl88KWw+HGQzN2E7N2w2NEQ+THA+QFRDIFZELFxCIFxKJFxNMl9VP2dEGmRLGXRLF2dEKWhMJ2ZENGdNOmJSLmxUK2xXP3RKLHdMP3BeKHdaL3pUInRfOnhVMWRaRGheSH9FR3dVQ3ZaQHReRnRmTHxhRn9pV39xZ4A8RIRMOIRXKYxWJIxfJ4xaPIBgKYFgNoNnNY9oMY1pPoRwNJBhNpFvPZxvPpxwMpx3P6RsOKRyPKR4O4RNSIxGVJBSRJZYT4NnRo9gRIRiVIxiXIRwR45wToRwVIR2WJBnTpxnRJR4QJx+RJJ4U5R+VJxwVpx9UIxqYIxyZI94YZJ+YJx+YpR+cKluSad6T6d+T6l+Qax6QLRuTLR+QLR6XKR4YKR+bJ+FObCEO52DXYyCZJCEbJyKfKOESqGNX6yFWK+MXbKER7GMSbyDRryNR7SFXLyLWbyTT7SUXbyaVKGDcayUYK6QbqSRda+YeLSaZLyWYbyZb7efd7ySfLqgZrymcMSRQcSRT8SXTcyXTMufU8maXMeVY9ShW9imX8agbcugYMyqbMSmfsimccqsf9ambNSrZdytZtSseNyybNyweOC3dey+f4yOnJSGiKyKhKyYiLSSlLCgiLSmjLylibSqlLasnryskLyyqLy2xMSihMWskc+0gceyl8i2mNS4k9S+mNy5ksi5psq+ptS8qNy+tOS+gOC+lNzClMzCrNTEp9TKrN/Eo9jFt9rMtuTEjOzDi/DLlPzKnPTVmuDLqO7NqOTOtuzSoePTuvDVsPvdtPzevPzisOTaw+zUwe/cwu3dzeTa1Pbjw/TmzPzmzvzuxPvr1Pzy2fz35/z+9AAAAEG26sQAAAEAdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wBT9wclAAAACXBIWXMAAA7CAAAOwgEVKEqAAAAAGHRFWHRTb2Z0d2FyZQBwYWludC5uZXQgNC4wLjOM5pdQAAAGpElEQVRIS3WVD1wT5xnHwdUVWjacW9XQ4Ay6mipqV4MYyRlgeJBVtGrrXBKoiXRxBWxo1WXEqRXoulbSDUkiGqZAhVlJAiFX/oSYuI6mTLryJzUytTQ5SE0woHAsSd9j7EISTJT9Pnef5O6e7+d9nz/v80TMzKcJ4vZ6/f8f0byA2+QBAJsMPIVrPgC4unFsEP0POgoCb+YEwHyAt6fO9hWGT0+jk48QwNUzD4D3J4lu251O5323wxN45xcY+jP2OIBbSBKjpvl8/Q3tLac1ZAkAHNwB/DEAR2lS7YEDfHaaBBbobwQIL/EzeYNXiz/qNHCPMivfTaGvjIshQXACz9DqIqJLhMxhba/IvEDsMAwAU66b74jY8fE02s6XxLxqmCI3mKe9k6OD7cPVXHqWi1gnDJhAMeeO5zZGXXca9H36yuqa+N9ViD4UVUjlytPbIFENRtiEAhiKtZftQKVv3Ws8myNuq79YKTpDid4k5qZx2XDq7z/q9cUsFEBd7Tnxe77LO26WSYUFJ0XaUvFRFpmzS1TfWl8i7euz+QIQCngGoGcXbn5Qmd4ugeITV1MvZm08mgtxahrqilrtw87BKZ9RuA806o+//3bq5peTf/LzPSTG0qjVUAJLUl0vhaX3xlB0NsJhgGtVDHUXPTryiU//9feXYkm7agqfYRZIeq3adgxDv/HbhAL48Zi64Za9UYvWrGEyIRhyOHjiHSdQYL73wG2Z8GcwFAA26pC9hU1axjiULhR1s3giWFtd5PgcM1swy1zhhgKmz+82yzctJtcWFTR0pwspDL09Ncssue29iWFB+1AAN7VpK7kbY6Ph9LdS02tEsUkNPTRR20AtioGHp+8hgHc9ly7kMVY9sWzFy5bS/SIJZ8ni2B9JHA6LryLmNAeAgRN1EmHiD3+wujY5Op7COipnc5PJ5LQTJhBqPwcAy8d3jTr51lXH+h4c/+lpYZ4MptRB2hK4ogEPO0UBALi67C1NVQJ+cycy3MC+XCfN48HiZO5eurTPn7CggoBpuFOlbGxENE2I/njMSs4+saQoOyq1Gkq73D7PCvjN1hG1SqVSNjUXM0kLnqSXCugwi0rKkm6BOdqw5uEHQJdV5wNapBsWREZGbuTw8pI4/ByYDlfwc5tNjwHeyW57CwF0Nq+JjFwYtZDGgOvTuI1yAb/k/JH89485QohZAPx70K5TqzsNGd9bsGjRCgqtIO6AXNGmVZz9Y/5vX3yzuAaftZ1VALDZr3Yavn1/2ZMMiJ7CyTpDl6k62trUZ0/lv5KRnlHY+7DR+oH+HvzuvfG/rSdlCtj7c3icPq5cqdFfrpadyj+YuPPF7X/qm8u2H3Blf2azntwaBwnKeILSbtbFitN/RZDLFysOH8zftfXgkcYRR7D8ZoEZ0Lth/dq1MYvS+GV5PGl3Lixmy5s6Pvm44kj+YeHWQuSWEwumzw98d/PCH06KukzUndvgJEkuFyqAfoMYblsr39jOpK4vREbGgCuQPj/g6f3HByezPzicben5cHMydSmZxeLpjE5n9ivPpzNfKOkYGQdfYziOE67PAtO2C8UU8tIV8UuSsk7Umfp3xybmZiLG+wOJr65//mcZMt3I2HQtaefuWsIRHzBt2XMoDuKWyWT8fSkUyqYzPe8sZaXIDO6eTH7hwe2vNiFGO/72U8uXr81GfQMFdJGfSYK1ROY0KqWy/LUt8TuOQfp1ZYZxS+6l+uJzJUqdcWScxsjPf2P5bgIAJg68hDncqfQVn1KtuVKembghtyRFph9zceq1JeebEN1Ve83KPNmpvUUOEOEZ7dX/KmHgLqJUNaqUGm0rckWw8hfbEnhKg9OTxZFfamrp0F2tZu2vUr7OHyJ88Ixixl8Lh+7riNNwRYm0tSLKqn3wFnY5MuL97y9JcJ5coZALeLz3zr5e4psuEa5Dfbc4wtfM9mvGlsYqRUcH0qQSHJCX6+xW9PpiMo2Tk1dWXi57793SL2eTHdHPWsfJTYQozALxJY1GTVxqZXl5y1V9EZVMToI4ZQo1olYotOZAbUTMuBrERQlLoqOfejqOUXyuqpHYgEDxyY3eAfQbq9V6x2y+fcfhwnxDLgAAAMa+6v4L81wZn7WOkcFicY5+dAfz4tM4Tnxye9xTYX1mNtNegIOucWOnRrY/Ey6oG5xwT019gdps6KjLHdYBCPlricjeP4fG7deuIdKGUa9vcExd//QLFO1/2FODCgJet8VC7Hhg0BM0mQDA65uCjygIENuasKFE2w08/h/NzPwPOHaIyvrbq40AAAAASUVORK5CYII=
 // ==/UserScript==
+/*jshint scripturl:true*/
 
 var Logger = $.inherit({
 }, { // Statics
@@ -26,7 +27,7 @@ var Logger = $.inherit({
         switch(args.length) {
             case 0:
                 return;
-                break;
+                //break;
             case 1:
                 args=args[0];
                 break;
@@ -174,8 +175,11 @@ var Utils = function() {
         },
 
         dateToString : function(d) {
-            return [ this.io2(d.getDate()), this.io2(d.getMonth() + 1), this.io2(d.getFullYear()) ].join('/') + ' '
-                + [ this.io2(d.getHours()), this.io2(d.getMinutes()), this.io2(d.getSeconds()) ].join(':');
+            return [
+                this.io2(d.getDate()), this.io2(d.getMonth() + 1), this.io2(d.getFullYear())
+            ].join('/') + ' ' + [
+                this.io2(d.getHours()), this.io2(d.getMinutes()), this.io2(d.getSeconds())
+            ].join(':');
         },
 
         formatTime : function(time) {
@@ -183,7 +187,7 @@ var Utils = function() {
         },
 
         getDateDiff : function (date1, date2){
-            var diff = {}                           // Initialisation du retour
+            var diff = {};                          // Initialisation du retour
             var tmp = date2 - date1;
 
             tmp = Math.floor(tmp/1000);             // Nombre de secondes entre les 2 dates
@@ -244,7 +248,7 @@ var Utils = function() {
                             .replace(/<\/?[^>]+>/gi,"")
                             .replace(/\s+/gi," "));
         }
-    }
+    };
 }();
 
 var Page = $.inherit({
@@ -376,8 +380,7 @@ var Page = $.inherit({
     /******************************************/
 
     isInitialized : function() {
-        return  (Utils.isDefined(typeof Utils.getConf("login")))
-        &&  (Utils.isDefined(typeof Utils.getConf("pswd")));
+        return (Utils.isDefined(typeof Utils.getConf("login"))) && (Utils.isDefined(typeof Utils.getConf("pswd")));
     },
 
     callAPIConnected : function(conf) {
@@ -385,7 +388,7 @@ var Page = $.inherit({
             this.logger.error("Authentification required");
             return;
         }
-        conf.data = $.extend(conf.data, {"login" : Utils.getConf("login"),"password" : Utils.getConf("pswd")})
+        conf.data = $.extend(conf.data, {"login" : Utils.getConf("login"),"password" : Utils.getConf("pswd")});
         this.callAPI(conf);
     },
 
@@ -587,8 +590,9 @@ var Page = $.inherit({
 
     showTalentPopup : function(link, newIHM, boost) {
         var popupId = link.attr("data-popup");
+        var popup;
         if(Utils.isDefined(popupId)) {
-            var popup = $('[action-popup-id="' + popupId + '"]');
+            popup = $('[action-popup-id="' + popupId + '"]');
             popup.toggle();
             return;
         }
@@ -611,8 +615,8 @@ var Page = $.inherit({
         // Extract levels
         var levels = [];
         if(boost) {
-            var prct = link.parents("tr:first").find("td:nth-child(2)").text().replace(/à\s+(\d+)\s+%/, "$1")
-            var tmp = /([^\(]*)(?:\(niveau (\d)\))?/.exec(actionName);
+            var prct = link.parents("tr:first").find("td:nth-child(2)").text().replace(/à\s+(\d+)\s+%/, "$1");
+            tmp = /([^\(]*)(?:\(niveau (\d)\))?/.exec(actionName);
             actionName = tmp[1].trim();
             var levelMax = 1;
             if(!Utils.isUndefined(tmp[2])) {
@@ -626,7 +630,7 @@ var Page = $.inherit({
         } else {
 
             var id = newIHM ? (actionType == "Comp" ? 9 : 8) : 8;
-            var tmp = link.parents("tr:first").find("td:nth-child(" + id + ")").text().trim().split("\n");
+            tmp = link.parents("tr:first").find("td:nth-child(" + id + ")").text().trim().split("\n");
             for(var j = 0; j < tmp.length; ++j) {
                 if(tmp[j] != "") {
                     var p = /niveau\s+(\d+)\s+:\s+(\d+)\s+%/.exec(tmp[j]);
@@ -644,8 +648,8 @@ var Page = $.inherit({
 
         var pos = link.offset();
 
-        var popup = this.displayTalentPopup(entry, levels, actionName);
-        popup.css("position", "absolute")
+        popup = this.displayTalentPopup(entry, levels, actionName);
+        popup.css("position", "absolute");
         popup.css("top", pos.top - popup.height() + "px");
         popup.css("left", (pos.left) + "px");
         popup.css("zIndex", "100");
@@ -883,23 +887,22 @@ var MH_Play_Actions_Abstract = $.inherit(Page, {
         this.display.normalizeFontSize();
         this.display.protectMonsters();
 
-        {
-            var id = $("[name='ai_IdSort'][value!='0']").val();
-            if(Utils.isDefined(id)) {
-                this.logger.log("Sort " + id + " detected");
-                Utils.setConf("action", "Sort" + id);
-                this.initPageSort(id);
-                return;
-            }
+        var id;
+
+        id = $("[name='ai_IdSort'][value!='0']").val();
+        if(Utils.isDefined(id)) {
+            this.logger.log("Sort " + id + " detected");
+            Utils.setConf("action", "Sort" + id);
+            this.initPageSort(id);
+            return;
         }
-        {
-            var id = $("[name='ai_IdAction'][value!='0']").val();
-            if(Utils.isDefined(id)) {
-                this.logger.log("Action " + id + " detected");
-                Utils.setConf("action", "Action" + id);
-                this.initPageAction(id);
-                return;
-            }
+
+        id = $("[name='ai_IdAction'][value!='0']").val();
+        if(Utils.isDefined(id)) {
+            this.logger.log("Action " + id + " detected");
+            Utils.setConf("action", "Action" + id);
+            this.initPageAction(id);
+            return;
         }
     },
     initPageSort : function(id) {
@@ -985,11 +988,11 @@ var MH_Missions_Mission_Liste = $.inherit(Page, {
 
             var tr = $(this);
 
-            var tmp = /Mission \[(\d+)\]/.exec(tr.find("div.mh_titre3").text());
+            tmp = /Mission \[(\d+)\]/.exec(tr.find("div.mh_titre3").text());
             var idMission = tmp[1];
 
 
-            var tmp = /(\d+) étapes? - (\d+) récompenses? - Meneur : (.*)/.exec(tr.find("div.mh_titre4").text());
+            tmp = /(\d+) étapes? - (\d+) récompenses? - Meneur : (.*)/.exec(tr.find("div.mh_titre4").text());
             var noSteps = tmp[1];
             var noAwards = tmp[2];
             var leader = tmp[3];
@@ -1175,8 +1178,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             $(this).remove();
         })
         .appendTo("body");
-        return;
-
+/*
         var result = $("table:first").text();
         result = result.replace(/<\/(TD|TH)[^>]*>/gi,"");
         result = result.replace(/<\/(TABLE|TR)[^>]*>/gi,"\n");
@@ -1193,6 +1195,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 "profile" : "MON PROFIL " + result
             }
         });
+*/
     },
 
     removeAds : function () {
@@ -1201,6 +1204,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
 
     tuneIHM : function() {
         var stats = this.getStats();
+        var ctn;
 
         // Echéance du Tour
         {
@@ -1225,7 +1229,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         if(stats.xp.level < 60) {
             var pi_nextLvl = stats.xp.level * (stats.xp.level + 3) * 5;
             var px_ent = 2 * stats.xp.level;
-            var px = stats.xp.PX['public'] + stats.xp.PX['private'];
+            var px = stats.xp.PX.public + stats.xp.PX.private;
             if(stats.xp.level < 3) {
                 px_ent = Math.max(px_ent, Math.min(px, 5));
             }
@@ -1239,7 +1243,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
 
         // Point de Vie
         {
-            var ctn = $("#pos table > tbody");
+            ctn = $("#pos table > tbody");
 
             var pvmax = stats.hp.max.total;
 
@@ -1313,22 +1317,20 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                 ]
             ];
 
-            var ctn = $("<table/>").css("margin-top", "15px");
+            ctn = $("<table/>").css("margin-top", "15px");
             ctn.append(
-                $("<thead/>")
-                .append(
+                $("<thead/>").append(
+                    $("<tr>")
+                    .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Nom"))
+                    .append($("<th/>").attr("colspan", "3").css("text-align", "center").text("Physique"))
+                    .append($("<th/>").attr("colspan", "3").css("text-align", "center").text("Magique")),
                 $("<tr>")
-                .append($("<th/>").attr("rowspan", "2").css("text-align", "center").text("Nom"))
-                .append($("<th/>").attr("colspan", "3").css("text-align", "center").text("Physique"))
-                .append($("<th/>").attr("colspan", "3").css("text-align", "center").text("Magique"))
-                ,
-                $("<tr>")
-                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Moy."))
-                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Min"))
-                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Max"))
-                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Moy."))
-                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Min"))
-                .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Max"))
+                    .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Moy."))
+                    .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Min"))
+                    .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Max"))
+                    .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Moy."))
+                    .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Min"))
+                    .append($("<th/>").css("border-bottom", "1px dotted gray").css("text-align", "center").text("Max"))
                 )
             );
             ctn.append(
@@ -1543,9 +1545,9 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             this.logger.error("Error while parsing PA");
         }
 
-
+        var tmp;
         try {
-            var tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+)/.exec(getText("Position"));
+            tmp = /X = (-?\d+) \| Y = (-?\d+) \| N = (-?\d+)/.exec(getText("Position"));
             stats.position = {
                 x : parseInt(tmp[1]),
                 y : parseInt(tmp[2]),
@@ -1610,11 +1612,11 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         }];
 
         $.each(caracs, $.proxy(function(i, carac) {
-            try {
-                var key = carac.key;
-                var label = carac.label;
-                var dice = carac.dice;
+            var key = carac.key;
+            var label = carac.label;
+            var dice = carac.dice;
 
+            try {
                 stats[key] = {
                     des : parseInt(getTextTd(label, 2)) || 0,
                     desMalus : parseInt(getTextTd(label, 3)) || 0,
@@ -1633,7 +1635,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         }, this));
 
         try {
-            var tmp = /(\d+)\/\d+/.exec(getText("Vie"));
+            tmp = /(\d+)\/\d+/.exec(getText("Vie"));
             var hp = stats.hp;
             stats.hp = {
                 current : parseInt(tmp[1]),
@@ -1642,7 +1644,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
                     bonus : hp.bm,
                     total : hp.total
                 }
-            }
+            };
         } catch(e) {
             this.logger.error("Error while parsing HP");
         }
@@ -1659,7 +1661,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
         }
 
         try {
-            var tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("Fatigue"));
+            tmp = /(.*)\s+\(\s+(\d+)\s?([+-]\d+)?\s+\)/.exec(getText("Fatigue"));
             stats.hp.fatigue = {
                 display : tmp[1],
                 value : parseInt(tmp[2]),
@@ -1709,7 +1711,7 @@ var MH_Play_Play_profil2 = $.inherit(Page, {
             this.logger.error("Error while computing");
         }
 
-        Utils.setConf("profil_stats", JSON.stringify(stats))
+        Utils.setConf("profil_stats", JSON.stringify(stats));
 
         return stats;
     }
@@ -1830,7 +1832,7 @@ var Messagerie_ViewMessageBot = $.inherit(Page, {
     analyseMessage : function() {
         var title = $.trim($("table:first tr:first td:first font:first").text());
         var body = $.trim($("table:first tr:nth-child(5) td:first").html().replace(/<br>/g, "\r\n")).replace(/<\/?[^>]+>/gi,"");
-
+        var tmp;
         var api = null;
         var data = {};
 
@@ -1849,7 +1851,7 @@ var Messagerie_ViewMessageBot = $.inherit(Page, {
         }
 
         if(title.indexOf("Sortilège : Identification des trésors") > -1) {
-            var tmp = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(body);
+            tmp = /L'identification a donné le résultat suivant :\s*(\d+)\s*-\s*([^\)]+\))/.exec(body);
             api = "tag";
             data =  {
                 "type" : 3,
@@ -1859,7 +1861,7 @@ var Messagerie_ViewMessageBot = $.inherit(Page, {
         }
 
         if(title.indexOf("Sortilège : Téléportation") > -1) {
-            var tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(body);
+            tmp = /Vous avez créé un Portail de Téléportation\s*\((\d+)\).*Il (conduit en[^\.]*)/.exec(body);
             api = "tag";
             data =  {
                 "type" : 5,
@@ -1870,7 +1872,7 @@ var Messagerie_ViewMessageBot = $.inherit(Page, {
 
 
         if(title.indexOf("Compétence : Identification des Champignons") > -1) {
-            var tmp = /Vous avez reconnu le Champignon :\s+(.*)(?:Salé|Sucré)\s+\(\d+\)\s+qui se trouvait en X=(-?\d+), Y=(-?\d+), N=(-?\d+)/.exec(body);
+            tmp = /Vous avez reconnu le Champignon :\s+(.*)(?:Salé|Sucré)\s+\(\d+\)\s+qui se trouvait en X=(-?\d+), Y=(-?\d+), N=(-?\d+)/.exec(body);
             api = "tag";
             data =  {
                 "type" : 4,
@@ -1905,38 +1907,37 @@ var MH_Play_Play_vue = $.inherit(Page, {
 
     monsterDatas : {},
 
-  init : function(){
-        
-    this.sendView();
-    $("#mhPlay").attr("data-view", "main");
+  init : function() {
+        this.sendView();
+        $("#mhPlay").attr("data-view", "main");
 
-    $("#mh_vue_hidden_trolls table:first thead tr.mh_tdtitre th:nth-child(" + this.getColumnId("mh_vue_hidden_trolls", "Niv.") + ")").text("Niveau").width("60px");
+        $("#mh_vue_hidden_trolls table:first thead tr.mh_tdtitre th:nth-child(" + this.getColumnId("mh_vue_hidden_trolls", "Niv.") + ")").text("Niveau").width("60px");
 
-    this.changeTrollColumnsOrder()
-    this.addTrollInfoColumns();
-    this.addPharozViewLinks();
-    this.highlightTreasures();
-    this.addMonsterCdmLink();
-    this.addBarycentreUI();
-    this.getBBcodeVersion();
-    this.addSameXYN();
-    this.addToggleTresors();
-    this.addChampignonsRef();
-    this.addTagEdition();
-    this.addMonsterInfos();
+        this.changeTrollColumnsOrder();
+        this.addTrollInfoColumns();
+        this.addPharozViewLinks();
+        this.highlightTreasures();
+        this.addMonsterCdmLink();
+        this.addBarycentreUI();
+        this.getBBcodeVersion();
+        this.addSameXYN();
+        this.addToggleTresors();
+        this.addChampignonsRef();
+        this.addTagEdition();
+        this.addMonsterInfos();
 
-    if(Utils.getConf("mountyzilla") != "true") {
-      this.addMonsterLevel();
-      this.addSharingUI();
-    }
-    this.addTrollEventLink();
-    this.addInfos();
-    this.fixTableSize();
-    this.addOwnRules();
-    this.addTeamRules();
+        if(Utils.getConf("mountyzilla") != "true") {
+            this.addMonsterLevel();
+            this.addSharingUI();
+        }
+        this.addTrollEventLink();
+        this.addInfos();
+        this.fixTableSize();
+        this.addOwnRules();
+        this.addTeamRules();
 
         // Tune ihm
-    $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
+        $("#mh_vue_hidden_monstres table:first tr.mh_tdpage td:nth-child(" + this.getColumnId("mh_vue_hidden_monstres", "Nom") + ") a:contains('Gowap Apprivoisé'),a:contains('Golem de cuir'),a:contains('Golem de métal'),a:contains('Golem de papier'),a:contains('Golem de mithril')").css("color", "#000");
     },
 
     addTeamRules : function() {
@@ -2079,7 +2080,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                                         $(this).parents("div:first").remove();
                                     })
                                 )
-                                .appendTo($("body"))
+                                .appendTo($("body"));
 
                                 //console.debug(bbcode);
                                 //alert(bbcode);
@@ -2386,7 +2387,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
             data.push($("#" + id + " table:first tr.mh_tdpage").map(function(){
                 return $(this).children("td").map(function(){
                     return $(this).text();
-                }).get().join("\t")
+                }).get().join("\t");
             }).get().join("\r\n"));
             return data;
         }
@@ -2490,8 +2491,8 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         v = parseInt(v) + parseInt(m);
                     } else if($.isArray(v)) {
                         if($.type( m ) === "string") {
-                            v[0] = eval((v[0] + m));
-                            v[1] = eval((v[1] + m));
+                            v[0] = parseInt(v[0]) + m; //eval((v[0] + m));
+                            v[1] = parseInt(v[1]) + m; //eval((v[1] + m));
                         } else {
                             v[0] = parseInt(v[0]) + parseInt(m);
                             v[1] = parseInt(v[1]) + parseInt(m);
@@ -2627,8 +2628,9 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         // in
                         var ctn = $(event.target);
                         var popupId = ctn.attr("data-monster-info-popup");
+                        var popup;
                         if(Utils.isDefined(popupId)) {
-                            var popup = $('[data-monster-info-popup-id="' + popupId + '"]');
+                            popup = $('[data-monster-info-popup-id="' + popupId + '"]');
                             popup.show();
                             return;
                         }
@@ -2640,7 +2642,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         var pos = ctn.position();
                         var offset = ctn.offset();
 
-                        var popup = $("<div/>")
+                        popup = $("<div/>")
                         .css("max-width", "700px")
                         .css("border", "1px solid #CCC")
                         .css("background-color", "#FFF")
@@ -2835,10 +2837,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     alert("Attention, vous êtes sur le point de distribuer des PX à un ou plusieurs trõlls de niveau 60.");
                 }
 
-                var destination = isSharePx
-                        ? "Actions/Play_a_DonPX.php?cat=8&dest="
-                        : "../Messagerie/MH_Messagerie.php?cat=3&dest=";
-
+                var destination = isSharePx ? "Actions/Play_a_DonPX.php?cat=8&dest=" : "../Messagerie/MH_Messagerie.php?cat=3&dest=";
                 window.open(destination + ids.join(','),
                     "Contenu"
                 );
@@ -2920,8 +2919,8 @@ var MH_Play_Play_vue = $.inherit(Page, {
             var yId = this.getColumnId(tableId, "Y");
             var nId = this.getColumnId(tableId, "N");
 
-            $("#" + tableId + " table:first tr.mh_tdpage").each($.proxy(function(idx, tr){
-                var tr = $(tr);
+            $("#" + tableId + " table:first tr.mh_tdpage").each($.proxy(function(idx, tableRow){
+                var tr = $(tableRow);
                 var tdX = tr.find("td:nth-child("+xId+")");
                 var tdY = tr.find("td:nth-child("+yId+")");
                 var tdN = tr.find("td:nth-child("+nId+")");
@@ -2931,7 +2930,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                     this.addSameXYN_hoverTd($(td));
                 }, this));
             }, this));
-        }, this))
+        }, this));
     },
 
     addSameXYN_hoverTd : function(td) {
@@ -3338,8 +3337,7 @@ var MH_Play_Play_vue = $.inherit(Page, {
                         .text(tag.tag);
 
                         if(
-                            ("3" == key[0] && tag.tag.match(/.*(Parchemin Gribouillé|Invention Extraordinaire).*/))
-                            ||
+                            ("3" == key[0] && tag.tag.match(/.*(Parchemin Gribouillé|Invention Extraordinaire).*/)) ||
                             ("3" == key[0] && !tag.tag.match(/^(Rune|Elixir)/) && tag.tag.match(/.*(de l'Aigle|des Béhémoths|des Cyclopes|des Enragés|de Feu|des Mages|de l'Orage|de l'Ours|du Pic|du Rat|de Résistance|de la Salamandre|du Temps|de la Terre|du Sable|des Vampires|des Duellistes|des Champions|des Anciens|du Roc|des Tortues|du Vent|en Mithril).*/))
                         ) {
                             ctn.parents("tr:first").find("> td").css("background-color", "#E9967A");
@@ -3552,7 +3550,7 @@ var MH_Follower_FO_DeleteOrder = $.inherit(MH_Follower_FO_SubmitOrderAbstract);
 
 var MH_Play_Actions_Competences_Play_a_Competence43b = $.inherit(Page, {
   init : function() {
-    var sons = DB_talents["Comp"][43].sons;
+    var sons = DB_talents.Comp[43].sons;
     var sel = $('select.SelectboxV2');
     sel.find('option').each(function() {
       var s = sons[$(this).val()];
@@ -3962,7 +3960,7 @@ var MH_Play_Actions_Play_a_Move = $.inherit(Page, { // DE
                         $("input[type='radio']").closest("td").removeClass("trapOn");
                     }
                 };
-                
+
                 $.each($("input[type='radio']"), function() {
                     $(this).click(fnCheckTrap);
                 });
