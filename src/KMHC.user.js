@@ -3016,9 +3016,9 @@ var MH_Play_Play_vue = $.inherit(Page, {
         var x = parseInt(txt.match(/.*X\s*=\s*(-?\d+)/)[1]);
         var y = parseInt(txt.match(/.*Y\s*=\s*(-?\d+)/)[1]);
         var n = parseInt(txt.match(/.*N\s*=\s*(-?\d+)/)[1]);
-        var r = txt.match(/(\d+) cases horizontalement et (\d+) verticalement/);
-        var rH = parseInt(r[1]);
-        var rV = parseInt(r[2]);
+        var r = txt.match(/(-?\d+) cases horizontalement et (-?\d+) verticalement/);
+        var rH = Math.max(parseInt(r[1]), 0);
+        var rV = Math.max(parseInt(r[2]), 0);
 
         // Fix
         //$("#mh_vue_hidden_trolls table:first thead tr.mh_tdpage th:nth-child("+this.getColumnId("mh_vue_hidden_trolls", "Nom")+")").css("width", "45%");        
