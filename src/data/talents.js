@@ -313,7 +313,7 @@ var DB_talents = {
                 var ctn = $("<table/>");
                 ctn.append(
                     $("<tr/>")
-                    .append($("<th/>").html("'Attaque :"))
+                    .append($("<th/>").html("Attaque :"))
                     .append($("<td/>").html("<b>" + Math.floor(att/2) + "</b> D6"))
                     .append($("<td/>").html(Utils.sign(Math.floor(attbm/2))))
                     .append($("<td/>").html(" => "))
@@ -472,7 +472,7 @@ var DB_talents = {
                 );
                 ctn.append(
                     $("<tr/>")
-                    .append($("<th/>").html("Portée horizontale :"))
+                    .append($("<th/>").html("Portée verticale :"))
                     .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                 );
                 return ctn;
@@ -528,7 +528,7 @@ var DB_talents = {
                 );
                 ctn.append(
                     $("<tr/>")
-                    .append($("<th/>").html("Portée horizontale :"))
+                    .append($("<th/>").html("Portée verticale :"))
                     .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                 );
                 return ctn;
