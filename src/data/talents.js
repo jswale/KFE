@@ -189,7 +189,7 @@ var DB_talents = {
                     ctn.append(
                         $("<tr/>")
                         .append($("<th/>").html("Dégâts (niveau " + i + " : " + pc + "%) :"))
-                        .append($("<td/>").html("<b>" + Math.min(Math.floor(deg * 1.5),deg+3 * i) + "</b> D6"))
+                        .append($("<td/>").html("<b>" + Math.min(Math.floor(deg * 1.5),deg+3 * i) + "</b> D3"))
                         .append($("<td/>").html(Utils.sign(degbm)))
                         .append($("<td/>").html(" => "))
                         .append($("<td/>").html("<b>" + jetdeg + '/' + (jetdeg+2*Math.floor(deg/2)) +"</b>"))
