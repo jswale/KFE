@@ -185,11 +185,12 @@ var DB_talents = {
                     pc = levels[i] || 0;
                     if(lastmax!=0 && pc<=lastmax) continue;
                     
-                    var jetdeg = 2*Math.min(Math.floor(1.5*deg),deg+3*i)+degbm;
+                    var cdbDegDices = Math.min(Math.floor(1.5*deg),deg+3*i);
+                    var jetdeg = 2*cdbDegDices+degbm;
                     ctn.append(
                         $("<tr/>")
                         .append($("<th/>").html("Dégâts (niveau " + i + " : " + pc + "%) :"))
-                        .append($("<td/>").html("<b>" + Math.min(Math.floor(deg * 1.5),deg+3 * i) + "</b> D3"))
+                        .append($("<td/>").html("<b>" + cdbDegDices + "</b> D3"))
                         .append($("<td/>").html(Utils.sign(degbm)))
                         .append($("<td/>").html(" => "))
                         .append($("<td/>").html("<b>" + jetdeg + '/' + (jetdeg+2*Math.floor(deg/2)) +"</b>"))
