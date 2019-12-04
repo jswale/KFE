@@ -185,11 +185,12 @@ var DB_talents = {
                     pc = levels[i] || 0;
                     if(lastmax!=0 && pc<=lastmax) continue;
                     
-                    var jetdeg = 2*Math.min(Math.floor(1.5*deg),deg+3*i)+degbm;
+                    var cdbDegDices = Math.min(Math.floor(1.5*deg),deg+3*i);
+                    var jetdeg = 2*cdbDegDices+degbm;
                     ctn.append(
                         $("<tr/>")
                         .append($("<th/>").html("Dégâts (niveau " + i + " : " + pc + "%) :"))
-                        .append($("<td/>").html("<b>" + Math.min(Math.floor(deg * 1.5),deg+3 * i) + "</b> D6"))
+                        .append($("<td/>").html("<b>" + cdbDegDices + "</b> D3"))
                         .append($("<td/>").html(Utils.sign(degbm)))
                         .append($("<td/>").html(" => "))
                         .append($("<td/>").html("<b>" + jetdeg + '/' + (jetdeg+2*Math.floor(deg/2)) +"</b>"))
@@ -312,7 +313,7 @@ var DB_talents = {
                 var ctn = $("<table/>");
                 ctn.append(
                     $("<tr/>")
-                    .append($("<th/>").html("'Attaque :"))
+                    .append($("<th/>").html("Attaque :"))
                     .append($("<td/>").html("<b>" + Math.floor(att/2) + "</b> D6"))
                     .append($("<td/>").html(Utils.sign(Math.floor(attbm/2))))
                     .append($("<td/>").html(" => "))
@@ -471,7 +472,7 @@ var DB_talents = {
                 );
                 ctn.append(
                     $("<tr/>")
-                    .append($("<th/>").html("Portée horizontale :"))
+                    .append($("<th/>").html("Portée verticale :"))
                     .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                 );
                 return ctn;
@@ -527,7 +528,7 @@ var DB_talents = {
                 );
                 ctn.append(
                     $("<tr/>")
-                    .append($("<th/>").html("Portée horizontale :"))
+                    .append($("<th/>").html("Portée verticale :"))
                     .append($("<td/>").html("<b>" + viewV + "</b> case" + Utils.addS(viewV)))
                 );
                 return ctn;
